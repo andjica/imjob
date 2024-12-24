@@ -1,0 +1,2 @@
+@extends('company.template-company')
+

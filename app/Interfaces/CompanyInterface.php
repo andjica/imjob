@@ -1,0 +1,27 @@
+<?php 
+
+namespace App\Interfaces;
+
+
+use App\Models\Company;
+use Illuminate\Http\Request;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+
+
+interface CompanyInterface
+{
+    public function getAllCompanies(?string $search = null): LengthAwarePaginator;
+  
+    public function countActiveCompanies();
+
+    public function getAllInactiveCompanies();
+
+    public function acceptCompany(int $id) :  Company;
+
+    public function rejectCompany(int $id) : bool;
+
+    public function create(Request $request);
+    public function update(Request $request);
+
+    public function getCompanyByRecruiter(int $recruiterId) : object;
+}
