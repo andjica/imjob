@@ -44,6 +44,7 @@ class FrontController extends Controller
     public function notifications(Request $request)
     {
         $inactiveCompanies = $this->companyService->getAllInactiveCompanies();
+        
         $companies = $this->companyService->getAllCompanies(null);
         return view('admin.pages.notifications', compact('inactiveCompanies', 'companies'));
     }

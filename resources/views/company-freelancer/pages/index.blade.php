@@ -271,10 +271,10 @@
                         </div>
                         <!-- Action Buttons -->
                         <div class="card-footer bg-light d-flex justify-content-end">
-                            <a href="#" class="btn btn-primary btn-sm me-2">
+                            <a href="{{route('company-freelancer-edit-company')}}" class="btn btn-primary btn-sm me-2">
                                 <i class="fas fa-edit me-1"></i> Edit Company
                             </a>
-                            <a href="#" class="btn btn-secondary btn-sm">
+                            <a href="" class="btn btn-secondary btn-sm">
                                 <i class="fas fa-eye me-1"></i> View Company
                             </a>
                         </div>

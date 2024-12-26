@@ -27,7 +27,7 @@ class DatabaseSeeder extends Seeder
         $this->call(CompanyTypeSeeder::class);
         $this->call(JobTypesSeeder::class);
         //factories
-        //User::factory(20)->create();
+        User::factory(10)->create();
         //Company::factory()->count(20)->create();
         //Recruiter::factory()->count(20)->create();
         // $this->call(CompanyRecruiterSeeder::class);
