@@ -96,7 +96,7 @@ Route::middleware(['auth', 'company.freelancer', 'verified'])->prefix('company/f
     Route::get('/edit', [CompanyFreelancerFrontController::class, 'editFreelancer'])->name('freelancer-edit');
     Route::get('/edit/company', [CompanyFreelancerFrontController::class, 'editCompany'])->name('edit-company');
 
-    
+
     Route::post('/recruiter/store', [FreelancerController::class, 'store'])->name('recruiter-store');
     Route::post('/update', [FreelancerController::class, 'update'])->name('update');
     Route::put('/update-profile-image', [FreelancerController::class, 'updateProfileImage'])->name('update-profile-image');
@@ -107,7 +107,6 @@ Route::middleware(['auth', 'company.freelancer', 'verified'])->prefix('company/f
     Route::get('/settings', [CompanyFreelancerFrontController::class, 'settings'])->name('settings');
     Route::post('/make-request', [CompanyFreelancerFrontController::class, 'followCompany'])->name('make-request');
 
-    
     //za dzonija
     Route::get('/company/details', [CompanyFreelancerFrontController::class, 'detailsCompany'])->name('company-details');
 

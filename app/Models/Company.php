@@ -9,6 +9,10 @@ use App\Models\Country;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/**
+ * @property int $id
+ * @property User $user
+ */
 class Company extends Model
 {
     use HasFactory;

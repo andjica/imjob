@@ -5,7 +5,13 @@ namespace App\Models;
 use App\Models\CompanyRecruiter;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
+/**
+ * @property int $id
+ */
 class Recruiter extends Model
 {
     use HasFactory;
@@ -21,14 +27,14 @@ class Recruiter extends Model
         'phone_number'
     ];
 
-   
-    public function user()
+
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
     //if you want active and inactive companies which recruiter works and wokrking
-    public function companies()
+    public function companies(): BelongsToMany
     {
         return $this->belongsToMany(Company::class, 'company_recruiter')
                     ->withPivot('from_date', 'until_date', 'status')
@@ -36,20 +42,20 @@ class Recruiter extends Model
     }
 
     //working now for that companies
-    public function activeCompanies()
+    public function activeCompanies(): BelongsToMany
     {
         return $this->belongsToMany(Company::class)
         ->withPivot(['from_date', 'until_date'])
         ->where(function ($query) {
             $query->whereNull('until_date')
                   ->orWhere('until_date', '>', now());
-                  
+
         });
-        
+
     }
 
     //working in the pass :)
-    public function inactiveCompanies()
+    public function inactiveCompanies(): BelongsToMany
     {
         return $this->belongsToMany(Company::class)
         ->withPivot(['from_date', 'until_date', 'status'])
@@ -60,30 +66,30 @@ class Recruiter extends Model
         });
     }
 
-    public function category()
+    public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
 
-    public function subCategory()
+    public function subCategory(): BelongsTo
     {
         return $this->belongsTo(SubCategory::class);
     }
 
-    public function company()
+    public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class, 'company_id');
     }
 
-    public function freelancerCompany()
+    public function freelancerCompany(): HasOne
     {
         return $this->hasOne(FreelancerCompany::class, 'freelancer_id');
     }
 
-    public function education()
+    public function education(): HasOne
     {
         return $this->hasOne(RecruiterEducation::class, 'recruiter_id');
     }
 
-    
+
 }

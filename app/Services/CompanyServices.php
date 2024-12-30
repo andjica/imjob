@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Services;
 
@@ -12,6 +12,11 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class CompanyServices implements CompanyInterface
 {
+    public function get(int $id): ?Company
+    {
+        return Company::find($id);
+    }
+
     //get all active companies
     public function getAllCompanies(?string $search = null): LengthAwarePaginator
     {
@@ -24,7 +29,7 @@ class CompanyServices implements CompanyInterface
         return $query->orderBy('updated_at', 'desc')->paginate(10);
     }
 
-    
+
 
     public function countActiveCompanies()
     {
@@ -35,7 +40,7 @@ class CompanyServices implements CompanyInterface
     public function getAllInactiveCompanies()
     {
         $inactiveCompanies = Company::where('active', 0)
-        ->with('user') 
+        ->with('user')
         ->orderBy('created_at', 'desc')
         ->get();
 
@@ -63,7 +68,7 @@ class CompanyServices implements CompanyInterface
     {
         $findCompany = Company::find($id) ?? abort(404);
 
-        
+
         try{
             $findCompany->delete();
             return true;
@@ -74,7 +79,7 @@ class CompanyServices implements CompanyInterface
         }
     }
 
-    
+
     public function create(Request $request)
     {
         $validated = $request->validate([
@@ -93,7 +98,7 @@ class CompanyServices implements CompanyInterface
             'cityId' => 'required|exists:cities,id', // Ensure city_id exists in cities table
             'logo' => 'nullable|mimes:jpg,jpeg,png,svg|max:2048', // Logo is optional, validate if uploaded
         ]);
-        
+
 
         $company = new Company();
         $company->country_id = $request->countryId;
@@ -111,47 +116,47 @@ class CompanyServices implements CompanyInterface
         $company->active = 0;
         // $company->number_of_employees = $request->numberofEmployees;
         $company->address = $request->address;
-       
+
         // Handling logo upload if present
         if ($request->hasFile('logo')) {
             // Store the logo in the 'company_logos' folder within the 'public' directory
             $logoPath = $request->file('logo')->store('uploads/company_logos', 'public');
-            
+
             // Generate the URL to access the uploaded logo
             $logoUrl = asset('storage/' . $logoPath);
 
             $company->logo = $logoPath;
-           
+
 
             try{
-                $company->save(); 
+                $company->save();
                 return $company;
             }
             catch(\Exception)
             {
                 return abort(500);
             }
-           
+
 
         } else {
             // Handle when no logo is uploaded (optional)
             $logoPath = null;
             $logoUrl = null;
                 // Save company withouth logo :)
-           
+
                 try{
-                    $company->save(); 
+                    $company->save();
                     return $company;
                 }
                 catch(\Exception)
                 {
                     return abort(500);
                 }
-               
+
         }
-        
-       
-       
+
+
+
     }
 
     public function update(Request $request)
@@ -172,7 +177,7 @@ class CompanyServices implements CompanyInterface
             'cityId' => 'required|exists:cities,id', // Ensure city_id exists in cities table
             'logo' => 'nullable|mimes:jpg,jpeg,png,svg|max:2048', // Logo is optional, validate if uploaded
         ]);
-        
+
 
         $company->name = $request->companyName;
         $company->country_id = $request->countryId;
@@ -190,42 +195,42 @@ class CompanyServices implements CompanyInterface
         $company->active = $company->active;
         // $company->number_of_employees = $request->numberofEmployees;
         $company->address = $request->address;
-       
-        
+
+
         if ($request->hasFile('logo')) {
             // Delete the old logo if it exists and the company already has a logo
             if (!empty($company->logo) && Storage::exists('public/' . $company->logo)) {
                 Storage::delete('public/' . $company->logo);
             }
-           
-            
-        
+
+
+
             // Store the new logo in the 'company_logos' folder
             $logoPath = $request->file('logo')->store('uploads/company_logos', 'public');
-        
+
             // Save only the file name in the database
             $company->logo = $logoPath;
             $company->save();
         }
-    
+
         // try {
             $company->save();
             return $company;
         // } catch (\Exception $e) {
         //     return abort(500, 'Error updating company: ' . $e->getMessage());
-        // }   
-        
+        // }
+
     }
 
     public function getCompanyByRecruiter(int $recruiterId): object
     {
-       
-    
-        return Company::where('user_id', $recruiterId)->with(['country', 'city', 'category', 'subCategory'])->first();
-        
-    }
-    
-    
 
-    
+
+        return Company::where('user_id', $recruiterId)->with(['country', 'city', 'category', 'subCategory'])->first();
+
+    }
+
+
+
+
 }
