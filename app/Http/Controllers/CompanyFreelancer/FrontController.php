@@ -16,6 +16,7 @@ use App\Interfaces\SubCategoryInterface;
 use App\Models\Company;
 use App\Services\CompanyTypeServices;
 use App\Interfaces\FreelancerInterface;
+use App\Interfaces\JobTypeInterface;
 
 class FrontController extends Controller
 {
@@ -27,11 +28,13 @@ class FrontController extends Controller
     protected $citiesServices;
     protected $companyTypesServices;
     protected $companyServices;
+    protected $jobTypesServices;
 
     public function __construct(CompanyFreelancerInterface $companyFreelancerServices, CategoryInterface $categoryServices
     ,FreelancerInterface $freelancerServices,  CountryInterface $countriesServices
     ,SubCategoryInterface $subCategoriesServices, CityInterface $citiesServices,
-    CompanyTypeInterface $companyTypesServices, CompanyInterface $companyServices)
+    CompanyTypeInterface $companyTypesServices, CompanyInterface $companyServices, 
+    JobTypeInterface $jobTypesServices)
     {    
         $this->companyFreelancerServices = $companyFreelancerServices;
         $this->categoryServices = $categoryServices;
@@ -41,6 +44,7 @@ class FrontController extends Controller
         $this->citiesServices = $citiesServices;
         $this->companyTypesServices = $companyTypesServices;
         $this->companyServices = $companyServices;
+        $this->jobTypesServices = $jobTypesServices;
     }
 
     public function dashboard()
@@ -119,6 +123,15 @@ class FrontController extends Controller
         //dodaj service za getCompany by id i vrati u blade :)
 
         return view('company-freelancer.pages.company.details');
+    }
+
+    public function createJob()
+    {
+        $countries = $this->countriesServices->getCountries();
+        $categories = $this->categoryServices->getAll();
+        $jobTypes = $this->jobTypesServices->getAll();
+
+        return view('company-freelancer.pages.job.create', compact('countries', 'categories', 'jobTypes'));
     }
 
    
