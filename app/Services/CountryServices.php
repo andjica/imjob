@@ -12,4 +12,11 @@ class CountryServices implements CountryInterface
         $countries = Country::orderBy('name', 'asc')->get();
         return $countries;
     }
+
+    public function getCurrency($countryId)
+    {
+        $country = Country::where('id', $countryId)->first() ?? abort(404);
+
+        return $country;
+    }
 }

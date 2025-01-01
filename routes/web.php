@@ -16,7 +16,8 @@ use App\Http\Controllers\{
     Recruiter\RecruiterEducationController,
     RoleController,
     Auth\LoginController,
-    Admin\FrontController as AdminFrontController
+    Admin\FrontController as AdminFrontController,
+    CountryController
 };
 
 /*
@@ -52,6 +53,7 @@ Route::get('/proba', [HomeController::class, 'proba']);
 Route::middleware('auth')->group(function () {
     Route::get('/subcategories/{categoryId}', [SubCategoryController::class, 'getSubCategoriesByCategory'])->name('subcategories');
     Route::get('/cities/{countryId}', [CityController::class, 'getCitiesByCountry'])->name('cities');
+    Route::get('/country/{countryId}/currency', [CountryController::class, 'getCurrency'])->name('currency');
 
     Route::prefix('user/{id}')->name('user-')->group(function () {
         Route::put('/update-email', [UserController::class, 'userEmailUpdate'])->name('email-update');
@@ -109,6 +111,6 @@ Route::middleware(['auth', 'company.freelancer', 'verified'])->prefix('company/f
 
     //za dzonija
     Route::get('/company/details', [CompanyFreelancerFrontController::class, 'detailsCompany'])->name('company-details');
-
+    Route::get('/job/create', [CompanyFreelancerFrontController::class, 'createJob'])->name('create-job');
 
 });

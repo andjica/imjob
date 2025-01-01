@@ -22,6 +22,7 @@ class SubCategorySeeder extends Seeder
                 'Therapists',
                 'Medical Researchers',
                 'Healthcare Administrators',
+                //'Other' + dodati
             ],
             'IT & Software' => [
                 'Software Developers',
