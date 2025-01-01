@@ -27,33 +27,9 @@ class FrontController extends Controller
         private SubCategoryInterface $subCategoriesServices,
         private CityInterface $citiesServices,
         private CompanyTypeInterface $companyTypesServices,
-        private CompanyInterface $companyServices
+        private CompanyInterface $companyServices,
+        private JobTypeInterface $jobTypesServices,
     ) {
-    protected $companyFreelancerServices;
-    protected $categoryServices;
-    protected $freelancerServices;
-    protected $countriesServices;
-    protected $subCategoriesServices;
-    protected $citiesServices;
-    protected $companyTypesServices;
-    protected $companyServices;
-    protected $jobTypesServices;
-
-    public function __construct(CompanyFreelancerInterface $companyFreelancerServices, CategoryInterface $categoryServices
-    ,FreelancerInterface $freelancerServices,  CountryInterface $countriesServices
-    ,SubCategoryInterface $subCategoriesServices, CityInterface $citiesServices,
-    CompanyTypeInterface $companyTypesServices, CompanyInterface $companyServices,
-    JobTypeInterface $jobTypesServices)
-    {
-        $this->companyFreelancerServices = $companyFreelancerServices;
-        $this->categoryServices = $categoryServices;
-        $this->freelancerServices = $freelancerServices;
-        $this->countriesServices = $countriesServices;
-        $this->subCategoriesServices = $subCategoriesServices;
-        $this->citiesServices = $citiesServices;
-        $this->companyTypesServices = $companyTypesServices;
-        $this->companyServices = $companyServices;
-        $this->jobTypesServices = $jobTypesServices;
     }
 
     public function dashboard()
