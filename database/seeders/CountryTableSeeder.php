@@ -32,7 +32,10 @@ class CountryTableSeeder extends Seeder
         $countryData = array_map(function($country) {
             return [
                 'name' => $country['name'],
-                'iso_code' => $country['iso2'], // Assuming 'iso3' is the field for ISO 3166-1 alpha-3
+                'iso_code' => $country['iso2'],
+                'currency'=> $country['currency'],
+                'currency_name' => $country['currency_name'],
+                'currency_symbol' => $country['currency_symbol'],// Assuming 'iso3' is the field for ISO 3166-1 alpha-3
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
