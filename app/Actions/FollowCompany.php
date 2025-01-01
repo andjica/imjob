@@ -6,6 +6,7 @@ use App\Enums\CompanyRecruiterStatus;
 use App\Interfaces\CompanyInterface;
 use App\Models\Company;
 use App\Models\CompanyRecruiter;
+use App\Models\Recruiter;
 use App\Models\User;
 
 class FollowCompany
@@ -22,26 +23,26 @@ class FollowCompany
         return $this->createCompanyRecruiter($companyToFollow, $follower);
     }
 
-    private function getCompany(int $companyId): Company
+    private function getCompany(int $companyId): ?Company
     {
         return $this->companyService->get($companyId);
     }
 
-    private function createCompanyRecruiter(Company $companyToFollow, Company $follower): CompanyRecruiter
+    private function createCompanyRecruiter(Company $companyToFollow, Recruiter $follower): CompanyRecruiter
     {
         return CompanyRecruiter::create([
-            'recruiter_id' => $follower->user->recruiter->id,
+            'recruiter_id' => $follower->id,
             'company_id'   => $companyToFollow->id,
             'status'       => CompanyRecruiterStatus::PENDING,
         ]);
     }
 
-    private function getFollower(?Company $follower): Company
+    private function getFollower(?Company $follower): Recruiter
     {
         if (!$follower) {
             /** @var User $user */
             $user     = auth()->user();
-            $follower = $user->company;
+            $follower = $user->recruiter;
         }
 
         return $follower;
