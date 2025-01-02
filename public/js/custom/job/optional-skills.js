@@ -4,7 +4,7 @@ $(document).ready(function() {
         // Create the new input group
         var newInputGroup = `
             <div class="input-group mb-2 skill-input-group">
-                <input type="text" class="form-control form-control-solid" name="required_skills[]" placeholder="Enter a skill" />
+                <input type="text" class="form-control form-control-solid" name="moreSkills[]" placeholder="Enter a skill" />
                 <button class="btn btn-success add-skill-btn" type="button" title="Add Skill">
                     <i class="fa fa-plus"></i>
                 </button>

@@ -17,7 +17,8 @@ use App\Http\Controllers\{
     RoleController,
     Auth\LoginController,
     Admin\FrontController as AdminFrontController,
-    CountryController
+    CountryController,
+    JobController
 };
 
 /*
@@ -113,4 +114,6 @@ Route::middleware(['auth', 'company.freelancer', 'verified'])->prefix('company/f
     Route::get('/company/details', [CompanyFreelancerFrontController::class, 'detailsCompany'])->name('company-details');
     Route::get('/job/create', [CompanyFreelancerFrontController::class, 'createJob'])->name('create-job');
 
+    //za dzonija store job
+    Route::post('/job/store', [JobController::class, 'store'])->name('store-job');
 });
