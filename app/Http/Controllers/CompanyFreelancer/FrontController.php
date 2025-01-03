@@ -119,11 +119,16 @@ class FrontController extends Controller
 
     public function createJob()
     {
+        $user = auth()->user();
+
+        //recruiter with his companies who works for .. :)
+        $recruiterWithCompanies = $user->recruiter->activeCompanies;
+
         $countries = $this->countriesServices->getCountries();
         $categories = $this->categoryServices->getAll();
         $jobTypes = $this->jobTypesServices->getAll();
 
-        return view('company-freelancer.pages.job.create', compact('countries', 'categories', 'jobTypes'));
+        return view('company-freelancer.pages.job.create', compact('countries', 'categories', 'jobTypes', 'recruiterWithCompanies'));
     }
 
 

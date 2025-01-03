@@ -46,6 +46,7 @@ class Recruiter extends Model
     {
         return $this->belongsToMany(Company::class)
         ->withPivot(['from_date', 'until_date'])
+        ->wherePivot('status', 'Active')
         ->where(function ($query) {
             $query->whereNull('until_date')
                   ->orWhere('until_date', '>', now());

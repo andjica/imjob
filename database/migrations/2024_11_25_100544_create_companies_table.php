@@ -24,8 +24,8 @@ class CreateCompaniesTable extends Migration
             $table->string('address');
             $table->string('owner_title');
             $table->string('name');
-            $table->string('registration_number')->unique();
-            $table->string('tax_number')->unique();
+            $table->string('registration_number');
+            $table->string('tax_number');
             $table->string('phone_number');
             $table->string('logo')->nullable();
             $table->string('email')->unique();

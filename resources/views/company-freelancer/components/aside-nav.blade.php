@@ -114,7 +114,7 @@
                                 <div class="menu-sub menu-sub-accordion">
 
                                     <div class="menu-item">
-                                        <a class="menu-link" href="">
+                                        <a class="menu-link {{ Route::currentRouteName() === 'company-freelancer-create-job' ? 'active' : '' }}" href="{{asset('company/freelancer/job/create')}}">
                                             <span class="menu-bullet">
                                                 <span class="bullet bullet-dot"></span>
                                             </span>
@@ -122,7 +122,7 @@
                                         </a>
                                     </div>
                                     <div class="menu-item">
-                                        <a class="menu-link {{ request()->is('admin/dashboard/jobs/active') ? 'active' : '' }}" href="{{ url('/admin/dashboard/jobs/active') }}">
+                                        <a class="menu-link" href="">
                                             <span class="menu-bullet">
                                                 <span class="bullet bullet-dot"></span>
                                             </span>
@@ -130,7 +130,7 @@
                                         </a>
                                     </div>
                                     <div class="menu-item">
-                                        <a class="menu-link {{ request()->is('admin/dashboard/jobs/active') ? 'active' : '' }}" href="{{ url('/admin/dashboard/jobs/active') }}">
+                                        <a class="menu-link" href="">
                                             <span class="menu-bullet">
                                                 <span class="bullet bullet-dot"></span>
                                             </span>

@@ -1,222 +1,242 @@
-$(document).ready(function() {
+
+  $(document).ready(function() {
+    // Handle the main form submission
     $('#jobForm').submit(function(event) {
-        // Prevent form submission for validation
-        event.preventDefault();
+      // Prevent form submission for validation
+      event.preventDefault();
 
-        // Access AutoNumeric instances
-        const anSalaryMin = AutoNumeric.getAutoNumericElement('#salaryMin');
-        const anSalaryMax = AutoNumeric.getAutoNumericElement('#salaryMax');
+      // Access AutoNumeric instances
+      const anSalaryMin = AutoNumeric.getAutoNumericElement('#salaryMin');
+      const anSalaryMax = AutoNumeric.getAutoNumericElement('#salaryMax');
 
-        // Get unformatted numeric values
-        const salaryMin = anSalaryMin ? anSalaryMin.getNumber() : parseFloat($('#salaryMin').val().replace(/[^0-9.-]+/g,""));
-        const salaryMax = anSalaryMax ? anSalaryMax.getNumber() : parseFloat($('#salaryMax').val().replace(/[^0-9.-]+/g,""));
+      // Get unformatted numeric values
+      const salaryMin = anSalaryMin ? anSalaryMin.getNumber() : parseFloat($('#salaryMin').val().replace(/[^0-9.-]+/g,""));
+      const salaryMax = anSalaryMax ? anSalaryMax.getNumber() : parseFloat($('#salaryMax').val().replace(/[^0-9.-]+/g,""));
 
-        // Get other form values
-        const title = $('#title').val().trim();
-        const description = jobDescriptionEditor ? jobDescriptionEditor.getData().trim() : $('#description').val().trim();
-        const categoryId = $('#categoryId').val();
-        const subCategoryId = $('#subCategoryId').val();
-        const countryId = $('#countryId').val();
-        const cityId = $('#cityId').val();
-        const jobTypeId = $('#jobTypeId').val();
-        const experienceLevel = $('#experienceLevel').val();
-        const requiredSkills = [];
-        $('input[name="requiredSkills[]"]').each(function() {
-            const skill = $(this).val().trim();
-            if (skill !== '') {
-                requiredSkills.push(skill);
-            }
+      // Get other form values
+      const title = $('#title').val().trim();
+      const description = jobDescriptionEditor ? jobDescriptionEditor.getData().trim() : $('#description').val().trim();
+      const categoryId = $('#categoryId').val();
+      const subCategoryId = $('#subCategoryId').val();
+      const countryId = $('#countryId').val();
+      const cityId = $('#cityId').val();
+      const jobTypeId = $('#jobTypeId').val();
+      const experienceLevel = $('#experienceLevel').val();
+      const requiredSkills = [];
+      $('input[name="requiredSkills[]"]').each(function() {
+        const skill = $(this).val().trim();
+        if (skill !== '') {
+          requiredSkills.push(skill);
+        }
+      });
+      const minAge = $('#min_age').val().trim();
+      const maxAge = $('#max_age').val().trim();
+      const specialRequirements = $('#special_requirements').is(':checked');
+      const specialDetails = $('#special_details').val().trim();
+      const validUntil = $('#validUntil').val().trim();
+
+      // Clear previous error states
+      $('.border-danger').removeClass('border-danger');
+      $('.text-danger').text('').hide();
+
+      // Initialize validation flag
+      let isValid = true;
+
+      // Validate Job Title
+      if (title === '') {
+        $('#title').addClass('border-danger');
+        $('#titleEmpty').text('Job Title is required.').show();
+        isValid = false;
+      }
+
+      // Validate Job Description
+      if (description === '') {
+        $('#description').addClass('border-danger');
+        $('#descriptionEmpty').text('Job Description is required.').show();
+        isValid = false;
+      }
+
+      // Validate Category
+      if (categoryId === '') {
+        $('#categoryId').addClass('border-danger');
+        $('#categoryIdEmpty').text('Please select a category.').show();
+        isValid = false;
+      }
+
+      // Validate SubCategory
+      if (subCategoryId === '') {
+        $('#subCategoryId').addClass('border-danger');
+        $('#subCategoryIdEmpty').text('Please select a subcategory.').show();
+        isValid = false;
+      }
+
+      // Validate Country
+      if (countryId === '') {
+        $('#countryId').addClass('border-danger');
+        $('#countryIdEmpty').text('Please select a country.').show();
+        isValid = false;
+      }
+
+      // Validate City
+      if (cityId === '') {
+        $('#cityId').addClass('border-danger');
+        $('#cityIdEmpty').text('Please select a city.').show();
+        isValid = false;
+      }
+
+      // Validate Job Type
+      if (jobTypeId === '') {
+        $('#jobTypeId').addClass('border-danger');
+        $('#jobTypeIdEmpty').text('Please select a job type.').show();
+        isValid = false;
+      }
+
+      // Validate Salary Minimum
+      if (isNaN(salaryMin) || salaryMin < 0 || salaryMin === "") {
+        $('#salaryMin').addClass('border-danger');
+        $('#salaryMinEmpty').text('Please enter a valid salary minimum.').show();
+        isValid = false;
+      }
+
+      // Validate Salary Maximum
+      if (isNaN(salaryMax) || salaryMax < 0 || salaryMax === "") {
+        $('#salaryMax').addClass('border-danger');
+        $('#salaryMaxEmpty').text('Please enter a valid salary maximum.').show();
+        isValid = false;
+      } else if (!isNaN(salaryMin) && salaryMax < salaryMin) {
+        $('#salaryMax').addClass('border-danger');
+        $('#salaryMaxEmpty').text('Salary maximum must be greater than or equal to salary minimum.').show();
+        isValid = false;
+      }
+
+      // Validate Experience Level
+      if (experienceLevel === '') {
+        $('#experienceLevel').addClass('border-danger');
+        $('#experienceLevelEmpty').text('Please select an experience level.').show();
+        isValid = false;
+      }
+
+      // Validate Required Skills
+      if (requiredSkills.length === 0) {
+        $('input[name="requiredSkills[]"]').addClass('border-danger');
+        $('#requiredSkillsEmpty').text('Please enter at least one required skill.').show();
+        isValid = false;
+      }
+
+      // Validate Age Range
+      if (minAge !== '' && isNaN(minAge)) {
+        $('#min_age').addClass('border-danger');
+        $('#minAgeEmpty').text('Please enter a valid minimum age.').show();
+        isValid = false;
+      }
+      if (maxAge !== '' && isNaN(maxAge)) {
+        $('#max_age').addClass('border-danger');
+        $('#maxAgeEmpty').text('Please enter a valid maximum age.').show();
+        isValid = false;
+      }
+      if (minAge !== '' && maxAge !== '' && parseInt(maxAge) < parseInt(minAge)) {
+        $('#max_age').addClass('border-danger');
+        $('#maxAgeEmpty').text('Maximum age must be greater than or equal to minimum age.').show();
+        isValid = false;
+      }
+
+      // Validate Special Requirements Details if checkbox is checked
+      if (specialRequirements) {
+        if (specialDetails === '') {
+          $('#special_details').addClass('border-danger');
+          $('#specialDetailsEmpty').text('Please provide details for special requirements.').show();
+          isValid = false;
+        }
+      }
+
+      // Validate Valid Until
+      if (!validateValidUntil()) {
+        isValid = false;
+      }
+
+      // If validation passes, show the company selection modal
+      if (isValid) {
+        var companyModal = new bootstrap.Modal(document.getElementById('companyModal'), {
+          backdrop: 'static',
+          keyboard: false
         });
-        const minAge = $('#min_age').val().trim();
-        const maxAge = $('#max_age').val().trim();
-        const specialRequirements = $('#special_requirements').is(':checked');
-        const specialDetails = $('#special_details').val().trim();
-        const validUntil = $('#validUntil').val().trim();
-
-        // Clear previous error states
-        $('.border-danger').removeClass('border-danger');
-        $('.text-danger').text('').hide();
-
-        // Initialize validation flag
-        let isValid = true;
-
-        // Validate Job Title
-        if (title === '') {
-            $('#title').addClass('border-danger');
-            $('#titleEmpty').text('Job Title is required.').show();
-            isValid = false;
-        }
-
-        // Validate Job Description
-        if (description === '') {
-            $('#description').addClass('border-danger');
-            $('#descriptionEmpty').text('Job Description is required.').show();
-            isValid = false;
-        }
-
-        // Validate Category
-        if (categoryId === '') {
-            $('#categoryId').addClass('border-danger');
-            $('#categoryIdEmpty').text('Please select a category.').show();
-            isValid = false;
-        }
-
-        // Validate SubCategory
-        if (subCategoryId === '') {
-            $('#subCategoryId').addClass('border-danger');
-            $('#subCategoryIdEmpty').text('Please select a subcategory.').show();
-            isValid = false;
-        }
-
-        // Validate Country
-        if (countryId === '') {
-            $('#countryId').addClass('border-danger');
-            $('#countryIdEmpty').text('Please select a country.').show();
-            isValid = false;
-        }
-
-        // Validate City
-        if (cityId === '') {
-            $('#cityId').addClass('border-danger');
-            $('#cityIdEmpty').text('Please select a city.').show();
-            isValid = false;
-        }
-
-        // Validate Job Type
-        if (jobTypeId === '') {
-            $('#jobTypeId').addClass('border-danger');
-            $('#jobTypeIdEmpty').text('Please select a job type.').show();
-            isValid = false;
-        }
-
-    
-
-        // Validate Salary Minimum
-        if (isNaN(salaryMin) || salaryMin < 0 || salaryMin == "") {
-            $('#salaryMin').addClass('border-danger');
-            $('#salaryMinEmpty').text('Please enter a valid salary minimum.').show();
-            isValid = false;
-        }
-
-        // Validate Salary Maximum
-        if (isNaN(salaryMax) || salaryMax < 0 || salaryMax ==  "") {
-            $('#salaryMax').addClass('border-danger');
-            $('#salaryMaxEmpty').text('Please enter a valid salary maximum.').show();
-            isValid = false;
-        } else if (!isNaN(salaryMin) && salaryMax < salaryMin) {
-            $('#salaryMax').addClass('border-danger');
-            $('#salaryMaxEmpty').text('Salary maximum must be greater than or equal to salary minimum.').show();
-            isValid = false;
-        }
-
-        // Validate Experience Level
-        if (experienceLevel === '') {
-            $('#experienceLevel').addClass('border-danger');
-            $('#experienceLevelEmpty').text('Please select an experience level.').show();
-            isValid = false;
-        }
-
-        // Validate Required Skills
-        if (requiredSkills.length === 0) {
-            $('input[name="requiredSkills[]"]').addClass('border-danger');
-            $('#requiredSkillsEmpty').text('Please enter at least one required skill.').show();
-            isValid = false;
-        }
-
-        // Validate Age Range
-        if (minAge !== '' && isNaN(minAge)) {
-            $('#min_age').addClass('border-danger');
-            $('#minAgeEmpty').text('Please enter a valid minimum age.').show();
-            isValid = false;
-        }
-        if (maxAge !== '' && isNaN(maxAge)) {
-            $('#max_age').addClass('border-danger');
-            $('#maxAgeEmpty').text('Please enter a valid maximum age.').show();
-            isValid = false;
-        }
-        if (minAge !== '' && maxAge !== '' && parseInt(maxAge) < parseInt(minAge)) {
-            $('#max_age').addClass('border-danger');
-            $('#maxAgeEmpty').text('Maximum age must be greater than or equal to minimum age.').show();
-            isValid = false;
-        }
-
-        // Validate Special Requirements Details if checkbox is checked
-        if (specialRequirements) {
-            if (specialDetails === '') {
-                $('#special_details').addClass('border-danger');
-                $('#specialDetailsEmpty').text('Please provide details for special requirements.').show();
-                isValid = false;
-            }
-        }
-
-        // Validate Valid Until
-        if (!validateValidUntil()) {
-            isValid = false;
-        }
-
-        // If validation passes, submit the form
-        if (isValid) {
-            // Optionally, disable the submit button to prevent multiple submissions
-            // $('#jobForm button[type="submit"]').prop('disabled', true);
-
-            // Submit the form
-            //this.submit();
-            var companyModal = new bootstrap.Modal(document.getElementById('companyModal'), {
-                backdrop: 'static',
-                keyboard: false
-            });
-            companyModal.show();
-        } else {
-            // Optionally, focus the first invalid input for better UX
-            $('.border-danger').first().focus();
-        }
+        companyModal.show();
+      } else {
+        // Optionally, focus the first invalid input for better UX
+        $('.border-danger').first().focus();
+      }
     });
+
+    // Handle the Confirm button click in the Company Selection Modal
     $('#confirmCompany').on('click', function() {
-        const companyName = $('#companyName').val().trim();
+      // Get the selected radio button value
+      const selectedCompany = $('input[name="selectedCompany"]:checked');
 
-        // Clear previous error messages
-        $('#companyNameEmpty').text('').hide();
-        $('#companyName').removeClass('border-danger');
+      // Clear previous error messages related to company selection (if any)
+      $('#companySelectionError').text('').hide();
 
-        let isValid = true;
+      let isValid = true;
 
-        // Validate Company Name
-        if (companyName === '') {
-            $('#companyName').addClass('border-danger');
-            $('#companyNameEmpty').text('Company name is required.').show();
-            isValid = false;
+      // Validate if a company is selected
+      if (selectedCompany.length === 0) {
+        // Display an error message
+        if ($('#companySelectionError').length === 0) {
+          // If the error container doesn't exist, create it
+          $('<h5 id="companySelectionError" class="text-danger mx-auto">Please select a company.</h5>').insertBefore('.modal-footer');
+        } else {
+          $('#companySelectionError').text('Please select a company.').show();
         }
+        isValid = false;
+      }
 
-        if (isValid) {
-            // Optionally, you can add the company name to the main form as a hidden input
-            if ($('#companyNameHidden').length === 0) {
-                $('#jobForm').append('<input type="hidden" id="companyNameHidden" name="companyName" value="' + companyName + '">');
-            } else {
-                $('#companyNameHidden').val(companyName);
-            }
+      if (isValid) {
+        const selectedCompanyId = selectedCompany.val();
+        const selectedCompanyName = selectedCompany.closest('.card').find('.fs-4.fw-bold').text().trim();
 
-            // Hide the modal
-            var companyModalEl = document.getElementById('companyModal');
-            var companyModal = bootstrap.Modal.getInstance(companyModalEl);
-            companyModal.hide();
-
-            // Optionally, disable the submit button to prevent multiple submissions
-            // $('#jobForm button[type="submit"]').prop('disabled', true);
-
-            // Submit the form
-            $('#jobForm')[0].submit();
+        // Add the selected company ID to the main form as a hidden input
+        let hiddenInputId = $('#selectedCompanyId');
+        if (hiddenInputId.length === 0) {
+          hiddenInputId = $('<input type="hidden" id="selectedCompanyId" name="companyId">').appendTo('#jobForm');
         }
+        hiddenInputId.val(selectedCompanyId);
+
+        // Add the selected company name to the main form as a hidden input (optional)
+        let hiddenInputName = $('#selectedCompanyName');
+        if (hiddenInputName.length === 0) {
+          hiddenInputName = $('<input type="hidden" id="selectedCompanyName" name="companyName">').appendTo('#jobForm');
+        }
+        hiddenInputName.val(selectedCompanyName);
+
+        // Hide the modal
+        var companyModalEl = document.getElementById('companyModal');
+        var companyModal = bootstrap.Modal.getInstance(companyModalEl);
+        companyModal.hide();
+
+        // Submit the form
+        $('#jobForm')[0].submit();
+      }
     });
 
     /**
      * Optional: Reset the modal form when it's hidden.
      */
     $('#companyModal').on('hidden.bs.modal', function () {
-        $('#companyForm')[0].reset();
-        $('#companyName').removeClass('border-danger');
-        $('#companyNameEmpty').text('').hide();
+      // If you have any reset logic for the modal, add it here
+      // For example, uncheck all radio buttons
+      $('input[name="selectedCompany"]').prop('checked', false);
+      $('#companySelectionError').text('').hide();
     });
-});
+
+    /**
+     * Optional: Focus on the first input when the modal is shown
+     */
+    $('#companyModal').on('shown.bs.modal', function () {
+      // Optionally, set focus to the first radio button
+      $('input[name="selectedCompany"]').first().focus();
+    });
+  });
+
+
 
 
 $('#categoryId').on('change', function () {

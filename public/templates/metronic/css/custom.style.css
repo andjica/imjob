@@ -702,3 +702,29 @@ footer a {
 footer a:hover {
     color: #3699ff; /* Metronic primary hover color */
 }
+
+.border-danger {
+  border: 0.5px dotted #e89ea5 !important;
+   /* Metronic’s danger color */
+}
+
+.border-danger:focus {
+  border-color: #e89ea5 !important;
+  box-shadow: 0 0 0 0.2rem rgba(246, 78, 96, 0.25);
+}
+
+/* Custom Border Success */
+.border-success {
+  border: 0.5px solid #7aecc8 !important; /* Metronic’s success color */
+}
+
+.border-success:focus {
+  border-color:#7aecc8 !important;
+  box-shadow: 0 0 0 0.2rem rgba(27, 197, 189, 0.25);
+}
+
+/* Optional: Transition for Smooth Border Changes */
+.border-danger,
+.border-success {
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
