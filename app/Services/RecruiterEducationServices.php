@@ -51,7 +51,7 @@ class RecruiterEducationServices implements RecruiterEducationInterface
         ]);
 
          // Create a new RecruiterEducation instance
-         $recruiterEducation = RecruiterEducation::where('recruiter_id', auth()->user()->recruiter->id)?? abort(404);
+         $recruiterEducation = RecruiterEducation::where('recruiter_id', auth()->user()->recruiter->id)->first() ?? abort(404);
          $recruiterEducation->recruiter_id = $recruiterEducation->recruiter_id;
          $recruiterEducation->school = $request->school;
          $recruiterEducation->degree = $request->degree;

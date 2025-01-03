@@ -13,7 +13,7 @@
 
             <!--begin::Card body-->
             <div class="card-body pt-3">
-                <form action="" method="POST" id="recruiterEducationEditForm">
+                <form action="{{route('company-freelancer-education-update')}}" method="POST" id="recruiterEducationEditForm">
                     @csrf
 
                     <!-- School -->

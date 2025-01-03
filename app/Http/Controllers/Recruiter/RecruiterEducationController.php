@@ -20,4 +20,11 @@ class RecruiterEducationController extends Controller
         $this->recruiterEducationServices->create($request);
         return redirect()->back()->with('success', 'Education details saved successfully!');
     }
+
+    public function update(Request $request)
+    {
+        $this->recruiterEducationServices->update($request);
+        return redirect()->back()->with('success', 'Education details saved successfully!');
+
+    }
 }
