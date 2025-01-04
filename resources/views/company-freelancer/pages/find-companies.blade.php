@@ -35,11 +35,11 @@
         <!-- Company Cards -->
         <div class="row g-6">
             @forelse($companies as $company)
-                <div class="col-md-6 col-lg-12">
+                <div class="col-md-4">
                     <div class="card shadow-sm">
                         <div class="card-header text-right">
                             <div class="card-toolbar">
-                                <a href="{{route('company-freelancer-company-details')}}" class="btn btn-outline btn-sm btn-outline-dashed me-2 mb-2">View profile</a>
+                                <a href="{{asset('/company/freelancer/company/'.$company->id.'/details')}}" class="btn btn-outline btn-sm btn-outline-dashed me-2 mb-2">View profile</a>
                             </div>
                             @php
                                 /** @var User $user */

@@ -110,11 +110,12 @@ class FrontController extends Controller
         ]);
     }
 
-    public function detailsCompany()
+    public function detailsCompany($companyId)
     {
-        //dodaj service za getCompany by id i vrati u blade :)
-
-        return view('company-freelancer.pages.company.details');
+        
+        $company = $this->companyServices->get($companyId);
+        
+        return view('company-freelancer.pages.company.details', compact('company'));
     }
 
     public function createJob()

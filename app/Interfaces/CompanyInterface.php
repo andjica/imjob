@@ -13,7 +13,7 @@ interface CompanyInterface
     public function get(int $id): ?Company;
 
     public function getAllCompanies(?string $search = null): LengthAwarePaginator;
-
+    
     public function countActiveCompanies();
 
     public function getAllInactiveCompanies();

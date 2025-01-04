@@ -1,0 +1,84 @@
+    /* Custom Styles for Company Blocks */
+    .company-block {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        margin: 10px;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        background-color: #ffffff;
+        text-align: center;
+        height: 100%;
+      }
+  
+      .company-block img {
+        width: 80px;
+        /*height: 100px;*/
+        object-fit: contain;
+        margin-bottom: 15px;
+      }
+  
+      .company-block h5 {
+        margin-bottom: 10px;
+        font-size: 1.25rem;
+        font-weight: bold;
+      }
+  
+      .company-block p {
+        margin: 5px 0;
+        font-size: 0.9rem;
+        color: #555555;
+      }
+  
+      /* Custom Styles for Smaller Swiper Navigation Arrows */
+      .swiper-button-next,
+      .swiper-button-prev {
+        width: 30px; /* Reduced width */
+        height: 30px; /* Reduced height */
+        margin-top: -15px; /* Adjust vertical alignment if necessary */
+      }
+  
+      .swiper-button-next::after,
+      .swiper-button-prev::after {
+        font-size: 16px; /* Smaller arrow icons */
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+  
+      /* Optional: Adjust the position of the navigation buttons */
+      .swiper-button-next {
+        right: 10px; /* Adjust as needed */
+      }
+  
+      .swiper-button-prev {
+        left: 10px; /* Adjust as needed */
+      }
+  
+      /* Optional: Change the color of the arrows */
+      .swiper-button-next::after,
+      .swiper-button-prev::after {
+        color: #000; /* Change to your desired color */
+      }
+  
+      /* Responsive Adjustments (Optional) */
+      @media (max-width: 768px) {
+        .swiper-button-next,
+        .swiper-button-prev {
+          width: 25px;
+          height: 25px;
+        }
+  
+        .swiper-button-next::after,
+        .swiper-button-prev::after {
+          font-size: 14px;
+        }
+      }
+
+      .img-fluid {
+        max-width: 100%;
+        height: auto;
+      }

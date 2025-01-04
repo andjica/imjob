@@ -14,7 +14,7 @@ class CompanyServices implements CompanyInterface
 {
     public function get(int $id): ?Company
     {
-        return Company::find($id);
+        return Company::find($id) ?? abort(404);
     }
 
     //get all active companies

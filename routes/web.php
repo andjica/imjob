@@ -108,12 +108,12 @@ Route::middleware(['auth', 'company.freelancer', 'verified'])->prefix('company/f
     // Education Routes
     Route::post('/education/create', [RecruiterEducationController::class, 'create'])->name('education-create');
     Route::post('/education/update', [RecruiterEducationController::class, 'update'])->name('education-update');
-    
+
     Route::get('/settings', [CompanyFreelancerFrontController::class, 'settings'])->name('settings');
     Route::post('/make-request', [CompanyFreelancerFrontController::class, 'followCompany'])->name('make-request');
 
     //za dzonija
-    Route::get('/company/details', [CompanyFreelancerFrontController::class, 'detailsCompany'])->name('company-details');
+    Route::get('/company/{companyId}/details', [CompanyFreelancerFrontController::class, 'detailsCompany'])->name('company-details');
     Route::get('/job/create', [CompanyFreelancerFrontController::class, 'createJob'])->name('create-job');
 
     //za dzonija store job
