@@ -62,7 +62,13 @@
                                     </a>
                                 </div>
                             @endif
-
+                            <!-- ovo je dugme ako su vec conectiovani -->
+                            <div class="card-tolbar">
+                            <button type="button" class="btn btn-primary btn-sm mt-4" data-bs-toggle="tooltip" data-bs-placement="left" title="You are connected with this company">
+                                <i class="fas fa-link"></i>
+                            </button>
+                            </div>
+                             <!-- connected button end -->
                         </div>
                         <div class="card-body">
                             <strong>{{$company->name}}</strong><br>
