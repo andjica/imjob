@@ -8,7 +8,7 @@
         max-width: 1000px;
         margin: 1.75rem auto;
     }
-   
+
 }
 
 
@@ -34,7 +34,7 @@
 
         <!--begin::Card body-->
         <div class="card-body pt-3">
-            <form action="" method="POST" id="jobForm">
+            <form action="/company/freelancer/job/store" method="POST" id="jobForm">
                 @csrf
                 <!-- Job Title -->
                 <div class="row mb-5">
@@ -129,7 +129,7 @@
                     </div>
                 </div>
 
-            
+
 
 
                 <!-- Salary Minimum -->
@@ -220,11 +220,11 @@
                     <label class="col-lg-3 col-form-label fw-bold fs-6">Special Requirements:</label>
                     <div class="col-lg-9">
                         <div class="form-check form-switch">
-                            <input 
-                                class="form-check-input  mb-2" 
-                                type="checkbox" 
-                                id="special_requirements" 
-                                name="special_requirements" 
+                            <input
+                                class="form-check-input  mb-2"
+                                type="checkbox"
+                                id="special_requirements"
+                                name="special_requirements"
                                 {{ old('special_requirements') ? 'checked' : '' }}
                             >
                             <label class="form-check-label" for="special_requirements">
@@ -241,11 +241,11 @@
                 <div class="row mb-5 d-none" id="specialRequirementsFields">
                     <label for="special_details" class="col-lg-3 col-form-label fw-bold fs-6">Details:</label>
                     <div class="col-lg-9">
-                        <textarea 
-                            class="form-control form-control-solid  mb-2 @error('special_details') is-invalid @enderror" 
-                            name="special_details" 
-                            id="special_details" 
-                            rows="4" 
+                        <textarea
+                            class="form-control form-control-solid  mb-2 @error('special_details') is-invalid @enderror"
+                            name="special_details"
+                            id="special_details"
+                            rows="4"
                             placeholder="Enter any special requirements here..."
                         >{{ old('special_details') }}</textarea>
                         <span class="text-danger" id="specialDetailsEmpty">
@@ -284,7 +284,7 @@
     @include('company-freelancer.components.job.create-modal-popup')
     </div>
 </div>
-   
+
 @endsection
 @section('js')
 <script src="https://cdn.ckeditor.com/ckeditor5/35.3.2/classic/ckeditor.js"></script>
@@ -326,7 +326,7 @@
                     }
                 });
 
-                
+
             })
             .catch(error => {
                 console.error('Error initializing CKEditor:', error);

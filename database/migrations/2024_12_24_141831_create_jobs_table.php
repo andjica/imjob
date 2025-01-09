@@ -12,7 +12,7 @@ class CreateJobsTable extends Migration
      * @return void
      */
     public function up()
-    {   
+    {
         Schema::create('jobs', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('company_id');
@@ -46,7 +46,7 @@ class CreateJobsTable extends Migration
 
             // Shortened Index Name
             $table->index(
-                ['company_id', 'recruiter_id', 'category_id', 'sub_category_id', 'country_id', 'city_id', 'job_type_id'], 
+                ['company_id', 'recruiter_id', 'category_id', 'sub_category_id', 'country_id', 'city_id', 'job_type_id'],
                 'jobs_comp_rec_cat_sub_cat_country_city_jobtype_idx'
             );
         });

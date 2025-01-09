@@ -92,28 +92,32 @@
 
         <!-- Buttons Column -->
         <div class="col-lg-1 d-none d-lg-flex flex-column align-items-left justify-content-start">
-            <!-- Ako postoji zajednicka saradnja mora se prikazu dva buttons, jedan samo info da su konektovani drugi dole broj jobova ako ih ima da je recruter okacio -->
-            <button type="button" class="btn btn-primary btn-sm mb-2" data-bs-toggle="tooltip" data-bs-placement="left" title="You are connected with this company">
-                <i class="fas fa-link"></i>
-            </button>
-             <!-- Broj jobova -->
-             <button type="button" class="btn btn-primary btn-sm mb-2" data-bs-toggle="tooltip" data-bs-placement="left" title="Number of job is ">
-                0 <i class="fas fa-briefcase"></i>
-            </button>
+            @if (!$isOwnCompany)
+                @if ($isConnected)
+                    <!-- Ako postoji zajednicka saradnja mora se prikazu dva buttons, jedan samo info da su konektovani drugi dole broj jobova ako ih ima da je recruter okacio -->
+                    <button type="button" class="btn btn-primary btn-sm mb-2" data-bs-toggle="tooltip" data-bs-placement="left" title="You are connected with this company">
+                        <i class="fas fa-link"></i>
+                    </button>
+                     <!-- Broj jobova -->
+                     <button type="button" class="btn btn-primary btn-sm mb-2" data-bs-toggle="tooltip" data-bs-placement="left" title="Number of job is ">
+                        0 <i class="fas fa-briefcase"></i>
+                    </button>
 
-            <!-- Button 2 ako vidis kompaniju i nisi jos uvek konektovan sa njom izlazi ovo dugme -->
-            <button
-                type="button"
-                class="btn btn-success btn-sm mb-2 follow-button"
-                data-company-id="{{ $company->id }}"
-                data-bs-toggle="tooltip"
-                data-bs-placement="left"
-                title="Make connection, send request to this company"
-                aria-label="Connect with Company {{ $company->name }}"
-                >
-                <i class="fas fa-handshake"></i>
-            </button>
-           
+                @else
+                    <!-- Button 2 ako vidis kompaniju i nisi jos uvek konektovan sa njom izlazi ovo dugme -->
+                    <button
+                        type="button"
+                        class="btn btn-success btn-sm mb-2 follow-button"
+                        data-company-id="{{ $company->id }}"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="left"
+                        title="Make connection, send request to this company"
+                        aria-label="Connect with Company {{ $company->name }}"
+                        >
+                        <i class="fas fa-handshake"></i>
+                    </button>
+                @endif
+            @endif
         </div>
     </div>
     <div class="row mt-5">
@@ -121,48 +125,27 @@
         <!-- Swiper -->
         <div class="swiper mySwiper">
           <div class="swiper-wrapper">
-            
-            <!-- Company Slide 1 -->
+
+          @foreach ($similarCompanies as $similarCompany)
+            @if ($company->id === $similarCompany->id)
+                @continue
+             @endif
             <div class="swiper-slide">
               <div class="company-block">
                 <img src="{{asset('/images/q-mark.png')}}" class="img-fluid" alt="Company A Logo">
-                <h5>Company A</h5>
-                <p><strong>Category:</strong> Technology</p>
-                <p><strong>Subcategory:</strong> Software Development</p>
-                <p><strong>Location:</strong> USA, New York</p>
+                <h5>{{ $similarCompany->name }}</h5>
+                <p><strong>Category:</strong> {{ $similarCompany->category->name }}</p>
+                <p><strong>Subcategory:</strong> {{ $similarCompany->subCategory->name }}</p>
+                <p><strong>Location:</strong> {{ $similarCompany->city->name }}, {{ $similarCompany->country->name }}</p>
               </div>
             </div>
-            
-            <!-- Company Slide 2 -->
-            <div class="swiper-slide">
-              <div class="company-block">
-                <img src="{{asset('/images/q-mark.png')}}" class="img-fluid" alt="Company B Logo">
-                <h5>Company B</h5>
-                <p><strong>Category:</strong> Finance</p>
-                <p><strong>Subcategory:</strong> Investment Banking</p>
-                <p><strong>Location:</strong> UK, London</p>
-              </div>
-            </div>
-            
-            <!-- Company Slide 3 -->
-            <div class="swiper-slide">
-              <div class="company-block">
-                <img src="{{asset('/images/q-mark.png')}}" class="img-fluid" alt="Company C Logo">
-                <h5>Company C</h5>
-                <p><strong>Category:</strong> Healthcare</p>
-                <p><strong>Subcategory:</strong> Biotechnology</p>
-                <p><strong>Location:</strong> Germany, Berlin</p>
-              </div>
-            </div>
-            
-            <!-- Add more slides as needed -->
-            
+          @endforeach
           </div>
-          
+
           <!-- Swiper Navigation Buttons -->
           <div class="swiper-button-next"></div>
           <div class="swiper-button-prev"></div>
-          
+
           <!-- Swiper Pagination (optional) -->
           <div class="swiper-pagination"></div>
         </div>
@@ -175,7 +158,7 @@
 @section('js')
   <!-- Swiper JS -->
   <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
-  
+
   <!-- Initialize Swiper -->
   <script>
     const swiper = new Swiper('.mySwiper', {
@@ -183,7 +166,7 @@
       loop: true,
       slidesPerView: 3,
       spaceBetween: 30,
-      
+
       // Responsive breakpoints
       breakpoints: {
         320: {
@@ -199,19 +182,19 @@
           spaceBetween: 30
         },
       },
-      
+
       // Navigation arrows
       navigation: {
         nextEl: '.swiper-button-next',
         prevEl: '.swiper-button-prev',
       },
-      
+
       // Pagination
       pagination: {
         el: '.swiper-pagination',
         clickable: true,
       },
-      
+
       // Accessibility
       a11y: true,
     });

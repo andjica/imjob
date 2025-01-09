@@ -1,26 +1,25 @@
 <?php
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{
-    HomeController,
-    UserController,
-    GoogleController,
-    RecruiterController,
-    SubCategoryController,
+    Admin\FrontController as AdminFrontController,
+    Auth\LoginController,
     City\CityController,
+    CompanyFreelancer\FreelancerController,
+    CompanyFreelancer\FrontController as CompanyFreelancerFrontController,
     Company\CompanyController,
     Company\FrontController as CompanyFrontController,
-    CompanyFreelancer\FrontController as CompanyFreelancerFrontController,
-    CompanyFreelancer\FreelancerController,
+    CountryController,
+    GoogleController,
+    HomeController,
+    JobController,
+    RecruiterController,
     Recruiter\RecruiterEducationController,
     RoleController,
-    Auth\LoginController,
-    Admin\FrontController as AdminFrontController,
-    CountryController,
-    JobController
+    SubCategoryController,
+    UserController
 };
-use App\Models\RecruiterEducation;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,7 +38,7 @@ Auth::routes(['verify' => true]);
 
 Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('auth-google');
 Route::get('callback/google/register', [GoogleController::class, 'handleGoogleCallback']);
-Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
+Route::get('/logout', [LoginController::class, 'logout'])->name('logout-route');
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/choose/role', [HomeController::class, 'chooseRole'])->name('choose-role');
@@ -100,7 +99,6 @@ Route::middleware(['auth', 'company.freelancer', 'verified'])->prefix('company/f
     Route::get('/edit', [CompanyFreelancerFrontController::class, 'editFreelancer'])->name('freelancer-edit');
     Route::get('/edit/company', [CompanyFreelancerFrontController::class, 'editCompany'])->name('edit-company');
 
-
     Route::post('/recruiter/store', [FreelancerController::class, 'store'])->name('recruiter-store');
     Route::post('/update', [FreelancerController::class, 'update'])->name('update');
     Route::put('/update-profile-image', [FreelancerController::class, 'updateProfileImage'])->name('update-profile-image');
@@ -113,9 +111,7 @@ Route::middleware(['auth', 'company.freelancer', 'verified'])->prefix('company/f
     Route::post('/make-request', [CompanyFreelancerFrontController::class, 'followCompany'])->name('make-request');
 
     //za dzonija
-    Route::get('/company/{companyId}/details', [CompanyFreelancerFrontController::class, 'detailsCompany'])->name('company-details');
+    Route::get('/company/{company}/details', [CompanyFreelancerFrontController::class, 'detailsCompany'])->name('company-details');
     Route::get('/job/create', [CompanyFreelancerFrontController::class, 'createJob'])->name('create-job');
-
-    //za dzonija store job
     Route::post('/job/store', [JobController::class, 'store'])->name('store-job');
 });

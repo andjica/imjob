@@ -21,12 +21,12 @@ class CreateCompanyRecruiterTable extends Migration
             $table->date('until_date')->nullable(); // When the recruiter left
             $table->string('status')->default('active'); // active or past
             $table->timestamps();
-        
+
             // Foreign keys
             $table->foreign('recruiter_id')->references('id')->on('recruiters')->onDelete('cascade');
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
-        
-            $table->unique(['recruiter_id', 'company_id']); 
+
+            $table->unique(['recruiter_id', 'company_id']);
         });
     }
 

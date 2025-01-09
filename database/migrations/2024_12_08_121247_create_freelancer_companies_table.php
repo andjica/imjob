@@ -22,7 +22,6 @@ class CreateFreelancerCompaniesTable extends Migration
             // Set foreign key constraints
             $table->foreign('freelancer_id')->references('id')->on('recruiters')->onDelete('cascade');
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
-            
         });
     }
 

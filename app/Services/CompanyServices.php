@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Company;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Interfaces\CompanyInterface;
@@ -20,16 +21,26 @@ class CompanyServices implements CompanyInterface
     //get all active companies
     public function getAllCompanies(?string $search = null): LengthAwarePaginator
     {
-        $query = Company::where('active', 1);
+        /** @var Builder $query */
+        $query = Company::with(['city', 'country'])
+        ->where('active', 1);
 
         if (!is_null($search)) {
-            $query->where('name', 'like', '%' . $search . '%');
+            $query->where(function ($query) use ($search) {
+                $query
+                    ->orWhere('name', 'like', '%' . $search . '%')
+                    ->orWhere('address', 'like', '%' . $search . '%')
+                    ->orWhereHas('city', function ($query) use ($search) {
+                        $query->where('name', 'like', '%' . $search . '%');
+                    })
+                    ->orWhereHas('country', function ($query) use ($search) {
+                        $query->where('name', 'like', '%' . $search . '%');
+                    });
+            });
         }
 
         return $query->orderBy('updated_at', 'desc')->paginate(10);
     }
-
-
 
     public function countActiveCompanies()
     {
@@ -230,7 +241,8 @@ class CompanyServices implements CompanyInterface
 
     }
 
-
-
-
+    public function getCompaniesByCategory(int $categoryId): LengthAwarePaginator
+    {
+        return Company::where('category_id', $categoryId)->with(['category', 'city', 'country', 'subCategory'])->paginate(10);
+    }
 }
