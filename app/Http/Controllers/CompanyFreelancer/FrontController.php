@@ -13,9 +13,14 @@ use App\Interfaces\CompanyTypeInterface;
 use App\Interfaces\CountryInterface;
 use App\Interfaces\FreelancerInterface;
 use App\Interfaces\SubCategoryInterface;
+use App\Models\Company;
 use App\Models\User;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use App\Interfaces\JobTypeInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 class FrontController extends Controller
 {
@@ -93,10 +98,15 @@ class FrontController extends Controller
         return view('company-freelancer.pages.settings', compact('freelancer'));
     }
 
-    public function findCompanies()
+    public function findCompanies(Request $request): Factory|View|Application
     {
-        $companies = $this->companyServices->getAllCompanies();
-        return view('company-freelancer.pages.find-companies', compact('companies'));
+        /** @var User $user */
+        $user = auth()->user();
+        $searchString = $request->get('search') ?? null;
+        $companies = $this->companyServices->getAllCompanies($searchString);
+        $connectedCompanies = $user->recruiter->companies;
+
+        return view('company-freelancer.pages.find-companies', compact('companies', 'connectedCompanies'));
     }
 
     public function followCompany(FollowCompanyRequest $request, FollowCompany $followCompany): JsonResponse
@@ -110,21 +120,29 @@ class FrontController extends Controller
         ]);
     }
 
-    public function detailsCompany($companyId)
+    public function detailsCompany(Company $company): Factory|View|Application
     {
-        
-        $company = $this->companyServices->get($companyId);
-        
-        return view('company-freelancer.pages.company.details', compact('company'));
+        /** @var User $user */
+        $user = auth()->user();
+        $isConnected = $user->recruiter->companies->contains($company);
+        $isOwnCompany = $user->recruiter->company?->id === $company->id;
+        $similarCompanies = $this->companyServices->getCompaniesByCategory($company->category->id);
+
+        return view('company-freelancer.pages.company.details', compact(
+                'company',
+                'similarCompanies',
+                'isConnected',
+                'isOwnCompany',
+            )
+        );
     }
 
-    public function createJob()
+    public function createJob(): Factory|View|Application
     {
+        /** @var User $user */
         $user = auth()->user();
 
-        //recruiter with his companies who works for .. :)
         $recruiterWithCompanies = $user->recruiter->activeCompanies;
-
         $countries = $this->countriesServices->getCountries();
         $categories = $this->categoryServices->getAll();
         $jobTypes = $this->jobTypesServices->getAll();
@@ -133,6 +151,7 @@ class FrontController extends Controller
     }
 
 
+    
     public function recruitmentProcess()
     {
         return view('company-freelancer.pages.recruitment.job-recruitment');

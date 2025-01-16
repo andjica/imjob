@@ -20,7 +20,6 @@ class CreateCitiesTable extends Migration
             $table->timestamps();
 
             //$table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade');
-           
         });
     }
 

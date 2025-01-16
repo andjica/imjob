@@ -32,10 +32,6 @@ class CreateCompaniesTable extends Migration
             $table->boolean('active')->default(false);
             $table->integer('number_of_employees')->default(0);
             $table->timestamps();
-
-           
-            
-
         });
     }
 
