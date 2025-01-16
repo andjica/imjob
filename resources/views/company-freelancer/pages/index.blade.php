@@ -1,5 +1,5 @@
 @extends('company-freelancer.template-company-freelancer')
-
+@section('main-title', 'Welcome user '.auth()->user()->first_name)
 @section('title-dash', 'Freelancer Overview')
 
 @section('css')

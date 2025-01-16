@@ -1,0 +1,276 @@
+.card-custom {
+    border: none;
+   
+    overflow: hidden;
+}
+
+.card-custom .card-header {
+    border-bottom: none;
+    padding: 20px;
+}
+
+.card-custom .card-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.info-item {
+    display: flex;
+    align-items: flex-start;
+}
+
+.icon-style {
+    font-size: 1.2rem;
+    color:#6a6356;
+    margin-right: 10px;
+    min-width: 24px;
+}
+
+.info-text strong {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 0.95rem;
+}
+
+.info-text p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 767.98px) {
+    .info-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .icon-style {
+        margin-bottom: 5px;
+    }
+}
+
+.shadow-lg {
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+/* Progress Bar Styles */
+.progress {
+    height: 20px;
+    background-color: #e9ecef;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 0;
+}
+
+.progress-bar {
+    height: 100%;
+    transition: width 0.6s ease;
+}
+
+.progress-accepted {
+    width: 100%;
+    background-color: #28a745;
+}
+
+.progress-rejected {
+    width: 100%;
+    background-color: #dc3545;
+}
+
+.progress-pending {
+    width: 50%;
+    background-color: #ffc107;
+}
+
+/* View Process Button Styles */
+.view-process {
+    display: none; /* Hidden by default */
+}
+
+.view-process.active {
+    display: inline-block;
+}
+
+/* Optional: Transition for smooth appearance */
+.view-process {
+    transition: all 0.3s ease;
+}
+
+/* LeaderLine Container */
+#leader-line-container {
+    /* position: relative; */
+    width: 100%;
+   overflow-y: scroll;
+}
+
+     /* ... existing custom styles ... */
+     .chat-box {
+        height: 400px;
+        overflow-y: auto;
+        border: 1px solid #e4e6ef;
+        padding: 15px;
+        background-color: #f5f8fa;
+    }
+    .chat-message {
+        margin-bottom: 15px;
+    }
+    .chat-message.sent {
+        text-align: right;
+    }
+    .chat-message.received {
+        text-align: left;
+    }
+    .chat-message p {
+        display: inline-block;
+        padding: 10px 15px;
+        border-radius: 15px;
+        max-width: 70%;
+    }
+    .chat-message.sent p {
+        background-color: #0d6efd;
+        color: #fff;
+    }
+    .chat-message.received p {
+        background-color: #e4e6ef;
+        color: #000;
+    }
+    /* Recruitment Process Overview */
+    .process-overview {
+        margin-top: 30px;
+    }
+    /* Candidate User Card Styles */
+    .candidate-card {
+        display: flex;
+        align-items: center;
+        padding: 15px;
+        border: 1px solid #e4e6ef;
+        border-radius: 10px;
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        flex-wrap: wrap; /* For better responsiveness */
+    }
+    .candidate-card img {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-right: 15px;
+        border: 2px solid #0d6efd;
+    }
+    .candidate-details {
+        flex: 1;
+        min-width: 200px; /* Ensure it doesn't shrink too much */
+    }
+    .candidate-details h5 {
+        margin: 0;
+        font-weight: 700;
+        font-size: 16px;
+    }
+    .candidate-details p {
+        margin: 3px 0;
+        color: #6c757d;
+        font-size: 14px;
+    }
+    .status-badge {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 600;
+        color: #fff;
+        margin-top: 5px;
+    }
+    .status-completed {
+        background-color: #28a745;
+    }
+    .status-current {
+        background-color: #ffc107;
+        color: #212529;
+    }
+    .status-upcoming {
+        background-color: #6c757d;
+    }
+    /* Recruitment Process Table Styles */
+    .recruitment-process-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .recruitment-process-table th, .recruitment-process-table td {
+        padding: 12px 15px;
+        border: 1px solid #e4e6ef;
+        text-align: center;
+        vertical-align: middle;
+    }
+    .recruitment-process-table th {
+        background-color: #f8f9fa;
+        font-weight: 700;
+    }
+    /* Badge Styles for Table */
+    .badge-completed {
+        background-color:rgb(137, 195, 150);
+        color: #fff;
+    }
+    .badge-current {
+        background-color: #ffc107;
+        color: #212529;
+    }
+    .badge-upcoming {
+        background-color: #6c757d;
+        color: #fff;
+    }
+    /* Status Update Button */
+    .status-update-btn {
+        margin-top: 15px;
+    }
+    /* CV Download Button */
+    .cv-download-btn {
+        margin-top: 10px;
+    }
+    /* Responsive Table */
+    @media (max-width: 768px) {
+        .candidate-card {
+            flex-direction: column;
+            text-align: center;
+        }
+        .candidate-card img {
+            margin-bottom: 10px;
+        }
+        .recruitment-process-table th, .recruitment-process-table td {
+            padding: 8px 10px;
+            font-size: 14px;
+        }
+        .status-update-btn {
+            width: 100%;
+        }
+        .cv-download-btn {
+            width: 100%;
+        }
+    }
+    /* Ensure the calendar takes full width and has appropriate height */
+    #meetingCalendar {
+        max-width: 100%;
+        margin: 0 auto;
+    }
+
+    /* Optional: Adjust calendar height */
+    .fc {
+        height: 600px; /* Adjust as needed */
+    }
+
+    @media (max-width: 768px) {
+        .fc {
+            height: 400px; /* Adjust for smaller screens */
+        }
+    }
+
+    .card-background-st {
+        background-image: linear-gradient(
+                rgba(178, 193, 214, 0.86),
+                rgba(157, 252, 252, 0.1)
+            ),
+            url('/images/map2.jpg');
+        width: 100%;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center -517px;
+    }

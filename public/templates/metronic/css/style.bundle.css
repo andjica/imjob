@@ -1,6 +1,6 @@
 @charset "UTF-8";
 :root {
-  --bs-blue: #009ef6;
+  --bs-blue: #34A7D5;
   --bs-indigo: #6610f2;
   --bs-purple: #6f42c1;
   --bs-pink: #d63384;
@@ -23,11 +23,11 @@
   --bs-gray-900: #181C32;
   --bs-white: #ffffff;
   --bs-light: #F5F8FA;
-  --bs-primary: #009EF7;
+  --bs-primary: #34A7D5;
   --bs-secondary: #E4E6EF;
   --bs-success: #50CD89;
   --bs-info: #7239EA;
-  --bs-warning: #FFC700;
+  --bs-warning: #F6A712;
   --bs-danger: #F1416C;
   --bs-dark: #181C32;
   --bs-white-rgb: 255, 255, 255;
@@ -10478,7 +10478,7 @@ textarea.form-control-lg {
 
 .text-primary {
   --bs-text-opacity: 1;
-  color: rgba(var(--bs-primary-rgb), var(--bs-text-opacity)) !important;
+  color: #34A7D5 !important;
 }
 
 .text-secondary {
@@ -10556,7 +10556,14 @@ textarea.form-control-lg {
 .text-opacity-100 {
   --bs-text-opacity: 1;
 }
-
+.bg-linear-orange
+{
+  background-image: linear-gradient(to right, #E44E75, #F6A712);
+}
+.bg-linear-orange-opacity
+{
+  background-image: linear-gradient(to right, #E88A99, #F8C37D);
+}
 .bg-white {
   --bs-bg-opacity: 1;
   background-color: rgba(var(--bs-white-rgb), var(--bs-bg-opacity)) !important;

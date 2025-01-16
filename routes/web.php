@@ -118,4 +118,7 @@ Route::middleware(['auth', 'company.freelancer', 'verified'])->prefix('company/f
 
     //za dzonija store job
     Route::post('/job/store', [JobController::class, 'store'])->name('store-job');
+
+    Route::get('/job/recruitment-process', [CompanyFreelancerFrontController::class, 'recruitmentProcess'])->name('recruitment-process');
+    Route::get('/job/candidat/recruitment-process', [CompanyFreelancerFrontController::class, 'candidatRecruitmentProcess'])->name('candidat-recruitment-process');
 });

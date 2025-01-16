@@ -1,5 +1,6 @@
 @php use App\Models\User; @endphp
 @extends('company-freelancer.template-company-freelancer')
+@section('main-title', 'Find companies')
 
 @section('title-dash', 'Find Companies')
 @section('css')

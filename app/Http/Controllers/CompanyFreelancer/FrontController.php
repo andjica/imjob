@@ -133,6 +133,16 @@ class FrontController extends Controller
     }
 
 
+    public function recruitmentProcess()
+    {
+        return view('company-freelancer.pages.recruitment.job-recruitment');
+    }
+
+
+    public function candidatRecruitmentProcess()
+    {
+        return view('company-freelancer.pages.recruitment.candidat-recruitment-process');
+    }
 
 
 

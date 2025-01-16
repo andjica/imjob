@@ -1,5 +1,7 @@
 @extends('company-freelancer.template-company-freelancer') 
-@section('title-dash', 'Edit freelancer')
+@section('main-title', 'Edit freelancer profile')
+
+@section('title-dash', 'Here you can update your freelancer data')
 
 @section('content')
 

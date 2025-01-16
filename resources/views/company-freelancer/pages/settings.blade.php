@@ -1,4 +1,6 @@
 @extends('company-freelancer.template-company-freelancer') 
+@section('main-title', 'Setting')
+
 @section('title-dash', 'Settings')
 
 @section('content')
