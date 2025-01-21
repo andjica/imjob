@@ -21,8 +21,10 @@ use App\Services\CompanyTypeServices;
 use App\Services\CountryServices;
 use App\Services\FreelancerServices;
 use App\Interfaces\FreelancerInterface;
+use App\Interfaces\JobInterface;
 use App\Interfaces\JobTypeInterface;
 use App\Interfaces\RecruiterEducationInterface;
+use App\Services\JobServices;
 use App\Services\JobTypeServices;
 use App\Services\RecruiterEducationServices;
 use App\Services\SubCategoryServices;
@@ -51,6 +53,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(FreelancerInterface::class, FreelancerServices::class);
         $this->app->bind(RecruiterEducationInterface::class, RecruiterEducationServices::class);
         $this->app->bind(JobTypeInterface::class, JobTypeServices::class);
+        $this->app->bind(JobInterface::class, JobServices::class);
     }
 
     /**

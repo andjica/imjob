@@ -39,11 +39,34 @@
 
                 <!--begin::Card body-->
                 <div class="card-body pt-3">
-                    <form action="" method="POST" id="jobForm">
+                    <form action="{{route('company-freelancer-store-job')}}" method="POST" id="jobForm">
                         @csrf
                         <div class="row">
                             <!-- Left Column -->
                             <div class="col-md-6 pe-10 border-end me-2">
+                         <!-- Job World Type as Navigation -->
+                            <div class="row mb-5">
+                                <label class="fw-bold fs-5 mb-3">Job World Type:</label>
+                                <div class="d-flex gap-3">
+                                    <!-- National Option -->
+                                    <button type="button" 
+                                            class="btn btn-outline btn-light-primary fw-semibold fs-6 py-3 px-4 {{ old('jobType') == 'national' ? 'active' : '' }}" 
+                                            id="jobTypeNational" 
+                                            onclick="setJobType('national')">
+                                        <i class="fas fa-flag me-2"></i> National
+                                    </button>
+                                    <!-- International Option -->
+                                    <button type="button" 
+                                            class="btn btn-outline btn-light-primary fw-semibold fs-6 py-3 px-4 {{ old('jobType') == 'international' ? 'active' : '' }}" 
+                                            id="jobTypeInternational" 
+                                            onclick="setJobType('international')">
+                                        <i class="fas fa-globe me-2"></i> International
+                                    </button>
+                                </div>
+                                <!-- Hidden input to store the selected job type -->
+                                <input type="hidden" name="jobType" id="jobType" value="{{ old('jobType', 'national') }}">
+                            </div>
+
                                 <!-- Job Title -->
                                 <div class="row mb-5">
                                     <label class="col-lg-4 col-form-label fw-bold fs-6 required">Job Title:</label>
@@ -188,7 +211,7 @@
                                   <div class="row mb-5">
                                     <label class="col-lg-4 col-form-label fw-bold fs-6 required">Required Skill:</label>
                                     <div class="col-lg-8">
-                                        <input type="text" class="form-control form-control-solid @error('requiredSkills') is-invalid @enderror" name="requiredSkills[]" id="requiredSkills"
+                                        <input type="text" class="form-control form-control-solid @error('requiredSkills') is-invalid @enderror" name="requiredSkills" id="requiredSkills"
                                             value="{{ old('requiredSkills') }}" />
                                         <span class="text-danger" id="requiredSkillsEmpty">@error('requiredSkills'){{ $message }}@enderror</span>
                                     </div>
@@ -199,7 +222,7 @@
                                     <div class="col-lg-8">
                                         <div id="skillsContainer">
                                             <div class="input-group mb-2 skill-input-group">
-                                                <input type="text" class="form-control form-control-solid" name="moreSkill" placeholder="Enter a skill" />
+                                                <input type="text" class="form-control form-control-solid" name="moreSkill[]" placeholder="Enter a skill" />
                                                 <button class="btn btn-success add-skill-btn" type="button" title="Add Skill">
                                                     <i class="fa fa-plus"></i>
                                                 </button>
@@ -365,6 +388,26 @@
             // Show the Alert Modal
             alertModal.show();
         });
+    });
+</script>
+<script>
+    function setJobType(type) {
+        // Update the hidden input value
+        document.getElementById('jobType').value = type;
+
+        // Toggle active class for buttons
+        document.getElementById('jobTypeNational').classList.toggle('active', type === 'national');
+        document.getElementById('jobTypeInternational').classList.toggle('active', type === 'international');
+    }
+
+    // Initialize with old value
+    document.addEventListener('DOMContentLoaded', function () {
+        const jobType = document.getElementById('jobType').value;
+        if (jobType === 'national') {
+            setJobType('national');
+        } else if (jobType === 'international') {
+            setJobType('international');
+        }
     });
 </script>
 @endsection

@@ -46,15 +46,23 @@
                                 /** @var User $user */
                                 $user = auth()->user();
                             @endphp
-                            @if ($company->id !== $user->company->id)
+                            @if($connectedOnPending->contains($company->id))
+                                <div class="card-toolbar">
+                                <button type="button" class="btn btn-outline btn-sm btn-outline-dashed me-2 mb-2 bg-light-warning" data-bs-toggle="tooltip" data-bs-placement="left" title="You have to wait for company aproval">
+                                    <i class="fas fa-hourglass-half"></i> Connection on Pending
+                                </button>
+
+                                </div>
+                            
+                            @elseif ($company->id !== $user->company->id)
                                 <div class="card-toolbar">
                                     <a href="#"
-                                       class="btn btn-sm btn-light me-2 follow-button hover-scale"
+                                       class="btn btn-sm btn-light-primary me-2 mb-2 follow-button"
                                        id="kt_user_follow_button_{{ $company->id }}"
                                        data-company-id="{{ $company->id }}">
                                         <i class="ki-duotone ki-check fs-3 d-none"></i>
                                         <!-- Indicator label -->
-                                        <span class="indicator-label">Send request</span>
+                                        <span class="indicator-label">    <i class="fas fa-paper-plane"></i>Send request</span>
                                         <!-- Indicator progress -->
                                         <span class="indicator-progress d-none">
                                         Please wait...
@@ -63,15 +71,14 @@
                                     </a>
                                 </div>
                             @endif
-                            @if($connectedCompanies->contains($company))
-                                <!-- ovo je dugme ako su vec conectiovani -->
-                                <div class="card-tolbar">
+                            @if($connectedSuccessfully->contains($company->id))
+                            <!-- This button is shown if the company is connected and the status is active -->
+                            <div class="card-tolbar">
                                 <button type="button" class="btn btn-primary btn-sm mt-4" data-bs-toggle="tooltip" data-bs-placement="left" title="You are connected with this company">
                                     <i class="fas fa-link"></i>
                                 </button>
-                                </div>
-                                 <!-- connected button end -->
-                            @endif
+                            </div>
+                        @endif
                         </div>
                         <div class="card-body">
                             <strong>{{$company->name}}</strong><br>

@@ -106,7 +106,16 @@ class FrontController extends Controller
         $companies = $this->companyServices->getAllCompanies($searchString);
         $connectedCompanies = $user->recruiter->companies;
 
-        return view('company-freelancer.pages.find-companies', compact('companies', 'connectedCompanies'));
+        $connectedOnPending = $user->recruiter->companies()
+        ->wherePivot('status', 'Pending')
+        ->get();
+      
+        $connectedSuccessfully = $user->recruiter->companies()
+        ->wherePivot('status', 'Active')
+        ->get();
+       
+        return view('company-freelancer.pages.find-companies', compact('companies', 'connectedCompanies', 
+        'connectedSuccessfully', 'connectedOnPending'));
     }
 
     public function followCompany(FollowCompanyRequest $request, FollowCompany $followCompany): JsonResponse

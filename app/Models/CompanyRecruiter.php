@@ -41,4 +41,6 @@ class CompanyRecruiter extends Pivot
     {
         return $this->belongsTo(Company::class);
     }
+
+   
 }

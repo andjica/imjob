@@ -5,6 +5,8 @@
       // Prevent form submission for validation
       event.preventDefault();
 
+      const salaryMinfield = $('#salaryMin').val();
+      const salaryMaxfield = $('#salaryMax').val();
       // Access AutoNumeric instances
       const anSalaryMin = AutoNumeric.getAutoNumericElement('#salaryMin');
       const anSalaryMax = AutoNumeric.getAutoNumericElement('#salaryMax');
@@ -22,13 +24,14 @@
       const cityId = $('#cityId').val();
       const jobTypeId = $('#jobTypeId').val();
       const experienceLevel = $('#experienceLevel').val();
-      const requiredSkills = [];
-      $('input[name="requiredSkills[]"]').each(function() {
-        const skill = $(this).val().trim();
-        if (skill !== '') {
-          requiredSkills.push(skill);
-        }
-      });
+      // const requiredSkills = [];
+      // $('input[name="requiredSkills[]"]').each(function() {
+      //   const skill = $(this).val().trim();
+      //   if (skill !== '') {
+      //     requiredSkills.push(skill);
+      //   }
+      // });
+      const requiredSkill = $('#requiredSkills').val();
       const minAge = $('#min_age').val().trim();
       const maxAge = $('#max_age').val().trim();
       const specialRequirements = $('#special_requirements').is(':checked');
@@ -58,48 +61,61 @@
 
       // Validate Category
       if (categoryId === '') {
-        $('#categoryId').addClass('border-danger');
+        $('#categoryId').next('.select2-container').find('.select2-selection').addClass('border-danger');
         $('#categoryIdEmpty').text('Please select a category.').show();
         isValid = false;
       }
 
       // Validate SubCategory
       if (subCategoryId === '') {
-        $('#subCategoryId').addClass('border-danger');
+        $('#subCategoryId').next('.select2-container').find('.select2-selection').addClass('border-danger');
         $('#subCategoryIdEmpty').text('Please select a subcategory.').show();
         isValid = false;
       }
 
       // Validate Country
       if (countryId === '') {
-        $('#countryId').addClass('border-danger');
+        $('#countryId').next('.select2-container').find('.select2-selection').addClass('border-danger');
         $('#countryIdEmpty').text('Please select a country.').show();
         isValid = false;
       }
 
       // Validate City
       if (cityId === '') {
-        $('#cityId').addClass('border-danger');
+        $('#cityId').next('.select2-container').find('.select2-selection').addClass('border-danger');
         $('#cityIdEmpty').text('Please select a city.').show();
         isValid = false;
       }
 
       // Validate Job Type
       if (jobTypeId === '') {
-        $('#jobTypeId').addClass('border-danger');
+        $('#jobTypeId').next('.select2-container').find('.select2-selection').addClass('border-danger');
         $('#jobTypeIdEmpty').text('Please select a job type.').show();
         isValid = false;
       }
 
+      if(salaryMinfield === '')
+      {
+        $('#salaryMin').addClass('border-danger');
+        $('#salaryMinEmpty').text('Please enter a valid salary minimum.').show();
+        isValid = false;
+      }
+      if(salaryMaxfield === '')
+        {
+          $('#salaryMax').addClass('border-danger');
+          $('#salaryMaxEmpty').text('Please enter a valid salary maximum.').show();
+          isValid = false;
+        }
       // Validate Salary Minimum
-      if (isNaN(salaryMin) || salaryMin < 0 || salaryMin === "") {
+      if (isNaN(salaryMin) || salaryMin < 0) {
+        
         $('#salaryMin').addClass('border-danger');
         $('#salaryMinEmpty').text('Please enter a valid salary minimum.').show();
         isValid = false;
       }
 
       // Validate Salary Maximum
-      if (isNaN(salaryMax) || salaryMax < 0 || salaryMax === "") {
+      if (isNaN(salaryMax) || salaryMax < 0) {
         $('#salaryMax').addClass('border-danger');
         $('#salaryMaxEmpty').text('Please enter a valid salary maximum.').show();
         isValid = false;
@@ -117,19 +133,31 @@
       }
 
       // Validate Required Skills
-      if (requiredSkills.length === 0) {
-        $('input[name="requiredSkills[]"]').addClass('border-danger');
+      if (requiredSkill == "") {
+        $('#requiredSkills').addClass('border-danger');
         $('#requiredSkillsEmpty').text('Please enter at least one required skill.').show();
         isValid = false;
       }
 
-      // Validate Age Range
-      if (minAge !== '' && isNaN(minAge)) {
+      if(minAge == '')
+      {
         $('#min_age').addClass('border-danger');
         $('#minAgeEmpty').text('Please enter a valid minimum age.').show();
         isValid = false;
       }
-      if (maxAge !== '' && isNaN(maxAge)) {
+      // Validate Age Range
+      else if (minAge !== '' && isNaN(minAge)) {
+        $('#min_age').addClass('border-danger');
+        $('#minAgeEmpty').text('Please enter a valid minimum age.').show();
+        isValid = false;
+      }
+      if(maxAge == '')
+        {
+          $('#max_age').addClass('border-danger');
+          $('#maxAgeEmpty').text('Please enter a valid max age.').show();
+          isValid = false;
+        }
+      else if (maxAge !== '' && isNaN(maxAge)) {
         $('#max_age').addClass('border-danger');
         $('#maxAgeEmpty').text('Please enter a valid maximum age.').show();
         isValid = false;
@@ -321,6 +349,42 @@ $("#title").on('keyup',function(){
     }
 });
 
+$("#min_age").on('keyup',function(){
+    
+  var minAge = $("#min_age").val();
+
+
+  if(minAge == "")
+  {
+      
+      $("#minAgeEmpty").text("Min age is required field");
+      $('#min_age').addClass('border-danger').removeClass('border-success');
+      $('#min_age').next('.invalid-feedback').show();
+  }
+  
+  else {
+      $("#minAgeEmpty").text("");
+      $('#min_age').removeClass('border-danger').addClass('border-success');
+  }
+});
+$("#max_age").on('keyup',function(){
+    
+  var maxAge = $("#max_age").val();
+
+
+  if(maxAge == "")
+  {
+      
+      $("#maxAgeEmpty").text("Min age is required field");
+      $('#max_age').addClass('border-danger').removeClass('border-success');
+      $('#max_age').next('.invalid-feedback').show();
+  }
+  
+  else {
+      $("#maxAgeEmpty").text("");
+      $('#max_age').removeClass('border-danger').addClass('border-success');
+  }
+});
 $("#requiredSkills").on('keyup',function(){
     
     var requiredSkills = $("#requiredSkills").val();

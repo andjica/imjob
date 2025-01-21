@@ -35,6 +35,7 @@ $(document).ready(function() {
                 $('#salaryMaxEmpty').text('Maximum salary must be greater than or equal to minimum salary.').show();
                 isValid = false;
             }
+           
         }
 
         return isValid;

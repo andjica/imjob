@@ -26,7 +26,63 @@
                                     <span class="badge badge-success">Completed</span>
                                 </td>
                                 <td>
-                                    <span class="badge badge-warning">Current</span>
+                                    <span class="badge badge-warning">Current</span><br>
+                                    <span class="text-primary">- Viza application  DONE? </span>
+                                    <button class="btn btn-light-success btn-xs p-1" data-bs-toggle="modal" data-bs-target="#feedbackModal">
+                                        <i class="fa-solid fa-check" style="font-size: 0.75rem;"></i>
+                                    </button>
+                                     <!-- Drop Phase Button -->
+                                    <button class="btn btn-light-danger btn-xs p-1" data-bs-toggle="modal" data-bs-target="#deletePhaseModal">
+                                        <i class="fa-solid fa-trash" style="font-size: 0.75rem;"></i>
+                                    </button>
+                                    <!-- Check Button -->
+                                    
+                                        <!--COMPLETE Modal -->
+                                        <div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="feedbackModalLabel">Phase Feedback</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p>Is this subphase complete?</p>
+                                                        <textarea class="form-control" id="feedbackText" rows="3" placeholder="Provide your feedback here..."></textarea>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                        <button type="button" class="btn btn-primary" onclick="submitFeedback()">Submit Feedback</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Delete Phase Modal -->
+                                    <div class="modal fade" id="deletePhaseModal" tabindex="-1" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <!-- Modal Header -->
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Confirm Deletion</h5>
+                                                        <button type="button" class="btn btn-icon btn-sm btn-light" data-bs-dismiss="modal" aria-label="Close">
+                                                            <i class="fa-solid fa-xmark"></i>
+                                                        </button>
+                                                    </div>
+                                                    <!-- Modal Body -->
+                                                    <div class="modal-body">
+                                                        <div class="text-center">
+                                                            <i class="fa-solid fa-exclamation-triangle text-danger fs-3x mb-4"></i>
+                                                            <p class="fs-5">Are you sure you want to delete this phase? This action cannot be undone.</p>
+                                                        </div>
+                                                    </div>
+                                                    <!-- Modal Footer -->
+                                                    <div class="modal-footer justify-content-center">
+                                                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                                                        <button type="button" class="btn btn-danger">Delete</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
                                 </td>
                                 <td>
                                     <span class="badge badge-light">Upcoming</span>

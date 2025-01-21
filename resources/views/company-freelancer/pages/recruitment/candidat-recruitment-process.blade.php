@@ -56,4 +56,24 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script src="{{asset('/js/custom/recruitment/schedule-meeting.js')}}"></script>
+    <!-- JavaScript -->
+    <script>
+      $(document).ready(function () {
+                const restInputContainer = document.getElementById('restInputContainer');
+
+                // Add event listener to the dropdown
+                $('#selectPhase').on('change', function () {
+                    
+                    var dropdownValue = $(this).val(); // Get the selected value
+                    if (dropdownValue === 'rest') {
+                        // Show the input container when "The rest" is selected
+                        restInputContainer.style.display = 'block';
+                    } else {
+                        // Hide the input container for other options
+                        restInputContainer.style.display = 'none';
+                    }
+                });
+            });
+
+    </script>
 @endsection

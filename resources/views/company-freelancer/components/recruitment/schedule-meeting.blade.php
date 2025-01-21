@@ -27,8 +27,23 @@
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="meetingTitle" class="form-label">Meeting Title</label>
+                        <label for="meetingTitle" class="form-label">Meeting Title for Preparation Phase</label>
                         <input type="text" class="form-control" id="meetingTitle" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="phase" class="form-label">Phase</label>
+                        <select class="form-control"  id="selectPhase">
+                            <option>Language course</option>
+                            <option>Visa application</option>
+                            <option>Visa issuance</option>
+                            <option>Cultural mediation</option>
+                            <option id="rest" value="rest">The rest</option>
+                        </select>
+                        <!-- Input Text (Hidden by Default) -->
+                        <div id="restInputContainer" class="mt-3" style="display: none;">
+                            <label for="restInput" class="form-label">Specify "The rest"</label>
+                            <input type="text" id="restInput" class="form-control" placeholder="Enter details for 'The rest'" />
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label for="meetingDate" class="form-label">Date & Time</label>

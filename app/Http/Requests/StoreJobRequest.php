@@ -15,8 +15,9 @@ class StoreJobRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'jobType' => ['required'],
             'title' => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string'],
+            'description' => ['required','string','max:65535'],
             'categoryId' => ['required', 'integer', 'exists:categories,id'],
             'subCategoryId' => ['required', 'integer', 'exists:sub_categories,id'],
             'countryId' => ['required', 'integer', 'exists:countries,id'],
@@ -25,18 +26,18 @@ class StoreJobRequest extends FormRequest
             'salaryMin' => ['required', 'integer', 'min:0'],
             'salaryMax' => ['required', 'integer', 'gte:salaryMin'],
             'experienceLevel' => ['required', 'string', 'in:Entry-Level,Mid-Level,Senior-Level'],
-            'requiredSkills' => ['required', 'array'],
-            'requiredSkills.*' => ['string'],
-            'moreSkill' => ['string'],
-            'moreSkills' => ['array'],
-            'moreSkills.*' => ['string'],
+            'requiredSkills' => ['required', 'string'],
+            // 'requiredSkills.*' => ['string'],
+            // 'moreSkill' => ['string'],
+            // 'moreSkill' => ['nullable','array'],
+            // 'moreSkill.*' => ['string'],
             'min_age' => ['required', 'integer', 'min:18'],
             'max_age' => ['required', 'integer', 'gte:min_age'],
-            'special_requirements' => ['nullable', 'boolean'],
+            'special_requirements' => ['nullable', 'string'],
             'special_details' => ['nullable', 'string'],
             'validUntil' => ['required', 'date', 'after_or_equal:today'],
             'companyId' => ['required', 'integer', 'exists:companies,id'],
-            'companyName' => ['nullable', 'string', 'max:500'],
+            /*'companyName' => ['nullable', 'string', 'max:500'],*/
         ];
     }
 }

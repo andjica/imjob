@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class RemoveSkillsFromJobsTable extends Migration
+class UpdateJobsTableAddJobWorldTypeAndMakeRecruiterIdNullable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,10 @@ class RemoveSkillsFromJobsTable extends Migration
     public function up()
     {
         Schema::table('jobs', function (Blueprint $table) {
-            $table->dropColumn('required_skills'); // Remove the column
+           
+            $table->string('job_world_type')->after('job_type_id');
+
+            $table->unsignedBigInteger('recruiter_id')->nullable()->change();
         });
     }
 
@@ -26,7 +29,11 @@ class RemoveSkillsFromJobsTable extends Migration
     public function down()
     {
         Schema::table('jobs', function (Blueprint $table) {
-            //
+            
+            $table->dropColumn('job_world_type');
+
+          
+            $table->unsignedBigInteger('recruiter_id')->nullable(false);
         });
     }
 }
