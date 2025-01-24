@@ -14,28 +14,35 @@
                         <i class="fas fa-building icon-style"></i>
                         <div class="info-text">
                             <strong>Company:</strong>
-                            <p class="text-muted">Tech Solutions Inc.</p>
+                            <p class="text-muted">{{$job->company->name}}</p>
                         </div>
                     </div>
                     <div class="info-item mb-3">
                         <i class="fas fa-user-tie icon-style"></i>
                         <div class="info-text">
                             <strong>Recruiter:</strong>
-                            <p class="text-muted">Alice Johnson</p>
+                            <p class="text-muted">@if($job->recruiter->name == null) This job post is from {{$job->company->name}} company @else{{$job->recruiter->name}} @endif</p>
                         </div>
                     </div>
                     <div class="info-item mb-3">
                         <i class="fas fa-list icon-style"></i>
                         <div class="info-text">
                             <strong>Category:</strong>
-                            <p class="text-muted">Information Technology</p>
+                            <p class="text-muted">{{$job->category->name}}</p>
+                        </div>
+                    </div>
+                    <div class="info-item mb-3">
+                        <i class="fas fa-tags icon-style"></i>
+                        <div class="info-text">
+                            <strong>SubCategory:</strong>
+                            <p class="text-muted">{{$job->subCategory->name}}</p>
                         </div>
                     </div>
                     <div class="info-item mb-3">
                         <i class="fas fa-briefcase icon-style"></i>
                         <div class="info-text">
                             <strong>Job Type:</strong>
-                            <p class="text-muted">Full-Time</p>
+                            <p class="text-muted">{{$job->jobType->name}}</p>
                         </div>
                     </div>
                     
@@ -45,17 +52,38 @@
                     <div class="info-item mb-3">
                         <i class="fas fa-file-alt icon-style"></i>
                         <div class="info-text">
+                            @php
+                                $safeDescription = truncateHtml($job->description, 200);
+                            @endphp
+
                             <strong>Description:</strong>
-                            <p class="text-muted">
-                                We are seeking a highly skilled Senior Software Engineer to join our dynamic team. The ideal candidate will have extensive experience in full-stack development, a passion for building scalable applications, and a commitment to continuous learning.
-                            </p>
+                            <div class="text-muted">
+                                <div class="job-description">
+                                    {{-- Truncated version --}}
+                                    <span id="short-description">
+                                        {!! $safeDescription !!}
+                                    </span>
+
+                                    {{-- Full version (hidden initially) --}}
+                                    <span id="full-description" style="display: none;">
+                                        {!! $job->description !!}
+                                    </span>
+
+                                    {{-- Toggle links --}}
+                                    @if(strlen(strip_tags($job->description)) > 200)
+                                        <a href="javascript:void(0);" id="read-more" onclick="toggleDescription()">Read More</a>
+                                        <a href="javascript:void(0);" id="show-less" onclick="toggleDescription()" style="display: none;">Show Less</a>
+                                    @endif
+                                </div>
+                            </div>
                         </div>
+
                     </div>
                     <div class="info-item mb-3">
                         <i class="fas fa-map-marker-alt icon-style"></i>
                         <div class="info-text">
                             <strong>Location:</strong>
-                            <p class="text-muted">New York, USA</p>
+                            <p class="text-muted">{{$job->city->name}}, {{$job->country->name}}</p>
                         </div>
                     </div>
                     
@@ -66,35 +94,50 @@
                         <i class="fas fa-dollar-sign icon-style"></i>
                         <div class="info-text">
                             <strong>Salary Range:</strong>
-                            <p class="text-muted">$80,000 - $120,000</p>
+                            <p class="text-muted">{{$job->salary_min}} - {{$job->salary_max}} {{$job->country->currency_symbol}}</p>
                         </div>
                     </div>
                     <div class="info-item mb-3">
                         <i class="fas fa-user-graduate icon-style"></i>
                         <div class="info-text">
                             <strong>Experience Level:</strong>
-                            <p class="text-muted">Senior-Level</p>
+                            <p class="text-muted">{{$job->experience_level}}</p>
                         </div>
                     </div>
                     <div class="info-item mb-3">
                         <i class="fas fa-tools icon-style"></i>
                         <div class="info-text">
                             <strong>Required Skills:</strong>
-                            <p class="text-muted">JavaScript, Laravel, Vue.js, RESTful APIs</p>
+                            <p class="text-muted">Required skill: {{$job->skills->first()->skill}}</p>
                         </div>
                     </div>
+                    @if($job->skills->count() > 1)
+                    <div class="info-item mb-3">
+                        <i class="fas fa-tools icon-style"></i>
+                        <div class="info-text">
+                            <strong>Optional Skills:</strong>
+                            <ul>
+                                @foreach ($job->skills as $key => $skill)
+                                    @if ($key > 0) {{-- Skip the first skill --}}
+                                        <li class="text-muted">{{ $skill->skill }}</li> 
+                                    @endif
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                    @endif
                     <div class="info-item mb-3">
                         <i class="fas fa-birthday-cake icon-style"></i>
                         <div class="info-text">
                             <strong>Age Range:</strong>
-                            <p class="text-muted">25 - 40</p>
+                            <p class="text-muted">{{$job->min_age}}-{{$job->max_age}}</p>
                         </div>
                     </div>
                     <div class="info-item mb-3">
                         <i class="fas fa-calendar-alt icon-style"></i>
                         <div class="info-text">
                             <strong>Valid Until:</strong>
-                            <p class="text-muted">2025-12-31</p>
+                            <p class="text-muted">{{ \Carbon\Carbon::parse($job->valid_until)->format('d F Y') }}</p>
                         </div>
                     </div>
                 </div>

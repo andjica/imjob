@@ -274,3 +274,15 @@
         background-repeat: no-repeat;
         background-position: center -517px;
     }
+
+    .card-background-nt {
+        background-image: linear-gradient(
+                rgba(178, 193, 214, 0.86),
+                rgba(157, 252, 252, 0.1)
+            ),
+            url('/images/jobnational.jpg');
+        width: 100%;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center -548px;
+    }

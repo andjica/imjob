@@ -53,7 +53,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(FreelancerInterface::class, FreelancerServices::class);
         $this->app->bind(RecruiterEducationInterface::class, RecruiterEducationServices::class);
         $this->app->bind(JobTypeInterface::class, JobTypeServices::class);
-        $this->app->bind(JobInterface::class, JobServices::class);
     }
 
     /**

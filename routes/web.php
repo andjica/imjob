@@ -115,8 +115,10 @@ Route::middleware(['auth', 'company.freelancer', 'verified'])->prefix('company/f
     Route::get('/company/{company}/details', [CompanyFreelancerFrontController::class, 'detailsCompany'])->name('company-details');
     Route::get('/job/create', [CompanyFreelancerFrontController::class, 'createJob'])->name('create-job');
     Route::post('/job/store', [JobController::class, 'store'])->name('store-job');
-
+    // Route::get('/job/{id}', [CompanyFreelancerFrontController::class, 'getJob'])->name('get-job');
     //za dzonija rute
-    Route::get('/job/recruitment-process', [CompanyFreelancerFrontController::class, 'recruitmentProcess'])->name('recruitment-process');
+    Route::get('/jobId={id}/recruitment-process', [CompanyFreelancerFrontController::class, 'recruitmentProcess'])->name('recruitment-process');
     Route::get('/job/candidat/recruitment-process', [CompanyFreelancerFrontController::class, 'candidatRecruitmentProcess'])->name('candidat-recruitment-process');
+    Route::get('/jobs', [CompanyFreelancerFrontController::class, 'jobs'])->name('jobs');
+
 });

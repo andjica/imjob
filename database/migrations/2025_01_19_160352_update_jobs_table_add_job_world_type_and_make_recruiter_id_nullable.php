@@ -15,9 +15,9 @@ class UpdateJobsTableAddJobWorldTypeAndMakeRecruiterIdNullable extends Migration
     {
         Schema::table('jobs', function (Blueprint $table) {
            
-            $table->string('job_world_type')->after('job_type_id');
+            $table->string('job_world_type');
 
-            $table->unsignedBigInteger('recruiter_id')->nullable()->change();
+            /*$table->unsignedBigInteger('recruiter_id')->nullable()->change();*/
         });
     }
 
@@ -33,7 +33,7 @@ class UpdateJobsTableAddJobWorldTypeAndMakeRecruiterIdNullable extends Migration
             $table->dropColumn('job_world_type');
 
           
-            $table->unsignedBigInteger('recruiter_id')->nullable(false);
+            /*$table->unsignedBigInteger('recruiter_id')->nullable(false);*/
         });
     }
 }

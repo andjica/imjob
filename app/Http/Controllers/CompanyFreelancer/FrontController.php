@@ -20,6 +20,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use App\Interfaces\JobTypeInterface;
+use App\Repositories\JobRepository;
 use Symfony\Component\HttpFoundation\Request;
 
 class FrontController extends Controller
@@ -34,6 +35,7 @@ class FrontController extends Controller
         private CompanyTypeInterface $companyTypesServices,
         private CompanyInterface $companyServices,
         private JobTypeInterface $jobTypesServices,
+        private JobRepository $jobRep
     ) {
     }
 
@@ -160,10 +162,17 @@ class FrontController extends Controller
     }
 
 
+    // public function getJob()
+    // {
+        
+    //     return view('company-freelancer.pages.job.get-one', compact('job'));
+    // }
+
     
-    public function recruitmentProcess()
+    public function recruitmentProcess($id)
     {
-        return view('company-freelancer.pages.recruitment.job-recruitment');
+        $job = $this->jobRep->find($id) ?? abort(404);
+        return view('company-freelancer.pages.recruitment.job-recruitment', compact('job'));
     }
 
 
@@ -172,7 +181,9 @@ class FrontController extends Controller
         return view('company-freelancer.pages.recruitment.candidat-recruitment-process');
     }
 
-
+    public function jobs(){
+        return view('company-freelancer.pages.job.active-jobs');
+    }
 
 
 

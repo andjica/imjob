@@ -5,7 +5,15 @@
 
 @section('css')
 <link rel="stylesheet" type="text/css" href="{{asset('/css/custom/recruitment-process.css')}}"/>
+<style>
+  
 
+    #read-more, #show-less {
+        color: #007bff;
+        text-decoration: underline;
+        cursor: pointer;
+    }
+</style>
 @endsection
 
 @section('content')
@@ -13,11 +21,15 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card mb-2">
+                @if($job->job_world_type == "International")
                 <div class="card-body card-background-st rounded-top">
+                @else
+                <div class="card-body card-background-nt rounded-top">
+                @endif
                     <div class="tab-content" id="myTabContent">
                         <!-- Active Jobs Content -->
                         <div class="tab-pane fade show active" id="active-job" role="tabpanel" aria-labelledby="active-jobs-tab">
-                            <h5 class="text-white font-weight-bold">Internacional job type</h5>
+                            <h5 class="text-white font-weight-bold">{{$job->job_world_type}}</h5>
                         </div>
                         <!-- Inactive Jobs Content -->
                         <div class="tab-pane fade" id="inactive-jobs" role="tabpanel" aria-labelledby="inactive-jobs-tab">
@@ -67,5 +79,27 @@
 @endsection
 
 @section('js')
+<script>
+    function toggleDescription() {
+        const shortDesc = document.getElementById('short-description');
+        const fullDesc = document.getElementById('full-description');
+        const readMore = document.getElementById('read-more');
+        const showLess = document.getElementById('show-less');
+
+        if (shortDesc.style.display === 'none') {
+            shortDesc.style.display = 'inline';
+            fullDesc.style.display = 'none';
+            readMore.style.display = 'inline';
+            showLess.style.display = 'none';
+        } else {
+            shortDesc.style.display = 'none';
+            fullDesc.style.display = 'inline';
+            readMore.style.display = 'none';
+            showLess.style.display = 'inline';
+        }
+    }
+</script>
+
+
 
 @endsection
