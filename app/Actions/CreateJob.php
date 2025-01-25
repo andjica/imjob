@@ -69,7 +69,6 @@ class CreateJob
 
     private function setAdditionalFields(array $data): array
     {
-        $data['company_id']   = 1;
         $data['recruiter_id'] = 1;
 
         return $data;
