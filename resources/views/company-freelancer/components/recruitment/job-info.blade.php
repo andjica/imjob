@@ -9,7 +9,7 @@
             <div class="row">
                 <!-- Column 1 -->
                 <div class="col-md-4">
-                    
+
                     <div class="info-item mb-3">
                         <i class="fas fa-building icon-style"></i>
                         <div class="info-text">
@@ -21,7 +21,7 @@
                         <i class="fas fa-user-tie icon-style"></i>
                         <div class="info-text">
                             <strong>Recruiter:</strong>
-                            <p class="text-muted">@if($job->recruiter->name == null) This job post is from {{$job->company->name}} company @else{{$job->recruiter->name}} @endif</p>
+                            <p class="text-muted">@if($job->recruiter === null) This job post is from {{$job->company->name}} company @else{{$job->recruiter->name}} @endif</p>
                         </div>
                     </div>
                     <div class="info-item mb-3">
@@ -45,7 +45,7 @@
                             <p class="text-muted">{{$job->jobType->name}}</p>
                         </div>
                     </div>
-                    
+
                 </div>
                 <!-- Column 2 -->
                 <div class="col-md-4">
@@ -86,7 +86,7 @@
                             <p class="text-muted">{{$job->city->name}}, {{$job->country->name}}</p>
                         </div>
                     </div>
-                    
+
                 </div>
                 <!-- Column 3 -->
                 <div class="col-md-4">
@@ -119,7 +119,7 @@
                             <ul>
                                 @foreach ($job->skills as $key => $skill)
                                     @if ($key > 0) {{-- Skip the first skill --}}
-                                        <li class="text-muted">{{ $skill->skill }}</li> 
+                                        <li class="text-muted">{{ $skill->skill }}</li>
                                     @endif
                                 @endforeach
                             </ul>
