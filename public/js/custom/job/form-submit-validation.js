@@ -34,8 +34,8 @@
       const requiredSkill = $('#requiredSkills').val();
       const minAge = $('#min_age').val().trim();
       const maxAge = $('#max_age').val().trim();
-      const specialRequirements = $('#special_requirements').is(':checked');
-      const specialDetails = $('#special_details').val().trim();
+      const specialRequirements = $('#has_special_requirements').is(':checked');
+      const specialDetails = $('#special_requirements').val().trim();
       const validUntil = $('#validUntil').val().trim();
 
       // Clear previous error states
@@ -108,7 +108,7 @@
         }
       // Validate Salary Minimum
       if (isNaN(salaryMin) || salaryMin < 0) {
-        
+
         $('#salaryMin').addClass('border-danger');
         $('#salaryMinEmpty').text('Please enter a valid salary minimum.').show();
         isValid = false;
@@ -171,7 +171,7 @@
       // Validate Special Requirements Details if checkbox is checked
       if (specialRequirements) {
         if (specialDetails === '') {
-          $('#special_details').addClass('border-danger');
+          $('#special_requirements').addClass('border-danger');
           $('#specialDetailsEmpty').text('Please provide details for special requirements.').show();
           isValid = false;
         }
@@ -331,18 +331,18 @@ $('#experienceLevel').on('change', function () {
     }
 });
 $("#title").on('keyup',function(){
-    
+
     var title = $("#title").val();
 
 
     if(title == "")
     {
-        
+
         $("#titleEmpty").text("Title is required field");
         $('#title').addClass('border-danger').removeClass('border-success');
         $('#title').next('.invalid-feedback').show();
     }
-    
+
     else {
         $("#titleEmpty").text("");
         $('#title').removeClass('border-danger').addClass('border-success');
@@ -350,54 +350,54 @@ $("#title").on('keyup',function(){
 });
 
 $("#min_age").on('keyup',function(){
-    
+
   var minAge = $("#min_age").val();
 
 
   if(minAge == "")
   {
-      
+
       $("#minAgeEmpty").text("Min age is required field");
       $('#min_age').addClass('border-danger').removeClass('border-success');
       $('#min_age').next('.invalid-feedback').show();
   }
-  
+
   else {
       $("#minAgeEmpty").text("");
       $('#min_age').removeClass('border-danger').addClass('border-success');
   }
 });
 $("#max_age").on('keyup',function(){
-    
+
   var maxAge = $("#max_age").val();
 
 
   if(maxAge == "")
   {
-      
+
       $("#maxAgeEmpty").text("Min age is required field");
       $('#max_age').addClass('border-danger').removeClass('border-success');
       $('#max_age').next('.invalid-feedback').show();
   }
-  
+
   else {
       $("#maxAgeEmpty").text("");
       $('#max_age').removeClass('border-danger').addClass('border-success');
   }
 });
 $("#requiredSkills").on('keyup',function(){
-    
+
     var requiredSkills = $("#requiredSkills").val();
 
 
     if(requiredSkills == "")
     {
-        
+
         $("#requiredSkillsEmpty").text("Required skills is required field");
         $('#requiredSkills').addClass('border-danger').removeClass('border-success');
         $('#requiredSkills').next('.invalid-feedback').show();
     }
-    
+
     else {
         $("#requiredSkillsEmpty").text("");
         $('#requiredSkills').removeClass('border-danger').addClass('border-success');
@@ -421,7 +421,7 @@ $("#requiredSkills").on('keyup',function(){
             select2Container.removeClass('border-danger').addClass('border-success');
         }
     });
-    
+
     $('#cityId').on('change', function () {
         var cityIdSelect = $(this); // Reference the select element
         var selectedValue = cityIdSelect.val(); // Get the selected value
@@ -443,18 +443,18 @@ $("#requiredSkills").on('keyup',function(){
         const selectedDate = new Date(validUntil);
         const today = new Date();
         today.setHours(0,0,0,0); // Remove time portion
-    
+
         // Define the maximum allowable date (December 31, 2050)
         const maxDate = new Date('2050-12-31');
         maxDate.setHours(23,59,59,999); // Include the entire day
-    
+
         // Clear previous error messages and styles
         $('#validUntilEmpty').text('').hide();
         $('#validUntil').removeClass('border-danger border-success');
-    
+
         // Validation Flags
         let isValid = true;
-    
+
         if (validUntil === '') {
             $('#validUntil').addClass('border-danger');
             $('#validUntilEmpty').text('Please select a valid date.').show();
@@ -473,17 +473,16 @@ $("#requiredSkills").on('keyup',function(){
             $('#validUntilEmpty').text('Valid Until date cannot be later than December 31, 2050.').show();
             isValid = false;
         }
-    
+
         if (isValid) {
             $('#validUntil').addClass('border-success');
         }
-    
+
         return isValid;
     }
-    
+
     // Attach keyup and change event listeners for real-time validation
     $('#validUntil').on('keyup change', function() {
         validateValidUntil();
     });
 
-    
