@@ -181,9 +181,25 @@ class FrontController extends Controller
         return view('company-freelancer.pages.recruitment.candidat-recruitment-process');
     }
 
-    public function jobs(){
-        return view('company-freelancer.pages.job.active-jobs');
+    public function getActiveJobs()
+    {
+        $recruiterId = auth()->user()->recruiter->id ?? abort(404);
+        
+        $jobs = $this->jobRep->findActiveByRecruiterId($recruiterId);
+        
+        return view('company-freelancer.pages.job.active-jobs', compact('jobs'));
     }
+
+    public function getInactiveJobs()
+    {
+        $recruiterId = auth()->user()->recruiter->id ?? abort(404);
+        
+        $jobs = $this->jobRep->findInactiveByRecruiterId($recruiterId);
+        return dd($jobs);
+        return view('company-freelancer.pages.job.inactive-jobs', compact('jobs'));
+    }
+
+    
 
 
 
