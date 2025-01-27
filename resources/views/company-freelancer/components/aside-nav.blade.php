@@ -128,7 +128,7 @@
                                         </a>
                                     </div>
                                     <div class="menu-item">
-                                        <a class="menu-link {{ Route::currentRouteName() === 'company-freelancer-active-jobs' ? 'active' : '' }}" href="{{asset('company/freelancer/active/jobs')}}" href="">
+                                        <a class="menu-link {{ Route::currentRouteName() === 'company-freelancer-active-jobs' ? 'active' : '' }}" href="{{asset('company/freelancer/active/jobs')}}">
                                             <span class="menu-bullet">
                                                 <span class="bullet bullet-dot"></span>
                                             </span>
@@ -136,7 +136,7 @@
                                         </a>
                                     </div>
                                     <div class="menu-item">
-                                        <a class="menu-link" href="">
+                                        <a class="menu-link {{ Route::currentRouteName() === 'company-freelancer-inactive-jobs' ? 'active' : '' }}" href="{{asset('company/freelancer/inactive/jobs')}}">
                                             <span class="menu-bullet">
                                                 <span class="bullet bullet-dot"></span>
                                             </span>

@@ -195,7 +195,7 @@ class FrontController extends Controller
         $recruiterId = auth()->user()->recruiter->id ?? abort(404);
         
         $jobs = $this->jobRep->findInactiveByRecruiterId($recruiterId);
-        return dd($jobs);
+       
         return view('company-freelancer.pages.job.inactive-jobs', compact('jobs'));
     }
 

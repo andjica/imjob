@@ -39,33 +39,47 @@
 
                 <!--begin::Card body-->
                 <div class="card-body pt-3">
+                @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                @endif
                     <form action="{{route('company-freelancer-store-job')}}" method="POST" id="jobForm">
                         @csrf
                         <div class="row">
                             <!-- Left Column -->
                             <div class="col-md-6 pe-10 border-end me-2">
                          <!-- Job World Type as Navigation -->
-                            <div class="row mb-5">
+                         <div class="row mb-5">
                                 <label class="fw-bold fs-5 mb-3">Job World Type:</label>
                                 <div class="d-flex gap-3">
                                     <!-- National Option -->
                                     <button type="button" 
-                                            class="btn btn-outline btn-light-primary fw-semibold fs-6 py-3 px-4 {{ old('jobType') == 'national' ? 'active' : '' }}" 
-                                            id="jobTypeNational" 
+                                            class="btn btn-outline btn-light-primary fw-semibold fs-6 py-3 px-4 {{ old('jobWorldType') == 'national' ? 'active' : '' }}" 
+                                            name="jobWorldTypeButton"
+                                            id="jobWorldTypeNational" 
+                                            value="national"
                                             onclick="setJobType('national')">
                                         <i class="fas fa-flag me-2"></i> National
                                     </button>
                                     <!-- International Option -->
                                     <button type="button" 
-                                            class="btn btn-outline btn-light-primary fw-semibold fs-6 py-3 px-4 {{ old('jobType') == 'international' ? 'active' : '' }}" 
-                                            id="jobTypeInternational" 
+                                            class="btn btn-outline btn-light-primary fw-semibold fs-6 py-3 px-4 {{ old('jobWorldType') == 'international' ? 'active' : '' }}" 
+                                            name="jobWorldTypeButton"
+                                            id="jobWorldTypeInternational" 
+                                            value="international"
                                             onclick="setJobType('international')">
                                         <i class="fas fa-globe me-2"></i> International
                                     </button>
                                 </div>
-                                <!-- Hidden input to store the selected job type -->
-                                <input type="hidden" name="jobType" id="jobType" value="{{ old('jobType', 'national') }}">
+                                    <!-- Hidden input to store the selected job type -->
+                                    <input type="hidden" name="jobWorldType" id="jobWorldType" value="{{ old('jobWorldType', 'national') }}">
                             </div>
+
 
                                 <!-- Job Title -->
                                 <div class="row mb-5">
@@ -190,23 +204,23 @@
                                         <span class="text-danger" id="subCategoryIdEmpty">@error('subCategoryId'){{ $message }}@enderror</span>
                                     </div>
                                 </div>
-                               
-                                <!-- Job Type -->
-                                <div class="row mb-5">
-                                    <label class="col-lg-4 col-form-label fw-bold fs-6 required">Job Type:</label>
-                                    <div class="col-lg-8">
-                                        <select name="jobTypeId" id="jobTypeId" data-control="select2"
-                                            class="form-control form-control-solid @error('jobTypeId') is-invalid @enderror">
-                                            <option value="">Select a Job Type</option>
-                                            @foreach ($jobTypes as $jobType)
-                                                <option value="{{ $jobType->id }}" {{ old('jobTypeId') == $jobType->id ? 'selected' : '' }}>
-                                                    {{ $jobType->name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        <span class="text-danger" id="jobTypeIdEmpty">@error('jobTypeId'){{ $message }}@enderror</span>
-                                    </div>
+                               <!-- Job Type -->
+                            <div class="row mb-5">
+                                <label class="col-lg-4 col-form-label fw-bold fs-6 required">Job Type:</label>
+                                <div class="col-lg-8">
+                                    <select name="jobTypeId" id="jobTypeId" data-control="select2"
+                                        class="form-control form-control-solid @error('jobTypeId') is-invalid @enderror">
+                                        <option value="">Select a Job Type</option>
+                                        @foreach ($jobTypes as $jobType)
+                                            <option value="{{ $jobType->id }}" {{ old('jobTypeId') == $jobType->id ? 'selected' : '' }}>
+                                                {{ $jobType->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <span class="text-danger" id="jobTypeIdEmpty">@error('jobTypeId'){{ $message }}@enderror</span>
                                 </div>
+                            </div>
+                               
                                   <!-- Required Skills -->
                                   <div class="row mb-5">
                                     <label class="col-lg-4 col-form-label fw-bold fs-6 required">Required Skill:</label>
@@ -391,21 +405,22 @@
     });
 </script>
 <script>
-    function setJobType(type) {
+        function setJobType(type) {
         // Update the hidden input value
-        document.getElementById('jobType').value = type;
+        document.getElementById('jobWorldType').value = type;
 
         // Toggle active class for buttons
-        document.getElementById('jobTypeNational').classList.toggle('active', type === 'national');
-        document.getElementById('jobTypeInternational').classList.toggle('active', type === 'international');
+        document.getElementById('jobWorldTypeNational').classList.toggle('active', type === 'national');
+        document.getElementById('jobWorldTypeInternational').classList.toggle('active', type === 'international');
     }
+
 
     // Initialize with old value
     document.addEventListener('DOMContentLoaded', function () {
-        const jobType = document.getElementById('jobType').value;
-        if (jobType === 'national') {
+        const jobWorldType = document.getElementById('jobWorldType').value;
+        if (jobWorldType === 'national') {
             setJobType('national');
-        } else if (jobType === 'international') {
+        } else if (jobWorldType === 'international') {
             setJobType('international');
         }
     });

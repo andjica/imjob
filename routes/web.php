@@ -120,6 +120,6 @@ Route::middleware(['auth', 'company.freelancer', 'verified'])->prefix('company/f
     Route::get('/jobId={id}/recruitment-process', [CompanyFreelancerFrontController::class, 'recruitmentProcess'])->name('recruitment-process');
     Route::get('/job/candidat/recruitment-process', [CompanyFreelancerFrontController::class, 'candidatRecruitmentProcess'])->name('candidat-recruitment-process');
     Route::get('/active/jobs', [CompanyFreelancerFrontController::class, 'getActiveJobs'])->name('active-jobs');
-    Route::get('/inactive/jobs', [CompanyFreelancerFrontController::class, 'getInactiveJobs'])->name('active-jobs');
+    Route::get('/inactive/jobs', [CompanyFreelancerFrontController::class, 'getInactiveJobs'])->name('inactive-jobs');
 
 });
