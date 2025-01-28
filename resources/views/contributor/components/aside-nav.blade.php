@@ -48,7 +48,7 @@
                 <div class="hover-scroll-overlay-y my-2 py-2" id="kt_aside_menu_wrapper" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-height="auto" data-kt-scroll-dependencies="#kt_aside_logo, #kt_aside_footer" data-kt-scroll-wrappers="#kt_aside_menu" data-kt-scroll-offset="0" style="">
                     <!--begin::Menu-->
                     <div class="menu menu-column menu-title-gray-800 menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-500" id="#kt_aside_menu" data-kt-menu="true">
-                    <div class="menu-item menu-accordion show {{ request()->route()->getName() && Str::startsWith(request()->route()->getName(), 'company-freelancer-dashboard') ? 'show' : '' }}" data-kt-menu-trigger="click">
+                    <div class="menu-item menu-accordion show {{ request()->route()->getName() && Str::startsWith(request()->route()->getName(), 'contributor-dashboard') ? 'show' : '' }}" data-kt-menu-trigger="click">
                         <div class="menu-item">
                                 <div class="menu-content pt-8 pb-2">
                                     <span class="menu-heading text-muted text-uppercase fs-8 ls-1">Freelancer Management</span>
@@ -73,8 +73,8 @@
                             <div class="menu-sub menu-sub-accordion menu-active-bg">
                               
                             <div class="menu-item menu-sub-indention menu-accordion">
-                                    <a class="menu-link {{ Route::currentRouteName() === 'company-freelancer-dashboard' ? 'active' : '' }}" 
-                                    href="{{ route('company-freelancer-dashboard') }}">
+                                    <a class="menu-link {{ Route::currentRouteName() === 'contributor-dashboard' ? 'active' : '' }}" 
+                                    href="{{ route('contributor-dashboard') }}">
                                         <span class="menu-bullet">
                                             <span class="bullet bullet-dot"></span>
                                         </span>
@@ -82,8 +82,8 @@
                                     </a>
                                 </div>
                                 <div class="menu-item menu-sub-indention menu-accordion">
-                                    <a class="menu-link {{ Route::currentRouteName() === 'company-freelancer-find-companies' ? 'active' : '' }}" 
-                                    href="{{ route('company-freelancer-find-companies') }}">
+                                    <a class="menu-link {{ Route::currentRouteName() === 'contributor-companies' ? 'active' : '' }}" 
+                                    href="{{ route('contributor-companies') }}">
                                         <span class="menu-bullet">
                                             <span class="bullet bullet-dot"></span>
                                         </span>
@@ -91,12 +91,12 @@
                                     </a>
                                 </div>
                                 <div class="menu-item menu-sub-indention menu-accordion">
-                                    <a class="menu-link {{ Route::currentRouteName() === 'company-freelancer-find-contributors' ? 'active' : '' }}" 
-                                    href="{{ route('company-freelancer-find-contributors') }}">
+                                    <a class="menu-link {{ Route::currentRouteName() === 'contributor-find-recruiter' ? 'active' : '' }}" 
+                                    href="{{ route('contributor-find-recruiter') }}">
                                         <span class="menu-bullet">
                                             <span class="bullet bullet-dot"></span>
                                         </span>
-                                        <span class="menu-title">Find Contributors</span>
+                                        <span class="menu-title">Find Recruiters</span>
                                     </a>
                                 </div>
                             </div>
@@ -122,13 +122,13 @@
                                         </span>
                                         <!--end::Svg Icon-->
                                     </span>
-                                    <span class="menu-title">Jobs</span>
+                                    <span class="menu-title">Posts</span>
                                     <span class="menu-arrow"></span>
                                 </span>
                                 <div class="menu-sub menu-sub-accordion">
 
                                     <div class="menu-item">
-                                        <a class="menu-link {{ Route::currentRouteName() === 'company-freelancer-create-job' ? 'active' : '' }}" href="{{asset('company/freelancer/job/create')}}">
+                                        <a class="menu-link {{ Route::currentRouteName() === 'contributor-post-create' ? 'active' : '' }}" href="{{asset('contributor/post/create')}}">
                                             <span class="menu-bullet">
                                                 <span class="bullet bullet-dot"></span>
                                             </span>
@@ -136,19 +136,11 @@
                                         </a>
                                     </div>
                                     <div class="menu-item">
-                                        <a class="menu-link {{ Route::currentRouteName() === 'company-freelancer-active-jobs' ? 'active' : '' }}" href="{{asset('company/freelancer/active/jobs')}}">
+                                        <a class="menu-link {{ Route::currentRouteName() === 'contributor-posts' ? 'active' : '' }}" href="{{asset('contributor/posts')}}">
                                             <span class="menu-bullet">
                                                 <span class="bullet bullet-dot"></span>
                                             </span>
-                                            <span class="menu-title">Active jobs</span>
-                                        </a>
-                                    </div>
-                                    <div class="menu-item">
-                                        <a class="menu-link {{ Route::currentRouteName() === 'company-freelancer-inactive-jobs' ? 'active' : '' }}" href="{{asset('company/freelancer/inactive/jobs')}}">
-                                            <span class="menu-bullet">
-                                                <span class="bullet bullet-dot"></span>
-                                            </span>
-                                            <span class="menu-title">Inactive jobs</span>
+                                            <span class="menu-title">All posts</span>
                                         </a>
                                     </div>
                                 </div>
@@ -175,31 +167,20 @@
                                 <div class="menu-sub menu-sub-accordion">
 
                                     <div class="menu-item">
-                                        <a class="menu-link {{ Route::currentRouteName() === 'company-freelancer-edit-company' ? 'active' : '' }}" href="{{asset('company/freelancer/edit/company')}}">
+                                        <a class="menu-link {{ Route::currentRouteName() === 'contributor-edit' ? 'active' : '' }}" href="{{asset('contributoredit/edit')}}">
                                             <span class="menu-bullet">
                                                 <span class="bullet bullet-dot"></span>
                                             </span>
-                                            <span class="menu-title">Edit company</span>
+                                            <span class="menu-title">Edit contributor</span>
                                         </a>
                                     </div>
                                     
                                 </div>
-                                <div class="menu-sub menu-sub-accordion">
-
-                                    <div class="menu-item">
-                                        <a class="menu-link {{ Route::currentRouteName() === 'company-freelancer-freelancer-edit' ? 'active' : '' }}" href="{{asset('/company/freelancer/edit')}}">
-                                            <span class="menu-bullet">
-                                                <span class="bullet bullet-dot"></span>
-                                            </span>
-                                            <span class="menu-title">Edit freelancer</span>
-                                        </a>
-                                    </div>
-                                    
-                                </div>
+                              
                                 <!-- <div class="menu-sub menu-sub-accordion">
 
                                 <div class="menu-item">
-                                <a class="menu-link {{ Route::currentRouteName() === 'company-freelancer-settings' ? 'active' : '' }}" href="{{asset('/company/freelancer/settings')}}">
+                                <a class="menu-link {{ Route::currentRouteName() === 'contributor-settings' ? 'active' : '' }}" href="{{asset('/contributorsettings')}}">
                                         <span class="menu-bullet">
                                             <span class="bullet bullet-dot"></span>
                                         </span>
@@ -213,7 +194,7 @@
                         <!--begin::Footer-->
                         <div class="aside-footer flex-column-auto pt-5 pb-7 px-5" id="kt_aside_footer">
                             
-                            <a href="{{asset('/company/freelancer/settings')}}" class="btn btn-custom btn-primary w-100" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss-="click" title="" data-bs-original-title="Make changes for your profile company">
+                            <a href="{{asset('/contributor/settings')}}" class="btn btn-custom btn-primary w-100" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss-="click" title="" data-bs-original-title="Make changes your profile information">
                             <i class="fa-solid fa-sliders"></i>
                              <span class="btn-label">Settings</span>
                                

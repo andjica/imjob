@@ -16,7 +16,8 @@ use App\Http\Controllers\{
     Recruiter\RecruiterEducationController,
     RoleController,
     SubCategoryController,
-    UserController
+    UserController,
+    Contributor\FrontController as ContributorFrontController
 };
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -95,6 +96,7 @@ Route::middleware(['auth', 'company', 'verified'])->prefix('company/dashboard')-
 Route::middleware(['auth', 'company.freelancer', 'verified'])->prefix('company/freelancer')->name('company-freelancer-')->group(function () {
     Route::get('/dashboard', [CompanyFreelancerFrontController::class, 'dashboard'])->name('dashboard');
     Route::get('/find/companies', [CompanyFreelancerFrontController::class, 'findCompanies'])->name('find-companies');
+    Route::get('/find/contributors', [CompanyFreelancerFrontController::class, 'findContributors'])->name('find-contributors');
 
     Route::get('/edit', [CompanyFreelancerFrontController::class, 'editFreelancer'])->name('freelancer-edit');
     Route::get('/edit/company', [CompanyFreelancerFrontController::class, 'editCompany'])->name('edit-company');
@@ -121,5 +123,20 @@ Route::middleware(['auth', 'company.freelancer', 'verified'])->prefix('company/f
     Route::get('/job/candidat/recruitment-process', [CompanyFreelancerFrontController::class, 'candidatRecruitmentProcess'])->name('candidat-recruitment-process');
     Route::get('/active/jobs', [CompanyFreelancerFrontController::class, 'getActiveJobs'])->name('active-jobs');
     Route::get('/inactive/jobs', [CompanyFreelancerFrontController::class, 'getInactiveJobs'])->name('inactive-jobs');
+
+});
+
+//Contributors routes
+Route::middleware(['auth', 'contributor', 'verified'])->prefix('contributor')->name('contributor-')->group(function () {
+    Route::get('/dashboard', [ContributorFrontController::class, 'index'])->name('dashboard');
+
+    Route::middleware(['contributor.exists'])->group(function () {
+        Route::get('/companies', [ContributorFrontController::class, 'companies'])->name('companies');
+        Route::get('/find-recruiter', [ContributorFrontController::class, 'recruiter'])->name('find-recruiter');
+    
+        Route::get('/posts', [ContributorFrontController::class, 'posts'])->name('posts');
+        Route::get('/post/create', [ContributorFrontController::class, 'createPosts'])->name('post-create');
+        Route::get('/edit', [ContributorFrontController::class, 'edit'])->name('edit');
+    });
 
 });

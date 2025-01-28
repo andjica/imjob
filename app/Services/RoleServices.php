@@ -18,7 +18,7 @@ class RoleServices implements RoleInterface
      */
     public function getAllRoles()
     {
-        return Role::whereIn('name', ['company', 'recruiter'])->orderBy('name', 'asc')->get();
+        return Role::whereIn('name', ['company', 'recruiter', 'contributor'])->orderBy('name', 'asc')->get();
     }
 
     public function updateRole(int $roleId)

@@ -120,6 +120,11 @@ class FrontController extends Controller
         'connectedSuccessfully', 'connectedOnPending'));
     }
 
+    public function findContributors()
+    {
+        return 5;
+    }
+
     public function followCompany(FollowCompanyRequest $request, FollowCompany $followCompany): JsonResponse
     {
         $followCompany->execute((int) $request->get('company_id'));
