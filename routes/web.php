@@ -1,24 +1,22 @@
 <?php
 
-use App\Http\Controllers\{
-    Admin\FrontController as AdminFrontController,
+use App\Http\Controllers\{Admin\FrontController as AdminFrontController,
     Auth\LoginController,
     City\CityController,
-    CompanyFreelancer\FreelancerController,
-    CompanyFreelancer\FrontController as CompanyFreelancerFrontController,
     Company\CompanyController,
     Company\FrontController as CompanyFrontController,
+    CompanyFreelancer\FrontController as CompanyFreelancerFrontController,
+    Contributor\FrontController as ContributorFrontController,
     CountryController,
     GoogleController,
     HomeController,
     JobController,
-    RecruiterController,
     Recruiter\RecruiterEducationController,
+    RecruiterController,
     RoleController,
     SubCategoryController,
-    UserController,
-    Contributor\FrontController as ContributorFrontController
-};
+    UserController};
+use App\Http\FreelancerController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -117,10 +115,10 @@ Route::middleware(['auth', 'company.freelancer', 'verified'])->prefix('company/f
     Route::get('/company/{company}/details', [CompanyFreelancerFrontController::class, 'detailsCompany'])->name('company-details');
     Route::get('/job/create', [CompanyFreelancerFrontController::class, 'createJob'])->name('create-job');
     Route::post('/job/store', [JobController::class, 'store'])->name('store-job');
-    // Route::get('/job/{id}', [CompanyFreelancerFrontController::class, 'getJob'])->name('get-job');
     //za dzonija rute
     Route::get('/{job}/recruitment-process', [CompanyFreelancerFrontController::class, 'recruitmentProcess'])->name('recruitment-process');
-    Route::get('/job/candidat/recruitment-process', [CompanyFreelancerFrontController::class, 'candidatRecruitmentProcess'])->name('candidat-recruitment-process');
+    Route::get('/job/candidate/{candidate}/recruitment-process', [CompanyFreelancerFrontController::class, 'candidateRecruitmentProcess'])->name('candidat-recruitment-process');
+    Route::put('/job/candidate/{candidate}/change-status', [CompanyFreelancerFrontController::class, 'changeCandidateStatus'])->name('candidat-recruitment-process');
     Route::get('/active/jobs', [CompanyFreelancerFrontController::class, 'getActiveJobs'])->name('active-jobs');
     Route::get('/inactive/jobs', [CompanyFreelancerFrontController::class, 'getInactiveJobs'])->name('inactive-jobs');
 
@@ -133,7 +131,7 @@ Route::middleware(['auth', 'contributor', 'verified'])->prefix('contributor')->n
     Route::middleware(['contributor.exists'])->group(function () {
         Route::get('/companies', [ContributorFrontController::class, 'companies'])->name('companies');
         Route::get('/find-recruiter', [ContributorFrontController::class, 'recruiter'])->name('find-recruiter');
-    
+
         Route::get('/posts', [ContributorFrontController::class, 'posts'])->name('posts');
         Route::get('/post/create', [ContributorFrontController::class, 'createPosts'])->name('post-create');
         Route::get('/edit', [ContributorFrontController::class, 'edit'])->name('edit');

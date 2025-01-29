@@ -4,6 +4,7 @@ namespace App\Http\Controllers\CompanyFreelancer;
 
 use App\Actions\FollowCompany;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CandidateStatusRequest;
 use App\Http\Requests\FollowCompanyRequest;
 use App\Interfaces\CategoryInterface;
 use App\Interfaces\CityInterface;
@@ -14,10 +15,13 @@ use App\Interfaces\CountryInterface;
 use App\Interfaces\FreelancerInterface;
 use App\Interfaces\JobTypeInterface;
 use App\Interfaces\SubCategoryInterface;
+use App\Models\Candidate;
 use App\Models\Company;
 use App\Models\Job;
 use App\Models\User;
 use App\Repositories\JobRepository;
+use App\Services\CandidateService;
+use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -37,6 +41,7 @@ class FrontController extends Controller
         private CompanyInterface $companyServices,
         private JobTypeInterface $jobTypesServices,
         private JobRepository $jobRep,
+        private CandidateService $candidateService,
     ) {
     }
 
@@ -179,9 +184,26 @@ class FrontController extends Controller
         return view('company-freelancer.pages.recruitment.job-recruitment', compact('job', 'candidates'));
     }
 
-    public function candidatRecruitmentProcess(): Factory|View|Application
+    public function candidateRecruitmentProcess(Candidate $candidate): Factory|View|Application
     {
+        if ($candidate->status !== 'accept' || !$candidate->recruitmentProcess) {
+            abort(404);
+        }
+
         return view('company-freelancer.pages.recruitment.candidat-recruitment-process');
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function changeCandidateStatus(CandidateStatusRequest $request, Candidate $candidate): JsonResponse
+    {
+        $this->candidateService->handleCandidate($candidate, $request->get('status'));
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Status updated successfully.',
+        ]);
     }
 
     public function jobs(): Factory|View|Application

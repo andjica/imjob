@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * @property int $id
@@ -18,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $city
  * @property string $status
  * @property Job $job
+ * @property RecruitmentProcess|null $recruitmentProcess
  */
 class Candidate extends Model
 {
@@ -47,5 +49,10 @@ class Candidate extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function recruitmentProcess(): HasOne
+    {
+        return $this->hasOne(RecruitmentProcess::class);
     }
 }
