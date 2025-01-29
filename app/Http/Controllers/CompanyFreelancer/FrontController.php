@@ -4,6 +4,7 @@ namespace App\Http\Controllers\CompanyFreelancer;
 
 use App\Actions\FollowCompany;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CandidateStatusRequest;
 use App\Http\Requests\FollowCompanyRequest;
 use App\Interfaces\CategoryInterface;
 use App\Interfaces\CityInterface;
@@ -12,15 +13,19 @@ use App\Interfaces\CompanyInterface;
 use App\Interfaces\CompanyTypeInterface;
 use App\Interfaces\CountryInterface;
 use App\Interfaces\FreelancerInterface;
+use App\Interfaces\JobTypeInterface;
 use App\Interfaces\SubCategoryInterface;
+use App\Models\Candidate;
 use App\Models\Company;
+use App\Models\Job;
 use App\Models\User;
+use App\Repositories\JobRepository;
+use App\Services\CandidateService;
+use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
-use App\Interfaces\JobTypeInterface;
-use App\Repositories\JobRepository;
 use Symfony\Component\HttpFoundation\Request;
 
 class FrontController extends Controller
@@ -35,11 +40,12 @@ class FrontController extends Controller
         private CompanyTypeInterface $companyTypesServices,
         private CompanyInterface $companyServices,
         private JobTypeInterface $jobTypesServices,
-        private JobRepository $jobRep
+        private JobRepository $jobRep,
+        private CandidateService $candidateService,
     ) {
     }
 
-    public function dashboard()
+    public function dashboard(): Factory|View|Application
     {
         /** @var User $user */
         $user   = auth()->user();
@@ -49,7 +55,7 @@ class FrontController extends Controller
         return view('company-freelancer.pages.index', compact('freelancer'));
     }
 
-    public function editFreelancer()
+    public function editFreelancer(): Factory|View|Application
     {
         $categories   = $this->categoryServices->getAll();
         $freelancerId = auth()->user()->recruiter->id;
@@ -69,7 +75,7 @@ class FrontController extends Controller
         ));
     }
 
-    public function editCompany()
+    public function editCompany(): Factory|View|Application
     {
         $user    = auth()->user()->id;
         $company = $this->companyServices->getCompanyByRecruiter($user);
@@ -93,7 +99,7 @@ class FrontController extends Controller
         ));
     }
 
-    public function settings()
+    public function settings(): Factory|View|Application
     {
         $freelancerId = auth()->user()->recruiter->id;
         $freelancer   = $this->freelancerServices->getFreelancerById($freelancerId);
@@ -111,13 +117,17 @@ class FrontController extends Controller
         $connectedOnPending = $user->recruiter->companies()
         ->wherePivot('status', 'Pending')
         ->get();
-      
+
         $connectedSuccessfully = $user->recruiter->companies()
         ->wherePivot('status', 'Active')
         ->get();
-       
-        return view('company-freelancer.pages.find-companies', compact('companies', 'connectedCompanies', 
-        'connectedSuccessfully', 'connectedOnPending'));
+
+        return view('company-freelancer.pages.find-companies', compact(
+            'companies',
+            'connectedCompanies',
+            'connectedSuccessfully',
+            'connectedOnPending'
+        ));
     }
 
     public function findContributors()
@@ -129,7 +139,6 @@ class FrontController extends Controller
     {
         $followCompany->execute((int) $request->get('company_id'));
 
-        // Example response
         return response()->json([
             'success' => true,
             'message' => 'Follow request sent successfully.',
@@ -144,7 +153,9 @@ class FrontController extends Controller
         $isOwnCompany = $user->recruiter->company?->id === $company->id;
         $similarCompanies = $this->companyServices->getCompaniesByCategory($company->category->id);
 
-        return view('company-freelancer.pages.company.details', compact(
+        return view(
+            'company-freelancer.pages.company.details',
+            compact(
                 'company',
                 'similarCompanies',
                 'isConnected',
@@ -166,46 +177,55 @@ class FrontController extends Controller
         return view('company-freelancer.pages.job.create', compact('countries', 'categories', 'jobTypes', 'recruiterWithCompanies'));
     }
 
-
-    // public function getJob()
-    // {
-        
-    //     return view('company-freelancer.pages.job.get-one', compact('job'));
-    // }
-
-    
-    public function recruitmentProcess($id)
+    public function recruitmentProcess(Job $job): Factory|View|Application
     {
-        $job = $this->jobRep->find($id) ?? abort(404);
-        return view('company-freelancer.pages.recruitment.job-recruitment', compact('job'));
+        $candidates = $job->candidates()->with('user')->get();
+
+        return view('company-freelancer.pages.recruitment.job-recruitment', compact('job', 'candidates'));
     }
 
-
-    public function candidatRecruitmentProcess()
+    public function candidateRecruitmentProcess(Candidate $candidate): Factory|View|Application
     {
+        if ($candidate->status !== 'accept' || !$candidate->recruitmentProcess) {
+            abort(404);
+        }
+
         return view('company-freelancer.pages.recruitment.candidat-recruitment-process');
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function changeCandidateStatus(CandidateStatusRequest $request, Candidate $candidate): JsonResponse
+    {
+        $this->candidateService->handleCandidate($candidate, $request->get('status'));
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Status updated successfully.',
+        ]);
+    }
+
+    public function jobs(): Factory|View|Application
+    {
+        return view('company-freelancer.pages.job.active-jobs');
     }
 
     public function getActiveJobs()
     {
         $recruiterId = auth()->user()->recruiter->id ?? abort(404);
-        
+
         $jobs = $this->jobRep->findActiveByRecruiterId($recruiterId);
-        
+
         return view('company-freelancer.pages.job.active-jobs', compact('jobs'));
     }
 
     public function getInactiveJobs()
     {
         $recruiterId = auth()->user()->recruiter->id ?? abort(404);
-        
+
         $jobs = $this->jobRep->findInactiveByRecruiterId($recruiterId);
-       
+
         return view('company-freelancer.pages.job.inactive-jobs', compact('jobs'));
     }
-
-    
-
-
-
 }

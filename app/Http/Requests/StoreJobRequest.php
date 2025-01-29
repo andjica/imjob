@@ -2,8 +2,9 @@
 
 namespace App\Http\Requests;
 
-
+use App\Enums\JobType;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreJobRequest extends FormRequest
 {
@@ -14,11 +15,10 @@ class StoreJobRequest extends FormRequest
 
     public function rules(): array
     {
-        
         return [
+            'jobWorldType' => ['required', Rule::in([JobType::INTERNATIONAL, JobType::NATIONAL])],
             'title' => ['required', 'string', 'max:255'],
-            'jobWorldType' => ['required'],
-            'description' => ['required','string','max:65535'],
+            'description' => ['required', 'string'],
             'categoryId' => ['required', 'integer', 'exists:categories,id'],
             'subCategoryId' => ['required', 'integer', 'exists:sub_categories,id'],
             'countryId' => ['required', 'integer', 'exists:countries,id'],
@@ -26,19 +26,17 @@ class StoreJobRequest extends FormRequest
             'jobTypeId' => ['required', 'integer', 'exists:job_types,id'],
             'salaryMin' => ['required', 'integer', 'min:0'],
             'salaryMax' => ['required', 'integer', 'gte:salaryMin'],
-            'experienceLevel' => ['required', 'string', 'in:Entry-Level,Mid-Level,Senior-Level'],
-            'requiredSkills' => ['required', 'string'],
-            // 'requiredSkills.*' => ['string'],
-            // 'moreSkill' => ['string'],
-            // 'moreSkill' => ['nullable','array'],
-            // 'moreSkill.*' => ['string'],
+            'experienceLevel' => ['required', 'string', 'in:Entry-Level,Mid-Level,Senior-Level,Managerial'],
+            'requiredSkills' => ['required', 'string', 'max:255'],
+            'moreSkill' => ['array'],
+            'moreSkill.*' => ['string'],
+            'moreSkills' => ['array'],
+            'moreSkills.*' => ['string'],
             'min_age' => ['required', 'integer', 'min:18'],
             'max_age' => ['required', 'integer', 'gte:min_age'],
             'special_requirements' => ['nullable', 'string'],
-            'special_details' => ['nullable', 'string'],
             'validUntil' => ['required', 'date', 'after_or_equal:today'],
             'companyId' => ['required', 'integer', 'exists:companies,id'],
-            /*'companyName' => ['nullable', 'string', 'max:500'],*/
         ];
     }
 }

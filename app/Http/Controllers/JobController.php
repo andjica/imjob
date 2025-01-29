@@ -3,14 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Actions\CreateJob;
-use Illuminate\Http\Request;
-use App\Interfaces\JobInterface;
-use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\StoreJobRequest;
+use Illuminate\Http\RedirectResponse;
 
 class JobController extends Controller
 {
-    
+
     public function store(StoreJobRequest $request, CreateJob $createJob): RedirectResponse
     {
        
@@ -18,6 +16,4 @@ class JobController extends Controller
 
         return redirect()->route('company-freelancer-dashboard');
     }
-
-    
 }

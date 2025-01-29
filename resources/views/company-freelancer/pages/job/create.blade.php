@@ -58,19 +58,19 @@
                                 <label class="fw-bold fs-5 mb-3">Job World Type:</label>
                                 <div class="d-flex gap-3">
                                     <!-- National Option -->
-                                    <button type="button" 
-                                            class="btn btn-outline btn-light-primary fw-semibold fs-6 py-3 px-4 {{ old('jobWorldType') == 'national' ? 'active' : '' }}" 
+                                    <button type="button"
+                                            class="btn btn-outline btn-light-primary fw-semibold fs-6 py-3 px-4 {{ old('jobWorldType') == 'national' ? 'active' : '' }}"
                                             name="jobWorldTypeButton"
-                                            id="jobWorldTypeNational" 
+                                            id="jobWorldTypeNational"
                                             value="national"
                                             onclick="setJobType('national')">
                                         <i class="fas fa-flag me-2"></i> National
                                     </button>
                                     <!-- International Option -->
-                                    <button type="button" 
-                                            class="btn btn-outline btn-light-primary fw-semibold fs-6 py-3 px-4 {{ old('jobWorldType') == 'international' ? 'active' : '' }}" 
+                                    <button type="button"
+                                            class="btn btn-outline btn-light-primary fw-semibold fs-6 py-3 px-4 {{ old('jobWorldType') == 'international' ? 'active' : '' }}"
                                             name="jobWorldTypeButton"
-                                            id="jobWorldTypeInternational" 
+                                            id="jobWorldTypeInternational"
                                             value="international"
                                             onclick="setJobType('international')">
                                         <i class="fas fa-globe me-2"></i> International
@@ -99,7 +99,7 @@
                                         <span class="text-danger" id="descriptionEmpty">@error('description'){{ $message }}@enderror</span>
                                     </div>
                                 </div>
-                                
+
                                 <!-- Country -->
                                 <div class="row mb-5">
                                     <label class="col-lg-4 col-form-label fw-bold fs-6 required">Country:</label>
@@ -171,9 +171,9 @@
                                         <span class="text-danger" id="experienceLevelEmpty">@error('experienceLevel'){{ $message }}@enderror</span>
                                     </div>
                                 </div>
-                             
+
                             </div>
-                            
+
                             <!-- Right Column -->
                             <div class="col-md-5">
                                <!-- Category -->
@@ -220,7 +220,7 @@
                                     <span class="text-danger" id="jobTypeIdEmpty">@error('jobTypeId'){{ $message }}@enderror</span>
                                 </div>
                             </div>
-                               
+
                                   <!-- Required Skills -->
                                   <div class="row mb-5">
                                     <label class="col-lg-4 col-form-label fw-bold fs-6 required">Required Skill:</label>
@@ -250,40 +250,41 @@
                                     <label class="col-lg-4 col-form-label fw-bold fs-6">Special Requirements:</label>
                                     <div class="col-lg-8">
                                         <div class="form-check form-switch">
-                                            <input 
-                                                class="form-check-input" 
-                                                type="checkbox" 
-                                                id="special_requirements" 
-                                                name="special_requirements" 
-                                                {{ old('special_requirements') ? 'checked' : '' }}
+                                            <input
+                                                class="form-check-input"
+                                                type="checkbox"
+                                                id="has_special_requirements"
+                                                name="has_special_requirements"
+                                                value="true"
+                                                {{ old('has_special_requirements') ? 'checked' : '' }}
                                             >
-                                            <label class="form-check-label" for="special_requirements">
+                                            <label class="form-check-label" for="has_special_requirements">
                                                 Check if there are special requirements.
                                             </label>
                                         </div>
                                         <span class="text-danger" id="specialRequirementsEmpty">
-                                            @error('special_requirements'){{ $message }}@enderror
+                                            @error('has_special_requirements'){{ $message }}@enderror
                                         </span>
                                     </div>
                                 </div>
                                 <!-- Additional Special Requirements Fields -->
                                 <div class="row mb-5 d-none" id="specialRequirementsFields">
-                                    <label for="special_details" class="col-lg-4 col-form-label fw-bold fs-6">Details:</label>
+                                    <label for="special_requirements" class="col-lg-4 col-form-label fw-bold fs-6">Details:</label>
                                     <div class="col-lg-8">
-                                        <textarea 
-                                            class="form-control form-control-solid @error('special_details') is-invalid @enderror" 
-                                            name="special_details" 
-                                            id="special_details" 
-                                            rows="4" 
+                                        <textarea
+                                            class="form-control form-control-solid @error('special_requirements') is-invalid @enderror"
+                                            name="special_requirements"
+                                            id="special_requirements"
+                                            rows="4"
                                             placeholder="Enter any special requirements here..."
-                                        >{{ old('special_details') }}</textarea>
+                                        >{{ old('special_requirements') }}</textarea>
                                         <span class="text-danger" id="specialDetailsEmpty">
-                                            @error('special_details'){{ $message }}@enderror
+                                            @error('special_requirements'){{ $message }}@enderror
                                         </span>
                                     </div>
                                 </div>
-                               
-                               
+
+
                                 <!-- Age Range -->
                                 <div class="row mb-5">
                                     <label class="col-lg-4 col-form-label fw-bold fs-6">Age Range:</label>

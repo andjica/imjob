@@ -35,22 +35,26 @@ class CreateJob
      */
     private function extractSkills(array $data): Collection
     {
-        $requiredSkills = $data['requiredSkills']; // Single input as a string
-        $moreSkill = $data['moreSkill'] ?? null;
-        $moreSkills = $data['moreSkills'] ?? [];
-    
+        $requiredSkills = $data['requiredSkills'];
+        $moreSkill      = $data['moreSkill']      ?? [];
+        $moreSkills     = $data['moreSkills']     ?? [];
+
         $jobSkills = array_merge(
-            // Handle the single required skill as a string
             $requiredSkills ? [new JobSkillDTO($requiredSkills, true)] : [],
-            $moreSkill ? [new JobSkillDTO($moreSkill, false)] : [],
+            array_map(function ($skill) {
+                return new JobSkillDTO($skill, false);
+            }, $moreSkill),
             array_map(function ($skill) {
                 return new JobSkillDTO($skill, false);
             }, $moreSkills)
         );
-    
+
         return collect($jobSkills);
     }
 
+    /**
+     * @param  Collection<int, JobSkillDTO> $skills
+     */
     private function saveSkills(Job $job, Collection $skills): void
     {
         /** @var JobSkillDTO $skill */
@@ -65,7 +69,6 @@ class CreateJob
 
     private function setAdditionalFields(array $data): array
     {
-        //$data['company_id']   = 1;
         $data['recruiter_id'] = auth()->user()->recruiter->id ?? null;
 
         return $data;

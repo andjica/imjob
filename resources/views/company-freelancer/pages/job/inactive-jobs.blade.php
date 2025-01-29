@@ -60,7 +60,7 @@
                             <p class="card-text">Location: {{$job->city->name}}, {{$job->country->name}}</p>
                             <p>For company: {{$job->company->name}}</p>
                         </div>
-                       
+
                     </div>
                     <div class="card-body">
                         <p class="card-text"><strong>Expired at:</strong> {{ \Carbon\Carbon::parse($job->valid_until)->format('d F Y') }}</p>
@@ -68,8 +68,8 @@
                         <p class="card-text job-type">Job Type: {{$job->jobType->name}}</p>
                         <p class="card-text"><strong>Recruiter:</strong> John Doe</p>
                     </div>
-                        <a href="{{asset('/company/freelancer/jobId='.$job->id.'/recruitment-process')}}" class="btn btn-sm btn-light-primary">Go to recruitment process</a>
-                
+                        <a href="{{asset('/company/freelancer/'.$job->id.'/recruitment-process')}}" class="btn btn-sm btn-light-primary">Go to recruitment process</a>
+
                 </div>
             </div>
             @endforeach
@@ -81,5 +81,5 @@
 @endsection
 
 @section('js')
-  
+
 @endsection

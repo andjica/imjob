@@ -1,21 +1,21 @@
-$(document).ready(function() {
-    
+$(document).ready(function () {
+
     // Function to toggle the visibility of special requirements fields
     function toggleSpecialRequirements() {
-                if ($('#special_requirements').is(':checked')) {
-                    $('#specialRequirementsFields').removeClass('d-none');
-                } else {
-                    $('#specialRequirementsFields').addClass('d-none');
-                    // Optionally, clear the input fields when hiding
-                    $('#special_details').val('');
-                }
-            }
+        if ($('#has_special_requirements').is(':checked')) {
+            $('#specialRequirementsFields').removeClass('d-none');
+        } else {
+            $('#specialRequirementsFields').addClass('d-none');
+            // Optionally, clear the input fields when hiding
+            $('#special_requirements').val('');
+        }
+    }
 
-            // Initial check on page load
-            toggleSpecialRequirements();
+    // Initial check on page load
+    toggleSpecialRequirements();
 
-            // Event listener for checkbox change
-            $('#special_requirements').on('change', function() {
-                toggleSpecialRequirements();
-            });
-        });
+    // Event listener for checkbox change
+    $('#has_special_requirements').on('change', function () {
+        toggleSpecialRequirements();
+    });
+});
