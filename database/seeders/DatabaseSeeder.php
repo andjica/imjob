@@ -7,7 +7,7 @@ use App\Models\Company;
 use App\Models\CompanyRecruiter;
 use App\Models\Recruiter;
 use Illuminate\Database\Seeder;
- 
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // seeders 
+        // seeders
          $this->call(RolesTableSeeder::class);
         $this->call(CategorySeeder::class);
         $this->call(SubCategorySeeder::class);
@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
         $this->call(CompanyTypeSeeder::class);
         $this->call(JobTypesSeeder::class);
         $this->call(ContributorTypeSeeder::class);
+        $this->call(AvailableSubphasesSeeder::class);
         //factories
         // User::factory(10)->create();
         //Company::factory()->count(20)->create();
@@ -35,7 +36,7 @@ class DatabaseSeeder extends Seeder
 
         //$this->call(CountriesAndCitiesSeeder::class);
 
-        
-        
+
+
     }
 }
