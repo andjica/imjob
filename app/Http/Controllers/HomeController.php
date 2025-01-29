@@ -43,7 +43,6 @@ class HomeController extends Controller
         else if(auth()->user()->role_id == 2)
         {
          
-            
             if(!auth()->user()->company)
             {
                 return redirect('/company/dashboard/information/create');
@@ -76,6 +75,11 @@ class HomeController extends Controller
             }
 
             
+        }
+        //contributor
+        else if(auth()->user()->role_id == 4)
+        {
+            return redirect('contributor/dashboard');
         }
         else 
         {

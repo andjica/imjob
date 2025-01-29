@@ -1,8 +1,8 @@
 @extends('company-freelancer.template-company-freelancer')
 
-@section('main-title', 'Active Jobs')
+@section('main-title', 'Inactive Jobs')
 
-@section('title-dash', 'This is active on mobile app')
+@section('title-dash', 'This jobs are expired and they are not available on mobile app')
 
 @section('css')
   <link rel="stylesheet" href="{{asset('/css/custom/job-card.css')}}">
@@ -13,7 +13,7 @@
         <!-- Search Box -->
         <div class="row search-container">
             <div class="col-md-12">
-                <input type="text" class="search-input" placeholder="Search active jobs...">
+                <input type="text" class="search-input" placeholder="Search inactive jobs...">
             </div>
         </div>
         @include('alerts.success')
@@ -33,7 +33,7 @@
                         </span>
                         <div class="d-flex flex-column">
                             <h4 class="mb-1">No jobs Found</h4>
-                            <p class="mb-0">There are currently no active jobs in the system. Please <a href="{{asset('/company/freelancer/job/create')}}">create a new job.</a></p>
+                            <p class="mb-0">There are currently no inactive jobs in the system. Please <a href="{{asset('/company/freelancer/job/create')}}">create a new job.</a></p>
                         </div>
                     </div>
                 </div>
@@ -41,7 +41,7 @@
         </div>
         </div>
         @else
-        <!-- Active Job Cards -->
+        <!-- Inactive Job Cards -->
         <div class="row">
             <!-- Card  -->
             @foreach($jobs as $job)
@@ -51,20 +51,19 @@
                         <div>
                             @if($job->job_world_type == "International")
                             <span class="badge badge-primary mb-5">International</span>
+                            <span class="badge badge-dark">Expired on mobile</span>
                             @else
                             <span class="badge badge-warning mb-5">National</span>
+                            <span class="badge badge-dark">Expired on mobile</span>
                             @endif
                             <h5 class="card-title">{{$job->title}}</h5>
-                            <p>Company: {{$job->company->name}}</p>
                             <p class="card-text">Location: {{$job->city->name}}, {{$job->country->name}}</p>
+                            <p>For company: {{$job->company->name}}</p>
                         </div>
-                        <a href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
-                        <i class="fas fa-pencil-alt edit-icon" data-bs-toggle="modal" data-bs-target="#statusModal"
-                            data-job="{{$job->title}}"></i>
-                    </a>
+                       
                     </div>
                     <div class="card-body">
-                        <p class="card-text"><strong>Valid Until:</strong> {{ \Carbon\Carbon::parse($job->valid_until)->format('d F Y') }}</p>
+                        <p class="card-text"><strong>Expired at:</strong> {{ \Carbon\Carbon::parse($job->valid_until)->format('d F Y') }}</p>
                         <p class="card-text"><strong>Salary:</strong> {{$job->salary_min}} - {{$job->salary_max}} {{$job->country->currency_symbol}}</p>
                         <p class="card-text job-type">Job Type: {{$job->jobType->name}}</p>
                         <p class="card-text"><strong>Recruiter:</strong> John Doe</p>
@@ -82,5 +81,5 @@
 @endsection
 
 @section('js')
-   
+  
 @endsection

@@ -123,6 +123,11 @@ class FrontController extends Controller
         ));
     }
 
+    public function findContributors()
+    {
+        return 5;
+    }
+
     public function followCompany(FollowCompanyRequest $request, FollowCompany $followCompany): JsonResponse
     {
         $followCompany->execute((int) $request->get('company_id'));
@@ -178,5 +183,23 @@ class FrontController extends Controller
     public function jobs(): Factory|View|Application
     {
         return view('company-freelancer.pages.job.active-jobs');
+    }
+
+    public function getActiveJobs()
+    {
+        $recruiterId = auth()->user()->recruiter->id ?? abort(404);
+
+        $jobs = $this->jobRep->findActiveByRecruiterId($recruiterId);
+
+        return view('company-freelancer.pages.job.active-jobs', compact('jobs'));
+    }
+
+    public function getInactiveJobs()
+    {
+        $recruiterId = auth()->user()->recruiter->id ?? abort(404);
+
+        $jobs = $this->jobRep->findInactiveByRecruiterId($recruiterId);
+
+        return view('company-freelancer.pages.job.inactive-jobs', compact('jobs'));
     }
 }

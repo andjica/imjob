@@ -104,27 +104,29 @@
                             <p class="text-muted">{{$job->experience_level}}</p>
                         </div>
                     </div>
-                    <div class="info-item mb-3">
-                        <i class="fas fa-tools icon-style"></i>
-                        <div class="info-text">
-                            <strong>Required Skills:</strong>
-                            <p class="text-muted">Required skill: {{$job->skills->first()->skill}}</p>
+                    @if($job->skill != null)
+                        <div class="info-item mb-3">
+                            <i class="fas fa-tools icon-style"></i>
+                            <div class="info-text">
+                                <strong>Required Skills:</strong>
+                                <p class="text-muted">Required skill: {{$job->skills->first()->skill}}</p>
+                            </div>
                         </div>
-                    </div>
-                    @if($job->skills->count() > 1)
-                    <div class="info-item mb-3">
-                        <i class="fas fa-tools icon-style"></i>
-                        <div class="info-text">
-                            <strong>Optional Skills:</strong>
-                            <ul>
-                                @foreach ($job->skills as $key => $skill)
-                                    @if ($key > 0) {{-- Skip the first skill --}}
-                                        <li class="text-muted">{{ $skill->skill }}</li>
-                                    @endif
-                                @endforeach
-                            </ul>
+                        @if($job->skills->count() > 1)
+                        <div class="info-item mb-3">
+                            <i class="fas fa-tools icon-style"></i>
+                            <div class="info-text">
+                                <strong>Optional Skills:</strong>
+                                <ul>
+                                    @foreach ($job->skills as $key => $skill)
+                                        @if ($key > 0) {{-- Skip the first skill --}}
+                                            <li class="text-muted">{{ $skill->skill }}</li>
+                                        @endif
+                                    @endforeach
+                                </ul>
+                            </div>
                         </div>
-                    </div>
+                        @endif
                     @endif
                     <div class="info-item mb-3">
                         <i class="fas fa-birthday-cake icon-style"></i>

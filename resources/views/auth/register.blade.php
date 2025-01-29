@@ -81,32 +81,29 @@
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label for="password-confirm" class="col-md-4 col-form-label text-md-end">{{ __('Choose your account type') }}</label>
-
+                            <label for="role" class="col-md-4 col-form-label text-md-end">{{ __('Choose Your Account Type') }}</label>
                             <div class="col-md-6">
                                 <select name="role" id="role" class="form-control">
                                     @foreach ($roles as $role)
-                                        @if (in_array($role->id, [2, 3]))
+                                        @if (in_array($role->id, [2, 3, 4]))
                                             <option value="{{ $role->id }}" {{ old('role') == $role->id ? 'selected' : '' }}>
                                                 {{ $role->name }}
                                             </option>
                                         @endif
                                     @endforeach
                                 </select>
-
                                 @error('role')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
                         </div>
 
-                        <!-- Text description based on selected role -->
+                        <!-- Explanation for Account Type -->
                         <div class="row mb-3">
                             <div class="col-md-12">
-                                <span id="role-description" class="text-muted">
-                                    <!-- Default text for 'Company' role -->
-                                    Post jobs and recruit talent
-                                </span>
+                                <div id="role-description" class="alert alert-info">
+                                    Select an account type to see its features and purpose.
+                                </div>
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -140,29 +137,28 @@
 @endsection
 @section('js')
 <script>
-    // Select elements
-    const roleSelect = document.getElementById('role');
-    const roleDescription = document.getElementById('role-description');
+    document.addEventListener('DOMContentLoaded', function () {
+        const roleSelect = document.getElementById('role');
+        const roleDescription = document.getElementById('role-description');
 
-    // Function to update description based on selected role
-    function updateRoleDescription() {
-        const selectedRole = roleSelect.value;
+        // Mapping role IDs to descriptions
+        const descriptions = {
+            2: "Collaborate seamlessly with recruiters in your organization, streamline hiring processes, and achieve shared recruitment goals. Perfect for Freelancers, Agencies, or Basic companies.",
+            3: "Manage recruitment tasks efficiently for a single company or handle hiring across multiple organizations. Ideal for HR professionals or external recruitment specialists.",
+            4: "Join as a specialized contributor such as an embassy, airline company, ministry, or other unique entity. Contribute services or expertise to enhance platform capabilities."
+        };
 
-        if (selectedRole == 2) {
-
-            //company
-            roleDescription.textContent = "If you choose company you can collaborate seamlessly with other recruiters within your organization to streamline your hiring processes and achieve shared goals."; 
-        } else if (selectedRole == 3) {
-
-            //recruiter 
-            roleDescription.textContent = "As a recruiter, manage recruitment tasks for a single company or handle hiring across multiple organizations."; 
+        // Update description based on selected role
+        function updateRoleDescription() {
+            const selectedRole = roleSelect.value;
+            roleDescription.textContent = descriptions[selectedRole] || "Select an account type to see its features and purpose.";
         }
-    }
 
-    // Call function to update description initially based on selected role
-    updateRoleDescription();
+        // Initial description update
+        updateRoleDescription();
 
-    // Event listener to update description when the user selects a role
-    roleSelect.addEventListener('change', updateRoleDescription);
+        // Event listener for role selection
+        roleSelect.addEventListener('change', updateRoleDescription);
+    });
 </script>
 @endsection

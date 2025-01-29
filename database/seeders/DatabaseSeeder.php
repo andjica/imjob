@@ -19,20 +19,23 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // seeders 
-        $this->call(RolesTableSeeder::class);
+         $this->call(RolesTableSeeder::class);
         $this->call(CategorySeeder::class);
         $this->call(SubCategorySeeder::class);
         $this->call(CountryTableSeeder::class);
         $this->call(CitySeeder::class);
         $this->call(CompanyTypeSeeder::class);
         $this->call(JobTypesSeeder::class);
+        $this->call(ContributorTypeSeeder::class);
         //factories
-        User::factory(10)->create();
+        // User::factory(10)->create();
         //Company::factory()->count(20)->create();
         //Recruiter::factory()->count(20)->create();
         // $this->call(CompanyRecruiterSeeder::class);
 
         //$this->call(CountriesAndCitiesSeeder::class);
+
+        
         
     }
 }

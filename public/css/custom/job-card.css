@@ -1,0 +1,111 @@
+.card-job {
+    border: 1px solid #e0e0e0;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: #fff;
+    position: relative;
+}
+
+.card-job:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+.btn:not(.btn-outline):not(.btn-dashed):not(.btn-bordered):not(.border-hover):not(.border-active):not(.btn-flush):not(.btn-icon):not(.btn-hover-outline) {
+border: 0;
+padding: calc(.775rem + 1px) calc(1.5rem + 1px);
+position: absolute;
+bottom: 10px;
+right: 12px;
+}
+
+.card-job .card-header {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: white;
+    position: relative;
+}
+
+
+
+.card-job .card-title {
+    /* font-size: 16px; */
+    font-weight: bold;
+    margin: 0;
+}
+
+.card-job .card-body {
+    padding: 20px;
+}
+
+.card-job .card-text {
+    margin: 5px 0;
+    /* font-size: 14px; */
+    color: #6c757d;
+}
+
+.card-job .job-type {
+    font-weight: bold;
+    color: #007bff;
+}
+
+.btn-see-more {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    text-decoration: none;
+    text-align: center;
+    position: absolute;
+    right: 17px;
+    bottom: 17px;
+    font-size: smaller;
+    font-weight: 500;
+    text-transform: lowercase;
+}
+
+.btn-see-more:hover {
+    background-color: black;
+    transform: translateY(-2px);
+    color: white !important;
+}
+
+.btn-see-more:focus {
+    outline: none;
+    box-shadow: 0 0 4px rgba(0, 123, 255, 0.8);
+}
+
+.edit-icon {
+position: absolute;
+top: 5px;
+right: 5px;
+cursor: pointer;
+transition: color 0.3s ease;
+background: #0093ff;
+border-radius: 100%;
+padding: 7px;
+color: white !important;
+font-size: 16px;
+}
+.edit-icon:hover {
+    color: #0056b3;
+}
+
+.search-container {
+    margin-bottom: 20px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    /* font-size: 14px; */
+}
