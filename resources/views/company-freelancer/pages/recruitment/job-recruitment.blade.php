@@ -68,6 +68,7 @@
     <div class="row mt-5">
             <div class="col-lg-12">
                 @include('company-freelancer.components.recruitment.candidates')
+              
             </div>
     </div>
 
@@ -99,7 +100,7 @@
         }
     }
 </script>
-
+<script src="{{asset('/js/custom/recruitment/accept-reject-modal.js')}}"></script>
 
 
 @endsection

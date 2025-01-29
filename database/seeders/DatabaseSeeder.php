@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // seeders
-         $this->call(RolesTableSeeder::class);
+        $this->call(RolesTableSeeder::class);
         $this->call(CategorySeeder::class);
         $this->call(SubCategorySeeder::class);
         $this->call(CountryTableSeeder::class);
@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ContributorTypeSeeder::class);
         $this->call(AvailableSubphasesSeeder::class);
         //factories
-        // User::factory(10)->create();
+        User::factory(10)->create();
         //Company::factory()->count(20)->create();
         //Recruiter::factory()->count(20)->create();
         // $this->call(CompanyRecruiterSeeder::class);

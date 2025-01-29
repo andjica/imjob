@@ -70,10 +70,23 @@
                         <!-- Action Buttons -->
                         @if ($candidate->status === 'pending')
                             <div class="d-flex">
-                                <a href="javascript:;" class="btn btn-sm btn-light-primary btn-icon mx-1" title="Edit Details">
+                                <!-- Accept Button -->
+                                <a href="javascript:;" 
+                                class="btn btn-sm btn-light-success btn-icon mx-1 accept-btn" 
+                                data-candidate-name="{{ $candidate->user->getFirstName() }}" 
+                                data-bs-toggle="modal" 
+                                data-bs-target="#acceptCandidateModal"
+                                title="Accept Candidate">
                                     <i class="fa-solid fa-check"></i>
                                 </a>
-                                <a href="javascript:;" class="btn btn-sm btn-light-danger btn-icon mx-1" title="Delete">
+
+                                <!-- Reject Button -->
+                                <a href="javascript:;" 
+                                class="btn btn-sm btn-light-danger btn-icon mx-1 reject-btn" 
+                                data-candidate-name="{{ $candidate->user->getFirstName() }}" 
+                                data-bs-toggle="modal" 
+                                data-bs-target="#rejectCandidateModal"
+                                title="Reject Candidate">
                                     <i class="fa-solid fa-trash-alt"></i>
                                 </a>
                             </div>
@@ -95,9 +108,12 @@
                         @endif
                     </td>
                 </tr>
+                @include('company-freelancer.components.recruitment.accept-reject-modal-popup')
             @endforeach
                 </tbody>
             </table>
             <!--end: Datatable-->
         </div>
     </div>
+
+

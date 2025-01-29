@@ -49,7 +49,7 @@
                 <div class="card card-job">
                     <div class="card-header">
                         <div>
-                            @if($job->job_world_type == "International")
+                            @if($job->job_world_type == "international")
                             <span class="badge badge-primary mb-5">International</span>
                             @else
                             <span class="badge badge-warning mb-5">National</span>

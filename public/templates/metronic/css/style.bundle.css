@@ -30878,7 +30878,7 @@ textarea.form-control-lg {
 }
 
 .bg-success {
-  background-color: #50CD89 !important;
+  background-color: #e3f3ea !important;
   --bg-color: 80, 205, 137 !important;
 }
 .bg-success.hoverable:hover {
@@ -48509,4 +48509,9 @@ a.relative.inline-flex.items-center.px-4.py-2.text-sm.font-medium.text-gray-700.
   transform: scale(1.1);
   transition: transform .3s ease;
   will-change: transform;
+}
+
+i.fas.fa-check-circle.me-2 {
+  /* fill: black !important; */
+  color: black;
 }

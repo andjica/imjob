@@ -20,18 +20,17 @@ class CandidateService
      */
     public function handleCandidate(Candidate $candidate, string $status): Candidate
     {
-
-        if (!in_array($status, [Candidate::STATUS_REJECTED, Candidate::STATUS_ACTIVE])) {
+        if (!in_array($status, [Candidate::STATUS_REJECTED, Candidate::STATUS_ACCEPT])) {
             throw new Exception("Invalid candidate status");
         }
 
         return $this->transactionService->run(function () use ($candidate, $status) {
-            $candidate->status = $status;
-            $candidate->save();
-
-            if ($status === Candidate::STATUS_ACTIVE) {
+            if ($status === Candidate::STATUS_ACCEPT && $status !== $candidate->status) {
                 $this->recruitmentProcessWorkflow->create($candidate);
             }
+
+            $candidate->status = $status;
+            $candidate->save();
 
             return $candidate;
         });
