@@ -74,6 +74,15 @@
                     }
                 });
             });
+            document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("confirmNextStep").addEventListener("click", function () {
+                // Simulate the recruitment phase update (replace with actual API call)
+                alert("Candidate has been advanced to the next recruitment phase!");
 
+                // Close the modal after confirming
+                var nextStepModal = bootstrap.Modal.getInstance(document.getElementById("nextStepModal"));
+                nextStepModal.hide();
+            });
+        });
     </script>
 @endsection

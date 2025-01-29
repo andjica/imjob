@@ -19,6 +19,7 @@ use App\Http\Controllers\{
     UserController,
     Contributor\FrontController as ContributorFrontController
 };
+use App\Http\Controllers\Contributor\ContributorController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -129,6 +130,9 @@ Route::middleware(['auth', 'company.freelancer', 'verified'])->prefix('company/f
 //Contributors routes
 Route::middleware(['auth', 'contributor', 'verified'])->prefix('contributor')->name('contributor-')->group(function () {
     Route::get('/dashboard', [ContributorFrontController::class, 'index'])->name('dashboard');
+
+    //contributor information profile
+    Route::post('/store', [ContributorController::class, 'store'])->name('create');
 
     Route::middleware(['contributor.exists'])->group(function () {
         Route::get('/companies', [ContributorFrontController::class, 'companies'])->name('companies');

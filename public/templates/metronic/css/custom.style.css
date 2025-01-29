@@ -728,3 +728,13 @@ footer a:hover {
 .border-success {
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
+
+.border-b-c
+{
+  height: 250px; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  border: 3px dashed rgb(179, 198, 227);
+  border-radius: 10px;
+}

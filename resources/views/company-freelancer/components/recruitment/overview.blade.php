@@ -95,8 +95,8 @@
                     </table>
                 </div>
                 <!-- Status Update Button -->
-                <button class="btn btn-sm btn-success status-update-btn" id="statusUpdateBtn">
-                    Advance to Next Step
+                <button class="btn btn-sm btn-success status-update-btn" id="statusUpdateBtn" data-bs-toggle="modal" data-bs-target="#nextStepModal">
+                    <i class="fas fa-forward me-1"></i> Advance to Next Step
                 </button>
             </div>
             <!-- End of Recruitment Process Table -->
@@ -128,3 +128,38 @@
         </div>
     </div>
 </div>
+
+
+<!-- Advance to Next Step Modal -->
+<div class="modal fade" id="nextStepModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h5 class="modal-title text-primary">
+                    <i class="fas fa-forward me-2"></i> Confirm Advancement
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <p class="text-muted">
+                    Are you sure you want to advance this candidate to the next phase of the recruitment process?
+                </p>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-1"></i> Cancel
+                </button>
+                <button type="button" class="btn btn-success" id="confirmNextStep">
+                    <i class="fas fa-check me-1"></i> Confirm
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+

@@ -2,37 +2,39 @@
 
 namespace App\Providers;
 
-use App\Interfaces\CategoryInterface;
-use App\Interfaces\CityInterface;
-use App\Interfaces\CompanyFreelancerInterface;
+use App\Services\JobServices;
+use App\Services\CityServices;
 use App\Services\RoleServices;
+use App\Interfaces\JobInterface;
+use App\Interfaces\CityInterface;
 use App\Interfaces\RoleInterface;
 use App\Services\CompanyServices;
+use App\Services\CountryServices;
+use App\Services\JobTypeServices;
+use App\Services\CategoryServices;
 use App\Services\RecruiterServices;
 use App\Interfaces\CompanyInterface;
-use App\Interfaces\CompanyTypeInterface;
-use App\Interfaces\ContributorTypeInterface;
 use App\Interfaces\CountryInterface;
-use App\Interfaces\RecruiterInterface;
-use App\Interfaces\SubCategoryInterface;
-use App\Services\CategoryServices;
-use App\Services\CityServices;
-use App\Services\CompanyFreelancerServices;
-use App\Services\CompanyTypeServices;
-use App\Services\CountryServices;
-use App\Services\FreelancerServices;
-use App\Interfaces\FreelancerInterface;
-use App\Interfaces\JobInterface;
 use App\Interfaces\JobTypeInterface;
-use App\Interfaces\RecruiterEducationInterface;
-use App\Services\ContributorTypeServices;
-use App\Services\JobServices;
-use App\Services\JobTypeServices;
-use App\Services\RecruiterEducationServices;
+use App\Services\FreelancerServices;
+use App\Interfaces\CategoryInterface;
+use App\Services\CompanyTypeServices;
 use App\Services\SubCategoryServices;
+use App\Interfaces\RecruiterInterface;
+use App\Interfaces\FreelancerInterface;
 use Illuminate\Support\ServiceProvider;
-
-
+use App\Interfaces\CompanyTypeInterface;
+use App\Interfaces\ContributorInterface;
+use App\Interfaces\SubCategoryInterface;
+use App\Services\ContributorTypeServices;
+use App\Services\CompanyFreelancerServices;
+use App\Interfaces\ContributorTypeInterface;
+use App\Services\RecruiterEducationServices;
+use App\Interfaces\CompanyFreelancerInterface;
+use App\Interfaces\RecruiterEducationInterface;
+use App\Services\ContributorService;
+use App\Services\ContributorServices;
+use App\Services\ContributorServies;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -56,6 +58,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(RecruiterEducationInterface::class, RecruiterEducationServices::class);
         $this->app->bind(JobTypeInterface::class, JobTypeServices::class);
         $this->app->bind(ContributorTypeInterface::class, ContributorTypeServices::class);
+        $this->app->bind(ContributorInterface::class, ContributorServices::class);
+
     }
 
     /**
