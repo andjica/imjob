@@ -4,6 +4,7 @@ namespace App\Actions;
 
 use App\DTO\JobSkillDTO;
 use App\Models\Job;
+use App\Models\User;
 use App\Repositories\JobRepository;
 use App\Repositories\JobSkillRepository;
 use App\Services\TransactionService;
@@ -69,7 +70,10 @@ class CreateJob
 
     private function setAdditionalFields(array $data): array
     {
-        $data['recruiter_id'] = 1;
+        /** @var ?User $user */
+        $user = auth()->user();
+
+        $data['recruiter_id'] = $user?->recruiter ?? null;
 
         return $data;
     }

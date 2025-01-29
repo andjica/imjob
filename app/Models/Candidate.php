@@ -25,8 +25,8 @@ class Candidate extends Model
 {
     use HasFactory;
 
-    public const STATUS_ACTIVE = 'active';
-    public const STATUS_REJECTED = 'rejected';
+    public const STATUS_ACCEPT = 'accept';
+    public const STATUS_REJECTED = 'reject';
     public const STATUS_PENDING = 'pending';
 
     protected $fillable = [
