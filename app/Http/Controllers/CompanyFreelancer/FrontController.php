@@ -17,6 +17,7 @@ use App\Interfaces\SubCategoryInterface;
 use App\Models\Company;
 use App\Models\Job;
 use App\Models\User;
+use App\Repositories\JobRepository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -35,6 +36,7 @@ class FrontController extends Controller
         private CompanyTypeInterface $companyTypesServices,
         private CompanyInterface $companyServices,
         private JobTypeInterface $jobTypesServices,
+        private JobRepository $jobRep,
     ) {
     }
 

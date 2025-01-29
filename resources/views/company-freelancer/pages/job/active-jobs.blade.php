@@ -69,8 +69,8 @@
                         <p class="card-text job-type">Job Type: {{$job->jobType->name}}</p>
                         <p class="card-text"><strong>Recruiter:</strong> John Doe</p>
                     </div>
-                        <a href="{{asset('/company/freelancer/jobId='.$job->id.'/recruitment-process')}}" class="btn btn-sm btn-light-primary">Go to recruitment process</a>
-                
+                        <a href="{{asset('/company/freelancer/'.$job->id.'/recruitment-process')}}" class="btn btn-sm btn-light-primary">Go to recruitment process</a>
+
                 </div>
             </div>
             @endforeach
@@ -82,5 +82,5 @@
 @endsection
 
 @section('js')
-   
+
 @endsection
