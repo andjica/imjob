@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @method static static create(array $data)
  * @property int $id
  * @property Collection<int, JobSkill> $skills
+ * @property Collection<int, Candidate> $candidates
  */
 class Job extends Model
 {
@@ -78,8 +79,9 @@ class Job extends Model
         return $this->belongsTo(City::class);
     }
 
-
-
-
+    public function candidates(): HasMany
+    {
+        return $this->hasMany(Candidate::class);
+    }
 
 }

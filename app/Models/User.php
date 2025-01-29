@@ -17,6 +17,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property ?string $companyType
  * @property ?Company $company
  * @property ?Recruiter $recruiter
+ * @property string $first_name
+ * @property string $last_name
  */
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -73,5 +75,10 @@ class User extends Authenticatable implements MustVerifyEmail
     public function contributor(): HasOne
     {
         return $this->hasOne(Contributor::class);
+    }
+
+    public function getFirstName(): string
+    {
+        return $this->first_name . ' ' . $this->last_name;
     }
 }

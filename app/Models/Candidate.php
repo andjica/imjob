@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int $id
@@ -16,10 +17,15 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $country
  * @property string $city
  * @property string $status
+ * @property Job $job
  */
 class Candidate extends Model
 {
     use HasFactory;
+
+    public const STATUS_ACTIVE = 'active';
+    public const STATUS_REJECTED = 'rejected';
+    public const STATUS_PENDING = 'pending';
 
     protected $fillable = [
         'job_id',
@@ -32,4 +38,14 @@ class Candidate extends Model
         'city',
         'status'
     ];
+
+    public function job(): BelongsTo
+    {
+        return $this->belongsTo(Job::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }

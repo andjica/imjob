@@ -2,11 +2,23 @@
 
 namespace App\Services;
 
+use App\Models\Candidate;
 use App\Models\RecruitmentProcess;
 use App\Models\RecruitmentSubphase;
 
 class RecruitmentProcessWorkflow
 {
+    public function create(Candidate $candidate): RecruitmentProcess
+    {
+        $recruitmentProcess = new RecruitmentProcess();
+        $recruitmentProcess->fill([
+            'candidate_id' => $candidate->id,
+        ]);
+        $recruitmentProcess->save();
+
+        return $recruitmentProcess;
+    }
+
     public function advance(RecruitmentProcess $process): bool
     {
         $phases = [

@@ -174,7 +174,9 @@ class FrontController extends Controller
 
     public function recruitmentProcess(Job $job): Factory|View|Application
     {
-        return view('company-freelancer.pages.recruitment.job-recruitment', compact('job'));
+        $candidates = $job->candidates()->with('user')->get();
+
+        return view('company-freelancer.pages.recruitment.job-recruitment', compact('job', 'candidates'));
     }
 
     public function candidatRecruitmentProcess(): Factory|View|Application

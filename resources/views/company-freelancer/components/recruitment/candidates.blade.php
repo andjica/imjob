@@ -7,20 +7,21 @@
             </h3>
         </div>
     </div>
-        <div class="card-body">
-            <!--begin: Datatable-->
-            <table class="table  table-head-custom table-checkable border-top">
-                <thead>
-                    <tr>
-                        <th>Candidate</th>
-                        
-                        <th>From</th>
-                        <th>CV</th>
-                        <th>Status</th>
-                        <th style="width: 20%">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
+    <div class="card-body">
+        <!--begin: Datatable-->
+        <table class="table  table-head-custom table-checkable border-top">
+            <thead>
+            <tr>
+                <th>Candidate</th>
+
+                <th>From</th>
+                <th>CV</th>
+                <th>Status</th>
+                <th style="width: 20%">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach($candidates as $candidate)
                 <tr>
                     <td>
                         <div class="d-flex align-items-center">
@@ -30,16 +31,16 @@
                             </div>
                             <!-- Name and Company -->
                             <div>
-                                <span class="text-dark font-weight-bold d-block">Arlie Larking</span>
+                                <span class="text-dark font-weight-bold d-block">{{ $candidate->user->getFirstName()  }}</span>
                                 <a class="text-muted text-hover-primary font-weight-normal" href="mailto:alarkingg@elegantthemes.com">
-                                <small>sad@elentthemes.com</small>
+                                    <small>{{ $candidate->user->email  }}</small>
                                 </a>
                             </div>
                         </div>
                     </td>
                     <td>
                         <!-- Full Name -->
-                        <span class="font-weight-bold text-dark">Arlie Larking</span>
+                        <span class="font-weight-bold text-dark">{{ $candidate->user->getFirstName()  }}</span>
                     </td>
                     <td>
                         <!-- PDF Link -->
@@ -50,10 +51,10 @@
                     <td>
                         <!-- Status -->
                         <span class="badge badge-light-warning  py-2 px-4 rounded-pill">
-                            On pending
+                            {{ $candidate->status }}
                         </span>
                     </td>
-                    
+
                     <td>
                         <!-- Action Buttons -->
                         <div class="d-flex">
@@ -66,6 +67,7 @@
                         </div>
                     </td>
                 </tr>
+            @endforeach
                 <tr>
                     <td>
                         <div class="d-flex align-items-center">
@@ -98,7 +100,7 @@
                             Acepted
                         </span>
                     </td>
-                    
+
                     <td>
                     <!-- Action Buttons -->
                     <div class="d-flex">
@@ -148,7 +150,7 @@
                             X Rejected
                         </span>
                     </td>
-                    
+
                     <td>
                         <i class="fa-solid fa-xmark fa-xl text-danger"></i>
                     </td>
