@@ -18,7 +18,7 @@ class StoreMeetingRequest extends FormRequest
             'meeting_title' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
             'available_subphase_id' => ['required', 'exists:available_recruitment_subphases,id'],
-            'scheduled_at' => ['required', 'date_format:Y-m-d\TH:i'],
+            'scheduled_at' => ['required', 'date'],
             'contributors' => ['required', 'array'],
             'contributors.*' => ['required', 'integer'],
         ];
