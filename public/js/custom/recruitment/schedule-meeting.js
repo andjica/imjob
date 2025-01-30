@@ -28,54 +28,54 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Handle schedule meeting form submission
     const scheduleMeetingForm = document.getElementById('scheduleMeetingForm');
-    scheduleMeetingForm.addEventListener('submit', function (e) {
-        // e.preventDefault();
-        const title = document.getElementById('meetingTitle').value.trim();
-        const date = document.getElementById('meetingDate').value.trim();
-        const description = document.getElementById('meetingDescription').value.trim();
-        const contributors = $('#meetingContributors').val(); // Get selected contributors
-
-        if (title && date && description && contributors.length > 0) {
-            // Parse date and time
-            const startDate = new Date(date);
-            const endDate = new Date(startDate.getTime() + 60 * 60 * 1000); // Assuming 1-hour meeting
-
-            // Add event to FullCalendar
-            calendar.addEvent({
-                title: title,
-                start: startDate,
-                end: endDate,
-                description: description
-            });
-
-            // Show success pop-up
-            Swal.fire({
-                icon: 'success',
-                title: 'Meeting Scheduled',
-                html: `
-                    <strong>Title:</strong> ${escapeHtml(title)}<br>
-                    <strong>Date & Time:</strong> ${escapeHtml(startDate.toLocaleString())}<br>
-                    <strong>Description:</strong> ${escapeHtml(description)}<br>
-                    <strong>Contributors:</strong> ${escapeHtml(getContributorsText(contributors))}
-                `,
-                confirmButtonText: 'OK'
-            });
-
-            // Close the modal
-            var scheduleMeetingModal = bootstrap.Modal.getInstance(document.getElementById('scheduleMeetingModal'));
-            scheduleMeetingModal.hide();
-            // Reset the form
-            scheduleMeetingForm.reset();
-            $('#meetingContributors').val(null).trigger('change');
-        } else {
-            Swal.fire({
-                icon: 'error',
-                title: 'Missing Information',
-                text: 'Please fill in all fields and select at least one contributor.',
-                confirmButtonText: 'OK'
-            });
-        }
-    });
+    // scheduleMeetingForm.addEventListener('submit', function (e) {
+    //     // e.preventDefault();
+    //     const title = document.getElementById('meetingTitle').value.trim();
+    //     const date = document.getElementById('meetingDate').value.trim();
+    //     const description = document.getElementById('meetingDescription').value.trim();
+    //     const contributors = $('#meetingContributors').val(); // Get selected contributors
+    //
+    //     if (title && date && description && contributors.length > 0) {
+    //         // Parse date and time
+    //         const startDate = new Date(date);
+    //         const endDate = new Date(startDate.getTime() + 60 * 60 * 1000); // Assuming 1-hour meeting
+    //
+    //         // Add event to FullCalendar
+    //         calendar.addEvent({
+    //             title: title,
+    //             start: startDate,
+    //             end: endDate,
+    //             description: description
+    //         });
+    //
+    //         // Show success pop-up
+    //         Swal.fire({
+    //             icon: 'success',
+    //             title: 'Meeting Scheduled',
+    //             html: `
+    //                 <strong>Title:</strong> ${escapeHtml(title)}<br>
+    //                 <strong>Date & Time:</strong> ${escapeHtml(startDate.toLocaleString())}<br>
+    //                 <strong>Description:</strong> ${escapeHtml(description)}<br>
+    //                 <strong>Contributors:</strong> ${escapeHtml(getContributorsText(contributors))}
+    //             `,
+    //             confirmButtonText: 'OK'
+    //         });
+    //
+    //         // Close the modal
+    //         var scheduleMeetingModal = bootstrap.Modal.getInstance(document.getElementById('scheduleMeetingModal'));
+    //         scheduleMeetingModal.hide();
+    //         // Reset the form
+    //         scheduleMeetingForm.reset();
+    //         $('#meetingContributors').val(null).trigger('change');
+    //     } else {
+    //         Swal.fire({
+    //             icon: 'error',
+    //             title: 'Missing Information',
+    //             text: 'Please fill in all fields and select at least one contributor.',
+    //             confirmButtonText: 'OK'
+    //         });
+    //     }
+    // });
 
     // Function to append chat messages
     function appendChatMessage(type, message) {
