@@ -29,8 +29,7 @@ class CreateMeeting
                 'phase' => $recruitmentProcess->current_phase,
                 'recruitment_process_id' => $recruitmentProcess->id,
                 'available_subphase_id' => $data['available_subphase_id'],
-                'scheduled_date' => $data['scheduled_date'],
-                'meeting_link' => $data['meeting_link'],
+                'scheduled_at' => $data['scheduled_at'],
                 'description' => $data['description'],
                 'meeting_title' => $data['meeting_title'],
             ]);

@@ -31,6 +31,7 @@ class RecruitmentSubphase extends Model
         'meeting_title',
         'description',
         'completed',
-        'feedback'
+        'feedback',
+        'available_subphase_id',
     ];
 }
