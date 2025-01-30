@@ -14,11 +14,11 @@ class StoreMeetingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'candidate' => ['required', 'exists:candidates,id'],
+            'candidate_id' => ['required', 'exists:candidates,id'],
             'meeting_title' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
             'available_subphase_id' => ['required', 'exists:available_recruitment_subphases,id'],
-            'scheduled_at' => ['required', 'datetime'],
+            'scheduled_at' => ['required', 'date_format:Y-m-d\TH:i'],
             'contributors' => ['required', 'array'],
             'contributors.*' => ['required', 'integer'],
         ];

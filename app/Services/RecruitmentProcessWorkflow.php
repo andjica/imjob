@@ -12,7 +12,7 @@ class RecruitmentProcessWorkflow
 {
     public function create(Candidate $candidate): RecruitmentProcess
     {
-        if ($candidate->status !== Candidate::STATUS_ACCEPT) {
+        if ($candidate->status !== Candidate::STATUS_ACCEPT || $candidate->recruitmentProcess) {
             throw new \LogicException("Recruitment process can only be created for accepted candidates.", Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 

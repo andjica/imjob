@@ -207,10 +207,8 @@ class FrontController extends Controller
     /**
      * @throws Exception
      */
-    public function createMeeting(Request $request, Candidate $candidate, CreateMeeting $createMeeting): JsonResponse
+    public function createMeeting(StoreMeetingRequest $request, Candidate $candidate, CreateMeeting $createMeeting): JsonResponse
     {
-        dd($request->all());
-        dd($request->validated());
         $createMeeting->execute($candidate, $request->validated());
 
         return response()->json([

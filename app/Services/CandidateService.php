@@ -25,12 +25,12 @@ class CandidateService
         }
 
         return $this->transactionService->run(function () use ($candidate, $status) {
-            if ($status === Candidate::STATUS_ACCEPT && $status !== $candidate->status) {
-                $this->recruitmentProcessWorkflow->create($candidate);
-            }
-
             $candidate->status = $status;
             $candidate->save();
+
+            if ($status === Candidate::STATUS_ACCEPT) {
+                $this->recruitmentProcessWorkflow->create($candidate);
+            }
 
             return $candidate;
         });

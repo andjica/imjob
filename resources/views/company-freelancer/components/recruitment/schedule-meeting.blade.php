@@ -18,7 +18,7 @@
     <div class="modal-dialog">
         <form id="scheduleMeetingForm" method="POST" action="/company/freelancer/job/candidate/{{ $candidate->id }}/plan-meeting">
             @csrf
-            <input type="hidden" id="candidateId" name="candidate" value="{{ $candidate->id }}">
+            <input type="hidden" id="candidateId" name="candidate_id" value="{{ $candidate->id }}">
 
             <div class="modal-content">
                 <div class="modal-header">
@@ -51,7 +51,14 @@
                     <!-- Date & Time -->
                     <div class="mb-3">
                         <label for="meetingDate" class="form-label">Date & Time</label>
-                        <input type="datetime-local" class="form-control" id="meetingDate" name="scheduled_at" value="{{ old('scheduled_at') }}" required>
+                        <input
+                            type="datetime-local"
+                            class="form-control"
+                            id="meetingDate"
+                            name="scheduled_at"
+                            value="{{ old('scheduled_at', now()->format('Y-m-d\TH:i')) }}"
+                            required
+                        >
                         @error('scheduled_at') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
 
