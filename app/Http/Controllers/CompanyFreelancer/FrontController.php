@@ -220,14 +220,14 @@ class FrontController extends Controller
     /**
      * @throws Exception
      */
-    public function changeCandidateStatus(CandidateStatusRequest $request, Candidate $candidate): JsonResponse
+    public function changeCandidateStatus(CandidateStatusRequest $request, Candidate $candidate)
     {
         $this->candidateService->handleCandidate($candidate, $request->get('status'));
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Status updated successfully.',
-        ]);
+        return redirect()->back()->with('success', 'You accept '.$candidate->user->first_name.'successfully');
+        // return response()->json([
+        //     'success' => true,
+        //     'message' => 'Status updated successfully.',
+        // ]);
     }
 
     public function jobs(): Factory|View|Application

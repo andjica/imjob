@@ -67,53 +67,38 @@
                     </td>
 
                     <td>
-                        <!-- Action Buttons -->
-                        @if ($candidate->status === 'pending')
-                            <div class="d-flex">
-                                <!-- Accept Button -->
-                                <a href="javascript:;" 
-                                class="btn btn-sm btn-light-success btn-icon mx-1 accept-btn" 
-                                data-candidate-name="{{ $candidate->user->getFirstName() }}" 
-                                data-bs-toggle="modal" 
-                                data-bs-target="#acceptCandidateModal"
-                                title="Accept Candidate">
-                                    <i class="fa-solid fa-check"></i>
-                                </a>
+                    @if ($candidate->status === 'pending')
+                        <div class="d-flex">
+                            <!-- Accept Button -->
+                            <a href="javascript:;" 
+                            class="btn btn-sm btn-light-success btn-icon mx-1 accept-btn" 
+                            data-candidate-id="{{ $candidate->id }}" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#acceptCandidateModal-{{ $candidate->id }}"
+                            title="Accept Candidate">
+                                <i class="fa-solid fa-check"></i>
+                            </a>
 
-                                <!-- Reject Button -->
-                                <a href="javascript:;" 
-                                class="btn btn-sm btn-light-danger btn-icon mx-1 reject-btn" 
-                                data-candidate-name="{{ $candidate->user->getFirstName() }}" 
-                                data-bs-toggle="modal" 
-                                data-bs-target="#rejectCandidateModal"
-                                title="Reject Candidate">
-                                    <i class="fa-solid fa-trash-alt"></i>
-                                </a>
-                            </div>
-                        @elseif($candidate->status === 'accept')
-                            <div class="d-flex">
-                                <a href="javascript:;" class="btn btn-sm btn-light-primary btn-icon mx-1" title="Edit Details">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                </a>
-                                <a href="javascript:;" class="btn btn-sm btn-light-danger btn-icon mx-1" title="Delete">
-                                    <i class="fa-solid fa-trash-alt"></i>
-                                </a>
-                                <a href="{{ asset('/company/freelancer/job/candidate/' . $candidate->id . '/recruitment-process') }}" class="btn btn-sm bg-linear-orange text-white d-flex align-items-center" title="Go to Recruitment Process">
-                                    <i class="fa-solid fa-clipboard-list text-white"></i>
-                                    Process
-                                </a>
-                            </div>
-                        @else
-                            <i class="fa-solid fa-xmark fa-xl text-danger"></i>
-                        @endif
-                    </td>
+                            <!-- Reject Button -->
+                            <a href="javascript:;" 
+                            class="btn btn-sm btn-light-danger btn-icon mx-1 reject-btn" 
+                            data-candidate-id="{{ $candidate->id }}" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#rejectCandidateModal-{{ $candidate->id }}"
+                            title="Reject Candidate">
+                                <i class="fa-solid fa-trash-alt"></i>
+                            </a>
+                        </div>
+                    @endif
+                </td>
                 </tr>
-                @include('company-freelancer.components.recruitment.accept-reject-modal-popup')
-            @endforeach
+                
+               
+                @endforeach
                 </tbody>
             </table>
             <!--end: Datatable-->
         </div>
     </div>
 
-
+@include('company-freelancer.components.recruitment.accept-reject-modal-popup')
