@@ -114,13 +114,13 @@ class RecruiterServices implements RecruiterInterface
                     $freelancerCompany->company_id = $companyId;
                     $freelancerCompany->save();
                 }
-                return redirect()->back()->with('success', 'Freelancer information saved successfully!');
+                return redirect('/home')->with('success', 'Freelancer information saved successfully!');
 
         }
         else
         {
             $freelancer->save();
-            return redirect()->back()->with('success', 'Recruiter information saved successfully!');
+            return redirect('/home')->with('success', 'Recruiter information saved successfully!');
         }
 
 

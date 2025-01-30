@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\{Admin\FrontController as AdminFrontController,
+use App\Http\Controllers\{
+    Admin\FrontController as AdminFrontController,
     Auth\LoginController,
     City\CityController,
     Company\CompanyController,
@@ -17,8 +18,8 @@ use App\Http\Controllers\{Admin\FrontController as AdminFrontController,
     RoleController,
     SubCategoryController,
     UserController,
+    Contributor\ContributorController
 };
-use App\Http\Controllers\Contributor\ContributorController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -138,7 +139,7 @@ Route::middleware(['auth', 'contributor', 'verified'])->prefix('contributor')->n
         Route::get('/find-recruiter', [ContributorFrontController::class, 'recruiter'])->name('find-recruiter');
 
         Route::get('/posts', [ContributorFrontController::class, 'posts'])->name('posts');
-        Route::get('/post/create', [ContributorFrontController::class, 'createPosts'])->name('post-create');
+        Route::get('/post/create', [ContributorFrontController::class, 'createPost'])->name('post-create');
         Route::get('/edit', [ContributorFrontController::class, 'edit'])->name('edit');
     });
 

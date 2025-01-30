@@ -130,11 +130,11 @@
 </div>
 
 
-<!-- Advance to Next Step Modal -->
+<!-- Advance to Next Step Modal
 <div class="modal fade" id="nextStepModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <!-- Modal Header -->
+            
             <div class="modal-header">
                 <h5 class="modal-title text-primary">
                     <i class="fas fa-forward me-2"></i> Confirm Advancement
@@ -142,14 +142,14 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
-            <!-- Modal Body -->
+           
             <div class="modal-body">
                 <p class="text-muted">
                     Are you sure you want to advance this candidate to the next phase of the recruitment process?
                 </p>
             </div>
 
-            <!-- Modal Footer -->
+           
             <div class="modal-footer">
                 <button type="button" class="btn btn-light" data-bs-dismiss="modal">
                     <i class="fas fa-times me-1"></i> Cancel
@@ -160,6 +160,6 @@
             </div>
         </div>
     </div>
-</div>
+</div> --> 
 
 

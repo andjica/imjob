@@ -19,4 +19,9 @@ class FrontController extends Controller
         $contributorTypes = $this->contributorTypeServices->getAllContributorTypes();
         return view('contributor.pages.index', compact('countries', 'contributorTypes'));
     }
+
+    public function createPost()
+    {
+        return view('contributor.pages.post.create');
+    }
 }

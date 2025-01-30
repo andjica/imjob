@@ -20,17 +20,22 @@
 @endsection
 @section('content')
 <div class="container">
+    @include('alerts.errors')
     <div class="row mb-20">
         <div class="col-12 mt-20">
         <div class="card shadow-sm mb-4">
-            <div class="card-header bg-success text-white text-center py-4">
-                <h2 class="mb-1 text-white">One more step :) and you are finish..</h2>
+            <div class="card-header bg-success text-dark fw-light text-center py-5">
+                <h2 class="text-dark">
+                    One more step :) and you are finish..
+                    <i class="fas fa-arrow-right ms-2"></i> <!-- Font Awesome icon -->
+                </h2>
                 <p class="text-white text-left"></p>
             </div>
         </div>
+
             <div class="card">
                 <div class="card-header text-center py-4">
-                    <h3 class="fw-bold">Complete your freelancer information</h3>
+                    <h3 class="fw-light">Complete your freelancer information</h3>
                     <p class="text-muted">Provide accurate details to set up your dashboard.</p>
                 </div>
             <div class="card-body p-4 background-image">
