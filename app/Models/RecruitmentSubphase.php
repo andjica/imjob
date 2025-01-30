@@ -5,6 +5,7 @@ namespace App\Models;
 use DateTime;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int $id
@@ -33,4 +34,9 @@ class RecruitmentSubphase extends Model
         'completed',
         'feedback'
     ];
+
+    public function availableSubphase(): BelongsTo
+    {
+        return $this->belongsTo(AvailableRecruitmentSubphases::class, 'available_subphase_id');
+    }
 }
