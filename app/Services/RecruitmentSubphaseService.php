@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\RecruitmentProcess;
 use App\Models\RecruitmentSubphase;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -12,40 +13,8 @@ class RecruitmentSubphaseService
 
     }
 
-    private const ALLOWED_SUBPHASES = [
-        'selection' => [
-            'interview 1',
-            'interview 2',
-            'interview 3',
-            'professional interview',
-            'language proficiency check',
-            'other',
-        ],
-        'preparation' => [
-            'language course',
-            'visa request',
-            'visa issuance',
-            'cultural mediation',
-            'other',
-        ],
-        'transfer' => [
-            'travel organization',
-            'candidate reception',
-            'other',
-        ],
-        'offer_stage' => [
-            'administrative preparation',
-            'employment date',
-            'other',
-        ],
-    ];
-
-    public function createSubphase(array $data): ?RecruitmentSubphase
+    public function createSubphase(RecruitmentProcess $process, array $data): ?RecruitmentSubphase
     {
-        if (!isset(self::ALLOWED_SUBPHASES[$data['phase']]) || !in_array($data['subphase'], self::ALLOWED_SUBPHASES[$data['phase']])) {
-            throw new \InvalidArgumentException("Invalid subphase '{$data['subphase']}' for phase '{$data['phase']}'", Response::HTTP_UNPROCESSABLE_ENTITY);
-        }
-
         $existingSubphase = RecruitmentSubphase::where('recruitment_process_id', $data['recruitment_process_id'])
             ->where('completed', false)
             ->first()

@@ -50,7 +50,7 @@ class CreateJob
             }, $moreSkills)
         );
 
-        return collect($jobSkills);
+        return collect($jobSkills)->filter();
     }
 
     /**
@@ -60,6 +60,9 @@ class CreateJob
     {
         /** @var JobSkillDTO $skill */
         foreach ($skills as $skill) {
+            if (!$skill->getSkill()) {
+                continue;
+            }
             $this->jobSkillRepository->create([
                 'job_id'      => $job->id,
                 'skill'       => $skill->getSkill(),
@@ -73,7 +76,7 @@ class CreateJob
         /** @var ?User $user */
         $user = auth()->user();
 
-        $data['recruiter_id'] = $user?->recruiter ?? null;
+        $data['recruiter_id'] = $user?->recruiter?->id ?? null;
 
         return $data;
     }
