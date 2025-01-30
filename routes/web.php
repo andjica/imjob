@@ -1,10 +1,12 @@
 <?php
 
-use App\Http\Controllers\{Admin\FrontController as AdminFrontController,
+use App\Http\Controllers\{
+    Admin\FrontController as AdminFrontController,
     Auth\LoginController,
     City\CityController,
     Company\CompanyController,
     Company\FrontController as CompanyFrontController,
+    CompanyFreelancer\FreelancerController,
     CompanyFreelancer\FrontController as CompanyFreelancerFrontController,
     Contributor\FrontController as ContributorFrontController,
     CountryController,
@@ -16,9 +18,9 @@ use App\Http\Controllers\{Admin\FrontController as AdminFrontController,
     RoleController,
     SubCategoryController,
     UserController,
+    Contributor\ContributorController
 };
-use App\Http\Controllers\CompanyFreelancer\FreelancerController;
-use App\Http\Controllers\Contributor\ContributorController;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -123,7 +125,7 @@ Route::middleware(['auth', 'company.freelancer', 'verified'])->prefix('company/f
     Route::put('/job/candidate/{candidate}/change-status', [CompanyFreelancerFrontController::class, 'changeCandidateStatus'])->name('candidat-recruitment-process');
     Route::get('/active/jobs', [CompanyFreelancerFrontController::class, 'getActiveJobs'])->name('active-jobs');
     Route::get('/inactive/jobs', [CompanyFreelancerFrontController::class, 'getInactiveJobs'])->name('inactive-jobs');
-    Route::get('/job/candidate/{candidate}/plan-meeting', [CompanyFreelancerFrontController::class, 'createMeeting'])->name('create-meeting');
+    Route::post('/job/candidate/{candidate}/plan-meeting', [CompanyFreelancerFrontController::class, 'createMeeting'])->name('create-meeting');
 });
 
 //Contributors routes
@@ -138,8 +140,10 @@ Route::middleware(['auth', 'contributor', 'verified'])->prefix('contributor')->n
         Route::get('/find-recruiter', [ContributorFrontController::class, 'recruiter'])->name('find-recruiter');
 
         Route::get('/posts', [ContributorFrontController::class, 'posts'])->name('posts');
-        Route::get('/post/create', [ContributorFrontController::class, 'createPosts'])->name('post-create');
+        Route::get('/post/create', [ContributorFrontController::class, 'createPost'])->name('post-create');
         Route::get('/edit', [ContributorFrontController::class, 'edit'])->name('edit');
+    
+
     });
 
 });

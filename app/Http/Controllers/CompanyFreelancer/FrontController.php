@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\CompanyFreelancer;
 
+use App\Actions\CreateMeeting;
 use App\Actions\FollowCompany;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CandidateStatusRequest;
 use App\Http\Requests\FollowCompanyRequest;
+use App\Http\Requests\StoreMeetingRequest;
 use App\Interfaces\CategoryInterface;
 use App\Interfaces\CityInterface;
 use App\Interfaces\CompanyFreelancerInterface;
@@ -15,6 +17,7 @@ use App\Interfaces\CountryInterface;
 use App\Interfaces\FreelancerInterface;
 use App\Interfaces\JobTypeInterface;
 use App\Interfaces\SubCategoryInterface;
+use App\Models\AvailableRecruitmentSubphases;
 use App\Models\Candidate;
 use App\Models\Company;
 use App\Models\Job;
@@ -190,7 +193,30 @@ class FrontController extends Controller
             abort(404);
         }
 
-        return view('company-freelancer.pages.recruitment.candidat-recruitment-process');
+        $recruitmentProcess = $candidate->recruitmentProcess()->with('subphases')->first();
+        $availablePhases = AvailableRecruitmentSubphases::where('phase', $candidate->recruitmentProcess->current_phase)->get();
+
+        return view('company-freelancer.pages.recruitment.candidat-recruitment-process', compact(
+            'candidate',
+            'recruitmentProcess',
+                'availablePhases'
+            )
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function createMeeting(Request $request, Candidate $candidate, CreateMeeting $createMeeting): JsonResponse
+    {
+        dd($request->all());
+        dd($request->validated());
+        $createMeeting->execute($candidate, $request->validated());
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Meeting created successfully.',
+        ]);
     }
 
     /**

@@ -14,6 +14,6 @@ class JobController extends Controller
        
         $createJob->execute($request->validated());
 
-        return redirect()->route('company-freelancer-dashboard');
+        return redirect()->route('company-freelancer-dashboard')->with('success', 'You create job successfully, for more find on Active jobs');
     }
 }

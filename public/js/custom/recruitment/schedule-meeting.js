@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Handle schedule meeting form submission
     const scheduleMeetingForm = document.getElementById('scheduleMeetingForm');
     scheduleMeetingForm.addEventListener('submit', function (e) {
-        e.preventDefault();
+        // e.preventDefault();
         const title = document.getElementById('meetingTitle').value.trim();
         const date = document.getElementById('meetingDate').value.trim();
         const description = document.getElementById('meetingDescription').value.trim();

@@ -25,13 +25,15 @@
                     <i class="fas fa-times me-1"></i> Cancel
                 </button>
                 <form action="{{ asset('company/freelancer/job/candidate/'.$candidate->id.'/change-status') }}" method="POST" class="d-inline">
-                @csrf
-                @method('PUT') 
+                    @csrf
+                    @method('PUT') 
 
-                <button type="submit" class="btn btn-success btn-lg px-4">
-                    <i class="fas fa-check me-1"></i> Accept
-                </button>
-            </form>
+                    <input type="hidden" name="status" value="{{ \App\Models\Candidate::STATUS_ACCEPT }}">
+
+                    <button type="submit" class="btn btn-success btn-lg px-4">
+                        <i class="fas fa-check me-1"></i> Accept
+                    </button>
+                </form>
             </div>
         </div>
     </div>

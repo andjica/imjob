@@ -14,6 +14,8 @@
 <div class="container m-0">
     <div class="row">
         <div class="col-lg-10">
+            @include('alerts.success')
+            @include('alerts.errors')
             <div class="card shadow-sm">
             <div class="card-header border-0 bg-light text-white d-flex justify-content-between align-items-center">
                 <h3 class="card-title mb-0 d-flex align-items-center">

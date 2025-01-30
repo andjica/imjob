@@ -14,7 +14,7 @@ class CandidateStatusRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'status' => 'required|string',
+            'status' => 'required|string|in:accept,reject,pending', // Ensure it's always a valid status
         ];
     }
 }
