@@ -6,6 +6,7 @@ use App\Actions\CreateMeeting;
 use App\Actions\FollowCompany;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CandidateStatusRequest;
+use App\Http\Requests\CompleteSubphaseRequest;
 use App\Http\Requests\FollowCompanyRequest;
 use App\Http\Requests\StoreMeetingRequest;
 use App\Interfaces\CategoryInterface;
@@ -21,14 +22,18 @@ use App\Models\AvailableRecruitmentSubphases;
 use App\Models\Candidate;
 use App\Models\Company;
 use App\Models\Job;
+use App\Models\RecruitmentProcess;
+use App\Models\RecruitmentSubphase;
 use App\Models\User;
 use App\Repositories\JobRepository;
 use App\Services\CandidateService;
+use App\Services\RecruitmentProcessWorkflow;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 class FrontController extends Controller
@@ -45,6 +50,7 @@ class FrontController extends Controller
         private JobTypeInterface $jobTypesServices,
         private JobRepository $jobRep,
         private CandidateService $candidateService,
+        private RecruitmentProcessWorkflow $recruitmentProcessWorkflow,
     ) {
     }
 
@@ -217,10 +223,33 @@ class FrontController extends Controller
         ]);
     }
 
+    public function completeSubphase(CompleteSubphaseRequest $request, RecruitmentSubphase $subphase): RedirectResponse
+    {
+        $subphase->completed = true;
+        $subphase->feedback = $request->get('feedback');
+        $subphase->save();
+
+        return redirect()->back()->with('success', 'You accept deleted phase successfully.');
+    }
+
+    public function deleteSubphase(RecruitmentSubphase $subphase): RedirectResponse
+    {
+        $subphase->delete();
+
+        return redirect()->back()->with('success', 'You accept deleted phase successfully.');
+    }
+
+    public function advanceProcess(RecruitmentProcess $process): RedirectResponse
+    {
+        $this->recruitmentProcessWorkflow->advance($process);
+
+        return redirect()->back()->with('success', 'You advanced process successfully.');
+    }
+
     /**
      * @throws Exception
      */
-    public function changeCandidateStatus(CandidateStatusRequest $request, Candidate $candidate)
+    public function changeCandidateStatus(CandidateStatusRequest $request, Candidate $candidate): RedirectResponse
     {
         $this->candidateService->handleCandidate($candidate, $request->get('status'));
         return redirect()->back()->with('success', 'You accept '.$candidate->user->first_name.'successfully');

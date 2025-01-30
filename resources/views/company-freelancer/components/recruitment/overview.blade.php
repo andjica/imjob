@@ -74,20 +74,23 @@
                                                 <div class="modal fade" id="feedbackModal-{{ $subphase->id }}" tabindex="-1"
                                                      aria-labelledby="feedbackModalLabel-{{ $subphase->id }}" aria-hidden="true">
                                                     <div class="modal-dialog">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title" id="feedbackModalLabel-{{ $subphase->id }}">Phase Feedback</h5>
-                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        <form method="POST" action="/company/freelancer/recruitment-subphase/{{ $subphase->id }}/complete">
+                                                            @csrf
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="feedbackModalLabel-{{ $subphase->id }}">Phase Feedback</h5>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <p>Is this subphase complete?</p>
+                                                                    <textarea class="form-control" name="feedback" rows="3" placeholder="Provide your feedback here..." required></textarea>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                    <button type="submit" class="btn btn-primary">Submit Feedback</button>
+                                                                </div>
                                                             </div>
-                                                            <div class="modal-body">
-                                                                <p>Is this subphase complete?</p>
-                                                                <textarea class="form-control" rows="3" placeholder="Provide your feedback here..."></textarea>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                                <button type="button" class="btn btn-primary">Submit Feedback</button>
-                                                            </div>
-                                                        </div>
+                                                        </form>
                                                     </div>
                                                 </div>
 
@@ -109,7 +112,10 @@
                                                             </div>
                                                             <div class="modal-footer justify-content-center">
                                                                 <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                                                                <button type="button" class="btn btn-danger">Delete</button>
+                                                                <form method="POST" action="/company/freelancer/recruitment-subphase/{{ $subphase->id }}/delete">
+                                                                    @csrf
+                                                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                                                </form>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -128,9 +134,13 @@
                 </div>
 
                 <!-- Status Update Button -->
-                <button class="btn btn-sm btn-success status-update-btn" id="statusUpdateBtn">
-                    Advance to Next Step
-                </button>
+                <!-- Advance to Next Step Button (Using a Form) -->
+                <form method="POST" action="/company/freelancer/recruitment-process/{{ $recruitmentProcess->id }}/advance">
+                    @csrf
+                    <button type="submit" class="btn btn-sm btn-success status-update-btn">
+                        Advance to Next Step
+                    </button>
+                </form>
             </div>
             <!-- End of Recruitment Process Table -->
 
