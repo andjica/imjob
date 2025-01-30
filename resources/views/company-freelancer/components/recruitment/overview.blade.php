@@ -36,7 +36,7 @@
                                         <i class="fa-solid fa-trash" style="font-size: 0.75rem;"></i>
                                     </button>
                                     <!-- Check Button -->
-                                    
+
                                         <!--COMPLETE Modal -->
                                         <div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
                                             <div class="modal-dialog">
@@ -100,13 +100,13 @@
                 </button>
             </div>
             <!-- End of Recruitment Process Table -->
-            
+
             <!-- Small User Card -->
             <div class="col-lg-4">
                 <div class="candidate-card">
                     <!-- Candidate Profile Picture -->
                     <img src="{{ asset('images/300-2.jpg') }}" alt="Andjela Stojanovic">
-    
+
                     <!-- Candidate Details -->
                     <div class="candidate-details">
                         <h5>Andjela Stojanovic</h5>
