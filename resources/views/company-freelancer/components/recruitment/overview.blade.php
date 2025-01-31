@@ -1,5 +1,5 @@
 @php
-    use App\Models\RecruitmentProcess;
+    use App\Models\Job;use App\Models\RecruitmentProcess;
 
     $phases = [
         RecruitmentProcess::APPLICATION_RECEIVED => 'Application Received',
@@ -8,6 +8,11 @@
         RecruitmentProcess::TRANSFER => 'Transfer',
         RecruitmentProcess::OFFER_STAGE => 'Offer Stage',
     ];
+
+    if ($candidate->job->job_world_type === Job::TYPE_NATIONAL) {
+        unset($phases[RecruitmentProcess::PREPARATION]);
+        unset($phases[RecruitmentProcess::TRANSFER]);
+    }
 
     $currentPhaseIndex = array_search($recruitmentProcess->current_phase, array_keys($phases));
 @endphp
@@ -57,37 +62,55 @@
 
                                                     @if (!$subphase->completed)
                                                         <!-- Complete Button -->
-                                                        <button class="btn btn-light-success btn-xs p-1" data-bs-toggle="modal"
+                                                        <button class="btn btn-light-success btn-xs p-1"
+                                                                data-bs-toggle="modal"
                                                                 data-bs-target="#feedbackModal-{{ $subphase->id }}">
-                                                            <i class="fa-solid fa-check" style="font-size: 0.75rem;"></i>
+                                                            <i class="fa-solid fa-check"
+                                                               style="font-size: 0.75rem;"></i>
                                                         </button>
 
                                                         <!-- Drop Phase Button -->
-                                                        <button class="btn btn-light-danger btn-xs p-1" data-bs-toggle="modal"
+                                                        <button class="btn btn-light-danger btn-xs p-1"
+                                                                data-bs-toggle="modal"
                                                                 data-bs-target="#deletePhaseModal-{{ $subphase->id }}">
-                                                            <i class="fa-solid fa-trash" style="font-size: 0.75rem;"></i>
+                                                            <i class="fa-solid fa-trash"
+                                                               style="font-size: 0.75rem;"></i>
                                                         </button>
                                                     @endif
                                                 </div>
 
                                                 <!-- Complete Modal -->
-                                                <div class="modal fade" id="feedbackModal-{{ $subphase->id }}" tabindex="-1"
-                                                     aria-labelledby="feedbackModalLabel-{{ $subphase->id }}" aria-hidden="true">
+                                                <div class="modal fade" id="feedbackModal-{{ $subphase->id }}"
+                                                     tabindex="-1"
+                                                     aria-labelledby="feedbackModalLabel-{{ $subphase->id }}"
+                                                     aria-hidden="true">
                                                     <div class="modal-dialog">
-                                                        <form method="POST" action="/company/freelancer/recruitment-subphase/{{ $subphase->id }}/complete">
+                                                        <form method="POST"
+                                                              action="/company/freelancer/recruitment-subphase/{{ $subphase->id }}/complete">
                                                             @csrf
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
-                                                                    <h5 class="modal-title" id="feedbackModalLabel-{{ $subphase->id }}">Phase Feedback</h5>
-                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                    <h5 class="modal-title"
+                                                                        id="feedbackModalLabel-{{ $subphase->id }}">
+                                                                        Phase Feedback</h5>
+                                                                    <button type="button" class="btn-close"
+                                                                            data-bs-dismiss="modal"
+                                                                            aria-label="Close"></button>
                                                                 </div>
                                                                 <div class="modal-body">
                                                                     <p>Is this subphase complete?</p>
-                                                                    <textarea class="form-control" name="feedback" rows="3" placeholder="Provide your feedback here..." required></textarea>
+                                                                    <textarea class="form-control" name="feedback"
+                                                                              rows="3"
+                                                                              placeholder="Provide your feedback here..."
+                                                                              required></textarea>
                                                                 </div>
                                                                 <div class="modal-footer">
-                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                                    <button type="submit" class="btn btn-primary">Submit Feedback</button>
+                                                                    <button type="button" class="btn btn-secondary"
+                                                                            data-bs-dismiss="modal">Close
+                                                                    </button>
+                                                                    <button type="submit" class="btn btn-primary">Submit
+                                                                        Feedback
+                                                                    </button>
                                                                 </div>
                                                             </div>
                                                         </form>
@@ -95,26 +118,35 @@
                                                 </div>
 
                                                 <!-- Delete Phase Modal -->
-                                                <div class="modal fade" id="deletePhaseModal-{{ $subphase->id }}" tabindex="-1" aria-hidden="true">
+                                                <div class="modal fade" id="deletePhaseModal-{{ $subphase->id }}"
+                                                     tabindex="-1" aria-hidden="true">
                                                     <div class="modal-dialog modal-dialog-centered">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
                                                                 <h5 class="modal-title">Confirm Deletion</h5>
-                                                                <button type="button" class="btn btn-icon btn-sm btn-light" data-bs-dismiss="modal" aria-label="Close">
+                                                                <button type="button"
+                                                                        class="btn btn-icon btn-sm btn-light"
+                                                                        data-bs-dismiss="modal" aria-label="Close">
                                                                     <i class="fa-solid fa-xmark"></i>
                                                                 </button>
                                                             </div>
                                                             <div class="modal-body">
                                                                 <div class="text-center">
                                                                     <i class="fa-solid fa-exclamation-triangle text-danger fs-3x mb-4"></i>
-                                                                    <p class="fs-5">Are you sure you want to delete this subphase? This action cannot be undone.</p>
+                                                                    <p class="fs-5">Are you sure you want to delete this
+                                                                        subphase? This action cannot be undone.</p>
                                                                 </div>
                                                             </div>
                                                             <div class="modal-footer justify-content-center">
-                                                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                                                                <form method="POST" action="/company/freelancer/recruitment-subphase/{{ $subphase->id }}/delete">
+                                                                <button type="button" class="btn btn-light"
+                                                                        data-bs-dismiss="modal">Cancel
+                                                                </button>
+                                                                <form method="POST"
+                                                                      action="/company/freelancer/recruitment-subphase/{{ $subphase->id }}/delete">
                                                                     @csrf
-                                                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                                                    <button type="submit" class="btn btn-danger">
+                                                                        Delete
+                                                                    </button>
                                                                 </form>
                                                             </div>
                                                         </div>
@@ -135,7 +167,8 @@
 
                 <!-- Status Update Button -->
                 <!-- Advance to Next Step Button (Using a Form) -->
-                <form method="POST" action="/company/freelancer/recruitment-process/{{ $recruitmentProcess->id }}/advance">
+                <form method="POST"
+                      action="/company/freelancer/recruitment-process/{{ $recruitmentProcess->id }}/advance">
                     @csrf
                     <button type="submit" class="btn btn-sm btn-success status-update-btn">
                         Advance to Next Step
@@ -163,7 +196,8 @@
                         </span>
 
                         <!-- CV Download Button -->
-                        <a href="{{ asset('cv/andjela_stojanovic_cv.pdf') }}" class="badge badge-danger p-2 cv-download-btn" target="_blank">
+                        <a href="{{ asset('cv/andjela_stojanovic_cv.pdf') }}"
+                           class="badge badge-danger p-2 cv-download-btn" target="_blank">
                             <i class="fa fa-file-pdf text-white"></i> Download CV
                         </a>
                     </div>

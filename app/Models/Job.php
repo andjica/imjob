@@ -18,6 +18,9 @@ class Job extends Model
 {
     use HasFactory;
 
+    public const TYPE_INTERNATIONAL = 'international';
+    public const TYPE_NATIONAL = 'national';
+
     protected $fillable = [
         'company_id',
         'job_world_type',
