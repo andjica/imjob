@@ -23,14 +23,14 @@
      <div class="row process-overview mb-10">
         <div class="col-12">
            @include('company-freelancer.components.recruitment.overview')
-           
+
         </div>
     </div>
     <!-- End of Recruitment Process Overview -->
     <div class="row">
         <!-- Chat Box Section -->
         <div class="col-lg-6 mb-5">
-           @include('company-freelancer.components.recruitment.chat')  
+           @include('company-freelancer.components.recruitment.chat')
         </div>
 
         <!-- Meeting Planner Section -->
@@ -38,8 +38,6 @@
            @include('company-freelancer.components.recruitment.schedule-meeting')
         </div>
     </div>
-   
-   
 </div>
 
 
@@ -48,10 +46,10 @@
 @endsection
 
 @section('js')
-    <script src="{{ asset('templates/metronic/plugins/custom/datatables/datatables.bundle.js') }}"></script>    
+    <script src="{{ asset('templates/metronic/plugins/custom/datatables/datatables.bundle.js') }}"></script>
     <!-- FullCalendar JS -->
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
-    
+
     <!-- SweetAlert2 for Pop-ups -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -63,7 +61,7 @@
 
                 // Add event listener to the dropdown
                 $('#selectPhase').on('change', function () {
-                    
+
                     var dropdownValue = $(this).val(); // Get the selected value
                     if (dropdownValue === 'rest') {
                         // Show the input container when "The rest" is selected
@@ -85,5 +83,5 @@
             });
         });
     </script>
-   
+
 @endsection

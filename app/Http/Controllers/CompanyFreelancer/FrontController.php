@@ -4,10 +4,12 @@ namespace App\Http\Controllers\CompanyFreelancer;
 
 use App\Actions\CreateMeeting;
 use App\Actions\FollowCompany;
+use App\Actions\FollowContributor;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CandidateStatusRequest;
 use App\Http\Requests\CompleteSubphaseRequest;
 use App\Http\Requests\FollowCompanyRequest;
+use App\Http\Requests\FollowContributorRequest;
 use App\Http\Requests\StoreMeetingRequest;
 use App\Interfaces\CategoryInterface;
 use App\Interfaces\CityInterface;
@@ -154,6 +156,22 @@ class FrontController extends Controller
         ]);
     }
 
+    /**
+     * @throws Exception
+     */
+    public function followContributor(FollowContributorRequest $request, FollowContributor $followContributor): JsonResponse
+    {
+        /** @var User $user */
+        $user = auth()->user();
+
+        $followContributor->execute($user, (int) $request->get('follow_id'));
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Follow request sent successfully.',
+        ]);
+    }
+
     public function detailsCompany(Company $company): Factory|View|Application
     {
         /** @var User $user */
@@ -205,7 +223,7 @@ class FrontController extends Controller
         return view('company-freelancer.pages.recruitment.candidat-recruitment-process', compact(
             'candidate',
             'recruitmentProcess',
-                'availablePhases'
+                'availablePhases',
             )
         );
     }
