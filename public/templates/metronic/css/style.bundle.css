@@ -30877,10 +30877,10 @@ textarea.form-control-lg {
   background-color: #c9ffe3 !important;
 }
 
-.bg-success {
+/* .bg-success {
   background-color: #e3f3ea !important;
   --bg-color: 80, 205, 137 !important;
-}
+} */
 .bg-success.hoverable:hover {
   background-color: #47BE7D !important;
 }

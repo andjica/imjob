@@ -8,7 +8,9 @@
      data-kt-drawer-toggle="#kt_aside_mobile_toggle">            
      <div class="aside-logo flex-column-auto" id="kt_aside_logo">
                 <!--begin::Logo-->
-               <img src="{{asset('/images/logo1.png')}}" width="100px" class="img-fluid">
+                <a href="{{asset('/')}}">
+                    <img src="{{asset('/images/logo1.png')}}" width="100px" class="img-fluid">  
+                </a>
                 <!--end::Logo-->
                 <!--begin::Aside toggler-->
                 <div id="kt_aside_toggle" class="btn btn-icon w-auto px-0 btn-active-color-primary aside-toggle">

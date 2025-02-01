@@ -14,6 +14,7 @@ use App\Interfaces\CityInterface;
 use App\Interfaces\CompanyFreelancerInterface;
 use App\Interfaces\CompanyInterface;
 use App\Interfaces\CompanyTypeInterface;
+use App\Interfaces\ContributorInterface;
 use App\Interfaces\CountryInterface;
 use App\Interfaces\FreelancerInterface;
 use App\Interfaces\JobTypeInterface;
@@ -51,6 +52,7 @@ class FrontController extends Controller
         private JobRepository $jobRep,
         private CandidateService $candidateService,
         private RecruitmentProcessWorkflow $recruitmentProcessWorkflow,
+        private ContributorInterface $contributorServices
     ) {
     }
 
@@ -141,7 +143,9 @@ class FrontController extends Controller
 
     public function findContributors()
     {
-        return 5;
+        $contributors = $this->contributorServices->getAll();
+        
+        return view('company-freelancer.pages.find-contributors', compact('contributors'));
     }
 
     public function followCompany(FollowCompanyRequest $request, FollowCompany $followCompany): JsonResponse

@@ -54,5 +54,12 @@ class ContributorServices implements ContributorInterface
                 throw new \Exception("Something went wrong while creating the contributor.");
             }
     }
+
+    public function getAll()
+    {
+        $contributors = Contributor::orderBy('created_at', 'desc')->get();
+
+        return $contributors;
+    }
 }
 
