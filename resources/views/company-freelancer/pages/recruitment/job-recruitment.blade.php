@@ -61,6 +61,7 @@
             @include('company-freelancer.components.recruitment.sidebar')
 
             <!-- Job Information Card -->
+            
             @include('company-freelancer.components.recruitment.job-info')
     </div>
 

@@ -14,6 +14,7 @@ class StoreMeetingRequest extends FormRequest
     public function rules(): array
     {
         return [
+            //fali google link for google meet
             'candidate_id' => ['required', 'exists:candidates,id'],
             'meeting_title' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],

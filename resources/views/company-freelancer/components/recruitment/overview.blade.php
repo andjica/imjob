@@ -19,7 +19,7 @@
     <div class="card-body">
         <div class="row">
             <!-- Recruitment Process Table -->
-            <div class="col-lg-8 mb-4">
+            <div class="col-lg-9 mb-4">
                 <div class="table-responsive">
                     <table class="recruitment-process-table">
                         <thead>
@@ -43,15 +43,25 @@
                                 <td>
                                     @if ($isCompleted)
                                         <span class="badge badge-success">Completed</span>
+                                        @foreach ($subphases as $subphase)
+                                                <div class="mt-1">
+                                                    <span class="text-dark"> <b>- {{ $subphase->availableSubphase->subphase }}</b>
+                                                            @if ($subphase->completed)
+                                                                <b class="text-success">✔</b><br>
+                                                                Your feed back: <i>,,{{$subphase->feedback}}"</i>
+                                                            @endif
+                                                        </span>
+                                        @endforeach
                                     @elseif ($isCurrent)
                                         <span class="badge badge-warning">Current</span><br>
 
                                         @if ($subphases->isNotEmpty())
                                             @foreach ($subphases as $subphase)
                                                 <div class="mt-1">
-                                                        <span class="text-primary">- {{ $subphase->availableSubphase->subphase }}
+                                                        <span class="text-dark"> <b>- {{ $subphase->availableSubphase->subphase }}</b>
                                                             @if ($subphase->completed)
-                                                                <span class="badge badge-success">✔ Done</span>
+                                                                <b class="text-success">✔</b><br>
+                                                                Your feed back: <i>,,{{$subphase->feedback}}"</i>
                                                             @endif
                                                         </span>
 
@@ -135,7 +145,7 @@
 
                 <!-- Status Update Button -->
                 <!-- Advance to Next Step Button (Using a Form) -->
-                <form method="POST" action="/company/freelancer/recruitment-process/{{ $recruitmentProcess->id }}/advance">
+                <form method="POST" action="{{asset('/company/freelancer/recruitment-process/'.$recruitmentProcess->id.'/advance')}}">
                     @csrf
                     <button type="submit" class="btn btn-sm btn-success status-update-btn">
                         Advance to Next Step
@@ -145,23 +155,17 @@
             <!-- End of Recruitment Process Table -->
 
             <!-- Small User Card -->
-            <div class="col-lg-4">
+            <div class="col-lg-3">
                 <div class="candidate-card">
                     <!-- Candidate Profile Picture -->
-                    <img src="{{ asset('images/300-2.jpg') }}" alt="Andjela Stojanovic">
+                    <img src="{{ asset('images/300-2.jpg') }}" alt="{{$candidate->user->first_name}}{{$candidate->user->last_name}}">
 
                     <!-- Candidate Details -->
                     <div class="candidate-details">
-                        <h5>Andjela Stojanovic</h5>
-                        <p><i class="fa fa-envelope"></i> andjela.stojanovic@example.com</p>
-                        <p><i class="fa fa-phone"></i> +1234567890</p>
-                        <p><i class="fa fa-map-marker-alt"></i> 1234 Elm Street, Springfield, USA</p>
-
-                        <!-- Current Status Badge -->
-                        <span class="badge badge-warning p-2">
-                            First Interview
-                        </span>
-
+                        <h5>{{$candidate->user->first_name}} {{$candidate->user->last_name}}</h5>
+                        <p><i class="fa fa-envelope"></i>{{$candidate->user->email}}</p>
+                        <p><i class="fa fa-phone"></i> {{$candidate->phone}}</p>
+                        <p><i class="fa fa-map-marker-alt"></i> {{$candidate->city}}, {{$candidate->country}}</p>
                         <!-- CV Download Button -->
                         <a href="{{ asset('cv/andjela_stojanovic_cv.pdf') }}" class="badge badge-danger p-2 cv-download-btn" target="_blank">
                             <i class="fa fa-file-pdf text-white"></i> Download CV

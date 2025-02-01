@@ -213,14 +213,15 @@ class FrontController extends Controller
     /**
      * @throws Exception
      */
-    public function createMeeting(StoreMeetingRequest $request, Candidate $candidate, CreateMeeting $createMeeting): JsonResponse
+    public function createMeeting(StoreMeetingRequest $request, Candidate $candidate, CreateMeeting $createMeeting)
     {
         $createMeeting->execute($candidate, $request->validated());
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Meeting created successfully.',
-        ]);
+        return redirect()->back()->with('success', 'Meeting created succssfully');
+        // return response()->json([
+        //     'success' => true,
+        //     'message' => 'Meeting created successfully.',
+        // ]);
     }
 
     public function completeSubphase(CompleteSubphaseRequest $request, RecruitmentSubphase $subphase): RedirectResponse
@@ -241,8 +242,13 @@ class FrontController extends Controller
 
     public function advanceProcess(RecruitmentProcess $process): RedirectResponse
     {
-        $this->recruitmentProcessWorkflow->advance($process);
+        $process = $this->recruitmentProcessWorkflow->advance($process);
 
+        if($process == false)
+        {
+           return redirect()->back()->with('error', 'You must finish one or more subphases and then to go on the next level of recruitment process');
+
+        }
         return redirect()->back()->with('success', 'You advanced process successfully.');
     }
 

@@ -2,7 +2,7 @@
     <div class="card card-custom shadow-lg" id="job-card">
         <div class="card-header bg-secondary text-white bg-linear-orange-opacity">
             <h3 class="card-title  text-white d-flex align-items-center">
-            <i class="fas fa-heading icon-style text-white fa-3x"></i>&nbsp; Senior Software Developer
+            <i class="fas fa-heading icon-style text-white fa-3x"></i>&nbsp; {{$job->title}}
             </h3>
         </div>
         <div class="card-body">

@@ -16,6 +16,8 @@
 @section('content')
 
 <div class="container m-0 pb-5">
+    @include('alerts.errors')
+    @include('alerts.success')
     <a class="btn btn-sm btn-primary mb-2 p-2" href="{{ asset('/company/freelancer/job/recruitment-process') }}">
         <i class="fa fa-chevron-left"></i> Back
     </a>
