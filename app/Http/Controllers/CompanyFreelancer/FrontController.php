@@ -263,7 +263,9 @@ class FrontController extends Controller
         
         $candidateId = $candidate->id;
         $candidateSubphases = Candidate::with('recruitmentSubPhases')->find($candidateId);
+        
         $meetings = $candidateSubphases->recruitmentSubPhases->toArray();
+       
         return view('company-freelancer.pages.recruitment.candidat-recruitment-process', compact(
             'candidate',
             'recruitmentProcess',

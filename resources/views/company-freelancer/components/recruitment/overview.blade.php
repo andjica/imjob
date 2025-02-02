@@ -1,29 +1,9 @@
-@php
-    use App\Models\Job;
-    use App\Models\RecruitmentProcess;
 
-    // Define recruitment phases
-    $phases = [
-        RecruitmentProcess::APPLICATION_RECEIVED => 'Application Received',
-        RecruitmentProcess::SELECTION => 'Selection',
-        RecruitmentProcess::PREPARATION => 'Preparation',
-        RecruitmentProcess::TRANSFER => 'Transfer',
-        RecruitmentProcess::OFFER_STAGE => 'Offer Stage',
-    ];
-
-    // Remove unnecessary phases for National jobs
-    if ($candidate->job->job_world_type === Job::TYPE_NATIONAL) {
-        unset($phases[RecruitmentProcess::PREPARATION], $phases[RecruitmentProcess::TRANSFER]);
-    }
-
-    // Determine the current phase index
-    $currentPhaseIndex = array_search($recruitmentProcess->current_phase, array_keys($phases));
-@endphp
 
 <!-- Candidate Recruitment Process Overview -->
 <div class="card">
-    <div class="card-header">
-        <h3 class="card-title">Recruitment Process Overview</h3>
+    <div class="card-header d-flex justify-content-center align-items-center">
+        <h3 class="card-title ">Recruitment Process Overview</h3>
     </div>
     <div class="card-body">
         
@@ -91,19 +71,21 @@
                                         @elseif ($isCurrent)
                                             <span class="badge badge-warning">Current</span><hr>
                                             @foreach ($subphases as $subphase)
-                                                <div class="mt-1">
-                                                    <b>{{ $loop->iteration }}. {{ $subphase->availableSubphase->subphase }}</b>
+                                                <div class="my-5">
+                                                    <b> {{ $subphase->availableSubphase->subphase }}</b>
                                                     @if ($subphase->completed)
                                                         <b class="text-success">✔</b><br>
                                                         <span class="text-muted">Feedback: "{{ $subphase->feedback }}"</span>
-                                                    @else
+                                                    @else<br><br>
+                                                   
                                                         <!-- Action Buttons -->
-                                                        <button class="btn btn-light-success btn-sm" data-bs-toggle="modal" data-bs-target="#feedbackModal-{{ $subphase->id }}">
-                                                            <i class="fa-solid fa-check"></i>
+                                                        <button class="btn btn-light-success btn-sm p-3 me-2" data-bs-toggle="modal" data-bs-target="#feedbackModal-{{ $subphase->id }}">
+                                                            <i class="fa-solid fa-check fa-xs"></i>
                                                         </button>
-                                                        <button class="btn btn-light-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deletePhaseModal-{{ $subphase->id }}">
-                                                            <i class="fa-solid fa-trash"></i>
+                                                        <button class="btn btn-light-danger btn-sm p-3 text-small" data-bs-toggle="modal" data-bs-target="#deletePhaseModal-{{ $subphase->id }}">
+                                                            <i class="fa-solid fa-trash fa-xs"></i>
                                                         </button>
+                                                    
                                                     @endif
                                                 </div>
                                             @endforeach
@@ -130,3 +112,5 @@
         </div>
     </div>
 </div>
+
+
