@@ -1,8 +1,8 @@
 <div class="col-lg-9 col-md-8">
     <div class="card card-custom shadow-lg" id="job-card">
-        <div class="card-header bg-secondary text-white bg-linear-orange-opacity">
-            <h3 class="card-title  text-white d-flex align-items-center">
-            <i class="fas fa-heading icon-style text-white fa-3x"></i>&nbsp; {{$job->title}}
+        <div class="card-header text-white bg-light">
+            <h3 class="card-title  text-dark d-flex align-items-center fw-light">
+            <i class="fas fa-heading icon-style text-dark fa-3x"></i>&nbsp; {{$job->title}}
             </h3>
         </div>
         <div class="card-body">

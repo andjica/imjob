@@ -1,6 +1,8 @@
 @php
+    use App\Models\Job;
     use App\Models\RecruitmentProcess;
 
+    // Define recruitment phases
     $phases = [
         RecruitmentProcess::APPLICATION_RECEIVED => 'Application Received',
         RecruitmentProcess::SELECTION => 'Selection',
@@ -9,171 +11,122 @@
         RecruitmentProcess::OFFER_STAGE => 'Offer Stage',
     ];
 
+    // Remove unnecessary phases for National jobs
+    if ($candidate->job->job_world_type === Job::TYPE_NATIONAL) {
+        unset($phases[RecruitmentProcess::PREPARATION], $phases[RecruitmentProcess::TRANSFER]);
+    }
+
+    // Determine the current phase index
     $currentPhaseIndex = array_search($recruitmentProcess->current_phase, array_keys($phases));
 @endphp
 
+<!-- Candidate Recruitment Process Overview -->
 <div class="card">
     <div class="card-header">
         <h3 class="card-title">Recruitment Process Overview</h3>
     </div>
     <div class="card-body">
-        <div class="row">
-            <!-- Recruitment Process Table -->
-            <div class="col-lg-9 mb-4">
+        
+        <!-- Candidate Information -->
+
+        <!-- Recruitment Process Table -->
+        <div class="row mt-4">
+            <div class="col-lg-12">
+                <!-- Small Candidate Info Card Above Table -->
+                <div class="card shadow-sm mb-3 text-center p-2">
+                    <div class="card-body d-flex align-items-center justify-content-center">
+                        <img src="{{ asset('images/300-2.jpg') }}" 
+                            alt="{{ $candidate->user->first_name }} {{ $candidate->user->last_name }}" 
+                            class="rounded-circle me-2" width="45" height="45">
+
+                        <div>
+                            <h6 class="mb-0">{{ $candidate->user->first_name }} {{ $candidate->user->last_name }}</h6>
+                            <p class="text-muted mb-0" style="font-size: 12px;">
+                                <i class="fa fa-envelope me-1"></i> {{ $candidate->user->email }} |
+                                <i class="fa fa-phone me-1"></i> {{ $candidate->phone }} |
+                                <i class="fa fa-map-marker-alt me-1"></i> {{ $candidate->city }}, {{ $candidate->country }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Arrow pointing to 'Application Received' -->
+                <div class="text-center mb-2">
+                    <i class="fa-solid fa-arrow-down text-primary fs-4"></i>
+                </div>
                 <div class="table-responsive">
-                    <table class="recruitment-process-table">
-                        <thead>
-                        <tr>
-                            @foreach ($phases as $phaseName)
-                                <th>{{ $phaseName }}</th>
-                            @endforeach
-                        </tr>
+                    <table class="table table-sm table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                @foreach ($phases as $phaseName)
+                                    <th class="text-center">{{ $phaseName }}</th>
+                                @endforeach
+                            </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            @foreach ($phases as $phaseKey => $phaseName)
-                                @php
-                                    $index = array_search($phaseKey, array_keys($phases));
-                                    $isCurrent = $index === $currentPhaseIndex;
-                                    $isCompleted = $index < $currentPhaseIndex;
-                                    $isUpcoming = $index > $currentPhaseIndex;
-                                    $subphases = $recruitmentProcess->subphases->where('phase', $phaseKey)->sortBy('completed');
-                                @endphp
+                            <tr>
+                                @foreach ($phases as $phaseKey => $phaseName)
+                                    @php
+                                        $index = array_search($phaseKey, array_keys($phases));
+                                        $isCurrent = $index === $currentPhaseIndex;
+                                        $isCompleted = $index < $currentPhaseIndex;
+                                        $subphases = $recruitmentProcess->subphases->where('phase', $phaseKey)->sortBy('completed');
+                                    @endphp
 
-                                <td>
-                                    @if ($isCompleted)
-                                        <span class="badge badge-success">Completed</span>
-                                        @foreach ($subphases as $subphase)
-                                                <div class="mt-1">
-                                                    <span class="text-dark"> <b>- {{ $subphase->availableSubphase->subphase }}</b>
-                                                            @if ($subphase->completed)
-                                                                <b class="text-success">✔</b><br>
-                                                                Your feed back: <i>,,{{$subphase->feedback}}"</i>
-                                                            @endif
-                                                        </span>
-                                        @endforeach
-                                    @elseif ($isCurrent)
-                                        <span class="badge badge-warning">Current</span><br>
-
-                                        @if ($subphases->isNotEmpty())
+                                    <td class="text-center">
+                                        <!-- Completed Phase -->
+                                        @if ($isCompleted)
+                                            <span class="badge badge-success">Completed</span><hr>
                                             @foreach ($subphases as $subphase)
                                                 <div class="mt-1">
-                                                        <span class="text-dark"> <b>- {{ $subphase->availableSubphase->subphase }}</b>
-                                                            @if ($subphase->completed)
-                                                                <b class="text-success">✔</b><br>
-                                                                Your feed back: <i>,,{{$subphase->feedback}}"</i>
-                                                            @endif
-                                                        </span>
+                                                    <b>{{ $loop->iteration }}. {{ $subphase->availableSubphase->subphase }}</b>
+                                                    @if ($subphase->completed)
+                                                        <b class="text-success">✔</b><br>
+                                                        <span class="text-muted">Feedback: "{{ $subphase->feedback }}"</span>
+                                                    @endif
+                                                </div>
+                                            @endforeach
 
-                                                    @if (!$subphase->completed)
-                                                        <!-- Complete Button -->
-                                                        <button class="btn btn-light-success btn-xs p-1" data-bs-toggle="modal"
-                                                                data-bs-target="#feedbackModal-{{ $subphase->id }}">
-                                                            <i class="fa-solid fa-check" style="font-size: 0.75rem;"></i>
+                                        <!-- Current Phase -->
+                                        @elseif ($isCurrent)
+                                            <span class="badge badge-warning">Current</span><hr>
+                                            @foreach ($subphases as $subphase)
+                                                <div class="mt-1">
+                                                    <b>{{ $loop->iteration }}. {{ $subphase->availableSubphase->subphase }}</b>
+                                                    @if ($subphase->completed)
+                                                        <b class="text-success">✔</b><br>
+                                                        <span class="text-muted">Feedback: "{{ $subphase->feedback }}"</span>
+                                                    @else
+                                                        <!-- Action Buttons -->
+                                                        <button class="btn btn-light-success btn-sm" data-bs-toggle="modal" data-bs-target="#feedbackModal-{{ $subphase->id }}">
+                                                            <i class="fa-solid fa-check"></i>
                                                         </button>
-
-                                                        <!-- Drop Phase Button -->
-                                                        <button class="btn btn-light-danger btn-xs p-1" data-bs-toggle="modal"
-                                                                data-bs-target="#deletePhaseModal-{{ $subphase->id }}">
-                                                            <i class="fa-solid fa-trash" style="font-size: 0.75rem;"></i>
+                                                        <button class="btn btn-light-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deletePhaseModal-{{ $subphase->id }}">
+                                                            <i class="fa-solid fa-trash"></i>
                                                         </button>
                                                     @endif
                                                 </div>
-
-                                                <!-- Complete Modal -->
-                                                <div class="modal fade" id="feedbackModal-{{ $subphase->id }}" tabindex="-1"
-                                                     aria-labelledby="feedbackModalLabel-{{ $subphase->id }}" aria-hidden="true">
-                                                    <div class="modal-dialog">
-                                                        <form method="POST" action="/company/freelancer/recruitment-subphase/{{ $subphase->id }}/complete">
-                                                            @csrf
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title" id="feedbackModalLabel-{{ $subphase->id }}">Phase Feedback</h5>
-                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    <p>Is this subphase complete?</p>
-                                                                    <textarea class="form-control" name="feedback" rows="3" placeholder="Provide your feedback here..." required></textarea>
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                                    <button type="submit" class="btn btn-primary">Submit Feedback</button>
-                                                                </div>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
-
-                                                <!-- Delete Phase Modal -->
-                                                <div class="modal fade" id="deletePhaseModal-{{ $subphase->id }}" tabindex="-1" aria-hidden="true">
-                                                    <div class="modal-dialog modal-dialog-centered">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title">Confirm Deletion</h5>
-                                                                <button type="button" class="btn btn-icon btn-sm btn-light" data-bs-dismiss="modal" aria-label="Close">
-                                                                    <i class="fa-solid fa-xmark"></i>
-                                                                </button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <div class="text-center">
-                                                                    <i class="fa-solid fa-exclamation-triangle text-danger fs-3x mb-4"></i>
-                                                                    <p class="fs-5">Are you sure you want to delete this subphase? This action cannot be undone.</p>
-                                                                </div>
-                                                            </div>
-                                                            <div class="modal-footer justify-content-center">
-                                                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                                                                <form method="POST" action="/company/freelancer/recruitment-subphase/{{ $subphase->id }}/delete">
-                                                                    @csrf
-                                                                    <button type="submit" class="btn btn-danger">Delete</button>
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
                                             @endforeach
-                                        @endif
 
-                                    @else
-                                        <span class="badge badge-secondary">Upcoming</span>
-                                    @endif
-                                </td>
-                            @endforeach
-                        </tr>
+                                        <!-- Upcoming Phase -->
+                                        @else
+                                            <span class="badge badge-secondary">Upcoming</span>
+                                        @endif
+                                    </td>
+                                @endforeach
+                            </tr>
                         </tbody>
                     </table>
                 </div>
 
-                <!-- Status Update Button -->
-                <!-- Advance to Next Step Button (Using a Form) -->
-                <form method="POST" action="{{asset('/company/freelancer/recruitment-process/'.$recruitmentProcess->id.'/advance')}}">
+                <!-- Advance to Next Step Button -->
+                <form method="POST" action="{{ asset('/company/freelancer/recruitment-process/'.$recruitmentProcess->id.'/advance') }}">
                     @csrf
-                    <button type="submit" class="btn btn-sm btn-success status-update-btn">
+                    <button type="submit" class="btn btn-primary btn-sm mt-3">
                         Advance to Next Step
                     </button>
                 </form>
             </div>
-            <!-- End of Recruitment Process Table -->
-
-            <!-- Small User Card -->
-            <div class="col-lg-3">
-                <div class="candidate-card">
-                    <!-- Candidate Profile Picture -->
-                    <img src="{{ asset('images/300-2.jpg') }}" alt="{{$candidate->user->first_name}}{{$candidate->user->last_name}}">
-
-                    <!-- Candidate Details -->
-                    <div class="candidate-details">
-                        <h5>{{$candidate->user->first_name}} {{$candidate->user->last_name}}</h5>
-                        <p><i class="fa fa-envelope"></i>{{$candidate->user->email}}</p>
-                        <p><i class="fa fa-phone"></i> {{$candidate->phone}}</p>
-                        <p><i class="fa fa-map-marker-alt"></i> {{$candidate->city}}, {{$candidate->country}}</p>
-                        <!-- CV Download Button -->
-                        <a href="{{ asset('cv/andjela_stojanovic_cv.pdf') }}" class="badge badge-danger p-2 cv-download-btn" target="_blank">
-                            <i class="fa fa-file-pdf text-white"></i> Download CV
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <!-- End of Small User Card -->
         </div>
     </div>
 </div>

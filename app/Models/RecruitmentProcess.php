@@ -21,11 +21,10 @@ class RecruitmentProcess extends Model
     public const TRANSFER = "transfer";
     public const OFFER_STAGE = "offer_stage";
 
-    
+
     protected $fillable = [
         'current_phase',
         'candidate_id',
-        // 'job_application_id',
         'current_phase'
     ];
     public function subphases(): HasMany

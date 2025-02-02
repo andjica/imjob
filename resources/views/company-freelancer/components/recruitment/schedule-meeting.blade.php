@@ -10,6 +10,40 @@
     <div class="card-body">
         <!-- Metronic Classic Calendar Integration -->
         <div id="meetingCalendar"></div>
+        
+        <!-- Metronic 8 Bootstrap Modal with Icons & Animations -->
+        <div class="modal fade" id="meetingModal" tabindex="-1" aria-labelledby="meetingModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content shadow-lg">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title">
+                            <i class="bi bi-calendar-event-fill"></i> <span id="meetingTitle"></span>
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="bi bi-clock-fill text-primary me-2 fs-4"></i>
+                            <p class="m-0"><strong>Date & Time:</strong> <span id="meetingDate"></span></p>
+                        </div>
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="bi bi-chat-left-text-fill text-success me-2 fs-4"></i>
+                            <p class="m-0"><strong>Description:</strong> <span id="meetingDescription"></span></p>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-link-45deg text-danger me-2 fs-4"></i>
+                            <p class="m-0"><strong>Meeting Link:</strong> <a id="meetingLink" href="#" target="_blank" class="text-decoration-none text-danger fw-bold"></a></p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                            <i class="bi bi-x-circle"></i> Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 

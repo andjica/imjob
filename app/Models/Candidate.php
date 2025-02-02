@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 /**
  * @property int $id
@@ -54,5 +56,22 @@ class Candidate extends Model
     public function recruitmentProcess(): HasOne
     {
         return $this->hasOne(RecruitmentProcess::class);
+    }
+
+    public function recruitmentSubPhase()
+    {
+        return $this->hasMany(RecruitmentSubphase::class);
+    }
+
+    public function recruitmentSubPhases(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            RecruitmentSubphase::class, // Final table (subphases)
+            RecruitmentProcess::class,  // Intermediate table (recruitment process)
+            'candidate_id',             // Foreign key on recruitment_processes
+            'recruitment_process_id',   // Foreign key on recruitment_subphases
+            'id',                       // Local key on candidates
+            'id'                        // Local key on recruitment_processes
+        );
     }
 }

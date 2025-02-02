@@ -2,11 +2,12 @@
 
 namespace App\Services;
 
-use App\Interfaces\ContributorInterface;
 use App\Models\Contributor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use App\Interfaces\ContributorInterface;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class ContributorServices implements ContributorInterface
 {
@@ -55,9 +56,8 @@ class ContributorServices implements ContributorInterface
             }
     }
 
-    public function getAll()
-    {
-        $contributors = Contributor::orderBy('created_at', 'desc')->get();
+    public function getAll(?string $search = null): LengthAwarePaginator
+    {   $contributors = Contributor::orderBy('created_at', 'desc')->paginate(20);
 
         return $contributors;
     }

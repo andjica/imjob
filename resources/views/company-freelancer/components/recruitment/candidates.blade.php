@@ -92,7 +92,7 @@
                         @elseif($candidate->status === 'reject')
 
                         @else
-                        <a href="{{asset('company/freelancer/job/candidate/'.$candidate->id.'/recruitment-process')}}" class="btn btn-sm bg-linear-orange text-white fw-light">Go to recruitment process</a>
+                        <a href="{{asset('company/freelancer/job/candidate/'.$candidate->id.'/recruitment-process')}}" class="btn btn-sm bg-linear-pink text-white fw-light">Go to recruitment process</a>
                     @endif
                 </td>
               

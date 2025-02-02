@@ -36,6 +36,11 @@ class RecruitmentSubphase extends Model
         'available_subphase_id',
     ];
 
+     
+     protected $casts = [
+        'scheduled_at' => 'datetime',
+    ];
+
     public function availableSubphase(): BelongsTo
     {
         return $this->belongsTo(AvailableRecruitmentSubphases::class, 'available_subphase_id');
