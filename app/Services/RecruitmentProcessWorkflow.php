@@ -35,15 +35,19 @@ class RecruitmentProcessWorkflow
 
         $phases = ($worldType === Job::TYPE_NATIONAL)
             ? ['application_received', 'selection', 'offer_stage']
-            : ['application_received', 'selection', 'preparation', 'transfer', 'offer_stage'];
+            : ['application_received', 'selection', 'preparation', 'transfer', 'offer_stage']
+        ;
+
+        if ($process->current_phase === end($phases)) {
+            return true;
+        }
 
         $currentPhaseIndex = array_search($process->current_phase, $phases, true);
-        
+
         if ($currentPhaseIndex === false || $currentPhaseIndex >= count($phases) - 1) {
             return false;
         }
 
-        
         if ($process->current_phase === 'application_received') {
             $process->current_phase = $phases[$currentPhaseIndex + 1];
             $process->save();
