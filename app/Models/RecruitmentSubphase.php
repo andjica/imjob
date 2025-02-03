@@ -6,6 +6,7 @@ use DateTime;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * @property int $id
@@ -36,7 +37,7 @@ class RecruitmentSubphase extends Model
         'available_subphase_id',
     ];
 
-     
+
      protected $casts = [
         'scheduled_at' => 'datetime',
     ];
@@ -44,5 +45,11 @@ class RecruitmentSubphase extends Model
     public function availableSubphase(): BelongsTo
     {
         return $this->belongsTo(AvailableRecruitmentSubphases::class, 'available_subphase_id');
+    }
+
+    public function contributors(): BelongsToMany
+    {
+        return $this->belongsToMany(Contributor::class, 'recruitment_subphase_contributor')
+            ->withTimestamps();
     }
 }

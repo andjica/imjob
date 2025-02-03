@@ -25,7 +25,8 @@ class CreateMeeting
         $recruitmentProcess = $candidate->recruitmentProcess;
 
         return $this->transactionService->run(function () use ($candidate, $recruitmentProcess, $data) {
-            return RecruitmentSubphase::create([
+            /** @var RecruitmentSubphase $subphase */
+            $subphase = RecruitmentSubphase::create([
                 'phase' => $recruitmentProcess->current_phase,
                 'recruitment_process_id' => $recruitmentProcess->id,
                 'available_subphase_id' => $data['available_subphase_id'],
@@ -33,6 +34,12 @@ class CreateMeeting
                 'description' => $data['description'],
                 'meeting_title' => $data['meeting_title'],
             ]);
+
+            if ($subphase && !empty($data['contributors'])) {
+                $subphase->contributors()->attach($data['contributors']);
+            }
+
+            return $subphase;
         });
     }
 

@@ -17,7 +17,7 @@
                     <div class="mb-3">
                         <label for="meetingTitle" class="form-label">Meeting Title</label>
                         <input type="text" class="form-control" id="meeting_title" name="meeting_title" value="{{ old('meeting_title') }}">
-                        <span class="text-danger" id="meeting_titleError">@error('meeting_title') {{ $message }} @enderror</span> 
+                        <span class="text-danger" id="meeting_titleError">@error('meeting_title') {{ $message }} @enderror</span>
                     </div>
                         <!-- Meeting Link -->
                         <div class="mb-3">
@@ -37,7 +37,7 @@
                                 </option>
                             @endforeach
                         </select>
-                        <span class="text-danger" id="select_phaseError">@error('available_subphase_id') {{ $message }}@enderror</span> 
+                        <span class="text-danger" id="select_phaseError">@error('available_subphase_id') {{ $message }}@enderror</span>
                     </div>
 
                     <!-- Date & Time -->
@@ -65,10 +65,11 @@
                     <div class="mb-3">
                         <label for="meeting_contributors" class="form-label">Add Contributors</label>
                         <select class="form-control" id="meeting_contributors" name="contributors[]" multiple data-placeholder="Select contributors...">
-                            <option value="1" {{ in_array(1, old('contributors', [])) ? 'selected' : '' }}>John Doe</option>
-                            <option value="2" {{ in_array(2, old('contributors', [])) ? 'selected' : '' }}>Jane Smith</option>
-                            <option value="3" {{ in_array(3, old('contributors', [])) ? 'selected' : '' }}>Mike Johnson</option>
-                            <option value="4" {{ in_array(4, old('contributors', [])) ? 'selected' : '' }}>Emily Davis</option>
+                            @foreach($contributors as $contributor)
+                                <option value="{{ $contributor->id }}" {{ in_array($contributor->id, old('contributors', [])) ? 'selected' : '' }}>
+                                    {{ $contributor->name }}
+                                </option>
+                            @endforeach
                         </select>
                         <small class="form-text text-muted">Select one or more contributors for this meeting.</small>
                         @error('contributors') <span class="text-danger">{{ $message }}</span> @enderror

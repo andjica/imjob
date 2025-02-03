@@ -20,8 +20,8 @@ class StoreMeetingRequest extends FormRequest
             'description' => ['string'],
             'available_subphase_id' => ['required', 'exists:available_recruitment_subphases,id'],
             'scheduled_at' => ['required', 'date'],
-            // 'contributors' => ['required', 'array'],
-            // 'contributors.*' => ['required', 'integer'],
+             'contributors' => ['array'],
+             'contributors.*' => ['integer'],
         ];
     }
 }
