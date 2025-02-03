@@ -124,8 +124,10 @@ class FrontController extends Controller
     {
         /** @var User $user */
         $user = auth()->user();
-        $searchString = $request->get('search') ?? null;
+        $searchString = $request->get('query') ?? null;
+        
         $companies = $this->companyServices->getAllCompanies($searchString);
+        
         $connectedCompanies = $user->recruiter->companies;
 
         $connectedOnPending = $user->recruiter->companies()
@@ -148,7 +150,7 @@ class FrontController extends Controller
     {
         /** @var User $user */
         $user = auth()->user();
-        $searchString = $request->get('search') ?? null;
+        $searchString = $request->get('query') ?? null;
     
         // Fetch contributors
         $contributors = $this->contributorServices->getAll($searchString);
@@ -335,11 +337,13 @@ class FrontController extends Controller
         return view('company-freelancer.pages.job.active-jobs');
     }
 
-    public function getActiveJobs()
+    public function getActiveJobs(Request $request)
     {
         $recruiterId = auth()->user()->recruiter->id ?? abort(404);
 
-        $jobs = $this->jobRep->findActiveByRecruiterId($recruiterId);
+        $searchString = $request->get('query') ?? null;
+        $jobs = $this->jobRep->searchJobs($searchString, $recruiterId);
+        
 
         return view('company-freelancer.pages.job.active-jobs', compact('jobs'));
     }

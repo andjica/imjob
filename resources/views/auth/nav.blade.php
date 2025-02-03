@@ -2,8 +2,7 @@
     <div class="container-fluid">
         <!-- Logo -->
         <a href="{{ route('home') }}" class="navbar-brand fw-bold">
-            <img src="{{ asset('images/im-job-logo.svg') }}" alt="Logo Im job" height="60">
-            Welcome
+            <img src="{{ asset('images/logo1.png') }}" alt="Logo Im job" width="100px" class="img-fluid">
         </a>
 
         <!-- Toggle Button for Mobile -->

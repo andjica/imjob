@@ -57,9 +57,19 @@ class ContributorServices implements ContributorInterface
     }
 
     public function getAll(?string $search = null): LengthAwarePaginator
-    {   $contributors = Contributor::orderBy('created_at', 'desc')->paginate(20);
+    {   
+        $query = Contributor::with('contributorType')->orderBy('created_at', 'desc');
 
-        return $contributors;
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                ->orWhereHas('contributorType', function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%");
+                });
+            });
+        }
+
+        return $query->paginate(20);
     }
 }
 

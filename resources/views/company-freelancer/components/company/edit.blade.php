@@ -1,87 +1,89 @@
-<div class="card mb-5 mb-xl-10">
-                <!--begin::Card header-->
-                <div class="card-header">
-                    <h3 class="card-title">Edit Company Information</h3>
+<div class="col-md-6">
+    <div class="card mb-5 mb-xl-10 border-end">
+        <!--begin::Card header-->
+        <div class="card-header">
+            <h3 class="card-title">Edit Company Information</h3>
+        </div>
+        <!--end::Card header-->
+
+        <!--begin::Card body-->
+        <div class="card-body pt-3">
+            <form action="{{route('company-update')}}" method="POST" id="companyForm" enctype="multipart/form-data">
+                @csrf
+
+                <!-- Company Name -->
+                <div class="row mb-5">
+                    <label class="col-lg-3 col-form-label fw-bold fs-6 required">Company Name:</label>
+                    <div class="col-lg-9">
+                        <input type="text" class="form-control form-control-solid" id="companyName" name="companyName" value="{{ $company->name }}" required />
+                        <span class="text-danger" id="companyNameEmpty">@error('companyName'){{ $message }}@enderror</span>
+                    </div>
                 </div>
-                <!--end::Card header-->
 
-                <!--begin::Card body-->
-                <div class="card-body pt-3">
-                    <form action="{{route('company-update')}}" method="POST" id="companyForm" enctype="multipart/form-data">
-                        @csrf
-
-                        <!-- Company Name -->
-                        <div class="row mb-5">
-                            <label class="col-lg-3 col-form-label fw-bold fs-6 required">Company Name:</label>
-                            <div class="col-lg-9">
-                                <input type="text" class="form-control form-control-solid" id="companyName" name="companyName" value="{{ $company->name }}" required />
-                                <span class="text-danger" id="companyNameEmpty">@error('companyName'){{ $message }}@enderror</span>
-                            </div>
+                
+                <!-- Company Type -->
+                <div class="row mb-5">
+                    <label class="col-lg-3 col-form-label fw-bold fs-6">Company Type:</label>
+                    <div class="col-lg-9">
+                        <input type="text" class="form-control form-control-solid" name="companyType"  value="{{ $company->companyType->name }}" readonly
+                            data-bs-toggle="tooltip" data-bs-placement="top" title="This field cannot be updated." />
+                        <span class="text-muted fst-italic">This field is disabled and cannot be updated.</span>
+                    </div>
+                </div>
+                <!-- Owner Title -->
+                <div class="row mb-5">
+                        <label class="col-lg-3 col-form-label fw-bold fs-6 required">Owner Title:</label>
+                        <div class="col-lg-6">
+                            <select name="ownerTitle" id="ownerTitle" name="ownerTitle"
+                                class="form-control form-control-solid @error('ownerTitle') is-invalid @enderror">
+                                <option value="{{ $company->owner_title }}">{{ $company->owner_title }}</option>
+                                @foreach (['CEO', 'Main Director', 'Owner'] as $title)
+                                    <option value="{{ $title }}" {{ old('ownerTitle', $company->owner_title) == $title ? 'selected' : '' }}>
+                                        {{ $title }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <span class="text-danger" id="ownerTitleEmpty">@error('ownerTitle'){{ $message }}@enderror</span>
                         </div>
-
-                       
-                       <!-- Company Type -->
-                        <div class="row mb-5">
-                            <label class="col-lg-3 col-form-label fw-bold fs-6">Company Type:</label>
-                            <div class="col-lg-9">
-                                <input type="text" class="form-control form-control-solid" name="companyType"  value="{{ $company->companyType->name }}" readonly
-                                    data-bs-toggle="tooltip" data-bs-placement="top" title="This field cannot be updated." />
-                                <span class="text-muted fst-italic">This field is disabled and cannot be updated.</span>
-                            </div>
-                        </div>
-                        <!-- Owner Title -->
-                        <div class="row mb-5">
-                                <label class="col-lg-3 col-form-label fw-bold fs-6 required">Owner Title:</label>
-                                <div class="col-lg-6">
-                                    <select name="ownerTitle" id="ownerTitle" name="ownerTitle"
-                                        class="form-control form-control-solid @error('ownerTitle') is-invalid @enderror">
-                                        <option value="{{ $company->owner_title }}">{{ $company->owner_title }}</option>
-                                        @foreach (['CEO', 'Main Director', 'Owner'] as $title)
-                                            <option value="{{ $title }}" {{ old('ownerTitle', $company->owner_title) == $title ? 'selected' : '' }}>
-                                                {{ $title }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    <span class="text-danger" id="ownerTitleEmpty">@error('ownerTitle'){{ $message }}@enderror</span>
-                                </div>
-                            </div>
+                    </div>
 
 
-                        <!-- Category -->
-                        <div class="row mb-5">
-                            <label class="col-lg-3 col-form-label fw-bold fs-6 required">Category:</label>
-                            <div class="col-lg-9">
-                                <select name="categoryId" id="categoryId" data-control="select2" name="categoryId"
-                                    class="form-control form-control-solid @error('categoryId') is-invalid @enderror">
-                                    <option value="{{$company->category_id}}">{{$company->category->name}}</option>
-                                    @foreach ($categories as $category)
-                                                <option value="{{ $category->id }}" {{ old('categoryId') == $category->id ? 'selected' : '' }}>
-                                                    {{ $category->name }}
-                                                </option>
-                                            @endforeach
-                                </select>
-                                <span class="text-danger" id="categoryEmpty">@error('categoryId'){{ $message }} @enderror</span>
-                            </div>
-                        </div>
-
-                        <!-- Sub-Category -->
-                        <div class="row mb-5">
-                            <label class="col-lg-3 col-form-label fw-bold fs-6 required">Sub-Category:</label>
-                            <div class="col-lg-9">
-                                <select name="subCategoryId" id="subCategoryId" data-control="select2" name="subCategoryId"
-                                    class="form-control form-control-solid @error('subCategoryId') is-invalid @enderror">
-                                    <option value="{{$company->sub_category_id}}">{{$company->subCategory->name}}</option>
-                                    @foreach ($subCategories as $subCategory)
-                                        <option value="{{ $subCategory->id }}" {{ old('subCategoryId') == $subCategory->id ? 'selected' : '' }}>
-                                            {{ $subCategory->name }}
+                <!-- Category -->
+                <div class="row mb-5">
+                    <label class="col-lg-3 col-form-label fw-bold fs-6 required">Category:</label>
+                    <div class="col-lg-9">
+                        <select name="categoryId" id="categoryId" data-control="select2" name="categoryId"
+                            class="form-control form-control-solid @error('categoryId') is-invalid @enderror">
+                            <option value="{{$company->category_id}}">{{$company->category->name}}</option>
+                            @foreach ($categories as $category)
+                                        <option value="{{ $category->id }}" {{ old('categoryId') == $category->id ? 'selected' : '' }}>
+                                            {{ $category->name }}
                                         </option>
                                     @endforeach
-                                </select>
-                                <span class="text-danger" id="subCategoryEmpty">@error('subCategoryId'){{ $message }} @enderror</span>
-                            </div>
-                        </div>
-                    <!-- Register Number Field -->
-                    <div class="row mb-5">
+                        </select>
+                        <span class="text-danger" id="categoryEmpty">@error('categoryId'){{ $message }} @enderror</span>
+                    </div>
+                </div>
+
+                <!-- Sub-Category -->
+                <div class="row mb-5">
+                    <label class="col-lg-3 col-form-label fw-bold fs-6 required">Sub-Category:</label>
+                    <div class="col-lg-9">
+                        <select name="subCategoryId" id="subCategoryId" data-control="select2" name="subCategoryId"
+                            class="form-control form-control-solid @error('subCategoryId') is-invalid @enderror">
+                            <option value="{{$company->sub_category_id}}">{{$company->subCategory->name}}</option>
+                            @foreach ($subCategories as $subCategory)
+                                <option value="{{ $subCategory->id }}" {{ old('subCategoryId') == $subCategory->id ? 'selected' : '' }}>
+                                    {{ $subCategory->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        <span class="text-danger" id="subCategoryEmpty">@error('subCategoryId'){{ $message }} @enderror</span>
+                    </div>
+                </div>
+
+                 <!-- Register Number Field -->
+                 <div class="row mb-5">
                         <label class="col-lg-3 col-form-label fw-bold fs-6 required">Register Number:</label>
                         <div class="col-lg-9">
                             <input type="text" name="registrationNumber" id="registrationNumber" 
@@ -100,6 +102,14 @@
                                 <span class="text-danger" id="taxNumberEmpty"> @error('taxNumber'){{ $message }} @enderror</span>
                             </div>
                         </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-6">
+    <div class="card mb-5 mb-xl-10">
+                <!--begin::Card body-->
+                <div class="card-body pt-10">
+                   
                         <!-- Phone Number -->
                         <div class="row mb-5">
                             <label class="col-lg-3 col-form-label fw-bold fs-6 required">Phone Number:</label>
@@ -191,3 +201,6 @@
                 </div>
                 <!--end::Card body-->
             </div>
+            </div>
+    
+           

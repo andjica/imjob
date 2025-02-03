@@ -2,11 +2,12 @@
 
 namespace App\Services;
 
+use Log;
 use App\Models\Company;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Interfaces\CompanyInterface;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
@@ -21,26 +22,18 @@ class CompanyServices implements CompanyInterface
     //get all active companies
     public function getAllCompanies(?string $search = null): LengthAwarePaginator
     {
-        /** @var Builder $query */
-        $query = Company::with(['city', 'country'])
-        ->where('active', 1);
-
-        if (!is_null($search)) {
-            $query->where(function ($query) use ($search) {
-                $query
-                    ->orWhere('name', 'like', '%' . $search . '%')
-                    ->orWhere('address', 'like', '%' . $search . '%')
-                    ->orWhereHas('city', function ($query) use ($search) {
-                        $query->where('name', 'like', '%' . $search . '%');
-                    })
-                    ->orWhereHas('country', function ($query) use ($search) {
-                        $query->where('name', 'like', '%' . $search . '%');
-                    });
+        $query = Company::with(['country', 'city'])->where('active', 1);
+    
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('address', 'like', "%{$search}%");
             });
         }
-
-        return $query->orderBy('updated_at', 'desc')->paginate(10);
+    
+        return $query->paginate(10);
     }
+    
 
     public function countActiveCompanies()
     {

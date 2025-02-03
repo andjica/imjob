@@ -10,10 +10,10 @@
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
                         <div class="text-center mb-10">
-                                <h1 class="text-gray-900 mb-3">Sign In</h1>
+                                <h1 class="text-gray-900 mb-3 fw-light">Sign In</h1><br>
                                 <a href="">
-                                        <img src="{{asset('/images/im-job-logo.svg')}}" class="img-fluid" width="100px">
-                                    </a>
+                                    <img src="{{asset('/images/logo1.png')}}" class="img-fluid" width="100px">
+                                </a>
                                 <div class="text-gray-500 fw-semibold fs-4">
                                     New Here? <a href="/metronic8/vue/demo1/sign-up" class="link-primary fw-bold"> Create an Account </a>
                                 </div>
