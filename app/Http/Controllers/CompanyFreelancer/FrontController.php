@@ -2,41 +2,43 @@
 
 namespace App\Http\Controllers\CompanyFreelancer;
 
+use Exception;
+use App\Models\Job;
+use App\Models\User;
+use App\Models\Company;
+use App\Models\Candidate;
 use App\Actions\CreateMeeting;
 use App\Actions\FollowCompany;
-use App\Actions\FollowContributor;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\CandidateStatusRequest;
-use App\Http\Requests\CompleteSubphaseRequest;
-use App\Http\Requests\FollowCompanyRequest;
-use App\Http\Requests\FollowContributorRequest;
-use App\Http\Requests\StoreMeetingRequest;
-use App\Interfaces\CategoryInterface;
 use App\Interfaces\CityInterface;
-use App\Interfaces\CompanyFreelancerInterface;
-use App\Interfaces\CompanyInterface;
-use App\Interfaces\CompanyTypeInterface;
-use App\Interfaces\CountryInterface;
-use App\Interfaces\FreelancerInterface;
-use App\Interfaces\JobTypeInterface;
-use App\Interfaces\SubCategoryInterface;
-use App\Models\AvailableRecruitmentSubphases;
-use App\Models\Candidate;
-use App\Models\Company;
-use App\Models\Job;
-use App\Models\RecruitmentProcess;
-use App\Models\RecruitmentSubphase;
-use App\Models\User;
-use App\Repositories\JobRepository;
-use App\Services\CandidateService;
-use App\Services\RecruitmentProcessWorkflow;
-use Exception;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
+use App\Actions\FollowContributor;
+use App\Models\RecruitmentProcess;
+use App\Services\CandidateService;
+use App\Models\RecruitmentSubphase;
+use App\Repositories\JobRepository;
+use Illuminate\Contracts\View\View;
+use App\Http\Controllers\Controller;
+use App\Interfaces\CompanyInterface;
+use App\Interfaces\CountryInterface;
+use App\Interfaces\JobTypeInterface;
+use App\Models\ContributorRecruiter;
+use App\Interfaces\CategoryInterface;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Contracts\View\Factory;
+use App\Interfaces\FreelancerInterface;
+use App\Interfaces\CompanyTypeInterface;
+use App\Interfaces\ContributorInterface;
+use App\Interfaces\SubCategoryInterface;
+use App\Http\Requests\StoreMeetingRequest;
+use App\Http\Requests\FollowCompanyRequest;
+use App\Services\RecruitmentProcessWorkflow;
+use App\Http\Requests\CandidateStatusRequest;
+use App\Models\AvailableRecruitmentSubphases;
 use Symfony\Component\HttpFoundation\Request;
+use App\Http\Requests\CompleteSubphaseRequest;
+use App\Interfaces\CompanyFreelancerInterface;
+use App\Http\Requests\FollowContributorRequest;
+use Illuminate\Contracts\Foundation\Application;
 
 class FrontController extends Controller
 {
@@ -53,6 +55,7 @@ class FrontController extends Controller
         private JobRepository $jobRep,
         private CandidateService $candidateService,
         private RecruitmentProcessWorkflow $recruitmentProcessWorkflow,
+        private ContributorInterface $contributorServices
     ) {
     }
 
@@ -121,8 +124,10 @@ class FrontController extends Controller
     {
         /** @var User $user */
         $user = auth()->user();
-        $searchString = $request->get('search') ?? null;
+        $searchString = $request->get('query') ?? null;
+        
         $companies = $this->companyServices->getAllCompanies($searchString);
+        
         $connectedCompanies = $user->recruiter->companies;
 
         $connectedOnPending = $user->recruiter->companies()
@@ -141,10 +146,32 @@ class FrontController extends Controller
         ));
     }
 
-    public function findContributors()
+    public function findContributors(Request $request): Factory|View|Application
     {
-        return 5;
+        /** @var User $user */
+        $user = auth()->user();
+        $searchString = $request->get('query') ?? null;
+    
+        // Fetch contributors
+        $contributors = $this->contributorServices->getAll($searchString);
+    
+        // Get connections of the recruiter
+        $connectedOnPending = $user->recruiter->contributors()
+            ->wherePivot('status', ContributorRecruiter::PENDING) // Use the constant
+            ->pluck('contributors.id'); // Pluck only the IDs for easy lookup
+    
+        $connectedSuccessfully = $user->recruiter->contributors()
+            ->wherePivot('status', ContributorRecruiter::ACTIVE) // Use the constant
+            ->pluck('contributors.id'); // Pluck only the IDs for easy lookup
+    
+        // Pass variables to the view
+        return view('company-freelancer.pages.find-contributors', compact(
+            'contributors',
+            'connectedOnPending',
+            'connectedSuccessfully'
+        ));
     }
+    
 
     public function followCompany(FollowCompanyRequest $request, FollowCompany $followCompany): JsonResponse
     {
@@ -156,20 +183,36 @@ class FrontController extends Controller
         ]);
     }
 
+
     /**
      * @throws Exception
      */
     public function followContributor(FollowContributorRequest $request, FollowContributor $followContributor): JsonResponse
     {
-        /** @var User $user */
+       /** @var User $user */
         $user = auth()->user();
 
-        $followContributor->execute($user, (int) $request->get('follow_id'));
+        
+        if (!$user->recruiter) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You must be a recruiter to follow contributors.'
+            ], 403);
+        }
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Follow request sent successfully.',
-        ]);
+        try {
+            $followContributor->execute($user->recruiter, (int) $request->get('follow_id'));
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Follow request sent successfully.'
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], 500);
+        }
     }
 
     public function detailsCompany(Company $company): Factory|View|Application
@@ -219,11 +262,17 @@ class FrontController extends Controller
 
         $recruitmentProcess = $candidate->recruitmentProcess()->with('subphases')->first();
         $availablePhases = AvailableRecruitmentSubphases::where('phase', $candidate->recruitmentProcess->current_phase)->get();
-
+        
+        $candidateId = $candidate->id;
+        $candidateSubphases = Candidate::with('recruitmentSubPhases')->find($candidateId);
+        
+        $meetings = $candidateSubphases->recruitmentSubPhases->toArray();
+       
         return view('company-freelancer.pages.recruitment.candidat-recruitment-process', compact(
             'candidate',
             'recruitmentProcess',
-                'availablePhases',
+            'availablePhases',
+            'meetings'
             )
         );
     }
@@ -231,14 +280,15 @@ class FrontController extends Controller
     /**
      * @throws Exception
      */
-    public function createMeeting(StoreMeetingRequest $request, Candidate $candidate, CreateMeeting $createMeeting): JsonResponse
+    public function createMeeting(StoreMeetingRequest $request, Candidate $candidate, CreateMeeting $createMeeting)
     {
         $createMeeting->execute($candidate, $request->validated());
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Meeting created successfully.',
-        ]);
+        return redirect()->back()->with('success', 'Meeting created succssfully');
+        // return response()->json([
+        //     'success' => true,
+        //     'message' => 'Meeting created successfully.',
+        // ]);
     }
 
     public function completeSubphase(CompleteSubphaseRequest $request, RecruitmentSubphase $subphase): RedirectResponse
@@ -259,8 +309,13 @@ class FrontController extends Controller
 
     public function advanceProcess(RecruitmentProcess $process): RedirectResponse
     {
-        $this->recruitmentProcessWorkflow->advance($process);
+        $process = $this->recruitmentProcessWorkflow->advance($process);
 
+        if($process == false)
+        {
+           return redirect()->back()->with('error', 'You must finish one or more subphases and then to go on the next level of recruitment process');
+
+        }
         return redirect()->back()->with('success', 'You advanced process successfully.');
     }
 
@@ -282,11 +337,13 @@ class FrontController extends Controller
         return view('company-freelancer.pages.job.active-jobs');
     }
 
-    public function getActiveJobs()
+    public function getActiveJobs(Request $request)
     {
         $recruiterId = auth()->user()->recruiter->id ?? abort(404);
 
-        $jobs = $this->jobRep->findActiveByRecruiterId($recruiterId);
+        $searchString = $request->get('query') ?? null;
+        $jobs = $this->jobRep->searchJobs($searchString, $recruiterId);
+        
 
         return view('company-freelancer.pages.job.active-jobs', compact('jobs'));
     }

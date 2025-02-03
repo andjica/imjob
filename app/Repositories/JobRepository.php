@@ -2,8 +2,10 @@
 
 namespace App\Repositories;
 
+use Carbon\Carbon;
 use App\Models\Job;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class JobRepository
 {
@@ -59,4 +61,26 @@ class JobRepository
              ->orderBy('created_at', 'desc')
              ->paginate(4);
      }
+
+     //search acrive jobs from specific recruiter
+     public function searchJobs(?string $search = null, int $recruiterId): LengthAwarePaginator
+    {
+        $query = Job::with(['category', 'subCategory'])
+                    ->where('valid_until', '>', Carbon::today())
+                    ->where('recruiter_id', $recruiterId); // Filter by recruiter ID
+
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                ->orWhereHas('category', function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%");
+                })
+                ->orWhereHas('subCategory', function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%");
+                });
+            });
+        }
+
+        return $query->paginate(10);
+    }
 }

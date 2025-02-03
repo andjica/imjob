@@ -286,3 +286,18 @@
         background-repeat: no-repeat;
         background-position: center -548px;
     }
+
+    .btn-advance-linear
+    {
+    
+        background: linear-gradient(135deg, #3457D5, #34A7D5, #34D5B2) !important;
+    
+
+    }
+
+    .recruitment-process-table td, 
+    .recruitment-process-table th {
+        border: 1px solid #ddd !important; /* Light gray borders */
+        padding: 10px;
+        text-align: center;
+    }

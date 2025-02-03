@@ -10,10 +10,10 @@
                     <form method="POST" action="{{ route('register') }}">
                         @csrf
                         <div class="text-center mb-10">
-                                <h1 class="text-gray-900 mb-3">Welcome to</h1>
+                                <h1 class="text-gray-900 mb-3 fw-bold">Sign up</h1><br>
                                 <a href="">
-                                        <img src="{{asset('/images/im-job-logo.svg')}}" class="img-fluid" width="150px">
-                                    </a>
+                                <img src="{{asset('/images/logo1.png')}}" class="img-fluid" width="100px">
+                                </a>
                                   
                                 <div class="text-gray-500 fw-semibold fs-4 mt-3">
                                     Enjoy our platform <br> Here you can create an Account 

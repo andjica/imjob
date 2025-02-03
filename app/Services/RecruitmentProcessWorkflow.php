@@ -38,9 +38,16 @@ class RecruitmentProcessWorkflow
             : ['application_received', 'selection', 'preparation', 'transfer', 'offer_stage'];
 
         $currentPhaseIndex = array_search($process->current_phase, $phases, true);
-
+        
         if ($currentPhaseIndex === false || $currentPhaseIndex >= count($phases) - 1) {
             return false;
+        }
+
+        
+        if ($process->current_phase === 'application_received') {
+            $process->current_phase = $phases[$currentPhaseIndex + 1];
+            $process->save();
+            return true;
         }
 
         $hasCompletedSubphases = RecruitmentSubphase::where('recruitment_process_id', $process->id)

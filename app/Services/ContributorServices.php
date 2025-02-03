@@ -2,11 +2,12 @@
 
 namespace App\Services;
 
-use App\Interfaces\ContributorInterface;
 use App\Models\Contributor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use App\Interfaces\ContributorInterface;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class ContributorServices implements ContributorInterface
 {
@@ -53,6 +54,22 @@ class ContributorServices implements ContributorInterface
                 Log::error("Contributor creation failed: " . $e->getMessage());
                 throw new \Exception("Something went wrong while creating the contributor.");
             }
+    }
+
+    public function getAll(?string $search = null): LengthAwarePaginator
+    {   
+        $query = Contributor::with('contributorType')->orderBy('created_at', 'desc');
+
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                ->orWhereHas('contributorType', function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%");
+                });
+            });
+        }
+
+        return $query->paginate(20);
     }
 }
 

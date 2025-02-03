@@ -10,10 +10,13 @@
 
 @section('content')
 <div class="container">
-        <!-- Search Box -->
-        <div class="row search-container">
-            <div class="col-md-12">
-                <input type="text" class="search-input" placeholder="Search active jobs...">
+         <!-- Quick Search Form -->
+         <div class="row mb-6">
+            <div class="col-12">
+                <form action="" method="GET" class="d-flex">
+                    <input type="text" name="query" class="form-control me-2" placeholder="Search by company name..." value="{{ request('query') }}">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </form>
             </div>
         </div>
         @include('alerts.success')

@@ -3,7 +3,7 @@
 namespace App\Interfaces;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-
+use Illuminate\Support\Arr;
 
 interface CityInterface
 {

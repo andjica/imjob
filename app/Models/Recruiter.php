@@ -94,5 +94,12 @@ class Recruiter extends Model
         return $this->hasOne(RecruiterEducation::class, 'recruiter_id');
     }
 
+    public function contributors(): BelongsToMany
+    {
+        return $this->belongsToMany(Contributor::class, 'contributor_recruiter', 'recruiter_id', 'contributor_id')
+            ->withPivot('status', 'invite_type', 'from_date', 'until_date')
+            ->withTimestamps();
+    }
+
 
 }

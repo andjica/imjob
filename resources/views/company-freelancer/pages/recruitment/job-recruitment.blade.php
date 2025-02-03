@@ -22,9 +22,9 @@
         <div class="col-lg-12">
             <div class="card mb-2">
                 @if($job->job_world_type == "International")
-                <div class="card-body card-background-st rounded-top">
+                <div class="card-body bg-linear-pink">
                 @else
-                <div class="card-body card-background-nt rounded-top">
+                <div class="card-body bg-linear-pink rounded-top">
                 @endif
                     <div class="tab-content" id="myTabContent">
                         <!-- Active Jobs Content -->
@@ -61,6 +61,7 @@
             @include('company-freelancer.components.recruitment.sidebar')
 
             <!-- Job Information Card -->
+            
             @include('company-freelancer.components.recruitment.job-info')
     </div>
 

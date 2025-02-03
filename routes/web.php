@@ -113,7 +113,7 @@ Route::middleware(['auth', 'company.freelancer', 'verified'])->prefix('company/f
     //Settings Routes
     Route::get('/settings', [CompanyFreelancerFrontController::class, 'settings'])->name('settings');
     Route::post('/make-request', [CompanyFreelancerFrontController::class, 'followCompany'])->name('make-request');
-    Route::post('/follow-contributor', [CompanyFreelancerFrontController::class, 'followContributor'])->name('follow-contributor');
+    Route::post('/make-connection', [CompanyFreelancerFrontController::class, 'followContributor'])->name('follow-contributor');
 
     //Jobs Routes
     Route::get('/company/{company}/details', [CompanyFreelancerFrontController::class, 'detailsCompany'])->name('company-details');

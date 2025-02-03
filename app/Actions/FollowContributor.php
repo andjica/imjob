@@ -16,6 +16,7 @@ class FollowContributor
      */
     public function execute(Model $follower, int $followedId): ?ContributorRecruiter
     {
+        
         if ($follower instanceof Recruiter) {
             $followed = Contributor::find($followedId);
             if (!$followed) {
