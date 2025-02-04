@@ -106,15 +106,27 @@
             }
 
             console.log("Final candidateSubphases:", candidateSubphases);
+            
+            var events = candidateSubphases.map(phase => {
+            let formattedPhaseName = phase.phase; // Default phase name
 
-            var events = candidateSubphases.map(phase => ({
+            // If the phase is "offer_stage", display "Offer Stage"
+            if (formattedPhaseName === "offer_stage") {
+                formattedPhaseName = "Offer Stage";
+            } else {
+                // Otherwise, capitalize the first letter of other phases
+                formattedPhaseName = formattedPhaseName.charAt(0).toUpperCase() + formattedPhaseName.slice(1);
+            }
+
+            return {
                 id: phase.id,
-                title: phase.meeting_title ?? 'No Title',
+                title: `${formattedPhaseName} - ${phase.meeting_title ?? 'No Title'}`, // Show formatted phaseName + meeting title
+                phaseName: formattedPhaseName, // Store formatted phase name
                 start: new Date(phase.scheduled_at),
                 description: phase.description ?? 'No description available',
                 meetingLink: phase.meeting_link ?? null
-            }));
-
+            };
+        });
             console.log("FullCalendar Events:", events);
 
             var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -137,6 +149,7 @@
                 document.getElementById('meetingTitle').innerText = event.title;
                 document.getElementById('meetingDate').innerText = new Date(event.start).toLocaleString();
                 document.getElementById('meetingDescription').innerText = event.extendedProps.description;
+                document.getElementById('phaseName').innerText = event.extendedProps.phaseName;
 
                 var linkElement = document.getElementById('meetingLink');
                 if (event.extendedProps.meetingLink) {
@@ -167,6 +180,24 @@
             // Ensure old selected values are loaded correctly (Fix for Laravel)
             var selectedContributors = @json(old('contributors', []));
             $('#meeting_contributors').val(selectedContributors).trigger('change');
+
+            $('#select_phase').on('change', function () {
+                let selectedValue = $(this).val().toString().trim(); 
+                //alert(selectedValue);// Ensure it's a string and trimmed
+                console.log("Selected Phase Value:", selectedValue); // Debugging
+
+                if (selectedValue === "other") {
+                    console.log("Other phase selected. Showing input field.");
+                    $('#customPhaseContainer').fadeIn(); // Use fadeIn for better UX
+                    $('#custom_phase').prop('required', true);
+                } else {
+                    console.log("Normal phase selected. Hiding custom input.");
+                    $('#customPhaseContainer').fadeOut(); // Use fadeOut for better UX
+                    $('#custom_phase').prop('required', false);
+                }
+            });
+           
+            //validation form schedule meeting
             $('#scheduleMeetingForm').submit(function (event) {
                 // Prevent form submission for validation
                 event.preventDefault();
@@ -221,6 +252,122 @@
                     this.submit();
                 } else {
                     $('#scheduleMeetingModal').modal('show'); // Keep modal open if validation fails
+                }
+            });
+
+            $("#meeting_title").on('keyup', function () {
+                var title = $(this).val().trim();
+                if (title === "") {
+                    $("#meeting_titleError").text("Meeting Title is required").show();
+                    $(this).addClass('border-danger').removeClass('border-success');
+                } else {
+                    $("#meeting_titleError").text("").hide();
+                    $(this).removeClass('border-danger').addClass('border-success');
+                }
+            });
+
+            // Validate Meeting Link on Keyup
+            //ovo ce biti na live verziji
+            // $("#meeting_link").on('keyup', function () {
+            //     var link = $(this).val().trim();
+            //     var urlPattern = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w.-]*)*\/?$/;
+
+            //     if (link === "") {
+            //         $("#meeting_linkError").text("Meeting Link is required").show();
+            //         $(this).addClass('border-danger').removeClass('border-success');
+            //     } else if (!urlPattern.test(link)) {
+            //         $("#meeting_linkError").text("Enter a valid meeting link (e.g., https://meet.google.com/xyz)").show();
+            //         $(this).addClass('border-danger').removeClass('border-success');
+            //     } else {
+            //         $("#meeting_linkError").text("").hide();
+            //         $(this).removeClass('border-danger').addClass('border-success');
+            //     }
+            // });
+
+            // Validate Phase Selection on Change
+            $('#select_phase').on('change', function () {
+                let selectedValue = $(this).val();
+                
+                if (selectedValue === "") {
+                    $("#select_phaseError").text("Please select a phase").show();
+                    $(this).addClass('border-danger').removeClass('border-success');
+                } else {
+                    $("#select_phaseError").text("").hide();
+                    $(this).removeClass('border-danger').addClass('border-success');
+                }
+
+                // Show/Hide Custom Phase Input
+                if (selectedValue === 'other') {
+                    $('#customPhaseContainer').fadeIn();
+                    $('#custom_phase').prop('required', true);
+                } else {
+                    $('#customPhaseContainer').fadeOut();
+                    $('#custom_phase').prop('required', false);
+                }
+            });
+
+            // Validate Custom Phase Input on Keyup
+            $("#custom_phase").on('keyup', function () {
+                var customPhase = $(this).val().trim();
+                if (customPhase === "") {
+                    $("#custom_phaseError").text("Custom Phase is required").show();
+                    $(this).addClass('border-danger').removeClass('border-success');
+                } else {
+                    $("#custom_phaseError").text("").hide();
+                    $(this).removeClass('border-danger').addClass('border-success');
+                }
+            });
+
+            // Validate Date & Time Selection
+            $("#meeting_date").on('change', function () {
+                var selectedDate = new Date($(this).val());
+                var currentDate = new Date();
+                if (!$(this).val() || selectedDate <= currentDate) {
+                    $("#meeting_dateError").text("Please select a future date and time").show();
+                    $(this).addClass('border-danger').removeClass('border-success');
+                } else {
+                    $("#meeting_dateError").text("").hide();
+                    $(this).removeClass('border-danger').addClass('border-success');
+                }
+            });
+
+            // Validate Description on Keyup
+            $("#meeting_description").on('keyup', function () {
+                var description = $(this).val().trim();
+                if (description === "") {
+                    $("#meeting_descriptionError").text("Description is required").show();
+                    $(this).addClass('border-danger').removeClass('border-success');
+                } else {
+                    $("#meeting_descriptionError").text("").hide();
+                    $(this).removeClass('border-danger').addClass('border-success');
+                }
+            });
+
+            // Validate Contributors on Change
+            $('#meeting_contributors').on('change', function () {
+                if ($(this).val().length === 0) {
+                    $("#meeting_contributorsError").text("Please select at least one contributor").show();
+                    $(this).addClass('border-danger').removeClass('border-success');
+                } else {
+                    $("#meeting_contributorsError").text("").hide();
+                    $(this).removeClass('border-danger').addClass('border-success');
+                }
+            });
+
+            // Final Form Submission Validation
+            $('#scheduleMeetingForm').on('submit', function (event) {
+                let isValid = true;
+
+                // Check if any errors exist before submitting
+                $(".form-control").each(function () {
+                    if ($(this).hasClass("border-danger")) {
+                        isValid = false;
+                    }
+                });
+
+                if (!isValid) {
+                    event.preventDefault();
+                    //alert("Please correct the errors before submitting.");
                 }
             });
         });

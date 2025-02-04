@@ -9,14 +9,18 @@
         <div class="modal fade" id="meetingModal" tabindex="-1" aria-labelledby="meetingModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content shadow-lg">
-                    <div class="modal-header bg-primary text-white">
+                    <div class="modal-header bg-muted text-white">
                         <h5 class="modal-title">
-                        <i class="fas fa-calendar-alt"></i> <span id="meetingTitle"></span>
+                        <i class="fas fa-calendar-alt"></i><span id="phaseName"></span> 
 
                         </h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="fas fa-clock text-primary me-2 fs-4"></i>
+                        <p class="m-0"><strong>Meeting title:</strong> <span id="meetingTitle"></span></p>
+                    </div>
                     <div class="d-flex align-items-center mb-3">
                         <i class="fas fa-clock text-primary me-2 fs-4"></i>
                         <p class="m-0"><strong>Date & Time:</strong> <span id="meetingDate"></span></p>
@@ -35,7 +39,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-light" data-bs-dismiss="modal">
-                            <i class="bi bi-x-circle"></i> Close
+                            <i class="fas  fa-x"></i> Close
                         </button>
                     </div>
                 </div>

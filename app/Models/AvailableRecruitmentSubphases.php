@@ -13,4 +13,6 @@ use Illuminate\Database\Eloquent\Model;
 class AvailableRecruitmentSubphases extends Model
 {
     use HasFactory;
+
+   
 }

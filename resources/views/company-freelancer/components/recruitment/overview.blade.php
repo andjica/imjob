@@ -77,16 +77,17 @@
                                                     @if ($subphase->completed)
                                                         <b class="text-success">✔</b><br>
                                                         <span class="text-muted">Feedback: "{{ $subphase->feedback }}"</span>
-                                                    @else<br><br>
-                                                   
+                                                    @else<br>
+                                                    {{ \Carbon\Carbon::parse($subphase->scheduled_at)->format('d M Y, H:i') }}<br>
+                                                    <small>{{$subphase->meeting_title}}</small><br>
                                                         <!-- Action Buttons -->
-                                                        <button class="btn btn-light-success btn-sm p-3 me-2" data-bs-toggle="modal" data-bs-target="#feedbackModal-{{ $subphase->id }}">
+                                                        <button class="btn btn-light-success btn-sm p-3 me-2 my-3" data-bs-toggle="modal" data-bs-target="#feedbackModal-{{ $subphase->id }}">
                                                             <i class="fa-solid fa-check fa-xs"></i>
                                                         </button>
                                                         <button class="btn btn-light-danger btn-sm p-3 text-small" data-bs-toggle="modal" data-bs-target="#deletePhaseModal-{{ $subphase->id }}">
                                                             <i class="fa-solid fa-trash fa-xs"></i>
                                                         </button>
-                                                    
+                                                        <hr>
                                                     @endif
                                                 </div>
                                             @endforeach

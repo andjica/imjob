@@ -26,18 +26,35 @@
                         <span class="text-danger" id="meeting_linkError">@error('meeting_link') {{ $message }} @enderror</span>
                         <small>For live version we will put correct validation for GOOGLE MET LINK</small>
                     </div>
+                    @php
+                        $filteredPhases = collect($availablePhases)->reject(function ($phase) {
+                            return strtolower($phase->subphase) === 'other';
+                        });
+                    @endphp
+
                     <!-- Phase Selection -->
                     <div class="mb-3">
                         <label for="selectPhase" class="form-label">Phase</label>
                         <select class="form-control" id="select_phase" name="available_subphase_id">
                             <option value="">Select a Phase</option>
-                            @foreach($availablePhases as $phase)
-                                <option value="{{ $phase->id }}" {{ old('available_subphase_id') == $phase->id ? 'selected' : '' }}>
+                            @foreach($filteredPhases as $phase)
+                                <option value="{{ $phase->id }}" data-name="{{ ucfirst($phase->subphase) }}"
+                                    {{ old('available_subphase_id') == $phase->id ? 'selected' : '' }}>
                                     {{ ucfirst($phase->subphase) }}
                                 </option>
                             @endforeach
+
+                            <!-- Manually adding "Other" option (only one time) -->
+                            <option value="other">Other</option>
                         </select>
                         <span class="text-danger" id="select_phaseError">@error('available_subphase_id') {{ $message }}@enderror</span>
+                    </div>
+
+                    <!-- Custom Phase Input (Hidden by Default) -->
+                    <div class="mb-3" id="customPhaseContainer" style="display: none;">
+                        <label for="customPhase" class="form-label">Custom Phase</label>
+                        <input type="text" class="form-control" id="custom_phase" name="custom_phase" placeholder="Enter custom phase">
+                        <span class="text-danger" id="custom_phaseError"></span>
                     </div>
 
                     <!-- Date & Time -->
