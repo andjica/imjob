@@ -18,6 +18,8 @@
 
 @section('content')
 <div class="container m-0 pb-5 mt-5" id="leader-line-container">
+@include('alerts.errors')
+@include('alerts.success')
     <div class="row">
         <div class="col-lg-12">
             <div class="card mb-2">

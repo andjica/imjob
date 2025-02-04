@@ -329,8 +329,11 @@ class FrontController extends Controller
      */
     public function changeCandidateStatus(CandidateStatusRequest $request, Candidate $candidate): RedirectResponse
     {
-        $this->candidateService->handleCandidate($candidate, $request->get('status'));
-        return redirect()->back()->with('success', 'You accept ' . $candidate->user->first_name . 'successfully');
+        $changeStatus = $this->candidateService->handleCandidate($candidate, $request->get('status'));
+       
+       
+        return redirect()->back()->with('success', 'You change status to '.$changeStatus->status.'for Candidate '. $candidate->user->first_name.' '.$candidate->user->first_name . ' successfully');
+
         // return response()->json([
         //     'success' => true,
         //     'message' => 'Status updated successfully.',
