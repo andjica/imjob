@@ -31,13 +31,13 @@ class RecruitmentProcessWorkflow
 
     public function advance(RecruitmentProcess $process): bool
     {
-        $worldType = $process->candidate->job->world_type ?? null;
-
+        $worldType = $process->candidate->job->job_world_type ?? null;
+       
         $phases = ($worldType === Job::TYPE_NATIONAL)
             ? ['application_received', 'selection', 'offer_stage']
             : ['application_received', 'selection', 'preparation', 'transfer', 'offer_stage']
         ;
-
+       
         if ($process->current_phase === end($phases)) {
             return true;
         }

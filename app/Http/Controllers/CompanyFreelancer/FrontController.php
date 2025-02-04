@@ -247,7 +247,7 @@ class FrontController extends Controller
     public function recruitmentProcess(Job $job): Factory|View|Application
     {
         $candidates = $job->candidates()->with('user')->get();
-
+       
         return view('company-freelancer.pages.recruitment.job-recruitment', compact('job', 'candidates'));
     }
 
@@ -256,20 +256,21 @@ class FrontController extends Controller
         if ($candidate->status !== 'accept' || !$candidate->recruitmentProcess) {
             abort(404);
         }
-
+        
         $recruitmentProcess = $candidate->recruitmentProcess()->with('subphases')->first();
         $availablePhases = AvailableRecruitmentSubphases::where('phase', $candidate->recruitmentProcess->current_phase)->get();
 
         $candidateId = $candidate->id;
         $candidateSubphases = Candidate::with('recruitmentSubPhases')->find($candidateId);
-
+        //return dd($candidateSubphases);
         $meetings = $candidateSubphases->recruitmentSubPhases->toArray();
-
+        
+        
         /** @var User $user */
         $user = auth()->user();
         $contributors = $user->recruiter->contributors()
             ->wherePivot('status', ContributorRecruiter::ACTIVE)
-            ->pluck('contributors.id');
+            ->get();
 
         return view(
             'company-freelancer.pages.recruitment.candidat-recruitment-process',

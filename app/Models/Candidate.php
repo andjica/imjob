@@ -45,7 +45,7 @@ class Candidate extends Model
 
     public function job(): BelongsTo
     {
-        return $this->belongsTo(Job::class);
+        return $this->belongsTo(Job::class, 'job_id');
     }
 
     public function user(): BelongsTo

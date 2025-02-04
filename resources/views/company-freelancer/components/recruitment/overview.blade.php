@@ -69,6 +69,7 @@
 
                                         <!-- Current Phase -->
                                         @elseif ($isCurrent)
+                    
                                             <span class="badge badge-warning">Current</span><hr>
                                             @foreach ($subphases as $subphase)
                                                 <div class="my-5">

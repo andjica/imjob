@@ -18,22 +18,27 @@
     use App\Models\Job;
     use App\Models\RecruitmentProcess;
 
-    // Define recruitment phases
-    $phases = [
-        RecruitmentProcess::APPLICATION_RECEIVED => 'Application Received',
-        RecruitmentProcess::SELECTION => 'Selection',
-        RecruitmentProcess::PREPARATION => 'Preparation',
-        RecruitmentProcess::TRANSFER => 'Transfer',
-        RecruitmentProcess::OFFER_STAGE => 'Offer Stage',
-    ];
-
-    // Remove unnecessary phases for National jobs
-    if ($candidate->job->job_world_type === Job::TYPE_NATIONAL) {
-        unset($phases[RecruitmentProcess::PREPARATION], $phases[RecruitmentProcess::TRANSFER]);
+    // Define recruitment phases based on job type
+    if ($candidate->job->job_world_type === Job::TYPE_INTERNATIONAL) {
+        $phases = [
+            RecruitmentProcess::APPLICATION_RECEIVED => 'Application Received',
+            RecruitmentProcess::SELECTION => 'Selection',
+            RecruitmentProcess::PREPARATION => 'Preparation',
+            RecruitmentProcess::TRANSFER => 'Transfer',
+            RecruitmentProcess::OFFER_STAGE => 'Offer Stage', 
+        ];
+    } else { // If job is National
+        $phases = [
+            RecruitmentProcess::APPLICATION_RECEIVED => 'Application Received',
+            RecruitmentProcess::SELECTION => 'Selection',
+            RecruitmentProcess::OFFER_STAGE => 'Offer Stage', 
+        ];
     }
-
+    //return dd($recruitmentProcess);
     // Determine the current phase index
-    $currentPhaseIndex = array_search($recruitmentProcess->current_phase, array_keys($phases));
+   $currentPhaseIndex = array_search($recruitmentProcess->current_phase, array_keys($phases));
+    //$currentPhaseIndex = array_search((int) $recruitmentProcess->current_phase, array_map('intval', array_keys($phases)));
+
 @endphp
 
 <div class="container m-0 pb-5">
