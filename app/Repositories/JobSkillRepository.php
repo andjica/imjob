@@ -41,4 +41,22 @@ class JobSkillRepository
         $model = $this->find($id);
         return $model ? $model->delete() : false;
     }
+
+     /**
+     * Deletes only optional skills (is_required = false) for a given job.
+     */
+    public function deleteOptionalSkills(int $jobId): void
+    {
+        JobSkill::where('job_id', $jobId)->where('is_required', false)->delete();
+    }
+
+    /**
+     * Finds a skill by job ID and skill name.
+     */
+    public function findByJobIdAndSkill(int $jobId, string $skill): ?JobSkill
+    {
+        return JobSkill::where('job_id', $jobId)
+            ->where('skill', $skill)
+            ->first();
+    }
 }

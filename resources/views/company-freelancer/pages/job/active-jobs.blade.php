@@ -13,9 +13,11 @@
          <!-- Quick Search Form -->
          <div class="row mb-6">
             <div class="col-12">
+               <button onclick="window.history.back()" class="btn btn-sm bg-linear-pink text-white  p-2 mb-5"> <i class="fa fa-chevron-left text-white"></i> Back</button>
+
                 <form action="" method="GET" class="d-flex">
-                    <input type="text" name="query" class="form-control me-2" placeholder="Search by company name..." value="{{ request('query') }}">
-                    <button type="submit" class="btn btn-primary">Search</button>
+                    <input type="text" name="query" class="form-control me-2" placeholder="You can search job by Country name, City name, Category name, SubCategory name.." value="{{ request('query') }}">
+                    <button type="submit" class="btn btn-primary">Search</button><br>
                 </form>
             </div>
         </div>
@@ -61,7 +63,7 @@
                             <p>Company: {{$job->company->name}}</p>
                             <p class="card-text">Location: {{$job->city->name}}, {{$job->country->name}}</p>
                         </div>
-                        <a href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                        <a href="{{asset('/company/freelancer/job/'.$job->id.'/edit')}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
                         <i class="fas fa-pencil-alt edit-icon" data-bs-toggle="modal" data-bs-target="#statusModal"
                             data-job="{{$job->title}}"></i>
                     </a>
@@ -70,7 +72,7 @@
                         <p class="card-text"><strong>Valid Until:</strong> {{ \Carbon\Carbon::parse($job->valid_until)->format('d F Y') }}</p>
                         <p class="card-text"><strong>Salary:</strong> {{$job->salary_min}} - {{$job->salary_max}} {{$job->country->currency_symbol}}</p>
                         <p class="card-text job-type">Job Type: {{$job->jobType->name}}</p>
-                        <p class="card-text"><strong>Recruiter:</strong> John Doe</p>
+                        <p class="card-text"><strong>Recruiter:</strong> {{$job->recruiter->user->first_name}} {{$job->recruiter->user->last_name}}</p>
                     </div>
                         <a href="{{asset('/company/freelancer/'.$job->id.'/recruitment-process')}}" class="btn btn-sm btn-light-primary">Go to recruitment process</a>
 

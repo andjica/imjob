@@ -4,7 +4,7 @@
     $('#jobForm').submit(function(event) {
       // Prevent form submission for validation
       event.preventDefault();
-
+        
       const salaryMinfield = $('#salaryMin').val();
       const salaryMaxfield = $('#salaryMax').val();
       // Access AutoNumeric instances
