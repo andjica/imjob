@@ -23,15 +23,22 @@ class CompanyServices implements CompanyInterface
     public function getAllCompanies(?string $search = null): LengthAwarePaginator
     {
         $query = Company::with(['country', 'city'])->where('active', 1);
-    
+
         if (!empty($search)) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('address', 'like', "%{$search}%");
+                ->orWhere('address', 'like', "%{$search}%")
+                ->orWhereHas('country', function ($q) use ($search) { 
+                    $q->where('name', 'like', "%{$search}%");
+                })
+                ->orWhereHas('city', function ($q) use ($search) { 
+                    $q->where('name', 'like', "%{$search}%");
+                });
             });
         }
-    
+
         return $query->paginate(10);
+
     }
     
 

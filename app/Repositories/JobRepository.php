@@ -88,10 +88,10 @@ class JobRepository
     }
      
 
-     //search acrive jobs from specific recruiter
+     //search active jobs from specific recruiter
      public function searchJobs(?string $search = null, int $recruiterId): LengthAwarePaginator
      {
-         $query = Job::with(['category', 'subCategory', 'country', 'city']) 
+         $query = Job::with(['company','category', 'subCategory', 'country', 'city']) 
                      ->where('valid_until', '>', Carbon::today())
                      ->where('recruiter_id', $recruiterId)
                      ->orderBy('created_at', 'desc'); 
@@ -99,6 +99,10 @@ class JobRepository
          if (!empty($search)) {
              $query->where(function ($q) use ($search) {
                  $q->where('title', 'like', "%{$search}%")
+                 ->orWhere('job_world_type', 'like', "%{$search}%") 
+                  ->orWhereHas('company', function ($q) use ($search) {
+                     $q->where('name', 'like', "%{$search}%");
+                 })
                  ->orWhereHas('category', function ($q) use ($search) {
                      $q->where('name', 'like', "%{$search}%");
                  })

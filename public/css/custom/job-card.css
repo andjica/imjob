@@ -92,6 +92,29 @@ font-size: 16px;
     color: #0056b3;
 }
 
+.delete-icon {
+    position: absolute;
+    top: 5px;
+    right: 40px; /* Adjust position as needed */
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    background: #c7535e; /* Red color for delete */
+    border-radius: 100%;
+    padding: 7px;
+    color: white !important;
+    font-size: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+}
+.delete-icon:hover {
+    background: #a71d2a; /* Darker red on hover */
+    color: #fff;
+}
+
+
+
 .search-container {
     margin-bottom: 20px;
 }

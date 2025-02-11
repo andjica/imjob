@@ -14,7 +14,12 @@
     <link href="{{ asset('templates/metronic') }}/plugins/global/plugins.bundle.css" rel="stylesheet">
     <link href="{{ asset('templates/metronic') }}/css/style.bundle.css" rel="stylesheet">
     <link href="{{ asset('templates/metronic') }}/css/custom.style.css" rel="stylesheet">
+    
         @yield('css')
+
+    <!-- Pusher js -->
+    <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+
 </head>
 <body>
 
@@ -40,6 +45,8 @@
             @include('company-freelancer.components.page-title')
 
             <div id="content" class="d-flex flex-column flex-column-fluid">
+            <div id="notifications"></div>
+
                 @yield('content')
             </div>
 
@@ -62,6 +69,17 @@
 <script src="{{ asset('templates/metronic') }}/js/custom/modals/create-app.js"></script>
 <script src="{{ asset('templates/metronic') }}/js/custom/modals/upgrade-plan.js"></script>
 <script src="{{ asset('templates/metronic') }}/js/custom/modals/users-search.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    let asideMenu = document.querySelector("#kt_aside_menu");
+    if (asideMenu) {
+        asideMenu.removeAttribute("data-kt-menu-scroll");
+        asideMenu.style.height = "auto"; 
+    }
+});
+
+
+</script>
 @yield('js')
 </body>
 </html>

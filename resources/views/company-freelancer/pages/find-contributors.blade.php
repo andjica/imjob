@@ -27,6 +27,7 @@
         <!-- Quick Search Form -->
         <div class="row mb-6">
             <div class="col-12">
+                <button onclick="window.history.back()" class="btn btn-sm bg-linear-pink text-white  p-2 mb-5"> <i class="fa fa-chevron-left text-white"></i> Back</button>
                 <form action="{{ route('company-freelancer-find-contributors') }}" method="GET" class="d-flex">
                     <input type="text" name="query" class="form-control me-2" placeholder="Search by contributor name..." value="{{ request('query') }}">
                     <button type="submit" class="btn btn-primary">Search</button>

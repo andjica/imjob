@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\Pivot;
+use App\Events\NewFollowNotification;
 
 class CompanyRecruiter extends Pivot
 {
@@ -42,5 +43,16 @@ class CompanyRecruiter extends Pivot
         return $this->belongsTo(Company::class);
     }
 
+    protected static function booted()
+    {
+        static::created(function ($follow) {
+            $companyToFollow = Company::find($follow->company_id);
+            $follower = Recruiter::find($follow->recruiter_id);
+
+            if ($companyToFollow && $follower) {
+                broadcast(new NewFollowNotification($companyToFollow, $follower));
+            }
+        });
+    }
    
 }

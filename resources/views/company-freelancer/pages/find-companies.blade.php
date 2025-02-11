@@ -26,8 +26,9 @@
         <!-- Quick Search Form -->
         <div class="row mb-6">
             <div class="col-12">
+                <button onclick="window.history.back()" class="btn btn-sm bg-linear-pink text-white  p-2 mb-5"> <i class="fa fa-chevron-left text-white"></i> Back</button>
                 <form action="{{ route('company-freelancer-find-companies') }}" method="GET" class="d-flex">
-                    <input type="text" name="query" class="form-control me-2" placeholder="Search by company name..." value="{{ request('query') }}">
+                    <input type="text" name="query" class="form-control me-2" placeholder="Search by company name, country, city, address" value="{{ request('query') }}">
                     <button type="submit" class="btn btn-primary">Search</button>
                 </form>
             </div>
@@ -85,9 +86,8 @@
                             @if($company->logo)
                                 <img src="{{ asset('storage/' . $company->logo) }}" alt="{{ $company->name }} Logo" class="h-50px rounded img-fluid">
                             @else
-                                <img src="{{ asset('assets/media/svg/avatars/blank.svg') }}" alt="No Logo" class="h-100px rounded img-fluid">
+                                <i class="fas fa-building text-muted fa-2x"></i> <!-- Fallback Icon -->
                             @endif
-
                             <br>
                             <br>
                             <a href=""><u>{{ $company->category->name }}</u></a><br>

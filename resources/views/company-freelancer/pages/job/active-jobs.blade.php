@@ -16,7 +16,7 @@
                <button onclick="window.history.back()" class="btn btn-sm bg-linear-pink text-white  p-2 mb-5"> <i class="fa fa-chevron-left text-white"></i> Back</button>
 
                 <form action="" method="GET" class="d-flex">
-                    <input type="text" name="query" class="form-control me-2" placeholder="You can search job by Country name, City name, Category name, SubCategory name.." value="{{ request('query') }}">
+                    <input type="text" name="query" class="form-control me-2" placeholder="You can search job by Company name, Country name, City name, Category name, SubCategory name, national, international.." value="{{ request('query') }}">
                     <button type="submit" class="btn btn-primary">Search</button><br>
                 </form>
             </div>
@@ -52,22 +52,29 @@
             @foreach($jobs as $job)
             <div class="col-lg-5 col-md-6 mb-4">
                 <div class="card card-job">
-                    <div class="card-header">
-                        <div>
-                            @if($job->job_world_type == "international")
+                <div class="card-header">
+                    <div>
+                        @if($job->job_world_type == "international")
                             <span class="badge badge-primary mb-5">International</span>
-                            @else
+                        @else
                             <span class="badge badge-warning mb-5">National</span>
-                            @endif
-                            <h5 class="card-title">{{$job->title}}</h5>
-                            <p>Company: {{$job->company->name}}</p>
-                            <p class="card-text">Location: {{$job->city->name}}, {{$job->country->name}}</p>
-                        </div>
-                        <a href="{{asset('/company/freelancer/job/'.$job->id.'/edit')}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
-                        <i class="fas fa-pencil-alt edit-icon" data-bs-toggle="modal" data-bs-target="#statusModal"
-                            data-job="{{$job->title}}"></i>
-                    </a>
+                        @endif
+                        <h5 class="card-title">{{$job->title}}</h5>
+                        <p>Company: {{$job->company->name}}</p>
+                        <p class="card-text">Location: {{$job->city->name}}, {{$job->country->name}}</p>
                     </div>
+                    <div class="d-flex align-items-center">
+                        <a href="{{ asset('/company/freelancer/job/'.$job->id.'/edit') }}" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                            <i class="fas fa-pencil-alt edit-icon" data-bs-toggle="modal" data-bs-target="#statusModal"
+                                data-job="{{$job->title}}"></i>
+                        </a>
+                        <!-- Delete Button (Triggers Modal) -->
+                        <a href="#"  data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
+                            <i class="fas fa-trash-alt  delete-icon" data-bs-toggle="modal" data-bs-target="#deleteJobModal{{ $job->id }}"></i>
+                        </a>
+                    </div>
+                </div>
+
                     <div class="card-body">
                         <p class="card-text"><strong>Valid Until:</strong> {{ \Carbon\Carbon::parse($job->valid_until)->format('d F Y') }}</p>
                         <p class="card-text"><strong>Salary:</strong> {{$job->salary_min}} - {{$job->salary_max}} {{$job->country->currency_symbol}}</p>
@@ -76,6 +83,29 @@
                     </div>
                         <a href="{{asset('/company/freelancer/'.$job->id.'/recruitment-process')}}" class="btn btn-sm btn-light-primary">Go to recruitment process</a>
 
+                </div>
+
+                 <!-- Delete Confirmation Modal for each Job -->
+                <div class="modal fade" id="deleteJobModal{{ $job->id }}" tabindex="-1" aria-labelledby="deleteJobLabel{{ $job->id }}" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="deleteJobLabel{{ $job->id }}">Confirm Delete</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure you want to delete the job <strong>{{ $job->title }}</strong>?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <form action="" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             @endforeach

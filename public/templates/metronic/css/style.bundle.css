@@ -48512,3 +48512,7 @@ i.fas.fa-check-circle.me-2 {
   /* fill: black !important; */
   color: black;
 }
+
+div#kt_aside_menu_wrapper {
+ height: 100vh !important;
+}

@@ -87,4 +87,9 @@ class Job extends Model
         return $this->hasMany(Candidate::class);
     }
 
+    public function rejectedCandidates()
+    {
+        return $this->hasMany(Candidate::class)->where('status', 'reject');
+    }
+
 }

@@ -17,7 +17,7 @@
                             <div class="text-muted font-size-sm">All candidates who are interested in this job</div>
                         </div>
                     </div>
-                    <span class="badge badge-light-primary font-weight-bold px-3 py-2">5</span>
+                    <span class="badge badge-light-primary font-weight-bold px-3 py-2">{{$job->candidates->count()}}</span>
                 </div>
                 <!--end:Item-->
 
@@ -32,7 +32,7 @@
                             <div class="text-muted font-size-sm">Candidates who are employed for this job</div>
                         </div>
                     </div>
-                    <span class="badge badge-light-success font-weight-bold px-3 py-2">2</span>
+                    <span class="badge badge-light-success font-weight-bold px-3 py-2">0</span>
                 </div>
                 <!--end:Item-->
                 <div class="navi-item d-flex align-items-center justify-content-between py-3">
@@ -45,22 +45,8 @@
                             <div class="text-muted font-size-sm">Rejected candidates</div>
                         </div>
                     </div>
-                    <span class="badge badge-light-danger font-weight-bold px-3 py-2">1</span>
+                    <span class="badge badge-light-danger font-weight-bold px-3 py-2">{{$job->rejectedCandidates->count()}}</span>
                 </div>
-                <!--begin:Item-->
-                <div class="navi-item d-flex align-items-center justify-content-between py-3">
-                    <div class="d-flex align-items-center">
-                        <div class="navi-icon mr-3">
-                            <i class="fa fa-recycle icon-lg text-warning"></i>
-                        </div>
-                        <div>
-                            <span class="text-dark font-weight-bold font-size-md">Recruitment Process</span>
-                            <div class="text-muted font-size-sm">Learn about current processes</div>
-                        </div>
-                    </div>
-                    <span class="badge badge-warning font-weight-bold px-3 py-2">Details</span>
-                </div>
-                <!--end:Item-->    
 
             </div>
             <!--end:Nav-->

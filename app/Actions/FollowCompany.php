@@ -2,12 +2,14 @@
 
 namespace App\Actions;
 
-use App\Enums\CompanyRecruiterStatus;
-use App\Interfaces\CompanyInterface;
-use App\Models\Company;
-use App\Models\CompanyRecruiter;
-use App\Models\Recruiter;
 use App\Models\User;
+use App\Models\Company;
+use App\Models\Recruiter;
+use App\Models\CompanyRecruiter;
+use Illuminate\Support\Facades\Log;
+use App\Interfaces\CompanyInterface;
+use App\Enums\CompanyRecruiterStatus;
+use App\Events\NewFollowNotification; 
 
 class FollowCompany
 {
@@ -18,9 +20,16 @@ class FollowCompany
     public function execute(int $companyToFollowId, ?Company $follower = null): CompanyRecruiter
     {
         $companyToFollow = $this->getCompany($companyToFollowId);
-        $follower        = $this->getFollower($follower);
+        $follower = $this->getFollower($follower);
+        Log::info("Emitujem event za kanal: company.{$companyToFollow->id}");
 
-        return $this->createCompanyRecruiter($companyToFollow, $follower);
+        // Kreiramo zapis o praćenju
+        $companyRecruiter = $this->createCompanyRecruiter($companyToFollow, $follower);
+    
+        // Emitujemo event da bi Laravel poslao notifikaciju
+        broadcast(new NewFollowNotification($companyToFollow, $follower));
+    
+        return $companyRecruiter;
     }
 
     private function getCompany(int $companyId): ?Company
