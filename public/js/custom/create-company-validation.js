@@ -68,26 +68,34 @@ $(document).ready(function() {
     $('#categoryId').on('change', function () {
         var categorySelect = $(this); // Reference the select element
         var selectedValue = categorySelect.val(); // Get the selected value
+        var select2Container =  categorySelect.next('.select2-container').find('.select2-selection');
     
         if (selectedValue === "") {
-            $("#categoryEmpty").text("Please choose a valid category");
+            $("#categoryIdEmpty").text("Please choose a valid category");
             categorySelect.addClass('border-danger').removeClass('border-success');
+            select2Container.addClass('border-danger').removeClass('border-success');
+    
         } else {
-            $("#categoryEmpty").text("");
+            $("#categoryIdEmpty").text("");
             categorySelect.removeClass('border-danger').addClass('border-success');
+            select2Container.removeClass('border-danger').addClass('border-success');
         }
     });
-
+    
     $('#subCategoryId').on('change', function () {
         var subCategorySelect = $(this); // Reference the select element
         var selectedValue = subCategorySelect.val(); // Get the selected value
+        var select2Container = subCategorySelect.next('.select2-container').find('.select2-selection');
     
         if (selectedValue === "") {
-            $("#subCategoryEmpty").text("Please choose a valid sub category");
+            $("#subCategoryIdEmpty").text("Please choose a valid sub category");
             subCategorySelect.addClass('border-danger').removeClass('border-success');
+            select2Container.addClass('border-danger').removeClass('border-success');
         } else {
-            $("#subCategoryEmpty").text("");
+            $("#subCategoryIdEmpty").text("");
             subCategorySelect.removeClass('border-danger').addClass('border-success');
+            select2Container.removeClass('border-danger').addClass('border-success');
+    
         }
     });
     $("#companyName").on('keyup',function(){
@@ -256,26 +264,32 @@ $(document).ready(function() {
     $('#countryId').on('change', function () {
         var countryIdSelect = $(this); // Reference the select element
         var selectedValue = countryIdSelect.val(); // Get the selected value
-    
+        var select2Container =   countryIdSelect.next('.select2-container').find('.select2-selection');
+
         if (selectedValue === "") {
             $("#countryIdEmpty").text("Please choose a valid country");
             countryIdSelect.addClass('border-danger').removeClass('border-success');
+            select2Container.addClass('border-danger').removeClass('border-success');
         } else {
             $("#countryIdEmpty").text("");
             countryIdSelect.removeClass('border-danger').addClass('border-success');
+            select2Container.removeClass('border-danger').addClass('border-success');
         }
     });
     
     $('#cityId').on('change', function () {
         var cityIdSelect = $(this); // Reference the select element
         var selectedValue = cityIdSelect.val(); // Get the selected value
-    
+        var select2Container =   cityIdSelect.next('.select2-container').find('.select2-selection');
+
         if (selectedValue === "") {
-            $("#cityEmpty").text("Please choose a valid city");
+            $("#cityIdEmpty").text("Please choose a valid city");
             cityIdSelect.addClass('border-danger').removeClass('border-success');
+            select2Container.addClass('border-danger').removeClass('border-success');
         } else {
-            $("#cityEmpty").text("");
+            $("#cityIdEmpty").text("");
             cityIdSelect.removeClass('border-danger').addClass('border-success');
+            select2Container.removeClass('border-danger').addClass('border-success');
         }
     });
     $('#companyForm').submit(function(event) {
@@ -292,8 +306,8 @@ $(document).ready(function() {
         var phoneNumber = $('#phoneNumber').val();
         var email = $('#email').val();
         var address = $('#address').val();
-        var country = $('#countryId').val();
-        var city = $('#cityId').val();
+        var countryId = $('#countryId').val();
+        var cityId = $('#cityId').val();
         var category = $('#categoryId').val();
         var subCategory = $('#subCategoryId').val();
         // var numberofEmployees = $('#numberofEmployees').val();
@@ -353,15 +367,15 @@ $(document).ready(function() {
         
          // Category
         if (category === '') {
-            $('#categoryId').addClass('border-danger');
-            $('#categoryId').next('.invalid-feedback').text("Please choose a valid category").show();
+            $('#categoryId').next('.select2-container').find('.select2-selection').addClass('border-danger');
+        $('#categoryIdEmpty').text('Please select a category.').show();
             isValid = false;
         }
 
         // Sub-Category
         if (subCategory === '') {
-            $('#subCategoryId').addClass('border-danger');
-            $('#subCategoryId').next('.invalid-feedback').text("Please choose a valid sub-category").show();
+            $('#subCategoryId').next('.select2-container').find('.select2-selection').addClass('border-danger');
+            //$('#subCategoryIdEmpty').text('Please select a subcategory.').show();
             isValid = false;
         }
            
@@ -378,17 +392,18 @@ $(document).ready(function() {
             $('#address').next('.invalid-feedback').show();
             isValid = false;
         }
-        if (country === '') 
-        {
-            $('#countryId').addClass('border-danger');
-            $('#countryId').next('.invalid-feedback').show();
-            isValid = false;
+        // Validate Country
+        if (countryId === '') {
+        $('#countryId').next('.select2-container').find('.select2-selection').addClass('border-danger');
+        //$('#countryIdEmpty').text('Please select a country.').show();
+        isValid = false;
         }
-        if(city === '')
-        {
-            $('#cityId').addClass('border-danger');
-            $('#cityId').next('.invalid-feedback').show();
-            isValid = false;
+
+        // Validate City
+        if (cityId === '') {
+        $('#cityId').next('.select2-container').find('.select2-selection').addClass('border-danger');
+        $('#cityIdEmpty').text('Please select a city.').show();
+        isValid = false;
         }
 
         // if(numberofEmployees == "")

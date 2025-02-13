@@ -71,20 +71,18 @@ class FrontController extends Controller
 
     public function editFreelancer(): Factory|View|Application
     {
+        
         $categories   = $this->categoryServices->getAll();
+        
         $freelancerId = auth()->user()->recruiter->id;
-        $freelancer   = $this->freelancerServices->getFreelancerById($freelancerId);
-
-        $countries     = $this->countriesServices->getCountries();
+        $freelancer   = $this->freelancerServices->getFreelancerById($freelancerId);       
         $subCategories = $this->subCategoriesServices->getAll();
-        $cities        = $this->citiesServices->getAll();
         $companyTypes  = $this->companyTypesServices->getAll();
+        
         return view('company-freelancer.pages.freelancer.edit', compact(
             'categories',
             'freelancer',
-            'countries',
             'subCategories',
-            'cities',
             'companyTypes'
         ));
     }
