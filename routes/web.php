@@ -85,12 +85,19 @@ Route::middleware(['auth', 'admin'])->prefix('admin/dashboard')->name('admin-das
 Route::middleware(['auth', 'company', 'verified'])->prefix('company/dashboard')->name('company-dashboard-')->group(function () {
     Route::get('/', [CompanyFrontController::class, 'dashboard'])->name('index');
     Route::get('/information/create', [CompanyFrontController::class, 'informationCreate'])->name('information-create');
+
     Route::post('/store', [CompanyController::class, 'store'])->name('store');
 
     Route::get('/find/recruiters', [CompanyFrontController::class, 'findRecruiters'])->name('find-recruiters');
-    Route::get('/add/employees', [CompanyFrontController::class, 'addEmployees'])->name('add-employees');
+    
 
     Route::post('/recruiters/call/{recruiter}', [RecruiterController::class, 'callRecruiter'])->name('recruiters-call');
+
+    //new new :)
+    Route::get('/settings', [CompanyFrontController::class, 'settings'])->name('settings');
+    Route::get('/company/{company}/details', [CompanyFrontController::class, 'detailsCompany'])->name('company-details');
+    Route::get('/add/employees', [CompanyFrontController::class, 'addEmployees'])->name('add-employees');
+
 });
 
 // Company Freelancer Routes

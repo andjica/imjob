@@ -14,6 +14,15 @@
             <div class="card-body pt-3">
                 <form action="{{ route('company-freelancer-update') }}" id="freelancerForm" method="POST" enctype="multipart/form-data">
                     @csrf      
+                    @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 
                     <!-- Profile Image -->
                     <div class="row mb-5">

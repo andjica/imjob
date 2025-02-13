@@ -68,5 +68,12 @@ class FrontController extends Controller
     }
 
    
+    public function addEmployees(Request $request)
+    {
+        $search = $request->input('search');
+        $recruiters = $this->recruiterServices->getAllRecruiters($search);
+        return view('company.pages.add-employees', compact('recruiters'));
+    
+    }
    
 }
