@@ -39,7 +39,7 @@ return [
             'table' => 'my_app_queue',
             'queue' => 'default',
             'retry_after' => 90,
-            'after_commit' => false,
+            //'after_commit' => false,
         ],
 
         'beanstalkd' => [
