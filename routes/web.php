@@ -20,6 +20,7 @@ use App\Http\Controllers\{
     UserController,
     Contributor\ContributorController
 };
+use App\Http\Controllers\Front\LandingController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -138,6 +139,8 @@ Route::middleware(['auth', 'company.freelancer', 'verified'])->prefix('company/f
     Route::post('/recruitment-subphase/{subphase}/delete', [CompanyFreelancerFrontController::class, 'deleteSubphase'])->name('delete-subphase');
     Route::post('/recruitment-subphase/{subphase}/complete', [CompanyFreelancerFrontController::class, 'completeSubphase'])->name('complete-subphase');
     Route::post('/recruitment-process/{process}/advance', [CompanyFreelancerFrontController::class, 'advanceProcess'])->name('advance-process');
+
+
 });
 
 //Contributors routes
@@ -157,3 +160,8 @@ Route::middleware(['auth', 'contributor', 'verified'])->prefix('contributor')->n
     });
 
 });
+
+
+//Landing routes
+Route::get('/', [LandingController::class, 'index']);
+Route::get('/contact-us', [LandingController::class, 'getContactUs']);
