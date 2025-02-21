@@ -20,6 +20,7 @@ use App\Http\Controllers\{
     UserController,
     Contributor\ContributorController
 };
+use App\Http\Controllers\Contributor\PostController;
 use App\Http\Controllers\Front\LandingController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -156,6 +157,7 @@ Route::middleware(['auth', 'contributor', 'verified'])->prefix('contributor')->n
 
         Route::get('/posts', [ContributorFrontController::class, 'posts'])->name('posts');
         Route::get('/post/create', [ContributorFrontController::class, 'createPost'])->name('post-create');
+        Route::post('/post/store', [PostController::class, 'store'])->name('post-store');
         Route::get('/edit', [ContributorFrontController::class, 'edit'])->name('edit');
     });
 
