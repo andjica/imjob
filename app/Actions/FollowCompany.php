@@ -21,6 +21,8 @@ class FollowCompany
     {
         $companyToFollow = $this->getCompany($companyToFollowId);
         $follower = $this->getFollower($follower);
+
+        
         Log::info("Emitujem event za kanal: company.{$companyToFollow->id}");
 
         // Kreiramo zapis o praćenju

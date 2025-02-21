@@ -19,18 +19,20 @@
                             <div class="row mb-5">
                                 <label class="col-lg-4 col-form-label fw-bold fs-6 required">Recruiter:</label>
                                 <div class="col-lg-8">
-                                    <select name="recruiterId" id="recruiterId" data-control="select2"
-                                        class="form-control form-control-solid @error('recruiterId') is-invalid @enderror">
-                                        <option value="">Select a Recruiter</option>
-                                        @foreach ($recruiters as $recruiter)
-                                            @php
-                                                $image = $recruiter->profile_image ?? asset('assets/media/avatars/default.png');
-                                            @endphp
-                                            <option value="{{ $recruiter->id }}" data-img="{{ $image }}">
-                                                {{ $recruiter->first_name }} {{ $recruiter->last_name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
+                                <select name="recruiterId" id="recruiterId" data-control="select2"
+                                    class="form-control form-control-solid @error('recruiterId') is-invalid @enderror">
+                                    <option value="">Select a Recruiter</option>
+                                    @foreach ($recruiters as $recruiter)
+                                    @php
+                                        $image = $recruiter->profile_image 
+                                            ? asset('storage/uploads/recruiters/' . basename($recruiter->profile_image)) 
+                                            : asset('images/user-profile.png');
+                                    @endphp
+                                        <option value="{{ $recruiter->id }}" data-img="{{ $image }}">
+                                            {{ $recruiter->user->first_name }} {{ $recruiter->user->last_name }}
+                                        </option>
+                                    @endforeach
+                                </select>
                                     <span class="text-danger" id="recruiterIdEmpty">@error('recruiterId'){{ $message }}@enderror</span>
                                 </div>
                             </div>
@@ -64,14 +66,14 @@
 </div>
 @endsection
 <!-- Select2 Script for Image Support -->
-@push('js')
+@section('js')
 <script>
     $(document).ready(function() {
         function formatRecruiter(recruiter) {
             if (!recruiter.id) {
                 return recruiter.text;
             }
-            var image = $(recruiter.element).data('img') || "{{ asset('assets/media/avatars/default.png') }}";
+            var image = $(recruiter.element).data('img') || "{{ asset('/images/icon-profile.png') }}";
             var template = $('<span><img src="' + image + '" class="rounded-circle" style="width:30px; height:30px; margin-right:10px;"/> ' + recruiter.text + '</span>');
             return template;
         }
@@ -82,5 +84,5 @@
             escapeMarkup: function(m) { return m; }
         });
     });
-</script>
-@endpush
+</script> 
+@endsection

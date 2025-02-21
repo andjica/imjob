@@ -88,11 +88,8 @@ window.onload = function () {
         console.log("Subscribing for the first time!");
         const channel = pusher.subscribe(channelName);
 
-        channel.bind("pusher:subscription_succeeded", function () {
+        channel.bind("pusher:subscription_succeeded", function (data) {
             console.log("Successfully subscribed to channel:", channelName);
-        });
-
-        channel.bind("new-follow", function (data) {
             console.log("Received event:", data);
 
             let notificationIcon = document.getElementById("notification-icon");
@@ -110,6 +107,8 @@ window.onload = function () {
             notificationBadge.style.display = "inline";
             channel.unbind("new-follow"); 
         });
+
+       
     } else {
         console.warn("Already subscribed to channel:", channelName);
     }

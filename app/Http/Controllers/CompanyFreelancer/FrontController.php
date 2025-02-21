@@ -24,6 +24,7 @@ use App\Interfaces\SubCategoryInterface;
 use App\Models\AvailableRecruitmentSubphases;
 use App\Models\Candidate;
 use App\Models\Company;
+use App\Models\CompanyRecruiter;
 use App\Models\ContributorRecruiter;
 use App\Models\Job;
 use App\Models\RecruitmentProcess;
@@ -360,5 +361,13 @@ class FrontController extends Controller
         $jobs = $this->jobRep->findInactiveByRecruiterId($recruiterId);
 
         return view('company-freelancer.pages.job.inactive-jobs', compact('jobs'));
+    }
+
+    public function notifications(CompanyRecruiter $notifications)
+    {
+        $newNotifications = $notifications->getCompaniesFollowRequest();
+        $connections = $notifications->getAllConnections();
+        
+        return view('company-freelancer.pages.notifications.all', compact('newNotifications', 'connections'));
     }
 }
