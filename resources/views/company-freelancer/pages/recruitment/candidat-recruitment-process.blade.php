@@ -41,7 +41,6 @@
 
 @endphp
 
-
 <div class="container m-0 pb-5">
     @include('alerts.errors')
     @include('alerts.success')
@@ -64,6 +63,7 @@
         <div class="col-lg-6 mb-5">
            @include('company-freelancer.components.recruitment.schedule-meeting')
            @include('company-freelancer.components.recruitment.schedule-modal')
+          
            @include('company-freelancer.components.recruitment.calendar-with-modal')
         </div>
     </div>
@@ -333,7 +333,6 @@
 
             // Validate Description on Keyup
             $("#meeting_description").on('keyup', function () {
-                 
                 var description = $(this).val().trim();
                 if (description === "") {
                     $("#meeting_descriptionError").text("Description is required").show();

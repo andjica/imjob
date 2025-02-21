@@ -9,7 +9,7 @@ class CompanyRecruiter extends Pivot
 {
     protected $table = 'company_recruiter';
 
-    protected $fillable = ['recruiter_id', 'company_id', 'from_date', 'until_date', 'status'];
+    protected $fillable = ['recruiter_id', 'company_id', 'from_date', 'until_date', 'status', 'invite_type'];
 
     public $timestamps = true; // Ensure timestamps are enabled if the pivot table uses them.
 
@@ -54,5 +54,26 @@ class CompanyRecruiter extends Pivot
             }
         });
     }
+
+    //if company send to recruiter follow request
+    public static function getCompaniesFollowRequest()
+    {
+        $recruiterId = auth()->user()->recruiter->id;
+        return self::where('recruiter_id', $recruiterId)
+        ->where('status', 'Pending')
+        ->where('invite_type', 'Company')->get();
+    }
+
+    //all connections recruiter - companies
+    public function getAllConnections()
+    {
+        $recruiterId = auth()->user()->recruiter->id;
+        return self::where('recruiter_id', $recruiterId)
+        ->where('status', 'Active')
+        ->get();
+    
+    }
+
+
    
 }
