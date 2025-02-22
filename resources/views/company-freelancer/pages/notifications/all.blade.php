@@ -53,7 +53,7 @@
                                 </div>
                                 <div class="d-flex">
                                     <!-- Accept Button -->
-                                    <button type="button" class="btn btn-success btn-sm" title="Accept" data-bs-toggle="modal" data-bs-target="#acceptModal{{ $not->company->id }}">
+                                        <button type="button" class="btn btn-success btn-sm" title="Accept" data-bs-toggle="modal" data-bs-target="#acceptModal{{ $not->company->id }}">
                                         <i class="fas fa-check"></i>
                                         </button>
                                         <!-- Accept Modal -->
