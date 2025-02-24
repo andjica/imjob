@@ -16,7 +16,7 @@ $(document).ready(function () {
         } else if (!/^.{4,}$/.test(description)) {
 
             errorMessage = "Must be at least 4 characters";
-            $("#description").addClass("border-danger") .removeClass("border-success");
+            $("#description").addClass("border-danger").removeClass("border-success");
 
         } else {
             $("#description").removeClass("border-danger").addClass("border-success");

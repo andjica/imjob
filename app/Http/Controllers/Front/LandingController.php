@@ -11,4 +11,12 @@ class LandingController extends Controller
     {
         return view('front.pages.index');
     }
+
+    public function getContactUs() {
+        return view('front.pages.contact');
+    }
+
+    public function getAboutUs() {
+        return view('front.pages.about');
+    }
 }

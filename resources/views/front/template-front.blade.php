@@ -26,15 +26,18 @@
     @yield('content')
    
 
-    <footer class="bg-light py-4">
+    <footer class="footer-z-index landing-dark-bg py-4">
     <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center">
         <div class="text-muted">
+            <a href="#">
+                <img alt="Logo" src="{{asset('images/im-job-logo.svg')}}" class="h-15px h-md-20px">
+            </a>
             © {{ date('Y') }} <a href="https://yourcompany.com" class="text-primary fw-bold" target="_blank">Your Company</a>. All Rights Reserved.
         </div>
         <div class="d-flex align-items-center">
-            <a href="" class="text-muted mx-2">Privacy Policy</a>
-            <a href="" class="text-muted mx-2">Terms of Service</a>
-            <a href="" class="text-muted mx-2">Contact Us</a>
+            <a class="nav-link" href="{{route('index')}}">Home</a>
+            <a class="nav-link" href="{{route('about-us')}}">About Us</a>
+            <a class="nav-link" href="{{route('contact-us')}}">Contact Us</a>
         </div>
     </div>
 </footer>

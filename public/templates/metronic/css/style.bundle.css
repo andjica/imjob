@@ -47390,9 +47390,8 @@ label.rating-label:hover ~ .rating-label > i, label.rating-label:hover ~ .rating
 }
 
 .landing-header {
-  display: flex;
-  align-items: center;
-  height: 100px;
+  height: 100%;
+  display: block;
 }
 .landing-header .logo-default {
   display: block;
@@ -48493,7 +48492,7 @@ span.relative.inline-flex.items-center.px-4.py-2.text-sm.font-medium.text-gray-5
 a.relative.inline-flex.items-center.px-4.py-2.ml-3.text-sm.font-medium.text-gray-700.bg-white.border.border-gray-300.leading-5.rounded-md.hover\:text-gray-500.focus\:outline-none.focus\:ring.ring-gray-300.focus\:border-blue-300.active\:bg-gray-100.active\:text-gray-700.transition.ease-in-out.duration-150 {
   display: none;
 }
-a.relative.inline-flex.items-center.px-4.py-2.text-sm.font-medium.text-gray-700.bg-white.border.border-gray-300.leading-5.rounded-md.hover\:text-gray-500.focus\:outline-none.focus\:ring.ring-gray-300.focus\:border-blue-300.active\:bg-gray-100.active\:text-gray-700.transition.ease-in-out.duration-1501111111[]
+a.relative.inline-flex.items-center.px-4.py-2.text-sm.font-medium.text-gray-700.bg-white.border.border-gray-300.leading-5.rounded-md.hover\:text-gray-500.focus\:outline-none.focus\:ring.ring-gray-300.focus\:border-blue-300.active\:bg-gray-100.active\:text-gray-700.transition.ease-in-out.duration-1501111111
 {
   display: none !important;
 }
@@ -48515,4 +48514,8 @@ i.fas.fa-check-circle.me-2 {
 
 div#kt_aside_menu_wrapper {
  height: 100vh !important;
+}
+
+.footer-z-index{
+  z-index: 2;
 }
