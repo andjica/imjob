@@ -9,7 +9,7 @@ $(document).ready(function () {
         if (!descriptionTouched) return; // Don't show error initially
 
         if (description == "") {
-
+            console.log(description);
             errorMessage = "Description is required filed";
             $("#description").addClass("border-danger").removeClass("border-success");
 
