@@ -7,7 +7,7 @@
         <div class="card-body p-lg-12">
             <div class="col-md-6 pe-lg-10">
                 <!--begin::Form-->
-                <form action="{{asset('/')}}" method="POST" class="form mb-15 fv-plugins-bootstrap5 fv-plugins-framework">
+                <form action="{{asset('/')}}" method="POST" enctype="multipart/form-data" class="form mb-15 fv-plugins-bootstrap5 fv-plugins-framework">
                     <h1 class="fw-bold text-gray-900 mb-9">Send Us Email</h1>
                     @csrf
                     <!--begin::Input group-->
@@ -61,7 +61,7 @@
                         <label class="fs-6 fw-semibold mb-2">Message</label>
 
                         <textarea class="form-control form-control-sm" rows="6" id="message" name="message"
-                            placeholder="">        </textarea>
+                            placeholder=""></textarea>
                             <span id="message-error"></span>
                     </div>
                     <!--end::Input group-->

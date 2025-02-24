@@ -1,3 +1,30 @@
+@section('css')
+<style>
+.responsive-img {
+    width: 100%; /* Full width of the parent container */
+    max-width: 150px; /* Adjust based on your design */
+    height: auto; /* Maintain aspect ratio */
+    object-fit: cover; /* Ensures images fit nicely */
+}
+
+/* Ensure equal height on different devices */
+@media (min-width: 768px) {
+    .responsive-img {
+        max-width: 200px;
+        height: 200px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .responsive-img {
+        max-width: 250px; 
+        height: 600px;
+    }
+}
+</style>
+@endsection
+
+
 <div class="mb-n10 mb-lg-n20 z-index-2 mt-10">
     <!--begin::Container-->
     <div class="container">
@@ -138,14 +165,14 @@
                             data-kt-initialized="1" style="transform: translate3d(-66.6667%, 0px, 0px);">
                             <div class="text-center px-5 pt-5 pt-lg-10 px-lg-10 tns-item tns-slide-cloned"
                                 aria-hidden="true" tabindex="-1">
-                                <img src="{{ asset('images/map.jpg') }}" class="card-rounded shadow mh-lg-650px mw-100"
+                                <img src="{{ asset('images/map.jpg') }}" class="card-rounded shadow mh-lg-650px mw-100 responsive-img"
                                     alt="">
                             </div>
 
                             <!--begin::Item-->
                             <div class="text-center px-5 pt-5 pt-lg-10 px-lg-10 tns-item" id="tns1-item0"
                                 aria-hidden="true" tabindex="-1">
-                                <img src="{{ asset('images/map2.jpg') }}" class="card-rounded shadow mh-lg-650px mw-100"
+                                <img src="{{ asset('images/map2.jpg') }}" class="card-rounded shadow mh-lg-650px mw-100 responsive-img"
                                     alt="">
                             </div>
                             <!--end::Item-->
@@ -153,7 +180,7 @@
                             <div class="text-center px-5 pt-5 pt-lg-10 px-lg-10 tns-item" id="tns1-item1"
                                 aria-hidden="true" tabindex="-1">
                                 <img src="{{ asset('images/national.jpg') }}"
-                                    class="card-rounded shadow mh-lg-650px mw-100" alt="">
+                                    class="card-rounded shadow mh-lg-650px mw-100 responsive-img" alt="">
                             </div>
                             <!--end::Item-->
 

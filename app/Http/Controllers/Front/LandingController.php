@@ -12,7 +12,8 @@ class LandingController extends Controller
         return view('front.pages.index');
     }
 
-    public function getContactUs() {
+    public function getContactUs(Request $request) {
+        // return dd($request->all());
         return view('front.pages.contact');
     }
 

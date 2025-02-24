@@ -9,7 +9,7 @@ $(document).ready(function () {
         if (name === "") {
             showError("#name", "#name-error", "It is required");
             isValid = false;
-        } else if (!/^.{4,}$/.test(name)) {
+        } else if (name.length < 3) {
             showError("#name", "#name-error", "Name must be at least 3 characters.");
             isValid = false;
         } else {
@@ -34,7 +34,7 @@ $(document).ready(function () {
         if (subject === "") {
             showError("#subject", "#subject-error", "It is required");
             isValid = false;
-        } else if (!/^.{5,}$/.test(subject)) {
+        } else if (subject.length < 5) {
             showError("#subject", "#subject-error", "Subject must be at least 5 characters.");
             isValid = false;
         } else {
@@ -46,7 +46,7 @@ $(document).ready(function () {
         if (message === "") {
             showError("#message", "#message-error", "It is required");
             isValid = false;
-        } else if (!/^.{5,}$/.test(message)) {
+        } else if (message.length < 10) {
             showError("#message", "#message-error", "Message must be at least 10 characters.");
             isValid = false;
         } else {
@@ -59,21 +59,47 @@ $(document).ready(function () {
         }
     });
 
-    // Remove error message & add green border on input
+    // Real-time validation: Show message when empty, update message on input
     $("input, textarea").on("input", function () {
         let field = $(this);
-        let errorSpan = $("#" + field.attr("id") + "-error");
-        field.removeClass("border-danger").addClass("border-success");
-        errorSpan.text("");
+        let fieldId = field.attr("id");
+        let errorSpan = $("#" + fieldId + "-error");
+        let value = field.val().trim();
+
+        // Determine error message based on field type
+        let errorMessage = "";
+        if (value === "") {
+            errorMessage = "It is required";
+        } else if (fieldId === "name" && value.length < 3) {
+            errorMessage = "Name must be at least 3 characters.";
+        } else if (fieldId === "subject" && value.length < 5) {
+            errorMessage = "Subject must be at least 5 characters.";
+        } else if (fieldId === "message" && value.length < 10) {
+            errorMessage = "Message must be at least 10 characters.";
+        } else if (fieldId === "email") {
+            let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!value.match(emailPattern)) {
+                errorMessage = "Enter a valid email address.";
+            }
+        }
+
+        // Apply error or success styling
+        if (errorMessage) {
+            field.removeClass("border-success").addClass("border-danger");
+            errorSpan.text(errorMessage).addClass("text-danger");
+        } else {
+            field.removeClass("border-danger").addClass("border-success");
+            errorSpan.text("");
+        }
     });
 
-    // Function to show error
+    // Show error
     function showError(inputId, errorId, message) {
         $(inputId).removeClass("border-success").addClass("border-danger");
         $(errorId).text(message).addClass("text-danger");
     }
 
-    // Function to show success
+    // Show success
     function showSuccess(inputId, errorId) {
         $(inputId).removeClass("border-danger").addClass("border-success");
         $(errorId).text("");

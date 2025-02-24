@@ -8,7 +8,6 @@
             <div class="landing-header"  data-kt-sticky-name="landing-header"
                 data-kt-sticky-offset="{default: '200px', lg: '300px'}" style="animation-duration: 0.3s;">
                 <div class="d-flex flex-column flex-root">
-                                <!--begin::Container-->
                     @include('front.components.section-banner');
                     @include('front.components.section-how-it-works');
                     @include('front.components.section-things-better');
