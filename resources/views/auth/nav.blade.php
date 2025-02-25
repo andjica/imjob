@@ -27,6 +27,9 @@
             @endif
 
             <!-- Authentication Links -->
+            <a class="nav-link" href="{{route('index')}}">Home</a>
+            <a class="nav-link" href="{{route('about-us')}}">About Us</a>
+            <a class="nav-link" href="{{route('contact-us')}}">Contact Us</a>
             @if (auth()->check())
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Dashboard</a>

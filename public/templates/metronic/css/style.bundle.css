@@ -47368,8 +47368,22 @@ label.rating-label:hover ~ .rating-label > i, label.rating-label:hover ~ .rating
   background-color: #13263C;
 }
 
+.landing-banner-img {
+  position: relative;
+  background-image: url('/templates/metronic/img/bg-circle.webp');
+  background-size: cover;
+  background-position: center;
+}
+
+
+
+
+
+
+
 .landing-dark-color {
-  color: #13263C;
+  color: #3357d6;
+  bottom: 25px;
 }
 
 .landing-dark-border {
