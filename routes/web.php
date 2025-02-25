@@ -20,6 +20,7 @@ use App\Http\Controllers\{
     UserController,
     Contributor\ContributorController
 };
+use App\Http\Controllers\CompanyFreelancer\FollowController;
 use App\Http\Controllers\Contributor\PostController;
 use App\Http\Controllers\Front\LandingController;
 use Illuminate\Support\Facades\Auth;
@@ -121,8 +122,11 @@ Route::middleware(['auth', 'company.freelancer', 'verified'])->prefix('company/f
 
     //Settings Routes
     Route::get('/settings', [CompanyFreelancerFrontController::class, 'settings'])->name('settings');
-    Route::post('/make-request', [CompanyFreelancerFrontController::class, 'followCompany'])->name('make-request');
-    Route::post('/make-connection', [CompanyFreelancerFrontController::class, 'followContributor'])->name('follow-contributor');
+
+    //follow and make connection Routes
+    Route::post('/make-request', [FollowController::class, 'followCompany'])->name('make-request');
+    Route::post('/make-connection', [FollowController::class, 'followContributor'])->name('follow-contributor');
+    Route::post('/make-connection/change-status/{status}', [FollowController::class, 'changeStatus'])->name('follow-change-status');
 
     //Jobs Routes
     Route::get('/company/{company}/details', [CompanyFreelancerFrontController::class, 'detailsCompany'])->name('company-details');

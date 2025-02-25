@@ -65,7 +65,7 @@
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <p>Are you sure you want to accept this company?</p>
+                                                        <p>Accept connection with this company?</p>
                                                         <ul>
                                                             <li><strong>Name:</strong> {{ $not->company->name }}</li>
                                                             <li><strong>Email:</strong> {{ $not->company->user->email }}</li>
@@ -75,8 +75,9 @@
                                                         </ul>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <form action="{{ route('admin-dashboard-company-accept', $not->company->id) }}" method="POST">
+                                                        <form action="{{asset('/company/freelancer/make-request')}}" method="POST">
                                                             @csrf
+                                                            <input type="hidden" name="company_id" value="{{$not->company->id}}">
                                                             <button type="submit" class="btn btn-success">Accept</button>
                                                         </form>
                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>

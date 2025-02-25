@@ -54,8 +54,15 @@
                                 </button>
 
                                 </div>
-                            
-                            @elseif ($company->id !== $user->company->id)
+                            @elseif($connectedSuccessfully->contains($company->id))
+                            <!-- This button is shown if the company is connected and the status is active -->
+                            <div class="card-tolbar">
+                                <button type="button" class="btn btn-primary btn-sm mt-4" data-bs-toggle="tooltip" data-bs-placement="left" title="You are connected with this company">
+                                    <i class="fas fa-link"></i>
+                                </button>
+                            </div>
+                            @elseif($user->company->id == $company->id)
+                            @else
                                 <div class="card-toolbar">
                                     <a href="#"
                                        class="btn btn-sm btn-light-primary me-2 mb-2 follow-button"
@@ -72,14 +79,6 @@
                                     </a>
                                 </div>
                             @endif
-                            @if($connectedSuccessfully->contains($company->id))
-                            <!-- This button is shown if the company is connected and the status is active -->
-                            <div class="card-tolbar">
-                                <button type="button" class="btn btn-primary btn-sm mt-4" data-bs-toggle="tooltip" data-bs-placement="left" title="You are connected with this company">
-                                    <i class="fas fa-link"></i>
-                                </button>
-                            </div>
-                        @endif
                         </div>
                         <div class="card-body">
                             <strong>{{$company->name}}</strong><br>
