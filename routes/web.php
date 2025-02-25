@@ -126,7 +126,7 @@ Route::middleware(['auth', 'company.freelancer', 'verified'])->prefix('company/f
     //follow and make connection Routes
     Route::post('/make-request', [FollowController::class, 'followCompany'])->name('make-request');
     Route::post('/make-connection', [FollowController::class, 'followContributor'])->name('follow-contributor');
-    Route::post('/make-connection/change-status/{status}', [FollowController::class, 'changeStatus'])->name('follow-change-status');
+    Route::post('/make-connection/change-status', [FollowController::class, 'changeStatus'])->name('follow-change-status');
 
     //Jobs Routes
     Route::get('/company/{company}/details', [CompanyFreelancerFrontController::class, 'detailsCompany'])->name('company-details');

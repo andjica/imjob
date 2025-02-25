@@ -329,7 +329,6 @@ class FrontController extends Controller
     {
         $newNotifications = $notifications->getCompaniesFollowRequest();
         $connections = $notifications->getAllConnections();
-        
         return view('company-freelancer.pages.notifications.all', compact('newNotifications', 'connections'));
     }
 }

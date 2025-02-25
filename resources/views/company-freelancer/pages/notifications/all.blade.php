@@ -75,10 +75,12 @@
                                                         </ul>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <form action="{{asset('/company/freelancer/make-request')}}" method="POST">
+                                                        <form action=" {{ route('company-freelancer-follow-change-status') }}" method="POST">
                                                             @csrf
                                                             <input type="hidden" name="company_id" value="{{$not->company->id}}">
-                                                            <button type="submit" class="btn btn-success">Accept</button>
+                                                            <input type="hidden" name="recruiter_id" value="{{auth()->user()->recruiter->id}}">
+                                                            <input type="hidden" name="status" value="Active">
+                                                            <input type="submit" class="btn btn-success" value="Accept">
                                                         </form>
                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                                                     </div>

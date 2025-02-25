@@ -9,12 +9,20 @@ use App\Actions\FollowCompany;
 use Illuminate\Http\JsonResponse;
 use App\Actions\FollowContributor;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ChangeStatusRequest;
 use App\Http\Requests\FollowCompanyRequest;
 use App\Http\Requests\FollowContributorRequest;
-
+use App\Interfaces\CompanyRecruiterInterface;
 
 class FollowController extends Controller
 {
+    protected CompanyRecruiterInterface $companyRecruiterServices;
+
+    public function __construct(CompanyRecruiterInterface $companyRecruiterServices)
+    {
+        $this->companyRecruiterServices = $companyRecruiterServices;
+    }
+
     public function followCompany(FollowCompanyRequest $request, FollowCompany $followCompany): JsonResponse
     {
         $followCompany->execute((int) $request->get('company_id'));
@@ -53,5 +61,16 @@ class FollowController extends Controller
                 'message' => $e->getMessage(),
             ], 500);
         }
+    }
+
+    public function changeStatus(ChangeStatusRequest $request)
+    {
+        try {
+            $this->companyRecruiterServices->changeStatus($request);
+            return redirect()->back()->with('success', 'Follow request status updated successfully.');
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    
     }
 }

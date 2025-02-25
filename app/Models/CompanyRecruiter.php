@@ -16,13 +16,13 @@ class CompanyRecruiter extends Pivot
     // Example: Add a scope to query active relationships
     public function scopeActive($query)
     {
-        return $query->where('status', 'active');
+        return $query->where('status', 'Active');
     }
 
     // Example: Add a scope to query past relationships
     public function scopePast($query)
     {
-        return $query->where('status', 'past');
+        return $query->where('status', 'Past');
     }
 
     public function getStatusAttribute($value)

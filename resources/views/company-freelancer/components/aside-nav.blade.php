@@ -215,11 +215,11 @@
                                 <div class="menu-sub menu-sub-accordion">
 
                                     <div class="menu-item">
-                                        <a class="menu-link">
+                                        <a class="menu-link" href="{{asset('/company/freelancer/notifications')}}">
                                             <span class="menu-bullet">
                                                 <span class="bullet bullet-dot"></span>
                                             </span>
-                                            <span class="menu-title"> &nbsp;U IZRADI</span>
+                                            <span class="menu-title"> All notifications</span>
                                         </a>
                                     </div>
                                     
