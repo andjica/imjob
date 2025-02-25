@@ -26,7 +26,7 @@ $(document).ready(function () {
 
         $("#description-error")
             .text(errorMessage)
-            .css({ color: "red", display: "block" });
+            .addClass('text-danger')
     }
 
     function validateImage() {
@@ -54,7 +54,7 @@ $(document).ready(function () {
         if (errorMessage) {
             $("#image-error")
                 .text(errorMessage)
-                .css({ color: "red", display: "block" });
+                .addClass('text-danger');
         } else {
             $("#image-error").hide();
         }

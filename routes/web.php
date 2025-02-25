@@ -168,5 +168,6 @@ Route::middleware(['auth', 'contributor', 'verified'])->prefix('contributor')->n
 
 
 //Landing routes
-Route::get('/', [LandingController::class, 'index']);
-Route::get('/contact-us', [LandingController::class, 'getContactUs']);
+Route::get('/', [LandingController::class, 'index'])->name('index');
+Route::get('/contact-us', [LandingController::class, 'getContactUs'])->name('contact-us');
+Route::get('/about-us', [LandingController::class,'getAboutUs'])->name('about-us');
