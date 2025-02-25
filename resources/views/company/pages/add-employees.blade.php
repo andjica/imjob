@@ -4,7 +4,7 @@
 @section('title-dash', 'Add emoloyee')
 <div class="container">
     <div class="row">
-        <!-- First Card: Add Employee -->
+        <!-- First Card: Add Employee :) -->
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
