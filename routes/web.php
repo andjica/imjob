@@ -158,6 +158,8 @@ Route::middleware(['auth', 'contributor', 'verified'])->prefix('contributor')->n
     //contributor information profile
     Route::post('/store', [ContributorController::class, 'store'])->name('create');
 
+    Route::get('/settings',[ContributorFrontController::class,'settings'])->name('settings');
+
     Route::middleware(['contributor.exists'])->group(function () {
         Route::get('/companies', [ContributorFrontController::class, 'companies'])->name('companies');
         Route::get('/find-recruiter', [ContributorFrontController::class, 'recruiter'])->name('find-recruiter');
