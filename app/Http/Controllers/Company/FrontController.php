@@ -12,6 +12,9 @@ use App\Interfaces\RecruiterInterface;
 use App\Interfaces\SubCategoryInterface;
 use App\Models\Company;
 use App\Services\CompanyTypeServices;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 
 class FrontController extends Controller
 {
@@ -74,6 +77,13 @@ class FrontController extends Controller
         $recruiters = $this->recruiterServices->getAllRecruiters($search);
         return view('company.pages.add-employees', compact('recruiters'));
     
+    }
+
+    public function settings(): Factory|View|Application
+    {
+        $companyId = auth()->user()->company->id;
+        $company   = Company::find($companyId) ?? abort(404);
+        return view('contributor.pages.settings', compact('contributor'));
     }
    
 }

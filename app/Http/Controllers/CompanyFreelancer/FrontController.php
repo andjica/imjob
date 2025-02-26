@@ -88,9 +88,8 @@ class FrontController extends Controller
         ));
     }
 
-    public function editCompany(): Factory|View|Application
-    {
-        $user    = auth()->user()->id;
+    public function editCompany(): Factory|View|Application {
+        $user = auth()->user()->id;
         $company = $this->companyServices->getCompanyByRecruiter($user);
 
         $categories    = $this->categoryServices->getAll();

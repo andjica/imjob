@@ -93,6 +93,7 @@ Route::middleware(['auth', 'company', 'verified'])->prefix('company/dashboard')-
 
     Route::get('/find/recruiters', [CompanyFrontController::class, 'findRecruiters'])->name('find-recruiters');
     
+    Route::get('/settings', [CompanyFrontController::class, 'settings'])->name('settings');
 
     Route::post('/recruiters/call/{recruiter}', [RecruiterController::class, 'callRecruiter'])->name('recruiters-call');
 

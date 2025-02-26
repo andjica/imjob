@@ -13,7 +13,7 @@
             <!--begin::Card body-->
             <div class="card-body pt-3">
                 <!-- Email Update Form -->
-                <form action="{{ route('user-email-update', $freelancer->user_id) }}" method="POST" id="emailUpdateForm">
+                <form action="{{ route('user-email-update', $contributor->user_id) }}" method="POST" id="emailUpdateForm">
                     @csrf
                     @method('PUT')
                     
@@ -21,7 +21,7 @@
                         <label class="col-lg-2 col-form-label fw-bold fs-6">Email Address</label>
                         <div class="col-lg-10">
                             <input type="email" class="form-control form-control-lg form-control-solid @error('email') is-invalid @enderror" 
-                                name="email" value="{{ $freelancer->user->email }}" />
+                                name="email" value="{{ $contributor->email }}" />
                         
                             <span class="text-danger" id="emailEmpty"> @error('email'){{ $message }} @enderror</span>
                         
@@ -36,7 +36,7 @@
                 <div class="separator separator-dashed my-6"></div>
 
                 <!-- Password Change Form -->
-                <form action="{{ route('user-password-update', $freelancer->user_id) }}" method="POST" id="passwordChangeForm">
+                <form action="{{ route('user-password-update', $contributor->user_id) }}" method="POST" id="passwordChangeForm">
                     @csrf
                     @method('PUT')
 
@@ -44,7 +44,7 @@
                         <label class="col-lg-2 col-form-label fw-bold fs-6">Current Password</label>
                         <div class="col-lg-10">
                             <input type="password" class="form-control form-control-lg form-control-solid @error('current_password') is-invalid @enderror" 
-                                name="current_password" placeholder="Enter your current password" value={{ $freelancer->user->password}}/>
+                                name="current_password" placeholder="Enter your current password" value={{$contributor->password}} />
                             
                                 <span class="text-danger" id="currentPasswordEmpty">@error('current_password'){{ $message }}  @enderror</span>
                           

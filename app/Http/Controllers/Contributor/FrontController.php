@@ -4,12 +4,12 @@ namespace App\Http\Controllers\Contributor;
 use App\Models\Post;
 use App\Models\Contributor;
 use App\Interfaces\CityInterface;
+use App\Interfaces\ContributorTypeInterface;
+use App\Interfaces\CountryInterface;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use App\Http\Controllers\Controller;
-use App\Interfaces\CountryInterface;
-use Illuminate\Contracts\View\Factory;
-use App\Interfaces\ContributorTypeInterface;
-use Illuminate\Contracts\Foundation\Application;
 
 class FrontController extends Controller
 {
