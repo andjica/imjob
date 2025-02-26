@@ -20,7 +20,7 @@
                     </div>
                     <div class="card-body">
                     @if($newNotifications->count() == 0)
-                    <div class="alert alert-warning d-flex align-items-center p-5 mb-0">
+                    <div class="alert alert-warning align-items-center p-5 mb-0">
                                 <span class="svg-icon svg-icon-2hx svg-icon-warning me-4">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                         <path opacity="0.3" d="M12 22C17.523 22 22 17.523 22 12S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10Z" fill="currentColor"/>
@@ -29,13 +29,13 @@
                                 </span>
                                 <div class="d-flex flex-column">
                                     <h4 class="mb-1">No requests from companies</h4>
-                                    <p class="mb-0">There are currently no new requests for activation companies in the system.</p>
+                                    <p class="mb-0">There are currently no new requests for new connections</p>
                                 </div>
                             </div>
                     @else
                    
                         @foreach ($newNotifications as $not)
-                            <div class="alert alert-warning d-flex justify-content-between align-items-center mb-3">
+                            <div class="alert alert-warning justify-content-between align-items-center mb-3">
                                 <div>
                                     @if($not->company->logo)
                                         <img src="{{ Storage::url($not->company->logo) }}" alt="{{ $not->company->name }}" class="rounded-circle" width="50" height="50">
@@ -92,29 +92,37 @@
                                 </div>
                             </div>
                         @endforeach
+                        @endif
                         <hr>
                         <small class="card-title fw-light fst-italic">Older Notifications</small>
 
                         @foreach ($connections as $connection)
-                            <div class="alert alert-light d-flex justify-content-between align-items-center mb-3">
-                                <div>
-                                    @if($connection->company->logo)
-                                        <img src="{{ Storage::url($connection->company->logo) }}" alt="{{ $connection->company->name }}" class="rounded-circle" width="50" height="50">
-                                    @else
-                                        <i class="fas fa-building fa-2x text-muted"></i>
-                                    @endif
-                                    <strong>{{ $connection->company->name }}</strong><br>
-                                    <span>{{ $connection->company->user->email }}</span>
-                                    <br>
-                                    <span>Category: {{ $connection->company->category->name }}</span>
-                                    <br>
-                                    <span>Country: {{ $connection->company->country->name }}, City: {{ $connection->company->city->name }}</span>
-                                    <hr>
-                                    <span class="text-muted fs-7 fw-bold justify-content-right">{{ $connection->created_at->diffForHumans() }}</span>
+                        <div class="alert alert-light mb-3">
+                                <div class="d-flex justify-content-between align-items-center border-top pt-2">
+                                    <div class="d-flex align-items-center">
+                                        @if($connection->company->logo)
+                                            <img src="{{ Storage::url($connection->company->logo) }}" alt="{{ $connection->company->name }}" class="rounded-circle me-3" width="50" height="50">
+                                        @else
+                                            <i class="fas fa-building fa-2x text-muted me-3"></i>
+                                        @endif 
+                                        <div>
+                                            <strong>{{ $connection->company->name }}</strong><br>
+                                            <span>{{ $connection->company->user->email }}</span><br>
+                                            <span>Category: {{ $connection->company->category->name }}</span><br>
+                                            <span>Country: {{ $connection->company->country->name }}, City: {{ $connection->company->city->name }}</span><br>
+                                            <span class="text-muted fs-7 fw-bold">{{ $connection->created_at->diffForHumans() }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="card-toolbar">
+                                        <button type="button" class="btn btn-icon btn-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="left" title="You are connected with this company">
+                                            <i class="fas fa-link"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
+
                         @endforeach
-                    @endif
+                  
                     </div>
                 </div>
             </div>

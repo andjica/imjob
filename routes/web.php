@@ -164,7 +164,7 @@ Route::middleware(['auth', 'contributor', 'verified'])->prefix('contributor')->n
         Route::get('/companies', [ContributorFrontController::class, 'companies'])->name('companies');
         Route::get('/find-recruiter', [ContributorFrontController::class, 'recruiter'])->name('find-recruiter');
 
-        Route::get('/posts', [ContributorFrontController::class, 'posts'])->name('posts');
+        Route::get('/posts', [ContributorFrontController::class, 'allPost'])->name('posts');
         Route::get('/post/create', [ContributorFrontController::class, 'createPost'])->name('post-create');
         Route::post('/post/store', [PostController::class, 'store'])->name('post-store');
         Route::get('/edit', [ContributorFrontController::class, 'edit'])->name('edit');
