@@ -45,6 +45,5 @@ class FrontController extends Controller
         $posts = Post::where('contributor_id', $contributorId)->get() ?? abort(404);
         
         return view('contributor.pages.post.all', compact('posts'));
-        
     }
 }
