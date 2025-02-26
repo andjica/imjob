@@ -162,9 +162,11 @@ Route::middleware(['auth', 'contributor', 'verified'])->prefix('contributor')->n
     Route::get('/settings',[ContributorFrontController::class,'settings'])->name('settings');
 
     Route::middleware(['contributor.exists'])->group(function () {
-        Route::get('/companies', [ContributorFrontController::class, 'companies'])->name('companies');
-        Route::get('/find-recruiter', [ContributorFrontController::class, 'recruiter'])->name('find-recruiter');
 
+        Route::get('/find/companies', [ContributorFrontController::class, 'companies'])->name('find-companies');
+        Route::get('/find/recruiter', [ContributorFrontController::class, 'recruiter'])->name('find-recruiter');
+
+        //posts
         Route::get('/posts', [ContributorFrontController::class, 'allPost'])->name('posts');
         Route::get('/post/create', [ContributorFrontController::class, 'createPost'])->name('post-create');
         Route::post('/post/store', [PostController::class, 'store'])->name('post-store');

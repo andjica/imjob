@@ -31,13 +31,13 @@
 @endsection
 
 @section('content')
-    <div class="container">
+    <div class="container m-0">
         <div class="row">
-            <div class="col-lg-5">
+            <div class="col-lg-6">
                 <!--begin::Card-->
                 <div class="card shadow-lg border-0 rounded-3">
                     <!--begin::Card header-->
-                    <div class="card-header bg-light text-white py-3 d-flex align-items-center">
+                    <div class="card-header bg-light text-white py-3 d-flex">
                         <i class="fas fa-pencil-alt me-2 fa-2x"></i>
                         <h5 class="card-title fw-light m-0">Create a New Post</h5>
                     </div>

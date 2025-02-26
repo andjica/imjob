@@ -44,7 +44,7 @@
                         <label class="col-lg-2 col-form-label fw-bold fs-6">Current Password</label>
                         <div class="col-lg-10">
                             <input type="password" class="form-control form-control-lg form-control-solid @error('current_password') is-invalid @enderror" 
-                                name="current_password" placeholder="Enter your current password" value={{ $freelancer->user->password}}/>
+                                name="current_password" placeholder="Enter your current password" />
                             
                                 <span class="text-danger" id="currentPasswordEmpty">@error('current_password'){{ $message }}  @enderror</span>
                           

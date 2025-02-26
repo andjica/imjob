@@ -71,5 +71,12 @@ class ContributorServices implements ContributorInterface
 
         return $query->paginate(20);
     }
+
+    public function getContributor(int $contributorId)
+    {
+        $contributor = Contributor::find($contributorId) ?? abort(404);
+
+        return $contributor;
+    }
 }
 

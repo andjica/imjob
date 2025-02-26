@@ -9,4 +9,5 @@ interface ContributorInterface
     public function create(Request $request);
 
     public function getAll(?string $search = null): LengthAwarePaginator;
+    public function getContributor(int $contributorId);
 }

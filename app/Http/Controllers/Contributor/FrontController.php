@@ -10,17 +10,27 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use App\Http\Controllers\Controller;
+use App\Interfaces\ContributorInterface;
+use App\Interfaces\PostInterface;
 
 class FrontController extends Controller
 {
-    public function __construct(protected CountryInterface $countryService, protected CityInterface $cityServices,
-    protected ContributorTypeInterface $contributorTypeServices)
+    protected  $countryServices;
+    protected  $cityServices;
+    protected  $contributorTypeServices;
+    protected  $postServices;
+
+    public function __construct(CountryInterface $countryServices, CityInterface $cityServices, 
+    ContributorTypeInterface $contributorTypeServices, PostInterface $postServices)
     {
-        
+        $this->countryServices = $countryServices;
+        $this->cityServices = $cityServices;
+        $this->contributorTypeServices = $contributorTypeServices;
+        $this->postServices = $postServices;
     }
     public function index()
     {
-        $countries = $this->countryService->getCountries();
+        $countries = $this->countryServices->getCountries();
         $contributorTypes = $this->contributorTypeServices->getAllContributorTypes();
         return view('contributor.pages.index', compact('countries', 'contributorTypes'));
     }
@@ -40,9 +50,8 @@ class FrontController extends Controller
 
     public function allPost()
     {
-        //stvaiti posle u service
-        $contributorId = auth()->user()->contributor->id ?? abort(404);
-        $posts = Post::where('contributor_id', $contributorId)->get() ?? abort(404);
+        $contributorId = auth()->user()->contributor->id;
+        $posts = $this->postServices->getPostsByContributor($contributorId);
         
         return view('contributor.pages.post.all', compact('posts'));
     }

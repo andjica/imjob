@@ -38,6 +38,7 @@
                                     <span class="menu-heading text-muted text-uppercase fs-8 ls-1">Freelancer Management</span>
                                 </div>
                             </div>
+                            
                             <div class="menu-link">
                                 <span class="menu-icon">
                                     <!--begin::Svg Icon | path: icons/duotune/communication/com013.svg-->
@@ -66,8 +67,8 @@
                                     </a>
                                 </div>
                                 <div class="menu-item menu-sub-indention menu-accordion">
-                                    <a class="menu-link {{ Route::currentRouteName() === 'contributor-companies' ? 'active' : '' }}" 
-                                    href="{{ route('contributor-companies') }}">
+                                    <a class="menu-link {{ Route::currentRouteName() === 'contributor-find-companies' ? 'active' : '' }}" 
+                                    href="{{ route('contributor-find-companies') }}">
                                         <span class="menu-bullet">
                                             <span class="bullet bullet-dot"></span>
                                         </span>
