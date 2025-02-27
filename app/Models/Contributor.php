@@ -25,7 +25,6 @@ class Contributor extends Model
     {
         return $this->belongsTo(ContributorType::class, 'contributor_type_id');
     }
-
     
     public function country(): BelongsTo
     {

@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 namespace App\Http\Controllers\Contributor;
 
 use App\Models\Post;
@@ -12,6 +13,7 @@ use Illuminate\Contracts\View\View;
 use App\Http\Controllers\Controller;
 use App\Interfaces\ContributorInterface;
 use App\Interfaces\PostInterface;
+use App\Interfaces\CategoryInterface;
 
 class FrontController extends Controller
 {
@@ -19,14 +21,24 @@ class FrontController extends Controller
     protected  $cityServices;
     protected  $contributorTypeServices;
     protected  $postServices;
+    protected $countriesServices;
+    protected $citiesServices;
 
-    public function __construct(CountryInterface $countryServices, CityInterface $cityServices, 
-    ContributorTypeInterface $contributorTypeServices, PostInterface $postServices)
-    {
+    public function __construct(
+        CountryInterface $countryServices,
+        CategoryInterface $categoryServices,
+        CityInterface $cityServices,
+        ContributorTypeInterface $contributorTypeServices,
+        PostInterface $postServices,
+        CountryInterface $countriesServices,
+        CityInterface $citiesServices
+    ) {
         $this->countryServices = $countryServices;
         $this->cityServices = $cityServices;
         $this->contributorTypeServices = $contributorTypeServices;
         $this->postServices = $postServices;
+        $this->countriesServices = $countriesServices;
+        $this->citiesServices = $citiesServices;
     }
     public function index()
     {
@@ -52,7 +64,27 @@ class FrontController extends Controller
     {
         $contributorId = auth()->user()->contributor->id;
         $posts = $this->postServices->getPostsByContributor($contributorId);
-        
+
         return view('contributor.pages.post.all', compact('posts'));
+    }
+
+    public function companies()
+    {
+        return view('contributor.pages.companies');
+    }
+    public function recruiter()
+    {
+        return view('contributor.pages.recruiter');
+    }
+    public function edit()
+    {
+        $contributorId = auth()->user()->contributor->id;
+        $contributor   = Contributor::find($contributorId) ?? abort(404);
+
+        $contributorTypes = $this->contributorTypeServices->getAllContributorTypes();
+        $countries = $this->countriesServices->getCountries();
+        $cities    = $this->citiesServices->getCitiesByCountry($contributor->country_id);
+
+        return view('contributor.pages.edit', compact('contributor', 'contributorTypes', 'countries', 'cities'));
     }
 }

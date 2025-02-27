@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Interfaces\CategoryInterface;
 use App\Interfaces\CityInterface;
+use App\Interfaces\CompanyInterface;
 use App\Interfaces\CountryInterface;
 use App\Interfaces\RecruiterInterface;
 use App\Interfaces\SubCategoryInterface;
@@ -21,18 +22,20 @@ class FrontController extends Controller
     protected $countryServices;
     protected $cityServices;
     protected $recruiterServices;
+    protected $companyServices;
     protected $companyTypeServices;
     protected $categoryServices;
     protected $subCategoryServices;
 
 
     public function __construct(CountryInterface $countryServices, CityInterface $cityServices, 
-    RecruiterInterface $recruiterServices, CompanyTypeServices $companyTypeServices,
+    RecruiterInterface $recruiterServices, CompanyInterface $companyServices,CompanyTypeServices $companyTypeServices,
     CategoryInterface $categoryServices, SubCategoryInterface $subCategoryServices)
     {
         $this->countryServices = $countryServices;
         $this->cityServices = $cityServices;
         $this->recruiterServices = $recruiterServices;
+        $this->companyServices = $companyServices;
         $this->companyTypeServices = $companyTypeServices;
         $this->categoryServices = $categoryServices;
         $this->subCategoryServices = $subCategoryServices;
@@ -68,6 +71,17 @@ class FrontController extends Controller
         $company = auth()->user()->company;
         
         return view('company.pages.recruiters.find', compact('recruiters', 'company'));
+    }
+
+    public function findCompanies(Request $request)
+    {
+        // da se proveri da li je dobra putanja i da li je dobro pozvana metoda
+        $search = $request->input('search');
+        $companies = $this->companyServices->getAllCompanies($search);
+
+        $company = auth()->user()->company;
+        
+        return view('company.pages.company.find', compact('recruiters', 'company'));
     }
 
    

@@ -152,7 +152,7 @@
                                 <div class="menu-sub menu-sub-accordion">
 
                                     <div class="menu-item">
-                                        <a class="menu-link {{ Route::currentRouteName() === 'contributor-edit' ? 'active' : '' }}" href="{{asset('contributoredit/edit')}}">
+                                        <a class="menu-link {{ Route::currentRouteName() === 'contributor-edit' ? 'active' : '' }}" href="{{asset('contributor/edit')}}">
                                             <span class="menu-bullet">
                                                 <span class="bullet bullet-dot"></span>
                                             </span>
