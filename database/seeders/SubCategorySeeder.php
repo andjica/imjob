@@ -22,7 +22,6 @@ class SubCategorySeeder extends Seeder
                 'Therapists',
                 'Medical Researchers',
                 'Healthcare Administrators',
-                //'Other' + dodati
             ],
             'IT & Software' => [
                 'Software Developers',
@@ -79,6 +78,15 @@ class SubCategorySeeder extends Seeder
                     'updated_at' => now(),
                 ]);
             }
+
+           // add other to every subcategory
+            DB::table('sub_categories')->insert([
+                'category_id' => $categoryId,
+                'name' => 'Other', // Dodaj "Other" u svaku kategoriju
+                'description' => 'Other description.',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
         }
     }
 }

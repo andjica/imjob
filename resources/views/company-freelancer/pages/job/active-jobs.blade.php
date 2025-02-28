@@ -9,7 +9,7 @@
 @endsection
 
 @section('content')
-<div class="container">
+<div class="container m-0">
          <!-- Quick Search Form -->
          <div class="row mb-6">
             <div class="col-12">

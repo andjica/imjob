@@ -68,6 +68,6 @@ class Kernel extends HttpKernel
         'company.freelancer' =>\App\Http\Middleware\CompanyFreelancerMiddleware::class,
         'contributor' => \App\Http\Middleware\ContributorMiddleware::class,
         'contributor.exists'=> \App\Http\Middleware\EnsureContributorExists::class,
-        'recruter'=>\App\Http\Middleware\RecruiterMiddleware::class,
+        'recruiter' => \App\Http\Middleware\RecruiterMiddleware::class
     ];
 }

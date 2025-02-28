@@ -12,17 +12,18 @@ class SubCategoryServices implements SubCategoryInterface
     {
         $category = Category::find($categoryId) ?? abort(404);
 
-        if($category)
-        {
-            $subCategories = SubCategory::where('category_id', $category->id)->get();
+        if ($category) {
+            $subCategories = SubCategory::where('category_id', $category->id)
+                ->where('name', '!=', 'Other') 
+                ->orderBy('name', 'asc')
+                ->get();
             
             return $subCategories;
-        }
-        else
-        {
+        } else {
             return abort(404);
         }
     }
+
 
     public function getAll()
     {

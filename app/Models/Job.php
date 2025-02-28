@@ -27,6 +27,7 @@ class Job extends Model
         'recruiter_id',
         'category_id',
         'sub_category_id',
+        'custom_subcategory',
         'country_id',
         'city_id',
         'job_type_id',

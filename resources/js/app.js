@@ -1,32 +1,50 @@
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
+import './bootstrap';  
+import Echo from 'laravel-echo';  
+window.Pusher = require('pusher-js');
 
-require('./bootstrap');
-
-window.Vue = require('vue').default;
-
-/**
- * The following block of code may be used to automatically register your
- * Vue components. It will recursively scan this directory for the Vue
- * components and automatically register them with their "basename".
- *
- * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
- */
-
-// const files = require.context('./', true, /\.vue$/i)
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
-
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
-
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
-
-const app = new Vue({
-    el: '#app',
+window.Echo = new Echo({
+    broadcaster: 'pusher',
+    key: process.env.MIX_PUSHER_APP_KEY,  
+    cluster: process.env.MIX_PUSHER_APP_CLUSTER,
+    forceTLS: true
 });
+
+window.onload = function () {
+    const companyId = document.querySelector('meta[name="company-id"]')?.content;
+    if (!companyId) return;
+
+    const channelName = `company.${companyId}`;
+
+    if (!window.subscribedChannels) {
+        window.subscribedChannels = new Set();
+    }
+
+    // ✅ Ako je kanal već pretplaćen, zaustavi osluškivanje i resetuj kanal
+    if (window.subscribedChannels.has(channelName)) {
+        console.warn("⚠️ Resetujem kanal:", channelName);
+        window.Echo.leave(channelName);
+    } else {
+        window.subscribedChannels.add(channelName);
+    }
+
+    const channel = window.Echo.channel(channelName);
+
+    // ✅ Resetujemo event pre nego što dodamo novi listener
+    channel.stopListening('.new-follow').listen('.new-follow', (event) => {
+        console.log("✅ Nova notifikacija primljena:", event);
+
+        let notificationIcon = document.getElementById("notification-icon");
+        let notificationBadge = document.getElementById("notification-badge");
+
+        if (!notificationIcon || !notificationBadge) return;
+
+        notificationIcon.classList.add("text-danger");
+
+        let notificationCount = parseInt(notificationBadge.innerText) || 0;
+        notificationBadge.innerText = notificationCount + 1;
+        notificationBadge.style.display = "inline";
+    });
+
+    console.log(`✅ Subscribed to: ${channelName}`);
+};
+
