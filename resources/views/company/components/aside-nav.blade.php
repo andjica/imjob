@@ -139,12 +139,7 @@
                             <i class="fa-solid fa-bell"></i> <span class="btn-label">Settings</span>
                                
                             </a>
-                            <li class="nav-item">
-                            <a href="/notifications" class="nav-link">
-                                <i id="notification-icon" class="fas fa-bell"></i>
-                                <span id="notification-badge" class="badge bg-danger" style="display: none;">0</span>
-                            </a>
-                        </li>
+                           
                            
                         </div> 
             <!--end::Footer-->

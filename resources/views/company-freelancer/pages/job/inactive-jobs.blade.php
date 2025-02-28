@@ -9,7 +9,7 @@
 @endsection
 
 @section('content')
-<div class="container">
+<div class="container m-0">
         <!-- Search Box -->
         <div class="row search-container">
             <div class="col-md-12">

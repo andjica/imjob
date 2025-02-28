@@ -51,8 +51,17 @@
                             </div>
 
                         </div>
+                        <li class="nav-item">
+                            <a href="/notifications" class="nav-link">
+                            <i id="notification-icon" class="fas fa-bell"></i>
+                                <span id="notification-badge" class="badge bg-danger" style="display: none;">0</span>
+
+                            </a>
+                        </li>
+
                         <div class="app-navbar-item ms-1 mt-1 ms-md-3" id="kt_header_user_menu_toggle">
         <!--begin::Menu wrapper-->
+
         <div class="cursor-pointer" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">
              <svg width="71" height="50" viewBox="0 0 141 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g clip-path="url(#clip0_8:198)">
@@ -73,7 +82,7 @@
                         </defs>
                     </svg>
         </div>
-
+    
 <!--begin::User account menu-->
 <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg menu-state-color fw-semibold py-4 fs-6 w-275px" data-kt-menu="true" style="">
     <!--begin::Menu item-->

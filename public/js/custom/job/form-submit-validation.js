@@ -33,6 +33,7 @@ $(document).ready(function () {
             : $("#description").val().trim();
         const categoryId = $("#categoryId").val();
         const subCategoryId = $("#subCategoryId").val();
+        
         const otherCategory = $("#otherSub").val().trim();
         const countryId = $("#countryId").val();
         const cityId = $("#cityId").val();
@@ -96,12 +97,14 @@ $(document).ready(function () {
                 .show();
             isValid = false;
         }
-
+      
         // Validate OtherCategory
-        if (otherCategory === "") {
-            $("#otherSub").addClass("border-danger");
-            $("#otherCategoryEmpty").text("Please write your category.").show();
-            isValid = false;
+        if (subCategoryId === "other") { // Pazimo da je tačno "Other"
+            if (!otherCategory.trim()) {
+                $("#otherSub").addClass("border-danger");
+                $("#otherCategoryEmpty").text("Please write your category.").show();
+                isValid = false;
+            }
         }
 
         // Validate Country

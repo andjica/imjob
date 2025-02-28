@@ -9,6 +9,7 @@ use App\Http\Controllers\{
     CompanyFreelancer\FreelancerController,
     CompanyFreelancer\FrontController as CompanyFreelancerFrontController,
     Contributor\FrontController as ContributorFrontController,
+    Recruiter\FrontController as RecruiterFrontController,
     CountryController,
     GoogleController,
     HomeController,
@@ -97,7 +98,6 @@ Route::middleware(['auth', 'company', 'verified'])->prefix('company/dashboard')-
 
     Route::post('/recruiters/call/{recruiter}', [RecruiterController::class, 'callRecruiter'])->name('recruiters-call');
 
-    //new new :)
     Route::get('/settings', [CompanyFrontController::class, 'settings'])->name('settings');
     Route::get('/company/{company}/details', [CompanyFrontController::class, 'detailsCompany'])->name('company-details');
     Route::get('/add/employees', [CompanyFrontController::class, 'addEmployees'])->name('add-employees');
@@ -174,6 +174,11 @@ Route::middleware(['auth', 'contributor', 'verified'])->prefix('contributor')->n
     });
 
 });
+
+//Recruiter Routes
+Route::middleware(['auth', 'verified', 'recruiter'])->prefix('recruiter')->name('recruiter-')->group(function(){
+});
+
 
 
 //Landing routes

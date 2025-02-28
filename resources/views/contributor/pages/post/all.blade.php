@@ -32,7 +32,7 @@
                             {{ $p->description }}<br>
 
                             @if ($p->image != null)
-                                <img src="{{ $p->image }}" alt="Image from contributor .{{$p->image}}" />
+                                <img src="{{Storage::url($p->image)}}" alt="Image from contributor .{{$p->image}}" width="100px" />
                             @else
                             @endif
                         </div>

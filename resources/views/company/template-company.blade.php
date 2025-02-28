@@ -14,6 +14,7 @@
     <link href="{{ asset('templates/metronic') }}/plugins/global/plugins.bundle.css" rel="stylesheet">
     <link href="{{ asset('templates/metronic') }}/css/style.bundle.css" rel="stylesheet">
     <link href="{{ asset('templates/metronic') }}/css/custom.style.css" rel="stylesheet">
+    <meta name="company-id" content="{{ auth()->user()->company->id ?? '' }}">
 
 </head>
 <body>
@@ -59,64 +60,12 @@
 <script src="{{ asset('templates/metronic') }}/js/custom/widgets.js"></script>
 <script src="{{ asset('templates/metronic') }}/js/custom/apps-chats/chat.js"></script>
 <script src="{{ asset('templates/metronic') }}/js/custom/intro.js"></script>
-<script src="{{ asset('templates/metronic') }}/js/custom/modals/create-app.js"></script>
 <script src="{{ asset('templates/metronic') }}/js/custom/modals/upgrade-plan.js"></script>
 <script src="{{ asset('templates/metronic') }}/js/custom/modals/users-search.js"></script>
 <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
-
-<!-- Pusher and channel -->
-<script>
-const companyId = "{{ auth()->user()->company->id ?? '' }}";
-const channelName = "company." + companyId;
-
-// Initialize Pusher
-const pusher = new Pusher("{{ env('PUSHER_APP_KEY') }}", {
-    cluster: "{{ env('PUSHER_APP_CLUSTER') }}",
-    encrypted: true
-});
-
-console.log("Pusher initialized:", pusher);
-
-console.log("Attempting to subscribe to channel:", channelName);
-
-window.onload = function () {
-    console.log("Page loaded, checking subscription...");
-
-    if (!window.channelSubscribed) {
-        window.channelSubscribed = true;
-
-        console.log("Subscribing for the first time!");
-        const channel = pusher.subscribe(channelName);
-
-        channel.bind("pusher:subscription_succeeded", function (data) {
-            console.log("Successfully subscribed to channel:", channelName);
-            console.log("Received event:", data);
-
-            let notificationIcon = document.getElementById("notification-icon");
-            let notificationBadge = document.getElementById("notification-badge");
-
-            if (!notificationIcon || !notificationBadge) {
-                console.warn("Notification icon or badge does NOT exist in the DOM!");
-                return;
-            }
-
-            notificationIcon.classList.add("text-danger");
-
-            let currentCount = parseInt(notificationBadge.innerText) || 0;
-            notificationBadge.innerText = currentCount + 1;
-            notificationBadge.style.display = "inline";
-            channel.unbind("new-follow"); 
-        });
-
-       
-    } else {
-        console.warn("Already subscribed to channel:", channelName);
-    }
-};
+<script src="{{ mix('js/app.js') }}" defer></script>
 
 
-
-</script>
 @yield('js')
 </body>
 </html>

@@ -18,7 +18,8 @@ class CreateJobsTable extends Migration
             $table->unsignedBigInteger('company_id');
             $table->unsignedBigInteger('recruiter_id')->nullable();
             $table->unsignedBigInteger('category_id');
-            $table->unsignedBigInteger('sub_category_id');
+            $table->unsignedBigInteger('sub_category_id')->nullable();
+            $table->string('custom_subcategory')->nullable();
             $table->unsignedBigInteger('country_id');
             $table->unsignedBigInteger('city_id');
             $table->unsignedBigInteger('job_type_id'); // Ensure this replaces any enum 'job_type' field

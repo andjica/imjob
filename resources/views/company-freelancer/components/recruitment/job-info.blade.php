@@ -21,7 +21,7 @@
                         <i class="fas fa-user-tie icon-style"></i>
                         <div class="info-text">
                             <strong>Recruiter:</strong>
-                            <p class="text-muted">@if($job->recruiter === null) This job post is from {{$job->company->name}} company @else{{$job->recruiter->name}} @endif</p>
+                            <p class="text-muted"> This job post created by  {{$job->recruiter->user->first_name}}</p>
                         </div>
                     </div>
                     <div class="info-item mb-3">
@@ -35,7 +35,11 @@
                         <i class="fas fa-tags icon-style"></i>
                         <div class="info-text">
                             <strong>SubCategory:</strong>
+                            @if($job->subCategory->name == "Other")
+                            <p class="text-muted">{{$job->custom_subcategory}}</p>
+                            @else
                             <p class="text-muted">{{$job->subCategory->name}}</p>
+                            @endif
                         </div>
                     </div>
                     <div class="info-item mb-3">

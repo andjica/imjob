@@ -204,11 +204,11 @@
                                         <span class="text-danger" id="subCategoryIdEmpty">@error('subCategoryId'){{ $message }}@enderror</span>
                                     </div>
                                 </div>
-                                <!--Other categoty type-->
+                                <!-- Other categoty type -->
                                 <div class="row mb-5 d-none" id="otherSubRow">
                                     <label class="col-lg-4 col-form-label fw-bold fs-6 required">Other:</label>
                                     <div class="col-lg-8">
-                                        <input type="text" class="form-control form-control-solid" name="otherSub" id="otherSub" />
+                                        <input type="text" class="form-control form-control-solid" name="custom_subcategory" id="otherSub" />
                                         <span class="text-danger" id="otherCategoryEmpty">@error('otherCategoryId'){{ $message }}@enderror</span>
                                     </div>
                                 </div>
