@@ -9,6 +9,7 @@ use App\Http\Controllers\{
     CompanyFreelancer\FreelancerController,
     CompanyFreelancer\FrontController as CompanyFreelancerFrontController,
     Contributor\FrontController as ContributorFrontController,
+    Recruiter\FrontController as RecruiterFrontController,
     CountryController,
     GoogleController,
     HomeController,
@@ -173,6 +174,22 @@ Route::middleware(['auth', 'contributor', 'verified'])->prefix('contributor')->n
         Route::get('/edit', [ContributorFrontController::class, 'edit'])->name('edit');
     });
 
+});
+
+//Recruter routes
+Route::middleware(['auth', 'recruiter', 'verified'])->prefix('recruiter')->name('recruiter-')->group(function () {
+    Route::get('/dashboard', [RecruiterFrontController::class, 'index'])->name('dashboard');
+
+    Route::get('/find/companies', [RecruiterFrontController::class, 'companies'])->name('find-companies');
+    Route::get('/find/contributor', [RecruiterFrontController::class, 'contributor'])->name('find-contributor');
+
+    Route::get('/job/create', [RecruiterFrontController::class, 'createJob'])->name('create-job');
+    Route::get('/active/jobs', [RecruiterFrontController::class, 'getActiveJobs'])->name('active-jobs');
+    Route::get('/inactive/jobs', [RecruiterFrontController::class, 'getInactiveJobs'])->name('inactive-jobs');
+
+    Route::get('/edit', [RecruiterFrontController::class, 'editRecruiter'])->name('recruiter-edit');
+
+    Route::get('/settings',[RecruiterFrontController::class,'settings'])->name('settings');
 });
 
 
