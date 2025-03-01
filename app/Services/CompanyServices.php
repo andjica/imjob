@@ -22,6 +22,7 @@ class CompanyServices implements CompanyInterface
     //get all active companies
     public function getAllCompanies(?string $search = null): LengthAwarePaginator
     {
+        
         $query = Company::with(['country', 'city'])->where('active', 1);
 
         if (!empty($search)) {

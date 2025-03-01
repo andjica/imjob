@@ -8,7 +8,6 @@
 @endsection
 @section('content')
     <div class="container m-0 pb-5">
-    <div class="container">
         <div class="row">
             <div class="col-lg-10">
                 @include('alerts.success')
@@ -19,6 +18,7 @@
                         <h4 class="card-title">Your new Notifications</h4>
                     </div>
                     <div class="card-body">
+                    <small class="card-title fw-light fst-italic">Companies follow request to you</small><br>
                     @if($newNotifications->count() == 0)
                     <div class="alert alert-warning align-items-center p-5 mb-0">
                                 <span class="svg-icon svg-icon-2hx svg-icon-warning me-4">
@@ -29,7 +29,7 @@
                                 </span>
                                 <div class="d-flex flex-column">
                                     <h4 class="mb-1">No requests from companies</h4>
-                                    <p class="mb-0">There are currently no new requests for new connections</p>
+                                    <p class="mb-0">There are currently no new requests for connections from companies</p>
                                 </div>
                             </div>
                     @else
@@ -94,6 +94,33 @@
                         @endforeach
                         @endif
                         <hr>
+                        <small class="card-title fw-light fst-italic">Your follow request</small>
+                        @foreach ($recruiterToCompaniesFollowRequest as $follow)
+                            <div class="alert alert-light mb-3">
+                                <div class="d-flex justify-content-between align-items-center border-top pt-2">
+                                    <div class="d-flex align-items-center">
+                                        @if($follow->company->logo)
+                                            <img src="{{ Storage::url($follow->company->logo) }}" alt="{{ $follow->company->name }}" class="rounded-circle me-3" width="50" height="50">
+                                        @else
+                                            <i class="fas fa-building fa-2x text-muted me-3"></i>
+                                        @endif 
+                                        <div>
+                                            <strong>{{ $follow->company->name }}</strong><br>
+                                            <span>{{ $follow->company->user->email }}</span><br>
+                                            <span>Category: {{ $follow->company->category->name }}</span><br>
+                                            <span>Country: {{ $follow->company->country->name }}, City: {{ $follow->company->city->name }}</span><br>
+                                            <span class="text-muted fs-7 fw-bold">{{ $follow->created_at->diffForHumans() }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="card-toolbar">
+                                      
+                                            <span class="badge bg-light-warning text-dark me-2 p-3 fw-light">Status on Pending</span>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+
+                        <hr>
                         <small class="card-title fw-light fst-italic">Older Notifications</small>
 
                         @foreach ($connections as $connection)
@@ -128,7 +155,7 @@
             </div>
         </div>
      </div>
-    </div>
+    
 @endsection
 
 @section('js')

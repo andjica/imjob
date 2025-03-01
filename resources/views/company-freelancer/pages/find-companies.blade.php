@@ -37,6 +37,9 @@
         <!-- Company Cards -->
         <div class="row g-6">
             @forelse($companies as $company)
+            @if($company->id === auth()->user()->company->id)
+                @continue  {{-- Preskačemo svoju kompaniju --}}
+            @endif
                 <div class="col-md-4">
                     <div class="card shadow-sm">
                         <div class="card-header text-right">
@@ -89,7 +92,7 @@
                             @endif
                             <br>
                             <br>
-                            <a href=""><u>{{ $company->category->name }}</u></a><br>
+                            <a href=""><u>{{ $company->category->name }}</u></a><small>- {{$company->subCategory->name}} - </small><br>
                             Type of company - {{ $company->companyType->name }},<i> <br>From {{ $company->city->name }}, {{ $company->country->name }} </i>
                         </div>
                     </div>

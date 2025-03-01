@@ -43,17 +43,17 @@ class CompanyRecruiter extends Pivot
         return $this->belongsTo(Company::class);
     }
 
-    protected static function booted()
-    {
-        static::created(function ($follow) {
-            $companyToFollow = Company::find($follow->company_id);
-            $follower = Recruiter::find($follow->recruiter_id);
+    // protected static function booted()
+    // {
+    //     static::created(function ($follow) {
+    //         $companyToFollow = Company::find($follow->company_id);
+    //         $follower = Recruiter::find($follow->recruiter_id);
 
-            if ($companyToFollow && $follower) {
-                broadcast(new NewFollowNotification($companyToFollow, $follower));
-            }
-        });
-    }
+    //         if ($companyToFollow && $follower) {
+    //             broadcast(new NewFollowNotification($companyToFollow, $follower));
+    //         }
+    //     });
+    // }
 
     //if company send to recruiter follow request
     public static function getCompaniesFollowRequest()
@@ -62,6 +62,15 @@ class CompanyRecruiter extends Pivot
         return self::where('recruiter_id', $recruiterId)
         ->where('status', 'Pending')
         ->where('invite_type', 'Company')->get();
+    }
+
+    //if recruiter send company follow request
+    public static function getRecruiterFollowRequestToCompanies()
+    {
+        $recruiterId = auth()->user()->recruiter->id;
+        return self::where('recruiter_id', $recruiterId)
+        ->where('status', 'Pending')
+        ->where('invite_type', 'Recruiter')->get();
     }
 
     //all connections recruiter - companies

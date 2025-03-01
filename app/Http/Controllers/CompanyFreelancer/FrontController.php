@@ -327,7 +327,13 @@ class FrontController extends Controller
     public function notifications(CompanyRecruiter $notifications)
     {
         $newNotifications = $notifications->getCompaniesFollowRequest();
+        $recruiterToCompaniesFollowRequest = $notifications->getRecruiterFollowRequestToCompanies();
+        
         $connections = $notifications->getAllConnections();
-        return view('company-freelancer.pages.notifications.all', compact('newNotifications', 'connections'));
+        return view('company-freelancer.pages.notifications.all', 
+            compact('newNotifications', 
+            'connections',
+            'recruiterToCompaniesFollowRequest'
+        ));
     }
 }

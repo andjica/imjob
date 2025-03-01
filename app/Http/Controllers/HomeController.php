@@ -61,11 +61,13 @@ class HomeController extends Controller
                 {
                     //if company is active check which type of company is it
                         $company = auth()->user()->company;
+                        
                         //check if company is freelancer type
                         if($company)
                         {
                             if($company->company_type_id == 3)
                             {
+                               
                                 return redirect('/company/freelancer/dashboard');
                             } 
                             return redirect('company/dashboard');
@@ -100,7 +102,7 @@ class HomeController extends Controller
     public function pendingActivation()
     {
         $companyExists = auth()->user()->company->id;
-
+        
         if($companyExists)
         {
             $company = Company::where('user_id', auth()->user()->id)->first();
@@ -147,6 +149,7 @@ class HomeController extends Controller
 
     public function createFreelancer()
     {
+        
         // $recruiter = auth()->user()->recruiter;
         // if($recruiter?->is_freelancer == 1)
         // {
