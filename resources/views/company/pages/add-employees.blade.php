@@ -2,7 +2,7 @@
 
 @section('content')
 @section('title-dash', 'Add emoloyee')
-<div class="container">
+<div class="container m-0">
     <div class="row">
         <!-- First Card: Add Employee :) -->
         <div class="col-12">

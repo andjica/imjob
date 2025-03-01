@@ -14,21 +14,28 @@ class CompanyRecruiterServices implements CompanyRecruiterInterface
         $companyId = (int) $request->get('company_id');
         $recruiterId = (int) $request->get('recruiter_id');
         $status = $request->get('status');
-       
+    
         // Find the follow request
         $followRequest = CompanyRecruiter::where('company_id', $companyId)
             ->where('recruiter_id', $recruiterId)
             ->first();
-
+    
         if (!$followRequest) {
             throw new Exception('Follow request not found.');
         }
-
-        // Update the status
-        $followRequest->update([
-            'status' => $status,
-        ]);
-
+    
+        // Prepare update data
+        $updateData = ['status' => $status];
+    
+        // If status is "Active", update from_date with the current date
+        if ($status === "Active") {
+            $updateData['from_date'] = now(); // Laravel helper for current timestamp
+        }
+    
+        // Update the record
+        $followRequest->update($updateData);
+    
         return true;
     }
+    
 }

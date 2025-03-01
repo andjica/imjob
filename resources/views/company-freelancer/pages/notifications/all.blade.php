@@ -96,7 +96,7 @@
                         <hr>
                         <small class="card-title fw-light fst-italic">Your follow request</small>
                         @foreach ($recruiterToCompaniesFollowRequest as $follow)
-                            <div class="alert alert-light mb-3">
+                            <div class="alert alert-light mb-3 bg-light">
                                 <div class="d-flex justify-content-between align-items-center border-top pt-2">
                                     <div class="d-flex align-items-center">
                                         @if($follow->company->logo)
@@ -141,9 +141,17 @@
                                         </div>
                                     </div>
                                     <div class="card-toolbar">
-                                        <button type="button" class="btn btn-icon btn-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="left" title="You are connected with this company">
-                                            <i class="fas fa-link"></i>
-                                        </button>
+                                    @if(trim($connection->status) === "pending")
+                                            <span class="badge bg-light-warning text-dark me-2 p-3 fw-light">Status on Pending</span>
+                                        @elseif(trim($connection->status) === "active")
+                                            <button type="button" class="btn btn-icon btn-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="left" title="You are connected with this company">
+                                                <i class="fas fa-link"></i>
+                                            </button>
+                                        @elseif(trim($connection->status) === "reject")
+                                            <span class="badge bg-light-success text-dark me-2 p-3 fw-light">You are rejected</span>
+                                        @else
+                                            <span class="badge bg-light-danger text-dark me-2 p-3 fw-light">Unknown Status</span>
+                                        @endif
                                     </div>
                                 </div>
                             </div>

@@ -4,7 +4,8 @@
             <!--begin::Heading-->
             <div class="text-center mt-15 mb-18" id="achievements" data-kt-scroll-offset="{default: 100, lg: 150}">
                 <!--begin::Title-->
-                <h3 class="fs-2hx text-white fw-bold mb-5">We Make Things Better</h3>
+                <h3 class="fs-2hx text-white fw-bold mb-5">From local insights
+                to global opportunities</h3>
                 <!--end::Title-->
 
                 <!--begin::Description-->

@@ -2,7 +2,7 @@
 
 @section('content')
 @section('title-dash', 'Recruiters')
-<div class="container mt-4">
+<div class="container m-0">
     <div class="row">
         <div class="col-lg-12">
             <div class="card shadow-sm">
@@ -72,7 +72,7 @@
                         
                         <div class="card-body text-center">
                         @if ($recruiter->profile_image)
-                                <img src="{{ asset('/images/' . $recruiter->profile_image) }}" 
+                                <img src="{{ asset(Storage::url($recruiter->profile_image)) }}" 
                                     alt="Profile Image" 
                                     class="img-fluid rounded-circle shadow-sm"
                                     style="width: 60px; height: 60px;"> <!-- Smaller size here -->
@@ -85,24 +85,26 @@
                             <p class="small">Birthday: {{ $recruiter->birthday }}</p>
 
                             @php
-                                $pivot = $company->recruiters->where('id', $recruiter->id)->first()->pivot ?? null;
+                                $pivot = $company->recruiters()
+                                    ->wherePivot('recruiter_id', $recruiter->id)
+                                    ->first()?->pivot;
                             @endphp
 
-                            @if ($pivot && $pivot->status === 'onpending')
+                            @if ($pivot && $pivot->status === 'Pending')
                                 <button class="btn btn-warning btn-sm" disabled>Pending</button>
-                            @elseif ($company->recruiters->contains($recruiter->id))
+                            @elseif ($pivot && $pivot->status === 'Active')
                                 <button class="btn btn-success btn-sm" disabled>Connected</button>
                             @else
-                                <form method="POST" action="{{ route('company-recruiters-call', ['recruiter' => $recruiter->id]) }}">
+                                <form method="POST" action="">
                                     @csrf
-                                    <button type="submit" class="btn btn-primary btn-sm">Make a request</button>
+                                    <button type="submit" class="btn btn-primary btn-sm">Follow</button>
                                 </form>
                             @endif
                         </div>
                         <div class="card-footer text-center">
                             <span class="d-block text-gray-800 fw-semibold">Current Works for:</span>
                             @if ($recruiter->activeCompanies->count() === 0)
-                                Without working
+                                Without workin
                             @else
                                 @foreach ($recruiter->activeCompanies as $ractive)
                                     {{ $ractive->name }} (From: {{ $ractive->pivot->from_date }})<br>

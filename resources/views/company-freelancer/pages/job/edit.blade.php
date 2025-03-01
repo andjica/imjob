@@ -205,11 +205,25 @@
                                             class="form-control form-control-solid @error('subCategoryId') is-invalid @enderror">
                                             
                                                 <option value="{{ $job->subCategory->id }}">{{ $job->subCategory->name }}</option>
-                                                <option value=""></option>   
+                                                @php $subcategories= App\Models\SubCategory::where('category_id', $job->category_id)->whereNotIn('id', [$job->sub_category_id])->get(); 
+                                                @endphp
+                                                @foreach($subcategories as $subcat)
+                                                    <option value="{{$subcat->id}}">{{$subcat->name}}</option> 
+                                                @endforeach  
                                         </select>
                                         <span class="text-danger" id="subCategoryIdEmpty">@error('subCategoryId'){{ $message }}@enderror</span>
                                     </div>
                                 </div>
+                                @if($job->subCategory->name == "Other")
+                                     <!-- Other categoty type -->
+                                <div class="row mb-5" id="otherSubRow">
+                                    <label class="col-lg-4 col-form-label fw-bold fs-6 required">Other:</label>
+                                    <div class="col-lg-8">
+                                        <input type="text" class="form-control form-control-solid" name="custom_subcategory" id="otherSub" value="{{$job->custom_subcategory}}" />
+                                        <span class="text-danger" id="otherCategoryEmpty">@error('otherCategoryId'){{ $message }}@enderror</span>
+                                    </div>
+                                </div>
+                                @endif
                                 <!-- Job Type -->
                                 <div class="row mb-5">
                                     <label class="col-lg-4 col-form-label fw-bold fs-6 required">Job Type:</label>
