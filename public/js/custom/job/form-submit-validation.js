@@ -594,3 +594,4 @@ function validateValidUntil() {
 $("#validUntil").on("keyup change", function () {
     validateValidUntil();
 });
+ // Show or hide "otherSub" input field based on selection

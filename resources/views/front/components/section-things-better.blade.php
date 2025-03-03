@@ -20,24 +20,23 @@
             <!--begin::Statistics-->
             <div class="d-flex flex-center">
                 <!--begin::Items-->
-                <div class="d-flex flex-wrap flex-center justify-content-lg-between mb-15 mx-auto w-xl-900px">   
+                <div class="d-flex flex-wrap flex-center justify-content-lg-between mb-15 mx-auto w-xl-1200px">   
                          
                         <!--begin::Item-->
-                        <div class="d-flex flex-column flex-center h-200px w-200px h-lg-250px w-lg-250px m-3 bgi-no-repeat bgi-position-center bgi-size-contain" style="background-image: url('/metronic8/demo1/assets/media/svg/misc/octagon.svg')">  
+                        <div class="d-flex flex-column flex-center h-200px w-400px h-lg-250px w-lg-350px m-3 bgi-no-repeat bgi-position-center bgi-size-contain" style="background-image: url('/metronic8/demo1/assets/media/svg/misc/octagon.svg')">  
                             <!--begin::Symbol-->
-                            <i class="ki-duotone ki-element-11 fs-2tx text-white mb-3"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></i>                            <!--end::Symbol-->
-
+                            <img src="{{asset('/images/custom-and-tradition-icon.webp')}}" width="55px">
                             <!--begin::Info-->
                             <div class="mb-0">
                                 <!--begin::Value-->
-                                <div class="fs-lg-2hx fs-2x fw-bold text-white d-flex flex-center">
-                                    <div class="min-w-70px counted" data-kt-countup="true" data-kt-countup-value="700" data-kt-countup-suffix="+" data-kt-initialized="1">700+</div>
+                                <div class="fs-lg-1hx fs-2x fw-bold text-white d-flex flex-center text-center">
+                                Custom and<br> traditional AI  
                                 </div>
                                 <!--end::Value-->
 
                                 <!--begin::Label-->
                                 <span class="text-gray-600 fw-semibold fs-5 lh-0">
-                                    Known Companies                                </span>
+                                Adapt seamlessly to new cultures with tailored guidance                     </span>
                                 <!--end::Label-->
                             </div>
                             <!--end::Info-->      
@@ -45,21 +44,21 @@
                         <!--end::Item-->    
                          
                         <!--begin::Item-->
-                        <div class="d-flex flex-column flex-center h-200px w-200px h-lg-250px w-lg-250px m-3 bgi-no-repeat bgi-position-center bgi-size-contain" style="background-image: url('/metronic8/demo1/assets/media/svg/misc/octagon.svg')">  
+                        <div class="d-flex flex-column flex-center h-200px w-200px h-lg-250px w-lg-350px m-3 bgi-no-repeat bgi-position-center bgi-size-contain" style="background-image: url('/metronic8/demo1/assets/media/svg/misc/octagon.svg')">  
                             <!--begin::Symbol-->
-                            <i class="ki-duotone ki-chart-pie-4 fs-2tx text-white mb-3"><span class="path1"></span><span class="path2"></span><span class="path3"></span></i>                            <!--end::Symbol-->
+                            <img src="{{asset('/images/workforce.webp')}}" width="55px">
 
                             <!--begin::Info-->
                             <div class="mb-0">
                                 <!--begin::Value-->
-                                <div class="fs-lg-2hx fs-2x fw-bold text-white d-flex flex-center">
-                                    <div class="min-w-70px counted" data-kt-countup="true" data-kt-countup-value="80" data-kt-countup-suffix="K+" data-kt-initialized="1">80K+</div>
-                                </div>
+                                <div class="fs-lg-1hx fs-2x fw-bold text-white d-flex flex-center text-center">
+                                Workforce Development <br>Program
+                            </div>
                                 <!--end::Value-->
 
                                 <!--begin::Label-->
                                 <span class="text-gray-600 fw-semibold fs-5 lh-0">
-                                    Statistic Reports                                </span>
+                                Experience the fusion of imagination and expertise with Études Architectural Solutions.                       </span>
                                 <!--end::Label-->
                             </div>
                             <!--end::Info-->      
@@ -67,21 +66,22 @@
                         <!--end::Item-->    
                          
                         <!--begin::Item-->
-                        <div class="d-flex flex-column flex-center h-200px w-200px h-lg-250px w-lg-250px m-3 bgi-no-repeat bgi-position-center bgi-size-contain" style="background-image: url('/metronic8/demo1/assets/media/svg/misc/octagon.svg')">  
+                        <div class="d-flex flex-column flex-center h-200px w-200px h-lg-250px w-lg-350px m-3 bgi-no-repeat bgi-position-center bgi-size-contain" style="background-image: url('/metronic8/demo1/assets/media/svg/misc/octagon.svg')">  
                             <!--begin::Symbol-->
-                            <i class="ki-duotone ki-basket fs-2tx text-white mb-3"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></i>                            <!--end::Symbol-->
+                            <img src="{{asset('/images/Coach-AI.webp')}}" width="55px">
 
                             <!--begin::Info-->
                             <div class="mb-0">
                                 <!--begin::Value-->
-                                <div class="fs-lg-2hx fs-2x fw-bold text-white d-flex flex-center">
-                                    <div class="min-w-70px counted" data-kt-countup="true" data-kt-countup-value="35" data-kt-countup-suffix="M+" data-kt-initialized="1">35M+</div>
-                                </div>
+                                <div class="fs-lg-1hx fs-2x fw-bold text-white d-flex flex-center text-center">
+                                    Job Description <br>and Interview Coach AI
+
+                                   </div>
                                 <!--end::Value-->
 
                                 <!--begin::Label-->
-                                <span class="text-gray-600 fw-semibold fs-5 lh-0">
-                                    Secure Payments                                </span>
+                                <span class="text-gray-600 fw-semibold fs-5 lh-0 text-center">
+                                Workforce Development Program                </span>
                                 <!--end::Label-->
                             </div>
                             <!--end::Info-->      

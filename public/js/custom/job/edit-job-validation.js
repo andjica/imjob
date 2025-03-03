@@ -56,18 +56,19 @@ $(document).ready(function () {
   if (document.querySelector('#description')) {
       ClassicEditor.create(document.querySelector('#description'))
           .then(editor => {
-              console.log("✅ CKEditor is initialized!");
+              console.log("CKEditor is initialized!");
               window.jobDescriptionEditor = editor;
           })
           .catch(error => {
-              console.error("❌ CKEditor failed to initialize:", error);
+              console.error("CKEditor failed to initialize:", error);
           });
   }
 
   // Form Validation on Submit
   $('#jobForm').submit(function (event) {
+    //ovde nastaviti
       event.preventDefault();
-      console.log("🚀 Syncing CKEditor before validation...");
+      console.log("Syncing CKEditor before validation...");
       
       if (window.jobDescriptionEditor) {
           const editorContent = window.jobDescriptionEditor.getData().trim();
@@ -76,10 +77,10 @@ $(document).ready(function () {
       }
 
       if (validateForm()) {
-          console.log("✅ Form is valid. Submitting...");
+          console.log("Form is valid. Submitting...");
           this.submit();
       } else {
-          console.log("❌ Form validation failed!");
+          console.log("Form validation failed!");
       }
   });
 

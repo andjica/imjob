@@ -41,6 +41,8 @@ class Job extends Model
         'special_requirements',
         'valid_until',
         'job_world_type',
+
+
     ];
 
     public function skills(): HasMany
