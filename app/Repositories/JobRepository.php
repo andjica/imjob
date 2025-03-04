@@ -86,6 +86,69 @@ class JobRepository
         
             return $query->paginate(10);
     }
+
+    //find Active by Company id
+    public function searchJobsFromCompany(?string $search = null, int $companyId): LengthAwarePaginator
+    {
+        $query = Job::with(['company','category', 'subCategory', 'country', 'city']) 
+        ->where('valid_until', '>', Carbon::today())
+        ->where('company_id', $companyId)
+        ->orderBy('created_at', 'desc'); 
+
+        if (!empty($search)) {
+        $query->where(function ($q) use ($search) {
+        $q->where('title', 'like', "%{$search}%")
+        ->orWhere('job_world_type', 'like', "%{$search}%") 
+        ->orWhereHas('company', function ($q) use ($search) {
+            $q->where('name', 'like', "%{$search}%");
+        })
+        ->orWhereHas('category', function ($q) use ($search) {
+            $q->where('name', 'like', "%{$search}%");
+        })
+        ->orWhereHas('subCategory', function ($q) use ($search) {
+            $q->where('name', 'like', "%{$search}%");
+        })
+        ->orWhereHas('country', function ($q) use ($search) { 
+            $q->where('name', 'like', "%{$search}%");
+        })
+        ->orWhereHas('city', function ($q) use ($search) { 
+            $q->where('name', 'like', "%{$search}%");
+        });
+        });
+        }
+
+        return $query->paginate(10);
+    }
+
+    // New method to find active jobs by company ID by Andjica
+    public function findInactiveFromCompanyId(int $companyId)
+    {
+
+           $query = Job::with(['category', 'subCategory', 'country', 'city']) 
+                       ->where('valid_until', '<=', now()) 
+                       ->where('company_id', $companyId)
+                       ->orderBy('created_at', 'desc'); 
+       
+           if (!empty($search)) {
+               $query->where(function ($q) use ($search) {
+                   $q->where('title', 'like', "%{$search}%")
+                   ->orWhereHas('category', function ($q) use ($search) {
+                       $q->where('name', 'like', "%{$search}%");
+                   })
+                   ->orWhereHas('subCategory', function ($q) use ($search) {
+                       $q->where('name', 'like', "%{$search}%");
+                   })
+                   ->orWhereHas('country', function ($q) use ($search) { 
+                       $q->where('name', 'like', "%{$search}%");
+                   })
+                   ->orWhereHas('city', function ($q) use ($search) {
+                       $q->where('name', 'like', "%{$search}%");
+                   });
+               });
+           }
+       
+           return $query->paginate(10);
+   }
      
 
      //search active jobs from specific recruiter

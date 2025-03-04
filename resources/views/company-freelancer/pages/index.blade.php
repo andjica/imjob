@@ -108,7 +108,7 @@
                                                 <i class="fas fa-percentage text-info me-1" aria-hidden="true"></i> {{ $completionPercentage }}%
                                             </span>
                                         </div>
-
+                                        
                                         <div class="h-5px mx-3 w-100 bg-light mb-3">
                                             <div class="bg-info rounded h-5px" role="progressbar" style="width: {{ $completionPercentage }}%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                                         </div>
@@ -116,6 +116,8 @@
                                             <i class="fas fa-edit me-2" aria-hidden="true"></i> Complete Profile
                                         </a>
                                     @endif
+                                   
+                           
                                 </div>
                                 <!--end::Actions-->
                             </div>
@@ -182,6 +184,23 @@
                                         <i class="fas fa-briefcase me-2" aria-hidden="true"></i> Your Posted Jobs
                                     </a>
                                 </li>
+                                @if($freelancer->companies->count() > 0)
+                                <li class="nav-item mb-3">
+                                        Your connections 
+                                        <div class="symbol-group symbol-hover mb-3">
+                                                @foreach($freelancer->companies as $cm)
+                                                {{$cm->name}}
+                                                    <div class="symbol symbol-35px symbol-circle" data-bs-toggle="tooltip" data-bs-original-title="Alan Warden" data-kt-initialized="1">
+                                                    @if($cm->logo != null)    
+                                                    <img alt="Pic" src="{{Storage::url($cm->logo)}}">
+                                                    @else
+                                                    <span class="symbol-label bg-warning text-inverse-warning fw-bold">A</span>
+                                                    @endif
+                                                    </div>
+                                                @endforeach
+                                        </div>
+                                 </li>
+                               @endif
                             </ul>
                             <!--end::Nav Tabs-->
                         </div>

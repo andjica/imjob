@@ -68,6 +68,10 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::post('/company/update', [CompanyController::class, 'update'])->name('company-update');
+    Route::post('/job/store', [JobController::class, 'store'])->name('store-job');
+    Route::put('/job/{id}/update', [JobController::class, 'update'])->name('update-job');
+
+
 });
 
 // Admin Routes
@@ -85,7 +89,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin/dashboard')->name('admin-das
     Route::post('/company/{id}/reject', [CompanyController::class, 'reject'])->name('company-reject');
 });
 
-// Company Routes
+// Company Routes - Basic - Agency
 Route::middleware(['auth', 'company', 'verified'])->prefix('company/dashboard')->name('company-dashboard-')->group(function () {
     Route::get('/', [CompanyFrontController::class, 'dashboard'])->name('index');
     Route::get('/information/create', [CompanyFrontController::class, 'informationCreate'])->name('information-create');
@@ -94,12 +98,17 @@ Route::middleware(['auth', 'company', 'verified'])->prefix('company/dashboard')-
 
     Route::get('/find/recruiters', [CompanyFrontController::class, 'findRecruiters'])->name('find-recruiters');
     
-    Route::get('/settings', [CompanyFrontController::class, 'settings'])->name('settings');
-
     Route::post('/recruiters/call/{recruiter}', [RecruiterController::class, 'callRecruiter'])->name('recruiters-call');
 
+    //jobs
+    Route::get('/job/create', [CompanyFrontController::class, 'createJob'])->name('create-job');
+    Route::get('/active/jobs', [CompanyFrontController::class, 'getActiveJobs'])->name('active-jobs');
+    Route::get('/inactive/jobs', [CompanyFrontController::class, 'getInactiveJobs'])->name('inactive-jobs');
+
+    //profile
     Route::get('/settings', [CompanyFrontController::class, 'settings'])->name('settings');
     Route::get('/company/{company}/details', [CompanyFrontController::class, 'detailsCompany'])->name('company-details');
+    Route::get('/edit', [CompanyFrontController::class, 'editCompany'])->name('edit-company');
     Route::get('/add/employees', [CompanyFrontController::class, 'addEmployees'])->name('add-employees');
 
 });

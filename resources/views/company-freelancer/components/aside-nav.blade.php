@@ -55,34 +55,33 @@
                                 <span class="menu-arrow"></span>
                             </div>
                             <div class="menu-sub menu-sub-accordion menu-active-bg">
-                              
-                            <div class="menu-item menu-sub-indention menu-accordion">
-                                    <a class="menu-link {{ Route::currentRouteName() === 'company-freelancer-dashboard' ? 'active' : '' }}" 
-                                    href="{{ route('company-freelancer-dashboard') }}">
-                                        <span class="menu-bullet">
-                                            <span class="bullet bullet-dot"></span>
-                                        </span>
-                                        <span class="menu-title">Dashboard</span>
-                                    </a>
-                                </div>
-                                <div class="menu-item menu-sub-indention menu-accordion">
-                                    <a class="menu-link {{ Route::currentRouteName() === 'company-freelancer-find-companies' ? 'active' : '' }}" 
-                                    href="{{ route('company-freelancer-find-companies') }}">
-                                        <span class="menu-bullet">
-                                            <span class="bullet bullet-dot"></span>
-                                        </span>
-                                        <span class="menu-title">Find Companies</span>
-                                    </a>
-                                </div>
-                                <div class="menu-item menu-sub-indention menu-accordion">
-                                    <a class="menu-link {{ Route::currentRouteName() === 'company-freelancer-find-contributors' ? 'active' : '' }}" 
-                                    href="{{ route('company-freelancer-find-contributors') }}">
-                                        <span class="menu-bullet">
-                                            <span class="bullet bullet-dot"></span>
-                                        </span>
-                                        <span class="menu-title">Find Contributors</span>
-                                    </a>
-                                </div>
+                                    <div class="menu-item menu-sub-indention menu-accordion">
+                                        <a class="menu-link {{ Route::currentRouteName() === 'company-freelancer-dashboard' ? 'active' : '' }}" 
+                                        href="{{ route('company-freelancer-dashboard') }}">
+                                            <span class="menu-bullet">
+                                                <span class="bullet bullet-dot"></span>
+                                            </span>
+                                            <span class="menu-title">Dashboard</span>
+                                        </a>
+                                    </div>
+                                    <div class="menu-item menu-sub-indention menu-accordion">
+                                        <a class="menu-link {{ Route::currentRouteName() === 'company-freelancer-find-companies' ? 'active' : '' }}" 
+                                        href="{{ route('company-freelancer-find-companies') }}">
+                                            <span class="menu-bullet">
+                                                <span class="bullet bullet-dot"></span>
+                                            </span>
+                                            <span class="menu-title">Find Companies</span>
+                                        </a>
+                                    </div>
+                                    <div class="menu-item menu-sub-indention menu-accordion">
+                                        <a class="menu-link {{ Route::currentRouteName() === 'company-freelancer-find-contributors' ? 'active' : '' }}" 
+                                        href="{{ route('company-freelancer-find-contributors') }}">
+                                            <span class="menu-bullet">
+                                                <span class="bullet bullet-dot"></span>
+                                            </span>
+                                            <span class="menu-title">Find Contributors</span>
+                                        </a>
+                                    </div>
                             </div>
 
                         </div>
@@ -215,7 +214,7 @@
                                 <div class="menu-sub menu-sub-accordion">
 
                                     <div class="menu-item">
-                                        <a class="menu-link" href="{{asset('/company/freelancer/notifications')}}">
+                                        <a class="menu-link {{ Route::currentRouteName() === 'company-freelancer-notifications' ? 'active' : '' }}" href="{{asset('/company/freelancer/notifications')}}">
                                             <span class="menu-bullet">
                                                 <span class="bullet bullet-dot"></span>
                                             </span>

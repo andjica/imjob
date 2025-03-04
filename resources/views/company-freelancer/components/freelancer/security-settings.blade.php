@@ -6,12 +6,14 @@
             <div class="card-header">
                 <div class="card-title">
                     <h3>Security Settings</h3>
+                    
                 </div>
             </div>
             <!--end::Card header-->
 
             <!--begin::Card body-->
             <div class="card-body pt-3">
+            
                 <!-- Email Update Form -->
                 <form action="{{ route('user-email-update', $freelancer->user_id) }}" method="POST" id="emailUpdateForm">
                     @csrf
@@ -32,7 +34,7 @@
                         <button type="submit" class="btn btn-primary">Update Email</button>
                     </div>
                 </form>
-
+           
                 <div class="separator separator-dashed my-6"></div>
 
                 <!-- Password Change Form -->
@@ -87,8 +89,19 @@
                         <a href="{{ route('password.request') }}" class="btn btn-link">Send Password Reset Link</a>
                     </div>
                 </div>
+                <div class="separator separator-dashed my-6"></div>
+
+                <div class="row mb-5">
+                    <label class="col-lg-2 col-form-label fw-bold fs-6">Account Type</label>
+                    <div class="col-lg-10">
+                        <div class="fw-bold d-flex align-items-center fs-5">                
+                            <span class="badge badge-light-success fw-bold fs-5 p-3">Company<br>{{auth()->user()->company->companyType->name}}</span>
+                        </div>
+                    </div>
+                </div>
             </div>
             <!--end::Card body-->
         </div>
     </div>
 </div>
+

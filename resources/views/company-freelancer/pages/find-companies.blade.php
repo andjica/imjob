@@ -92,7 +92,7 @@
                             @endif
                             <br>
                             <br>
-                            <a href=""><u>{{ $company->category->name }}</u></a><small>- {{$company->subCategory->name}} - </small><br>
+                            <u>{{ $company->category->name }}</u><small>- {{$company->subCategory->name}} - </small><br>
                             Type of company - {{ $company->companyType->name }},<i> <br>From {{ $company->city->name }}, {{ $company->country->name }} </i>
                         </div>
                     </div>

@@ -38,6 +38,7 @@
                                 </svg>
                             </a>
                         </div>
+                      
                         <!--end::Mobile logo-->
                         <!--begin::Wrapper-->
                         <div class="d-flex align-items-stretch justify-content-between flex-lg-grow-1">
@@ -51,67 +52,75 @@
                             </div>
 
                         </div>
+                        <li class="nav-item">
+                            <a href="/notifications" class="nav-link">
+                            <i id="notification-icon" class="fas fa-bell"></i>
+                                <span id="notification-badge" class="badge bg-danger" style="display: none;">0</span>
+
+                            </a>
+                        </li>
                         <div class="app-navbar-item ms-1 mt-1 ms-md-3" id="kt_header_user_menu_toggle">
-        <!--begin::Menu wrapper-->
-        <div class="cursor-pointer" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">
-            <img src="{{asset('/images/logo1.png')}}" width="70px" class="img-fluid my-5">  
-        </div>
+                       
+                        <!--begin::Menu wrapper-->
+                            <div class="cursor-pointer" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">
+                                <img src="{{asset('/images/logo1.png')}}" width="70px" class="img-fluid my-5">  
+                            </div>
 
-<!--begin::User account menu-->
-<div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg menu-state-color fw-semibold py-4 fs-6 w-275px" data-kt-menu="true" style="">
-    <!--begin::Menu item-->
-    <div class="menu-item px-3">
-        <div class="menu-content d-flex align-items-center px-3">
-            <!--begin::Avatar-->
-            <div class="">
-                  <img src="{{asset('/images/logo1.png')}}" width="70px" class="img-fluid">  
-            </div>
-            <!--end::Avatar-->
+                    <!--begin::User account menu-->
+                    <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg menu-state-color fw-semibold py-4 fs-6 w-275px" data-kt-menu="true" style="">
+                        <!--begin::Menu item-->
+                        <div class="menu-item px-3">
+                            <div class="menu-content d-flex align-items-center px-3">
+                                <!--begin::Avatar-->
+                                <div class="">
+                                    <img src="{{asset('/images/logo1.png')}}" width="70px" class="img-fluid">  
+                                </div>
+                                <!--end::Avatar-->
 
-            <!--begin::Username-->
-            <div class="d-flex flex-column">
-                <div class="fw-bold d-flex align-items-center fs-5">
+                                <!--begin::Username-->
+                                <div class="d-flex flex-column">
+                                    <div class="fw-bold d-flex align-items-center fs-5">
+                                        
+                                        <span class="badge badge-light-success fw-bold fs-8 px-2 py-1 ms-2">Account type: <br>{{auth()->user()->company->companyType->name}}</span>
+                                    </div>
 
-                     <span class="badge badge-light-success fw-bold fs-8 px-2 py-1 ms-2">{{auth()->user()->role->name}}</span>
+                                    <a href="#" class="fw-semibold text-muted text-hover-primary fs-7">
+                                    </a>
+                                </div>
+                                <!--end::Username-->
+                            </div>
+                        </div>
+                            <!--end::Menu item-->
+
+                            <!--begin::Menu separator-->
+                            <div class="separator my-2"></div>
+                            <!--end::Menu separator-->
+
+
+                            <!--begin::Menu separator-->
+                            <div class="separator my-2"></div>
+
+
+                            <!--begin::Menu item-->
+                            <div class="menu-item px-5 my-1">
+                                <a href="{{asset('/company/freelancer/settings')}}" class="menu-link px-5">
+                                    Account Settings
+                                </a>
+                            </div>
+                            <!--end::Menu item-->
+
+                            <!--begin::Menu item-->
+                            <div class="menu-item px-5">
+                                <a href="{{asset('/logout')}}" class="menu-link px-5">
+                                    Sign Out
+                                </a>
+                            </div>
+                            <!--end::Menu item-->
+                    </div>
+            <!--end::User account menu-->
+            <!--end::Menu wrapper-->
                 </div>
-
-                <a href="#" class="fw-semibold text-muted text-hover-primary fs-7">
-                 </a>
-            </div>
-            <!--end::Username-->
-        </div>
+                <!--end::Wrapper-->
+                </div>
+            <!--end::Container-->
     </div>
-    <!--end::Menu item-->
-
-    <!--begin::Menu separator-->
-    <div class="separator my-2"></div>
-    <!--end::Menu separator-->
-
-
-    <!--begin::Menu separator-->
-    <div class="separator my-2"></div>
-
-
-    <!--begin::Menu item-->
-    <div class="menu-item px-5 my-1">
-        <a href="{{asset('/company/freelancer/settings')}}" class="menu-link px-5">
-            Account Settings
-        </a>
-    </div>
-    <!--end::Menu item-->
-
-    <!--begin::Menu item-->
-    <div class="menu-item px-5">
-        <a href="{{asset('/logout')}}" class="menu-link px-5">
-            Sign Out
-        </a>
-    </div>
-    <!--end::Menu item-->
-</div>
-<!--end::User account menu-->
-   <!--end::Menu wrapper-->
-    </div>
-     <!--end::Wrapper-->
-    </div>
-<!--end::Container-->
-</div>

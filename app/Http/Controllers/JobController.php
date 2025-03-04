@@ -26,7 +26,15 @@ class JobController extends Controller
        
         $createJob->execute($request->validated());
 
-        return redirect()->route('company-freelancer-active-jobs')->with('success', 'You create job successfully');
+        if(auth()->user()->company->companyType == "Freelancer")
+        {
+            return redirect()->route('company-freelancer-active-jobs')->with('success', 'You create job successfully');
+
+        }
+        else
+        {
+            return redirect()->route('company-dashboard-active-jobs')->with('success', 'You create job successfully');
+        }
     }
 
     public function edit($id)
@@ -51,7 +59,7 @@ class JobController extends Controller
     public function update(StoreJobRequest $request, $id, UpdateJob $updateJob)
     {
         $job = $this->jobRep->find($id) ?? abort(404);
-
+        
         if (!$job) {
             return redirect()->route('company-freelancer-active-jobs')->with('error', 'Job not found.');
         }

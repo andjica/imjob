@@ -15,7 +15,7 @@
     <link href="{{ asset('templates/metronic') }}/css/style.bundle.css" rel="stylesheet">
     <link href="{{ asset('templates/metronic') }}/css/custom.style.css" rel="stylesheet">
     <meta name="company-id" content="{{ auth()->user()->company->id ?? '' }}">
-
+    @yield('css')
 </head>
 <body>
 

@@ -8,10 +8,13 @@ use App\Http\Controllers\Controller;
 use App\Interfaces\CategoryInterface;
 use App\Interfaces\CityInterface;
 use App\Interfaces\CompanyInterface;
+use App\Interfaces\CompanyTypeInterface;
 use App\Interfaces\CountryInterface;
+use App\Interfaces\JobTypeInterface;
 use App\Interfaces\RecruiterInterface;
 use App\Interfaces\SubCategoryInterface;
 use App\Models\Company;
+use App\Repositories\JobRepository;
 use App\Services\CompanyTypeServices;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -26,11 +29,13 @@ class FrontController extends Controller
     protected $companyTypeServices;
     protected $categoryServices;
     protected $subCategoryServices;
-
+    protected $companyTypesServices;
+    protected $jobTypeServices;
+    protected $jobRep;
 
     public function __construct(CountryInterface $countryServices, CityInterface $cityServices, 
     RecruiterInterface $recruiterServices, CompanyInterface $companyServices,CompanyTypeServices $companyTypeServices,
-    CategoryInterface $categoryServices, SubCategoryInterface $subCategoryServices)
+    CategoryInterface $categoryServices, SubCategoryInterface $subCategoryServices, CompanyTypeInterface $companyTypesServices, JobTypeInterface $jobTypeServices, JobRepository $jobRep)
     {
         $this->countryServices = $countryServices;
         $this->cityServices = $cityServices;
@@ -39,6 +44,10 @@ class FrontController extends Controller
         $this->companyTypeServices = $companyTypeServices;
         $this->categoryServices = $categoryServices;
         $this->subCategoryServices = $subCategoryServices;
+        $this->companyTypesServices = $companyTypesServices;
+        $this->jobTypeServices = $jobTypeServices;
+        $this->jobRep = $jobRep;
+
     }
 
     public function dashboard()
@@ -97,7 +106,62 @@ class FrontController extends Controller
     {
         $companyId = auth()->user()->company->id;
         $company   = Company::find($companyId) ?? abort(404);
-        return view('contributor.pages.settings', compact('contributor'));
+        return view('company.pages.settings', compact('company'));
     }
    
+    public function editCompany()
+    {
+        $user = auth()->user()->id;
+        $company = $this->companyServices->getCompanyByRecruiter($user);
+
+        $categories    = $this->categoryServices->getAll();
+        $categoryId    = $company->category_id;
+        $subCategories = $this->subCategoryServices->getAllByCategoryId($categoryId);
+
+        $countries = $this->countryServices->getCountries();
+        $cities    = $this->cityServices->getCitiesByCountry($company->country_id);
+
+        $companyTypes = $this->companyTypesServices->getAll();
+
+        return view('company.pages.company.edit', compact(
+            'company',
+            'categories',
+            'countries',
+            'subCategories',
+            'cities',
+            'companyTypes'
+        ));
+    }
+
+    public function createJob()
+    {
+         /** @var User $user */
+         $user = auth()->user();
+
+        //  $recruiterWithCompanies = $user->recruiter->activeCompanies;
+         $countries = $this->countryServices->getCountries();
+         $categories = $this->categoryServices->getAll();
+         $jobTypes = $this->jobTypeServices->getAll();
+ 
+         return view('company.pages.job.create', compact('countries', 'categories', 'jobTypes'));
+    }
+
+    public function getActiveJobs(Request $request)
+    {
+        $companyId = auth()->user()->company->id ?? abort(404);
+
+        $searchString = $request->get('query') ?? null;
+        $jobs = $this->jobRep->searchJobsFromCompany($searchString, $companyId);
+        
+        return view('company.pages.job.active-jobs', compact('jobs'));
+    }
+
+    public function getInactiveJobs()
+    {
+       
+        $companyId = auth()->user()->company->id;
+
+        $jobs = $this->jobRep->findInactiveFromCompanyId($companyId);
+        return view('company.pages.job.inactive-jobs', compact('jobs'));
+    }
 }

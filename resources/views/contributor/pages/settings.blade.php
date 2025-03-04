@@ -15,6 +15,7 @@
      <!--End Alerts -->
     <div class="row">
         @include('contributor.components.security-settings')
+       
     </div>
 </div>
    

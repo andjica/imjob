@@ -61,37 +61,37 @@
                                   
                                 </div>
                                
-                                        <!-- Accept Modal -->
-                                        <div class="modal fade" id="acceptModal{{ $not->company->id }}" tabindex="-1" aria-labelledby="acceptModalLabel{{ $not->company->id }}" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header bg-light-success">
-                                                        <h5 class="modal-title" id="acceptModalLabel{{ $not->company->id }}">Accept Company</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <p>Accept connection with this company?</p>
-                                                        <ul>
-                                                            <li><strong>Name:</strong> {{ $not->company->name }}</li>
-                                                            <li><strong>Email:</strong> {{ $not->company->user->email }}</li>
-                                                            <li><strong>Country:</strong> {{ $not->company->country->name }}</li>
-                                                            <li><strong>Registration number:</strong> {{ $not->company->registration_number}}</li>
-                                                            <li><strong>Created At:</strong> {{ $not->company->created_at->format('d-m-Y') }}</li>
-                                                        </ul>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <form action=" {{ route('company-freelancer-follow-change-status') }}" method="POST">
-                                                            @csrf
-                                                            <input type="hidden" name="company_id" value="{{$not->company->id}}">
-                                                            <input type="hidden" name="recruiter_id" value="{{auth()->user()->recruiter->id}}">
-                                                            <input type="hidden" name="status" value="Active">
-                                                            <input type="submit" class="btn btn-success" value="Accept">
-                                                        </form>
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                                    </div>
-                                                </div>
+                                <!-- Accept Modal -->
+                                <div class="modal fade" id="acceptModal{{ $not->company->id }}" tabindex="-1" aria-labelledby="acceptModalLabel{{ $not->company->id }}" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header bg-light-success">
+                                                <h5 class="modal-title" id="acceptModalLabel{{ $not->company->id }}">Accept Company</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Accept connection with this company?</p>
+                                                <ul>
+                                                    <li><strong>Name:</strong> {{ $not->company->name }}</li>
+                                                    <li><strong>Email:</strong> {{ $not->company->user->email }}</li>
+                                                    <li><strong>Country:</strong> {{ $not->company->country->name }}</li>
+                                                    <li><strong>Registration number:</strong> {{ $not->company->registration_number}}</li>
+                                                    <li><strong>Created At:</strong> {{ $not->company->created_at->format('d-m-Y') }}</li>
+                                                </ul>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <form action=" {{ route('company-freelancer-follow-change-status') }}" method="POST">
+                                                    @csrf
+                                                    <input type="hidden" name="company_id" value="{{$not->company->id}}">
+                                                    <input type="hidden" name="recruiter_id" value="{{auth()->user()->recruiter->id}}">
+                                                    <input type="hidden" name="status" value="Active">
+                                                    <input type="submit" class="btn btn-success" value="Accept">
+                                                </form>
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
                                     <!-- Reject Modal -->
                                     <div class="modal fade" id="rejectModal{{ $not->company->id }}" tabindex="-1" aria-labelledby="rejectModalLabel{{ $not->company->id }}" aria-hidden="true">
                                     <div class="modal-dialog">
@@ -111,8 +111,11 @@
                                                 </ul>
                                             </div>
                                             <div class="modal-footer">
-                                                <form action="{{ route('admin-dashboard-company-reject', $not->company->id) }}" method="POST">
+                                                <form action="{{ route('company-freelancer-follow-change-status') }}" method="POST">
                                                     @csrf
+                                                    <input type="hidden" name="company_id" value="{{$not->company->id}}">
+                                                    <input type="hidden" name="recruiter_id" value="{{auth()->user()->recruiter->id}}">
+                                                    <input type="hidden" name="status" value="Rejected">
                                                     <button type="submit" class="btn btn-danger">Reject</button>
                                                 </form>
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
