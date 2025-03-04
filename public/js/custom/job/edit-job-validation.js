@@ -1,6 +1,6 @@
 // $(document).ready(function () {
 //     const jobWorldType = document.getElementById('jobWorldType').value;
-  
+
 //   // Function to update selection
 //   function setJobType(type) {
 //       // Update the hidden input value
@@ -24,7 +24,7 @@
 //   } else if (jobWorldType === 'international') {
 //       setJobType('international');
 //   }
-  
+
 //   // Make function globally accessible
 //   window.setJobType = setJobType;
 //   // AutoNumeric Configuration
@@ -69,7 +69,7 @@
 //     //ovde nastaviti
 //       event.preventDefault();
 //       console.log("Syncing CKEditor before validation...");
-      
+
 //       if (window.jobDescriptionEditor) {
 //           const editorContent = window.jobDescriptionEditor.getData().trim();
 //           $('textarea[name="description"]').val(editorContent);
@@ -167,7 +167,6 @@
 //           hideError('#special_requirements', '#specialDetailsEmpty');
 //       }
 
-
 //       console.log(isValid ? "✅ Form is valid!" : "❌ Form validation failed!");
 //       return isValid;
 //   }
@@ -232,7 +231,6 @@
 //       $(errorField).text('').hide();
 //   }
 // });
-
 
 $(document).ready(function () {
     const jobWorldType = document.getElementById("jobWorldType").value;
@@ -479,15 +477,14 @@ $(document).ready(function () {
     });
 
     // Other
-    $('#subCategoryId').select2();
-    $('#subCategoryId').on("change select2:select", function () {
+    $("#subCategoryId").select2();
+    $("#subCategoryId").on("change select2:select", function () {
         let selectedValue = $(this).val();
         let otherSubRow = $("#otherSubRow");
         let otherSubInput = $("#otherSub");
 
         if (selectedValue === "Other") {
             otherSubRow.removeClass("d-none");
-            
         } else {
             otherSubRow.addClass("d-none");
             otherSubInput.val(""); // Clear input when hidden
@@ -499,7 +496,9 @@ $(document).ready(function () {
 
         if (other == "") {
             $("#otherCategoryEmpty").text("Please write your category.");
-            $("#otherSub").addClass("border-danger").removeClass("border-success");
+            $("#otherSub")
+                .addClass("border-danger")
+                .removeClass("border-success");
             $("#otherSub").next(".invalid-feedback").show();
         } else if (!/^.{4,}$/.test(other)) {
             $("#otherSub").addClass("border-danger");
@@ -508,7 +507,9 @@ $(document).ready(function () {
                 .show();
         } else {
             $("#otherCategoryEmpty").text("");
-            $("#otherSub").removeClass("border-danger").addClass("border-success");
+            $("#otherSub")
+                .removeClass("border-danger")
+                .addClass("border-success");
         }
     });
 
@@ -669,13 +670,15 @@ $(document).ready(function () {
 
     // Form Validation on Submit
     $("#jobForm").submit(function (event) {
-        const subCategoryId = $('#subCategoryId').val();
+        const subCategoryId = $("#subCategoryId").val();
         const otherCategory = $("#otherSub").val();
         if (subCategoryId === "Other") {
      
             if (!otherCategory.trim()) {
                 $("#otherSub").addClass("border-danger");
-                $("#otherCategoryEmpty").text("Please write your category.").show();
+                $("#otherCategoryEmpty")
+                    .text("Please write your category.")
+                    .show();
                 isValid = false;
             }
         }

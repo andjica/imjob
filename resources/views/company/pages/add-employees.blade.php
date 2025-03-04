@@ -53,11 +53,16 @@
                     <h3 class="card-title">Send Email</h3>
                 </div>
                 <div class="card-body">
-                    <form action="" method="POST">
+                    <form action="/" method="POST" id="emailForm">
                         @csrf
                         <div class="mb-3">
                             <label for="email" class="form-label">Email Address:</label>
-                            <input type="email" class="form-control" name="email" id="email" required>
+                            <input type="email" class="form-control @error('email') is-invalid @enderror"
+                                name="email" id="email">
+                            <span class="text-danger" id="emailEmpty"> @error('email')
+                                    {{ $message }}
+                                @enderror
+                            </span>
                         </div>
                         <button type="submit" class="btn btn-success">Send Email</button>
                     </form>
@@ -76,15 +81,59 @@
                 return recruiter.text;
             }
             var image = $(recruiter.element).data('img') || "{{ asset('/images/icon-profile.png') }}";
-            var template = $('<span><img src="' + image + '" class="rounded-circle" style="width:30px; height:30px; margin-right:10px;"/> ' + recruiter.text + '</span>');
+            var template = $('<span><img src="' + image +
+                '" class="rounded-circle" style="width:30px; height:30px; margin-right:10px;"/> ' +
+                recruiter.text + '</span>');
             return template;
         }
 
         $('#recruiterId').select2({
             templateResult: formatRecruiter,
             templateSelection: formatRecruiter,
-            escapeMarkup: function(m) { return m; }
+            escapeMarkup: function(m) {
+                return m;
+            }
+        });
+
+        let isValid = true;
+
+        // Email validation
+        function showError(inputId, errorId, message) {
+            $(inputId).removeClass("border-success").addClass("border-danger");
+            $(errorId).text(message).addClass("text-danger");
+        }
+
+        function showSuccess(inputId, errorId) {
+            $(inputId).removeClass("border-danger").addClass("border-success");
+            $(errorId).text("");
+        }
+
+        function validateEmail() {
+            let email = $("#email").val().trim();
+            let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (email === "") {
+                showError("#email", "#emailEmpty", "Email is required.");
+                isValid = false;
+            } else if (!email.match(emailPattern)) {
+                showError("#email", "#emailEmpty", "Enter a valid email address.");
+                isValid = false;
+            } else {
+                showSuccess("#email", "#emailEmpty");
+                isValid = true;
+            }
+        }
+
+        // Validate email on input change
+        $("#email").on("input", function() {
+            validateEmail();
+        });
+
+        // Validate on form submit
+        $("#emailForm").submit(function(e) {
+            if (!validateEmail()) {
+                e.preventDefault(); // Prevent form submission if invalid
+            }
         });
     });
-</script> 
+</script>
 @endsection

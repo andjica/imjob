@@ -16,23 +16,16 @@ use App\Http\Requests\StoreJobRequest;
 class JobController extends Controller
 {
 
-    public function __construct(protected JobRepository $jobRep)
-    {
-        
-    }
+    public function __construct(protected JobRepository $jobRep) {}
 
     public function store(StoreJobRequest $request, CreateJob $createJob): RedirectResponse
     {
-       
+
         $createJob->execute($request->validated());
 
-        if(auth()->user()->company->companyType->name == "Freelancer")
-        {
+        if (auth()->user()->company->companyType->name === "Freelancer") {
             return redirect()->route('company-freelancer-active-jobs')->with('success', 'You create job successfully');
-
-        }
-        else
-        {
+        } else {
             return redirect()->route('company-dashboard-active-jobs')->with('success', 'You create job successfully');
         }
     }
@@ -93,6 +86,4 @@ class JobController extends Controller
 
         }
     }
-
-
 }

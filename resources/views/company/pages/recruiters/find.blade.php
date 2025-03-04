@@ -67,7 +67,7 @@
             @else
         <div class="row g-3">
             @foreach ($recruiters as $recruiter)
-                <div class="col-md-4">
+                {{-- <div class="col-md-4">
                     <div class="card shadow-sm">
                         
                         <div class="card-body text-center">
@@ -115,6 +115,39 @@
                             </div>
                         </div>
                     </div>
+                </div> --}}
+                <div class="d-flex flex-stack pt-2">  
+                    <!--begin::Image-->
+                    <div class="symbol symbol-40px me-5">
+                        @if ($recruiter->profile_image)
+                                <img src="{{ asset(Storage::url($recruiter->profile_image)) }}" 
+                                    alt="Profile Image" 
+                                    class="img-fluid rounded-circle shadow-sm"
+                                    style="width: 60px; height: 60px;"> <!-- Smaller size here -->
+                            @else
+                                <span class="badge bg-secondary">No Image</span>
+                            @endif                         
+                    </div>
+                    <!--end::Image-->
+    
+                    <!--begin::Section-->
+                    <div class="d-flex align-items-center flex-row-fluid flex-wrap">
+                        <!--begin:Recruiter-->                    
+                        <div class="flex-grow-1 me-2">
+                            <h5 class="card-title">{{ $recruiter->user->first_name }} {{ $recruiter->user->last_name }}</h5>
+                            
+                            <span class="text-muted fw-semibold d-block fs-7">{{ $recruiter->title_function }}</span>
+                        </div>
+                        <!--end:Recruiter-->                      
+                        
+                        <!--begin:Action-->
+                        <form method="POST" action="">
+                            @csrf
+                            <button type="submit" class="btn btn-primary btn-sm">Follow</button>
+                        </form>
+                        <!--end:Action-->
+                    </div>
+                    <!--end::Section-->
                 </div>
             @endforeach
         </div>
