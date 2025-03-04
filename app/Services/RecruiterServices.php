@@ -2,11 +2,12 @@
 
 namespace App\Services;
 
+use App\Models\Company;
 use App\Models\Recruiter;
 use Illuminate\Http\Request;
 use App\Models\FreelancerCompany;
 use App\Interfaces\RecruiterInterface;
-use App\Models\Company;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class RecruiterServices implements RecruiterInterface
@@ -122,12 +123,18 @@ class RecruiterServices implements RecruiterInterface
             $freelancer->save();
             return redirect('/home')->with('success', 'Recruiter information saved successfully!');
         }
-
-
-       
-       
+ 
 
         
+    }
+
+    public function getAvailableRecruiters(int $companyId): Collection
+    {
+        return Recruiter::whereNotIn('id', function ($query) use ($companyId) {
+            $query->select('recruiter_id')
+                  ->from('company_recruiter')
+                  ->where('company_id', $companyId);
+        })->get();
     }
 
 }

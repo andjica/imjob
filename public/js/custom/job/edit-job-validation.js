@@ -671,9 +671,8 @@ $(document).ready(function () {
     $("#jobForm").submit(function (event) {
         const subCategoryId = $('#subCategoryId').val();
         const otherCategory = $("#otherSub").val();
-        alert(otherCategory);
         if (subCategoryId === "Other") {
-            //alert(2);
+     
             if (!otherCategory.trim()) {
                 $("#otherSub").addClass("border-danger");
                 $("#otherCategoryEmpty").text("Please write your category.").show();

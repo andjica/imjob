@@ -111,6 +111,10 @@ Route::middleware(['auth', 'company', 'verified'])->prefix('company/dashboard')-
     Route::get('/edit', [CompanyFrontController::class, 'editCompany'])->name('edit-company');
     Route::get('/add/employees', [CompanyFrontController::class, 'addEmployees'])->name('add-employees');
 
+    //follow and connections
+    Route::post('/make-connection/change-status', [FollowController::class, 'changeStatus'])->name('follow-change-status');
+
+
 });
 
 // Company Freelancer Routes

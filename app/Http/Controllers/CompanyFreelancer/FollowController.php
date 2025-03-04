@@ -65,6 +65,7 @@ class FollowController extends Controller
 
     public function changeStatus(ChangeStatusRequest $request)
     {
+        
         try {
             $this->companyRecruiterServices->changeStatus($request);
             return redirect()->back()->with('success', 'Follow request status updated successfully.');

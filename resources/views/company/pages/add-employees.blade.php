@@ -11,15 +11,15 @@
                     <h3 class="card-title">Add Employee</h3>
                 </div>
                 <div class="card-body">
-                    <form action="" method="POST">
-                        @csrf
+                <form action=" {{ route('company-dashboard-follow-change-status') }}" method="POST">
+                @csrf
                         <div class="mb-3">
                             <label for="recruiter" class="form-label">Select Recruiter:</label>
                             <!-- Recruiter -->
                             <div class="row mb-5">
                                 <label class="col-lg-4 col-form-label fw-bold fs-6 required">Recruiter:</label>
                                 <div class="col-lg-8">
-                                <select name="recruiterId" id="recruiterId" data-control="select2"
+                                <select name="recruiter_id" id="recruiter_id" data-control="select2"
                                     class="form-control form-control-solid @error('recruiterId') is-invalid @enderror">
                                     <option value="">Select a Recruiter</option>
                                     @foreach ($recruiters as $recruiter)
@@ -33,6 +33,8 @@
                                         </option>
                                     @endforeach
                                 </select>
+                                <input type="hidden" name="company_id" value="{{auth()->user()->company->id}}">
+                                <input type="hidden" name="status" value="Active">
                                     <span class="text-danger" id="recruiterIdEmpty">@error('recruiterId'){{ $message }}@enderror</span>
                                 </div>
                             </div>

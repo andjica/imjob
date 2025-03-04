@@ -14,14 +14,23 @@ class CompanyRecruiterServices implements CompanyRecruiterInterface
         $companyId = (int) $request->get('company_id');
         $recruiterId = (int) $request->get('recruiter_id');
         $status = $request->get('status');
-    
+        
         // Find the follow request
         $followRequest = CompanyRecruiter::where('company_id', $companyId)
             ->where('recruiter_id', $recruiterId)
             ->first();
     
         if (!$followRequest) {
-            throw new Exception('Follow request not found.');
+            
+            $followRequest = new CompanyRecruiter();
+            $followRequest->recruiter_id = $recruiterId;
+            $followRequest->company_id = $companyId;
+            $followRequest->status = $status;
+            $followRequest->from_date = now();
+            $followRequest->save();
+
+            return true;
+
         }
     
         // Prepare update data

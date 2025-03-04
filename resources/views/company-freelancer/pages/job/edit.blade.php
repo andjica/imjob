@@ -208,6 +208,7 @@
                                             <option value="{{ $job->subCategory->name === 'Other' ? 'Other' : $job->subCategory->id }}">
                                                 {{ $job->subCategory->name }}
                                             </option>
+                            
                                             @php 
                                                 $subcategories = App\Models\SubCategory::where('category_id', $job->category_id)->get();
                                                                 
@@ -215,10 +216,10 @@
 
                                             <!-- Loop through other subcategories -->
                                             @foreach($subcategories as $subcat)
-                                                @if($subcat->name == "Other")
+                                                @if($job->subCategory->name === "Other")
                                                 @continue
                                                 @endif
-                                                <option value="{{$subcat->id}}">{{$subcat->name}}</option> 
+                                                <option value="{{ $subcat->name === 'Other' ? 'Other' : $subcat->id }}">{{$subcat->name}}</option> 
                                             @endforeach  
 
                                             <!-- Always include "Other" as an option -->
