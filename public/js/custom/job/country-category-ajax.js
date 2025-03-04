@@ -135,7 +135,7 @@ $(document).ready(function () {
                     }
                     // At the end apped "Other" option
                     $("#subCategoryId").append(
-                        '<option value="other">Other</option>'
+                        '<option value="Other">Other</option>'
                     );
                 },
                 error: function () {
@@ -159,12 +159,21 @@ $(document).ready(function () {
     });
 
     // Show or hide "otherSub" input field based on selection
-    $("#subCategoryId").on("change", function () {
-        var otherCategoryRow = $("#otherSubRow");
-        if ($(this).val() === "other") {
-            otherCategoryRow.removeClass("d-none"); // Show "Other" input field
+    $('#subCategoryId').select2();
+    $('#subCategoryId').on("change select2:select", function () {
+       
+        let selectedValue = $(this).val();
+        let otherSubRow = $("#otherSubRow");
+        let otherSubInput = $("#otherSub");
+
+        if (selectedValue === "Other") {
+           
+            otherSubRow.removeClass("d-none");
+            
         } else {
-            otherCategoryRow.addClass("d-none"); // Hide "Other" input field
+            
+            otherSubRow.addClass("d-none");
+            otherSubInput.val(""); // Clear input when hidden
         }
     });
 });

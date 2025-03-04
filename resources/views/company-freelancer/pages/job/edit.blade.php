@@ -205,8 +205,9 @@
                                             class="form-control form-control-solid @error('subCategoryId') is-invalid @enderror">
                                             
                                             <!-- Current Selected Option -->
-                                            <option value="{{ $job->subCategory->id }}" selected>{{ $job->subCategory->name }}</option>
-
+                                            <option value="{{ $job->subCategory->name === 'Other' ? 'Other' : $job->subCategory->id }}">
+                                                {{ $job->subCategory->name }}
+                                            </option>
                                             @php 
                                                 $subcategories = App\Models\SubCategory::where('category_id', $job->category_id)->get();
                                                                 
@@ -221,7 +222,8 @@
                                             @endforeach  
 
                                             <!-- Always include "Other" as an option -->
-                                            <option value="Other">Other</option>
+                                             <!-- <option value="Other">Andjica</option> -->
+                                            <!-- <option value="Other">Other</option> -->
                                         </select>
                                         <span class="text-danger" id="subCategoryIdEmpty">@error('subCategoryId'){{ $message }}@enderror</span>
                                     </div>
