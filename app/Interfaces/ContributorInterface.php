@@ -11,5 +11,4 @@ interface ContributorInterface
     public function getAll(?string $search = null): LengthAwarePaginator;
     public function getContributor(int $contributorId);
 
-    public function getAllRecruiters(?string $search = null): LengthAwarePaginator;
 }
