@@ -100,16 +100,16 @@
 
                                             <span
                                                 class="text-muted fw-semibold d-block fs-7">{{ $recruiter->title_function }}</span>
-                                                <p class="text-muted">{{ $recruiter->user->email }}</p>
+                                            <p class="text-muted">{{ $recruiter->user->email }}</p>
 
                                         </div>
                                         <!--end:Recruiter-->
 
                                         <!--begin:Action-->
-                                        <form method="POST" action="">
-                                            @csrf
-                                            <button type="submit" class="btn btn-primary btn-sm">Follow</button>
-                                        </form>
+                                        <button type="button" data-recruiter-id="{{ $recruiter->id }}"
+                                            data-status="Pending" class="btn btn-sm btn-light-primary me-2 mb-2 follow-button">
+                                            Follow
+                                        </button>
                                         <!--end:Action-->
                                     </div>
                                     <!--end::Section-->
@@ -130,5 +130,47 @@
 @endsection
 
 @section('js')
-<script src="{{ asset('/assets/custom/user/users-table.js') }}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Select all follow buttons
+    const followButtons = document.querySelectorAll('.follow-button');
+
+    followButtons.forEach(button => {
+        button.addEventListener('click', function(event) {
+            event.preventDefault();
+
+            const recruiterId = this.dataset.recruiterId;
+            const status = this.dataset.status;
+            // Send AJAX request using Fetch API
+            fetch('{{ route("contributor-make-request") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                },
+                body: JSON.stringify({ recruiter_id: recruiterId, status: status })
+            })            
+                .then(response => response.json())
+                .then(data => {
+                    if(data.success){
+                        // Update button to indicate success
+                        button.textContent = 'Request Sent';
+                        button.classList.remove('btn-primary');
+                        button.classList.add('btn-success');
+                        button.disabled = true;
+                    } else {
+                        throw new Error(data.message || 'Something went wrong.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Revert loading state
+                    // indicatorLabel.classList.remove('d-none');
+                    // indicatorProgress.classList.add('d-none');
+                    alert(error.message || 'Failed to send request. Please try again.');
+                });
+        });
+    });
+});
+</script>
 @endsection

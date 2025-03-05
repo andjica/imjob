@@ -20,6 +20,7 @@ class FollowController extends Controller
     //contributor - recruiter
     public function followRecruiter(ChangeStatusRecruiterContributorRequest $request): JsonResponse
     {
+       
         try {
             // Get the authenticated contributor's ID
             $contributorId = auth()->user()->contributor->id;

@@ -20,7 +20,7 @@ class ChangeStatusRecruiterContributorRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'contributor_id' => 'required|integer|exists:contributors,id',
+            //'contributor_id' => 'required|integer|exists:contributors,id',
             'recruiter_id' => 'required|integer|exists:recruiters,id',
         ];
     }
@@ -31,8 +31,8 @@ class ChangeStatusRecruiterContributorRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'contributor_id.required' => 'Contrbitur ID is required.',
-            'contributor_id.exists' => 'The selected contributor does not exist.',
+            //'contributor_id.required' => 'Contrbitur ID is required.',
+            //'contributor_id.exists' => 'The selected contributor does not exist.',
             'recruiter_id.required' => 'Recruiter ID is required.',
             'recruiter_id.exists' => 'The selected recruiter does not exist.',
         ];
