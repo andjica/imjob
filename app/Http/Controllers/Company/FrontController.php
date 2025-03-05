@@ -3,22 +3,22 @@
 namespace App\Http\Controllers\Company;
 
 use App\Models\User;
+use App\Models\Company;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Interfaces\CategoryInterface;
 use App\Interfaces\CityInterface;
+use App\Repositories\JobRepository;
+use Illuminate\Contracts\View\View;
+use App\Http\Controllers\Controller;
 use App\Interfaces\CompanyInterface;
-use App\Interfaces\CompanyTypeInterface;
 use App\Interfaces\CountryInterface;
 use App\Interfaces\JobTypeInterface;
-use App\Interfaces\RecruiterInterface;
-use App\Interfaces\SubCategoryInterface;
-use App\Models\Company;
-use App\Repositories\JobRepository;
+use App\Interfaces\CategoryInterface;
 use App\Services\CompanyTypeServices;
-use Illuminate\Contracts\Foundation\Application;
+use App\Interfaces\RecruiterInterface;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
+use App\Interfaces\CompanyTypeInterface;
+use App\Interfaces\SubCategoryInterface;
+use Illuminate\Contracts\Foundation\Application;
 
 class FrontController extends Controller
 {
@@ -165,5 +165,13 @@ class FrontController extends Controller
 
         $jobs = $this->jobRep->findInactiveFromCompanyId($companyId);
         return view('company.pages.job.inactive-jobs', compact('jobs'));
+    }
+
+    public function followRecruiter(Request $request){
+        $requestAll = $request->all();
+
+        return response()->json([
+            'request' => $requestAll
+        ]);
     }
 }

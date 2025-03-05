@@ -103,6 +103,9 @@ Route::middleware(['auth', 'company', 'verified'])->prefix('company/dashboard')-
     
     Route::post('/recruiters/call/{recruiter}', [RecruiterController::class, 'callRecruiter'])->name('recruiters-call');
 
+    //ruta za ajax
+    Route::post('/make-request', [CompanyFrontController::class, 'followRecruiter'])->name('make-request');
+
     //jobs
     Route::get('/job/create', [CompanyFrontController::class, 'createJob'])->name('create-job');
     Route::get('/active/jobs', [CompanyFrontController::class, 'getActiveJobs'])->name('active-jobs');
