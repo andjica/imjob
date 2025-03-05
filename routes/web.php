@@ -176,11 +176,14 @@ Route::middleware(['auth', 'contributor', 'verified'])->prefix('contributor')->n
     Route::post('/store', [ContributorController::class, 'store'])->name('create');
 
     Route::get('/find/companies', [ContributorFrontController::class, 'findCompanies'])->name('find-companies');
-    Route::get('/find/recruiter', [ContributorFrontController::class, 'findRecruiters'])->name('find-recruiter');
+    Route::get('/find/recruiters', [ContributorFrontController::class, 'findRecruiters'])->name('find-recruiter');
 
     Route::get('/settings',[ContributorFrontController::class,'settings'])->name('settings');
 
     Route::middleware(['contributor.exists'])->group(function () {
+    
+        //ruta za ajax
+        Route::post('/make-request', [FollowController::class, 'followRecruiter'])->name('make-request');
 
         //posts
         Route::get('/posts', [ContributorFrontController::class, 'allPost'])->name('posts');

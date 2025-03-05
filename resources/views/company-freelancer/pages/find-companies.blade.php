@@ -124,9 +124,12 @@
 
             followButtons.forEach(button => {
                 button.addEventListener('click', function(event) {
+                
                     event.preventDefault();
 
                     const companyId = this.dataset.companyId;
+                    //var andjica = $(this).data('company-id');
+                    alert(companyId);
                     const indicatorLabel = this.querySelector('.indicator-label');
                     const indicatorProgress = this.querySelector('.indicator-progress');
                     const icon = this.querySelector('i.ki-check');

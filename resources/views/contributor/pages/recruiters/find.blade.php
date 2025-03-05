@@ -78,7 +78,7 @@
                     @else
                         <div class="row g-3">
                             @foreach ($recruiters as $recruiter)
-                                <div class="d-flex flex-stack pt-2">
+                                <div class="d-flex flex-stack pt-2 border-bottom">
                                     <!--begin::Image-->
                                     <div class="symbol symbol-40px me-5">
                                         @if ($recruiter->profile_image)
@@ -100,6 +100,8 @@
 
                                             <span
                                                 class="text-muted fw-semibold d-block fs-7">{{ $recruiter->title_function }}</span>
+                                                <p class="text-muted">{{ $recruiter->user->email }}</p>
+
                                         </div>
                                         <!--end:Recruiter-->
 

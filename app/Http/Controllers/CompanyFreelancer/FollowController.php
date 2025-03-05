@@ -33,6 +33,23 @@ class FollowController extends Controller
         ]);
     }
 
+    public function followRecruiter(Request $request): JsonResponse
+    {
+       //$followCompany->execute((int) $request->get('company_id'));
+        $recruiterId = $request->get('recruiter_id');
+
+        $contributorId = auth()->user()->contributor->id;
+
+        // return response()->json([
+        //     'success' => true,
+        //     'message' => 'Follow request sent successfully.',
+        // ]);
+
+        return response()->json([
+            'contributorId' => $contributorId
+        ]);
+    }
+
     /**
      * @throws Exception
      */
