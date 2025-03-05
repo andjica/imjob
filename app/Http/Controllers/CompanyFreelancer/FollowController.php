@@ -9,20 +9,25 @@ use App\Actions\FollowCompany;
 use Illuminate\Http\JsonResponse;
 use App\Actions\FollowContributor;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ChangeStatusRecruiterContributorRequest;
 use App\Http\Requests\ChangeStatusRequest;
 use App\Http\Requests\FollowCompanyRequest;
 use App\Http\Requests\FollowContributorRequest;
 use App\Interfaces\CompanyRecruiterInterface;
+use App\Interfaces\ContributorRecruiterInterface;
 
 class FollowController extends Controller
 {
     protected CompanyRecruiterInterface $companyRecruiterServices;
+    protected ContributorRecruiterInterface $contributorRecruiterServices;
 
-    public function __construct(CompanyRecruiterInterface $companyRecruiterServices)
+    public function __construct(CompanyRecruiterInterface $companyRecruiterServices, ContributorRecruiterInterface $contributorRecruiterServices)
     {
         $this->companyRecruiterServices = $companyRecruiterServices;
+        $this->contributorRecruiterServices = $contributorRecruiterServices;
     }
 
+    //company - recruiter
     public function followCompany(FollowCompanyRequest $request, FollowCompany $followCompany): JsonResponse
     {
         $followCompany->execute((int) $request->get('company_id'));
@@ -33,22 +38,53 @@ class FollowController extends Controller
         ]);
     }
 
-    public function followRecruiter(Request $request): JsonResponse
+    //contributor - recruiter
+    public function followRecruiter(ChangeStatusRequest $request): JsonResponse
     {
-       //$followCompany->execute((int) $request->get('company_id'));
-        $recruiterId = $request->get('recruiter_id');
-
-        $contributorId = auth()->user()->contributor->id;
-
-        // return response()->json([
-        //     'success' => true,
-        //     'message' => 'Follow request sent successfully.',
-        // ]);
-
-        return response()->json([
-            'contributorId' => $contributorId
-        ]);
+        try {
+            // Get the authenticated contributor's ID
+            $contributorId = auth()->user()->contributor->id;
+            $recruiterId = (int) $request->get('recruiter_id');
+            $status = $request->get('status');
+    
+            // Ensure both IDs exist before proceeding
+            if (!$contributorId || !$recruiterId) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Invalid contributor or recruiter ID.'
+                ], 400);
+            }
+    
+            // Create a request-like array to pass to the service method
+            $changeStatusRequest = new ChangeStatusRequest([
+                'contributor_id' => $contributorId,
+                'recruiter_id' => $recruiterId,
+                'status' => $status
+            ]);
+    
+            // Call the service method to handle follow action
+            $success = $this->contributorRecruiterServices->changeStatus($changeStatusRequest);
+    
+            if ($success) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Follow request updated successfully.',
+                    'contributorId' => $contributorId
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Failed to update follow request.'
+                ], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred: ' . $e->getMessage()
+            ], 500);
+        }
     }
+    
 
     /**
      * @throws Exception
