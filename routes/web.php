@@ -1,5 +1,6 @@
 <?php
 
+use App\Actions\FollowCompany;
 use App\Http\Controllers\{
     Admin\FrontController as AdminFrontController,
     Auth\LoginController,
@@ -10,6 +11,8 @@ use App\Http\Controllers\{
     CompanyFreelancer\FrontController as CompanyFreelancerFrontController,
     Contributor\FrontController as ContributorFrontController,
     Recruiter\FrontController as RecruiterFrontController,
+    CompanyFreelancer\FollowController as FollowCompanyController,
+    Contributor\FollowController as FollowContributorController,
     CountryController,
     GoogleController,
     HomeController,
@@ -21,7 +24,7 @@ use App\Http\Controllers\{
     UserController,
     Contributor\ContributorController
 };
-use App\Http\Controllers\CompanyFreelancer\FollowController;
+
 use App\Http\Controllers\Contributor\PostController;
 use App\Http\Controllers\Front\LandingController;
 use Illuminate\Support\Facades\Auth;
@@ -112,7 +115,7 @@ Route::middleware(['auth', 'company', 'verified'])->prefix('company/dashboard')-
     Route::get('/add/employees', [CompanyFrontController::class, 'addEmployees'])->name('add-employees');
 
     //follow and connections
-    Route::post('/make-connection/change-status', [FollowController::class, 'changeStatus'])->name('follow-change-status');
+    Route::post('/make-connection/change-status', [FollowCompanyController::class, 'changeStatus'])->name('follow-change-status');
 
 
 });
@@ -141,9 +144,9 @@ Route::middleware(['auth', 'company.freelancer', 'verified'])->prefix('company/f
         Route::get('/settings', [CompanyFreelancerFrontController::class, 'settings'])->name('settings');
 
         //follow and make connection Routes
-        Route::post('/make-request', [FollowController::class, 'followCompany'])->name('make-request');
-        Route::post('/make-connection', [FollowController::class, 'followContributor'])->name('follow-contributor');
-        Route::post('/make-connection/change-status', [FollowController::class, 'changeStatus'])->name('follow-change-status');
+        Route::post('/make-request', [FollowCompanyController::class, 'followCompany'])->name('make-request');
+        Route::post('/make-connection', [FollowCompanyController::class, 'followContributor'])->name('follow-contributor');
+        Route::post('/make-connection/change-status', [FollowCompanyController::class, 'changeStatus'])->name('follow-change-status');
 
         //Jobs Routes
         Route::get('/company/{company}/details', [CompanyFreelancerFrontController::class, 'detailsCompany'])->name('company-details');
@@ -183,7 +186,7 @@ Route::middleware(['auth', 'contributor', 'verified'])->prefix('contributor')->n
     Route::middleware(['contributor.exists'])->group(function () {
     
         //ruta za ajax
-        Route::post('/make-request', [FollowController::class, 'followRecruiter'])->name('make-request');
+        Route::post('/make-request', [FollowContributorController::class, 'followRecruiter'])->name('make-request');
 
         //posts
         Route::get('/posts', [ContributorFrontController::class, 'allPost'])->name('posts');
