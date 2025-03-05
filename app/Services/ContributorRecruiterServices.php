@@ -2,14 +2,14 @@
 
 namespace App\Services;
 
-use App\Http\Requests\ChangeStatusRequest;
+use App\Http\Requests\ChangeStatusRecruiterContributorRequest;
 use Exception;
 use App\Models\ContributorRecruiter;
 use App\Interfaces\ContributorRecruiterInterface;
 
 class ContributorRecruiterServices implements ContributorRecruiterInterface
 {
-    public function changeStatus(ChangeStatusRequest $request): bool
+    public function changeStatus(ChangeStatusRecruiterContributorRequest $request): bool
     {
         $contributorId = (int) $request->get('contributor_id');
         $recruiterId = (int) $request->get('recruiter_id');

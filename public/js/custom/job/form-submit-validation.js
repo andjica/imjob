@@ -440,23 +440,23 @@ $("#title").on("keyup", function () {
     }
 });
 // Add validation for 'Other' input field
-$("#otherSub").on("keyup", function () {
-    var other = $("#otherSub").val();
+    $("#otherSub").on("keyup", function () {
+        var other = $("#otherSub").val();
 
-    if (other == "") {
-        $("#otherCategoryEmpty").text("Please write your category.");
-        $("#otherSub").addClass("border-danger").removeClass("border-success");
-        $("#otherSub").next(".invalid-feedback").show();
-    } else if (!/^.{4,}$/.test(other)) {
-        $("#otherSub").addClass("border-danger");
-        $("#otherCategoryEmpty")
-            .text("Category must be at least 4 characters long")
-            .show();
-    } else {
-        $("#otherCategoryEmpty").text("");
-        $("#otherSub").removeClass("border-danger").addClass("border-success");
-    }
-});
+        if (other == "") {
+            $("#otherCategoryEmpty").text("Please write your category.");
+            $("#otherSub").addClass("border-danger").removeClass("border-success");
+            $("#otherSub").next(".invalid-feedback").show();
+        } else if (!/^.{4,}$/.test(other)) {
+            $("#otherSub").addClass("border-danger");
+            $("#otherCategoryEmpty")
+                .text("Category must be at least 4 characters long")
+                .show();
+        } else {
+            $("#otherCategoryEmpty").text("");
+            $("#otherSub").removeClass("border-danger").addClass("border-success");
+        }
+    });
 
 $("#min_age").on("keyup", function () {
     var minAge = $("#min_age").val();
