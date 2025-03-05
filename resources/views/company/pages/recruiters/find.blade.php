@@ -137,18 +137,13 @@
 
         followButtons.forEach(button => {
             button.addEventListener('click', function(event) {
-                alert(3)
-                event.preventDefault();
 
-                    
-            alert("{{csrf_token()}}");
+                event.preventDefault();
 
                 const recruiterId = this.dataset.recruiterId;
                 const status = this.dataset.status;
-                console.log(this.dataset);
-                console.log(recruiterId, status )
                 // Send AJAX request using Fetch API
-                fetch('{{ route("company-dashboard-make-request") }}', {
+                fetch('{{ route('company-dashboard-make-request') }}', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
