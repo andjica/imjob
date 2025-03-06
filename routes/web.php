@@ -25,6 +25,7 @@ use App\Http\Controllers\{
     Contributor\ContributorController
 };
 
+use App\Http\Controllers\CompanyFreelancer\FrontController;
 use App\Http\Controllers\Contributor\PostController;
 use App\Http\Controllers\Front\LandingController;
 use Illuminate\Support\Facades\Auth;
@@ -147,6 +148,8 @@ Route::middleware(['auth', 'company.freelancer', 'verified'])->prefix('company/f
         Route::post('/make-request', [FollowCompanyController::class, 'followCompany'])->name('make-request');
         Route::post('/make-connection', [FollowCompanyController::class, 'followContributor'])->name('follow-contributor');
         Route::post('/make-connection/change-status', [FollowCompanyController::class, 'changeStatus'])->name('follow-change-status');
+        // view profile
+        Route::get('/view', [FrontController::class, 'getProfile'])->name('view');
 
         //Jobs Routes
         Route::get('/company/{company}/details', [CompanyFreelancerFrontController::class, 'detailsCompany'])->name('company-details');
@@ -177,13 +180,14 @@ Route::middleware(['auth', 'contributor', 'verified'])->prefix('contributor')->n
 
     //contributor information profile
     Route::post('/store', [ContributorController::class, 'store'])->name('create');
-  
-   
+
+    Route::get('/settings',[ContributorFrontController::class,'settings'])->name('settings');
+
     Route::middleware(['contributor.exists'])->group(function () {
     
         //ruta za ajax
         Route::post('/make-request', [FollowContributorController::class, 'followRecruiter'])->name('make-request');
-
+        
         Route::get('/find/companies', [ContributorFrontController::class, 'findCompanies'])->name('find-companies');
         Route::get('/find/recruiters', [ContributorFrontController::class, 'findRecruiters'])->name('find-recruiter');
         //posts
@@ -195,7 +199,6 @@ Route::middleware(['auth', 'contributor', 'verified'])->prefix('contributor')->n
         Route::get('/settings',[ContributorFrontController::class,'settings'])->name('settings');
 
     });
-
 });
 
 //Recruter routes

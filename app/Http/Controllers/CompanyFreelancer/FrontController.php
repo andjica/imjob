@@ -27,6 +27,7 @@ use App\Models\Company;
 use App\Models\CompanyRecruiter;
 use App\Models\ContributorRecruiter;
 use App\Models\Job;
+use App\Models\Recruiter;
 use App\Models\RecruitmentProcess;
 use App\Models\RecruitmentSubphase;
 use App\Models\User;
@@ -335,5 +336,18 @@ class FrontController extends Controller
             'connections',
             'recruiterToCompaniesFollowRequest'
         ));
+    }
+
+    
+    public function getProfile()
+    {
+        $userId = auth()->user()->id;
+        $recruiter = Recruiter::where('user_id', $userId)->first();
+
+        $recruiter->education->school;
+
+        $recruiter->user;
+        
+        return view('company-freelancer.pages.view', compact('recruiter'));
     }
 }

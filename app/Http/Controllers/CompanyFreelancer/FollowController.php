@@ -15,6 +15,7 @@ use App\Http\Requests\FollowCompanyRequest;
 use App\Http\Requests\FollowContributorRequest;
 use App\Interfaces\CompanyRecruiterInterface;
 use App\Interfaces\ContributorRecruiterInterface;
+use App\Models\Recruiter;
 
 class FollowController extends Controller
 {
