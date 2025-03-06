@@ -22,4 +22,16 @@ class ContributorController extends Controller
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
+
+
+    public function update(Request $request)
+    {
+        try {
+            $contributor = $this->contributorService->update($request);
+
+            return redirect()->back()->with('success', 'Contributor profile updated successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
 }

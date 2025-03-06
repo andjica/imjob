@@ -17,7 +17,7 @@
                     <!--end::Card header-->
                     <!--begin::Card body-->
                     <div class="card-body pt-3">
-                        <form action="/" method="POST" id="contributorForm">
+                        <form action="{{asset('/contributor/update')}}" method="POST" id="contributorForm">
                             @csrf
                             <!-- Contributor Full Name -->
                             <div class="mb-3">
@@ -65,6 +65,16 @@
                                     </span>
                                 </div>
                             </div>
+                            <!-- Custom Contributor Type -->
+                        <div class="row mb-5 d-none" id="customContributorTypeWrapper">
+                            <label class="col-lg-2 col-form-label fw-bold fs-6">Specify your type:</label>
+                            <div class="col-lg-8">
+                                <input type="text" name="customContributorType" id="customContributorType"
+                                    class="form-control form-control-solid @error('customContributorType') is-invalid @enderror"
+                                    value="{{ old('customContributorType') }}" placeholder="Enter your contributor type">
+                                <span class="text-danger" id="customContributorTypeEmpty">@error('customContributorType'){{ $message }}@enderror</span>
+                            </div>
+                        </div>
                             <!-- Country -->
                             <div class="row mb-5">
                                 <label class="col-lg-2 col-form-label fw-bold fs-6 required">Country:</label>

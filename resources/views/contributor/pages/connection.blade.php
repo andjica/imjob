@@ -1,7 +1,7 @@
 @extends('contributor.template-contributor')
 @section('content')
     <div class="container">
-        @if ($activeConnection->count() == 0)
+        @if ($activeConnections->count() == 0)
             <div class="row">
                 <div class="col-lg-7">
                     <div class="card card-flush shadow-sm mb-5">
@@ -33,7 +33,7 @@
             <div class="card shadow-sm">
                 <div class="card-body">
                     <div class="row g-3">
-                        @foreach ($activeConnection as $ac)
+                        @foreach ($activeConnections as $ac)
                             <div class="d-flex flex-stack pt-2 border-bottom">
                                 <!--begin::Image-->
                                 <div class="symbol symbol-40px me-5">

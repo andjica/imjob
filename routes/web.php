@@ -185,6 +185,7 @@ Route::middleware(['auth', 'contributor', 'verified'])->prefix('contributor')->n
 
     Route::middleware(['contributor.exists'])->group(function () {
     
+        Route::post('/update', [ContributorController::class, 'update'])->name('update');
         //ruta za ajax
         Route::post('/make-request', [FollowContributorController::class, 'followRecruiter'])->name('make-request');
         
@@ -197,13 +198,12 @@ Route::middleware(['auth', 'contributor', 'verified'])->prefix('contributor')->n
         Route::get('/edit', [ContributorFrontController::class, 'edit'])->name('edit');
 
         //connection
-        Route::get('/connections', [ContributorFrontController::class,'getActive'])->name('connections');
+        Route::get('/connections', [ContributorFrontController::class,'getActiveConnections'])->name('connections');
 
         Route::get('/settings',[ContributorFrontController::class,'settings'])->name('settings');
 
         //follow and connections
         Route::post('/make-request', [FollowContributorController::class, 'followRecruiter'])->name('make-request');
-        Route::get('/connections', [FollowContributorController::class, 'getConnections'])->name('connections');
 
     });
 });
