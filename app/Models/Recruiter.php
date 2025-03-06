@@ -32,7 +32,7 @@ class Recruiter extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class,'user_id');
     }
 
     //if you want active and inactive companies which recruiter works and wokrking
@@ -106,4 +106,8 @@ class Recruiter extends Model
         return $this->hasMany(Job::class);
     }
 
+    public function country()
+    {
+        return $this->belongsTo(Country::class, 'country_id');
+    }
 }

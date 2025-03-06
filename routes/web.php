@@ -196,6 +196,9 @@ Route::middleware(['auth', 'contributor', 'verified'])->prefix('contributor')->n
         Route::post('/post/store', [PostController::class, 'store'])->name('post-store');
         Route::get('/edit', [ContributorFrontController::class, 'edit'])->name('edit');
 
+        //connection
+        Route::get('/connections', [ContributorFrontController::class,'getActive'])->name('connections');
+
         Route::get('/settings',[ContributorFrontController::class,'settings'])->name('settings');
 
         //follow and connections

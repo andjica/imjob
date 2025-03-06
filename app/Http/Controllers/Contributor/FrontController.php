@@ -131,4 +131,13 @@ class FrontController extends Controller
         ));
         
         }
+
+        public function getActive()
+        {
+            $user = auth()->user()->id;
+            $contributor = Contributor::where('user_id', $user)->first();
+            $activeConnection = $contributor->recruiters()->wherePivot('status', 'Active')->get();
+
+            return view('contributor.pages.connection',compact('activeConnection'));
+        }
 }

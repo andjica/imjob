@@ -86,7 +86,9 @@
                                                 alt="Profile Image" class="img-fluid rounded-circle shadow-sm"
                                                 style="width: 60px; height: 60px;"> <!-- Smaller size here -->
                                         @else
-                                            <span class="badge bg-secondary">No Image</span>
+                                            <img src="{{ asset('images/user-286.png') }}" alt="Profile Image"
+                                                class="img-fluid rounded-circle shadow-sm"
+                                                style="width: 60px; height: 60px;">
                                         @endif
                                     </div>
                                     <!--end::Image-->
@@ -109,30 +111,31 @@
                                         @endphp
 
                                         <!-- Recruiter Status Check -->
-                                        @if($connectedOnPending->contains('id', $recruiter->id))
+                                        @if ($connectedOnPending->contains('id', $recruiter->id))
                                             <div class="card-toolbar">
-                                                <button type="button" class="btn btn-outline btn-sm btn-outline-dashed me-2 mb-2 bg-light" 
-                                                    data-bs-toggle="tooltip" data-bs-placement="left" title="You have to wait for company approval">
-                                                    <i class="fas fa-hourglass-half text-warning"></i> Connection on Pending
+                                                <button type="button"
+                                                    class="btn btn-outline btn-sm btn-outline-dashed me-2 mb-2 bg-light-warning"
+                                                    data-bs-toggle="tooltip" data-bs-placement="left"
+                                                    title="You have to wait for company approval">
+                                                    <i class="fas fa-hourglass-half"></i> Connection on Pending
                                                 </button>
                                             </div>
-
                                         @elseif($connectedSuccessfully->contains('id', $recruiter->id))
                                             <!-- This button is shown if the recruiter is connected and the status is active -->
                                             <div class="card-toolbar">
-                                                <button type="button" class="btn btn-primary btn-sm mt-4" 
-                                                    data-bs-toggle="tooltip" data-bs-placement="left" title="You are connected with this company">
+                                                <button type="button" class="btn btn-primary btn-sm mt-4"
+                                                    data-bs-toggle="tooltip" data-bs-placement="left"
+                                                    title="You are connected with this company">
                                                     <i class="fas fa-link"></i>
                                                 </button>
                                             </div>
-
                                         @elseif(isset($user->recruiter) && $user->recruiter->id == $recruiter->id)
                                             <!-- If the logged-in recruiter is viewing themselves, do nothing -->
-
                                         @else
                                             <!-- Default action for recruiters not pending, active, or self -->
                                             <button type="button" data-recruiter-id="{{ $recruiter->id }}"
-                                                data-status="Pending" class="btn btn-sm btn-light-primary me-2 mb-2 follow-button">
+                                                data-status="Pending"
+                                                class="btn btn-sm btn-light-primary me-2 mb-2 follow-button">
                                                 Follow
                                             </button>
                                         @endif
@@ -158,46 +161,49 @@
 
 @section('js')
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Select all follow buttons
-    const followButtons = document.querySelectorAll('.follow-button');
+    document.addEventListener('DOMContentLoaded', function() {
+        // Select all follow buttons
+        const followButtons = document.querySelectorAll('.follow-button');
 
-    followButtons.forEach(button => {
-        button.addEventListener('click', function(event) {
-            event.preventDefault();
+        followButtons.forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.preventDefault();
 
-            const recruiterId = this.dataset.recruiterId;
-            const status = this.dataset.status;
-            // Send AJAX request using Fetch API
-            fetch('{{ route("contributor-make-request") }}', {
+                const recruiterId = this.dataset.recruiterId;
+                const status = this.dataset.status;
+                // Send AJAX request using Fetch API
+                fetch('{{ route('contributor-make-request') }}', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                             'X-CSRF-TOKEN': '{{ csrf_token() }}'
                         },
-                        body: JSON.stringify({ recruiter_id: recruiterId, status:status })
-                    })           
-                .then(response => response.json())
-                .then(data => {
-                    if(data.success){
-                        // Update button to indicate success
-                        button.textContent = 'Request Sent';
-                        button.classList.remove('btn-primary');
-                        button.classList.add('btn-success');
-                        button.disabled = true;
-                    } else {
-                        throw new Error(data.message || 'Something went wrong.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    // Revert loading state
-                    // indicatorLabel.classList.remove('d-none');
-                    // indicatorProgress.classList.add('d-none');
-                    alert(error.message || 'Failed to send request. Please try again.');
-                });
+                        body: JSON.stringify({
+                            recruiter_id: recruiterId,
+                            status: status
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Update button to indicate success
+                            button.textContent = 'Request Sent';
+                            button.classList.remove('btn-primary');
+                            button.classList.add('btn-success');
+                            button.disabled = true;
+                        } else {
+                            throw new Error(data.message || 'Something went wrong.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        // Revert loading state
+                        // indicatorLabel.classList.remove('d-none');
+                        // indicatorProgress.classList.add('d-none');
+                        alert(error.message || 'Failed to send request. Please try again.');
+                    });
+            });
         });
     });
-});
 </script>
 @endsection
