@@ -52,7 +52,7 @@ class JobController extends Controller
     public function update(StoreJobRequest $request, $id, UpdateJob $updateJob)
     {
         $job = $this->jobRep->find($id) ?? abort(404);
-
+        
         if (!$job) {
             return redirect()->route('company-freelancer-active-jobs')->with('error', 'Job not found.');
         }

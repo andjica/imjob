@@ -138,12 +138,13 @@
         followButtons.forEach(button => {
             button.addEventListener('click', function(event) {
 
+                
                 event.preventDefault();
 
                 const recruiterId = this.dataset.recruiterId;
                 const status = this.dataset.status;
                 // Send AJAX request using Fetch API
-                fetch('{{ route('company-dashboard-make-request') }}', {
+                fetch("{{ route('company-dashboard-make-request') }}", {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',

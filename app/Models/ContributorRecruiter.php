@@ -20,11 +20,11 @@ class ContributorRecruiter extends Pivot
 
     public function recruiter(): BelongsTo
     {
-        return $this->belongsTo(Recruiter::class);
+        return $this->belongsTo(Recruiter::class, 'recruiter_id');
     }
 
     public function contributor(): BelongsTo
     {
-        return $this->belongsTo(Contributor::class);
+        return $this->belongsTo(Contributor::class, 'contributor_id');
     }
 }

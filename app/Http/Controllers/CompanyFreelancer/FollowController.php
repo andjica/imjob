@@ -26,7 +26,7 @@ class FollowController extends Controller
         
     }
 
-    //company - recruiter
+    //recruiter or freelancer following company
     public function followCompany(FollowCompanyRequest $request, FollowCompany $followCompany): JsonResponse
     {
         $followCompany->execute((int) $request->get('company_id'));
@@ -42,6 +42,8 @@ class FollowController extends Controller
     /**
      * @throws Exception
      */
+
+     //recruiter or freelancer following contributor
     public function followContributor(FollowContributorRequest $request, FollowContributor $followContributor): JsonResponse
     {
         /** @var User $user */
@@ -67,6 +69,12 @@ class FollowController extends Controller
                 'message' => $e->getMessage(),
             ], 500);
         }
+    }
+
+    //basic - agency, contributor following recruiter
+    public function followRecruiter(Request $request) : JsonResponse
+    {
+        return response()->json(['stiglo'=>'stiglo']);
     }
 
     public function changeStatus(ChangeStatusRequest $request)

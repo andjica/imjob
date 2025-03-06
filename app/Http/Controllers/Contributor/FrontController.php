@@ -92,11 +92,43 @@ class FrontController extends Controller
     }
     public function findRecruiters(Request $request)
     {
+       /** @var User $user */
+        $user = auth()->user();
+
+        // Check if the authenticated user has a contributor record
+        if (!$user->contributor) {
+            return redirect()->route('contributor-dashboard')->with('error', 'You need a contributor profile to search recruiters.');
+        }
+
+        $contributorId = $user->contributor->id;
         $search = $request->input('search');
+
+        // Get recruiters based on search query
         $recruiters = $this->recruiterServices->getAllRecruiters($search);
 
-        $company = auth()->user()->company;
+        // Get company if exists
+        $company = $user->company;
+
+        // Get connected recruiters using pivot table
+        $connectedRecruiters = $user->contributor->recruiters;
+        //return dd($connectedRecruiters);
+        // Get recruiters with "Pending" status from pivot table
+        $connectedOnPending = $user->contributor->recruiters()
+            ->wherePivot('status', 'Pending')
+            ->get();
+
+        // Get recruiters with "Active" status from pivot table
+        $connectedSuccessfully = $user->contributor->recruiters()
+            ->wherePivot('status', 'Active')
+            ->get();
+
+        return view('contributor.pages.recruiters.find', compact(
+            'recruiters', 
+            'company', 
+            'connectedRecruiters', 
+            'connectedOnPending', 
+            'connectedSuccessfully'
+        ));
         
-        return view('contributor.pages.recruiters.find', compact('recruiters', 'company'));
-    }
+        }
 }

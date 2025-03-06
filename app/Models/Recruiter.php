@@ -97,8 +97,8 @@ class Recruiter extends Model
     public function contributors(): BelongsToMany
     {
         return $this->belongsToMany(Contributor::class, 'contributor_recruiter', 'recruiter_id', 'contributor_id')
-            ->withPivot('status', 'invite_type', 'from_date', 'until_date')
-            ->withTimestamps();
+                    ->withPivot('status', 'invite_type', 'from_date', 'until_date')
+                    ->withTimestamps();
     }
 
     public function jobs()

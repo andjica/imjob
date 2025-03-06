@@ -22,8 +22,17 @@ class FollowController extends Controller
     {
        
         try {
+
+            if (!auth()->user() || !auth()->user()->contributor) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'You are not a contributor.'
+                ], 403);
+            }
+            
             // Get the authenticated contributor's ID
             $contributorId = auth()->user()->contributor->id;
+            
             $recruiterId = (int) $request->get('recruiter_id');
             $status = $request->get('status');
     

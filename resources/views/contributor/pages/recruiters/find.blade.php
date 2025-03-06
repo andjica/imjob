@@ -103,13 +103,40 @@
                                             <p class="text-muted">{{ $recruiter->user->email }}</p>
 
                                         </div>
-                                        <!--end:Recruiter-->
+                                        @php
+                                            /** @var User $user */
+                                            $user = auth()->user();
+                                        @endphp
 
-                                        <!--begin:Action-->
-                                        <button type="button" data-recruiter-id="{{ $recruiter->id }}"
-                                            data-status="Pending" class="btn btn-sm btn-light-primary me-2 mb-2 follow-button">
-                                            Follow
-                                        </button>
+                                        <!-- Recruiter Status Check -->
+                                        @if($connectedOnPending->contains('id', $recruiter->id))
+                                            <div class="card-toolbar">
+                                                <button type="button" class="btn btn-outline btn-sm btn-outline-dashed me-2 mb-2 bg-light-warning" 
+                                                    data-bs-toggle="tooltip" data-bs-placement="left" title="You have to wait for company approval">
+                                                    <i class="fas fa-hourglass-half"></i> Connection on Pending
+                                                </button>
+                                            </div>
+
+                                        @elseif($connectedSuccessfully->contains('id', $recruiter->id))
+                                            <!-- This button is shown if the recruiter is connected and the status is active -->
+                                            <div class="card-toolbar">
+                                                <button type="button" class="btn btn-primary btn-sm mt-4" 
+                                                    data-bs-toggle="tooltip" data-bs-placement="left" title="You are connected with this company">
+                                                    <i class="fas fa-link"></i>
+                                                </button>
+                                            </div>
+
+                                        @elseif(isset($user->recruiter) && $user->recruiter->id == $recruiter->id)
+                                            <!-- If the logged-in recruiter is viewing themselves, do nothing -->
+
+                                        @else
+                                            <!-- Default action for recruiters not pending, active, or self -->
+                                            <button type="button" data-recruiter-id="{{ $recruiter->id }}"
+                                                data-status="Pending" class="btn btn-sm btn-light-primary me-2 mb-2 follow-button">
+                                                Follow
+                                            </button>
+                                        @endif
+
                                         <!--end:Action-->
                                     </div>
                                     <!--end::Section-->
@@ -143,13 +170,13 @@ document.addEventListener('DOMContentLoaded', function() {
             const status = this.dataset.status;
             // Send AJAX request using Fetch API
             fetch('{{ route("contributor-make-request") }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                },
-                body: JSON.stringify({ recruiter_id: recruiterId, status: status })
-            })            
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({ recruiter_id: recruiterId, status:status })
+                    })           
                 .then(response => response.json())
                 .then(data => {
                     if(data.success){

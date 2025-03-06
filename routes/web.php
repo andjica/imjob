@@ -103,9 +103,6 @@ Route::middleware(['auth', 'company', 'verified'])->prefix('company/dashboard')-
     
     Route::post('/recruiters/call/{recruiter}', [RecruiterController::class, 'callRecruiter'])->name('recruiters-call');
 
-    //ruta za ajax
-    Route::post('/make-request', [CompanyFrontController::class, 'followRecruiter'])->name('make-request');
-
     //jobs
     Route::get('/job/create', [CompanyFrontController::class, 'createJob'])->name('create-job');
     Route::get('/active/jobs', [CompanyFrontController::class, 'getActiveJobs'])->name('active-jobs');
@@ -119,7 +116,7 @@ Route::middleware(['auth', 'company', 'verified'])->prefix('company/dashboard')-
 
     //follow and connections
     Route::post('/make-connection/change-status', [FollowCompanyController::class, 'changeStatus'])->name('follow-change-status');
-
+    Route::post('/make-request', [FollowCompanyController::class, 'followRecruiter'])->name('make-request');
 
 });
 
@@ -180,22 +177,23 @@ Route::middleware(['auth', 'contributor', 'verified'])->prefix('contributor')->n
 
     //contributor information profile
     Route::post('/store', [ContributorController::class, 'store'])->name('create');
-
-    Route::get('/find/companies', [ContributorFrontController::class, 'findCompanies'])->name('find-companies');
-    Route::get('/find/recruiters', [ContributorFrontController::class, 'findRecruiters'])->name('find-recruiter');
-
-    Route::get('/settings',[ContributorFrontController::class,'settings'])->name('settings');
-
+  
+   
     Route::middleware(['contributor.exists'])->group(function () {
     
         //ruta za ajax
         Route::post('/make-request', [FollowContributorController::class, 'followRecruiter'])->name('make-request');
 
+        Route::get('/find/companies', [ContributorFrontController::class, 'findCompanies'])->name('find-companies');
+        Route::get('/find/recruiters', [ContributorFrontController::class, 'findRecruiters'])->name('find-recruiter');
         //posts
         Route::get('/posts', [ContributorFrontController::class, 'allPost'])->name('posts');
         Route::get('/post/create', [ContributorFrontController::class, 'createPost'])->name('post-create');
         Route::post('/post/store', [PostController::class, 'store'])->name('post-store');
         Route::get('/edit', [ContributorFrontController::class, 'edit'])->name('edit');
+
+        Route::get('/settings',[ContributorFrontController::class,'settings'])->name('settings');
+
     });
 
 });
