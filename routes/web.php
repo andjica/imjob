@@ -191,6 +191,8 @@ Route::middleware(['auth', 'contributor', 'verified'])->prefix('contributor')->n
         
         Route::get('/find/companies', [ContributorFrontController::class, 'findCompanies'])->name('find-companies');
         Route::get('/find/recruiters', [ContributorFrontController::class, 'findRecruiters'])->name('find-recruiter');
+
+        Route::get('/company/{id}/details', [ContributorFrontController::class,'detailsCompany'])->name('company-details');
         //posts
         Route::get('/posts', [ContributorFrontController::class, 'allPost'])->name('posts');
         Route::get('/post/create', [ContributorFrontController::class, 'createPost'])->name('post-create');
@@ -201,10 +203,6 @@ Route::middleware(['auth', 'contributor', 'verified'])->prefix('contributor')->n
         Route::get('/connections', [ContributorFrontController::class,'getActiveConnections'])->name('connections');
 
         Route::get('/settings',[ContributorFrontController::class,'settings'])->name('settings');
-
-        //follow and connections
-        Route::post('/make-request', [FollowContributorController::class, 'followRecruiter'])->name('make-request');
-
     });
 });
 

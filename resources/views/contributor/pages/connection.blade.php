@@ -1,4 +1,8 @@
 @extends('contributor.template-contributor')
+@section('main-title', 'Your Active Connections')
+@section('title-dash', 'Connection')
+
+
 @section('content')
     <div class="container">
         @if ($activeConnections->count() == 0)

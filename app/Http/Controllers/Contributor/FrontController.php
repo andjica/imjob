@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Contributor;
 
+use App\Interfaces\CompanyInterface;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use App\Models\Contributor;
@@ -15,6 +16,8 @@ use App\Http\Controllers\Controller;
 use App\Interfaces\ContributorInterface;
 use App\Interfaces\PostInterface;
 use App\Interfaces\RecruiterInterface;
+use App\Models\Company;
+use App\Models\User;
 
 class FrontController extends Controller
 {
@@ -25,6 +28,7 @@ class FrontController extends Controller
     protected $countriesServices;
     protected $citiesServices;
     protected $recruiterServices;
+    protected $companyServices;
 
     public function __construct(
         CountryInterface $countryServices,
@@ -33,7 +37,8 @@ class FrontController extends Controller
         PostInterface $postServices,
         CountryInterface $countriesServices,
         CityInterface $citiesServices,
-        RecruiterInterface $recruiterServices
+        RecruiterInterface $recruiterServices,
+        CompanyInterface $companyServices
     ) {
         $this->countryServices = $countryServices;
         $this->cityServices = $cityServices;
@@ -42,6 +47,7 @@ class FrontController extends Controller
         $this->countriesServices = $countriesServices;
         $this->citiesServices = $citiesServices;
         $this->recruiterServices = $recruiterServices;
+        $this->companyServices = $companyServices;
     }
     public function index()
     {
@@ -139,5 +145,25 @@ class FrontController extends Controller
             $activeConnections = $contributor->recruiters()->wherePivot('status', 'Active')->get();
 
             return view('contributor.pages.connection',compact('activeConnections'));
+        }
+
+        public function findCompanies(Request $request): Factory|View|Application  
+        {
+            /** @var User $user */
+            $user = auth()->user();
+            $searchString = $request->get('query') ?? null;
+
+            $companies = $this->companyServices->getAllCompanies($searchString);
+
+            // return dd($companies);
+
+            return view('contributor.pages.companies', compact('companies'));
+        }
+
+        public function detailsCompany($id):Factory|View|Application
+
+        {
+            $company = $this->companyServices->get($id);
+            return view('contributor.pages.company.details', compact('company'));
         }
 }
