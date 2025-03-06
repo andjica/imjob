@@ -111,9 +111,9 @@
                                         <!-- Recruiter Status Check -->
                                         @if($connectedOnPending->contains('id', $recruiter->id))
                                             <div class="card-toolbar">
-                                                <button type="button" class="btn btn-outline btn-sm btn-outline-dashed me-2 mb-2 bg-light-warning" 
+                                                <button type="button" class="btn btn-outline btn-sm btn-outline-dashed me-2 mb-2 bg-light" 
                                                     data-bs-toggle="tooltip" data-bs-placement="left" title="You have to wait for company approval">
-                                                    <i class="fas fa-hourglass-half"></i> Connection on Pending
+                                                    <i class="fas fa-hourglass-half text-warning"></i> Connection on Pending
                                                 </button>
                                             </div>
 

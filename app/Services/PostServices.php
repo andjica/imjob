@@ -23,6 +23,7 @@ class PostServices implements PostInterface
         $imagePath = null;
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('uploads/contributor/posts/image', 'public');
+
         }
 
         $contributorId = auth()->user()->contributor->id ?? abort(404);

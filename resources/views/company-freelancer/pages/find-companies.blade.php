@@ -52,8 +52,8 @@
                             @endphp
                             @if($connectedOnPending->contains($company->id))
                                 <div class="card-toolbar">
-                                <button type="button" class="btn btn-outline btn-sm btn-outline-dashed me-2 mb-2 bg-light-warning" data-bs-toggle="tooltip" data-bs-placement="left" title="You have to wait for company aproval">
-                                    <i class="fas fa-hourglass-half"></i> Connection on Pending
+                                <button type="button" class="btn btn-outline btn-sm btn-outline-dashed me-2 mb-2 bg-light" data-bs-toggle="tooltip" data-bs-placement="left" title="You have to wait for company aproval">
+                                    <i class="fas fa-hourglass-half text-warning"></i> Connection on Pending
                                 </button>
 
                                 </div>

@@ -198,6 +198,10 @@ Route::middleware(['auth', 'contributor', 'verified'])->prefix('contributor')->n
 
         Route::get('/settings',[ContributorFrontController::class,'settings'])->name('settings');
 
+        //follow and connections
+        Route::post('/make-request', [FollowContributorController::class, 'followRecruiter'])->name('make-request');
+        Route::get('/connections', [FollowContributorController::class, 'getConnections'])->name('connections');
+
     });
 });
 
