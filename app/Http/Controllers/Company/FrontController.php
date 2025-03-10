@@ -55,13 +55,11 @@ class FrontController extends Controller
         $user = auth()->user();
         $companyId = $user->company->id;
         $company = $this->companyServices->get($companyId);
-
-       
         if(!$company instanceof Company)
         {
             return redirect('/company/dashboard/information/create');
         }
-        return view('company.pages.index');
+        return view('company.pages.index', compact('company'));
     }
 
     public function informationCreate()
