@@ -4,6 +4,8 @@
 @section('title-dash', 'Add emoloyee')
 <div class="container m-0">
     <div class="row">
+    @include('alerts.success')
+    @include('alerts.errors')
         <!-- First Card: Add Employee :) -->
         <div class="col-12">
             <div class="card">
@@ -48,27 +50,9 @@
 
         <!-- Second Card: Send Email -->
         <div class="col-12 mt-4">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Send Email</h3>
-                </div>
-                <div class="card-body">
-                    <form action="/" method="POST" id="emailForm">
-                        @csrf
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email Address:</label>
-                            <input type="email" class="form-control @error('email') is-invalid @enderror"
-                                name="email" id="email">
-                            <span class="text-danger" id="emailEmpty"> @error('email')
-                                    {{ $message }}
-                                @enderror
-                            </span>
-                        </div>
-                        <button type="submit" class="btn btn-success">Send Email</button>
-                    </form>
-                </div>
-            </div>
+           @include('company.components.company.card-add-employees')
         </div>
+        
     </div>
 </div>
 @endsection
@@ -118,8 +102,10 @@
                 showError("#email", "#emailEmpty", "Enter a valid email address.");
                 isValid = false;
             } else {
+                
                 showSuccess("#email", "#emailEmpty");
                 isValid = true;
+                return true;
             }
         }
 
@@ -133,6 +119,7 @@
             if (!validateEmail()) {
                 e.preventDefault(); // Prevent form submission if invalid
             }
+        
         });
     });
 </script>

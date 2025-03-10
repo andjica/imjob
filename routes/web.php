@@ -22,7 +22,8 @@ use App\Http\Controllers\{
     RoleController,
     SubCategoryController,
     UserController,
-    Contributor\ContributorController
+    Contributor\ContributorController,
+    EmailController
 };
 
 use App\Http\Controllers\CompanyFreelancer\FrontController;
@@ -118,6 +119,9 @@ Route::middleware(['auth', 'company', 'verified'])->prefix('company/dashboard')-
     //follow and connections
     Route::post('/make-connection/change-status', [FollowCompanyController::class, 'changeStatus'])->name('follow-change-status');
     Route::post('/make-request', [FollowCompanyController::class, 'followRecruiter'])->name('make-request');
+
+    //email
+    Route::post('/email/emoloyee-invitation', [EmailController::class, 'sendToEmployee'])->name('email-to-employeee');
 
 });
 
