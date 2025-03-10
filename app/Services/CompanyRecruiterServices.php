@@ -2,9 +2,11 @@
 
 namespace App\Services;
 
-use App\Http\Requests\ChangeStatusRequest;
 use Exception;
+use App\Models\Company;
+use App\Models\Recruiter;
 use App\Models\CompanyRecruiter;
+use App\Http\Requests\ChangeStatusRequest;
 use App\Interfaces\CompanyRecruiterInterface;
 
 class CompanyRecruiterServices implements CompanyRecruiterInterface
@@ -46,5 +48,26 @@ class CompanyRecruiterServices implements CompanyRecruiterInterface
     
         return true;
     }
+
+    public function delete(int $companyId, int $recruiterId)
+    {
+        $company = Company::find($companyId) ?? abort(404);
+        $recruiter = Recruiter::find($recruiterId) ?? abort(404);
+
+        $delete = CompanyRecruiter::where('company_id', $company->id)
+        ->where('recruiter_id', $recruiter->id)
+        ->delete();
+
+        if($delete)
+        {
+            return redirect()->back()->with('success', 'You delete recruiter from your connection list successfully!');
+        }
+        else
+        {
+            return redirect()->back()->with('error', 'Something went wrong, try later');
+        }
+        
+    }
+    
     
 }

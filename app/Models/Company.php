@@ -68,4 +68,17 @@ class Company extends Model
     {
         return 'id';
     }
+
+     //if company send to recruiter follow request
+    public function pendingRecruiters()
+    {
+        return $this->belongsToMany(Recruiter::class, 'company_recruiter', 'company_id', 'recruiter_id')
+                    ->wherePivot('status', 'Pending');
+    }
+
+    public function activeRecruiters()
+    {
+        return $this->belongsToMany(Recruiter::class, 'company_recruiter', 'company_id', 'recruiter_id')
+        ->wherePivot('status', 'Active');
+    }
 }

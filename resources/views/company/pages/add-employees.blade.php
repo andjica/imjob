@@ -4,56 +4,24 @@
 @section('title-dash', 'Add emoloyee')
 <div class="container m-0">
     <div class="row">
-    @include('alerts.success')
-    @include('alerts.errors')
+         @include('alerts.success')
+        @include('alerts.errors')
         <!-- First Card: Add Employee :) -->
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Add Employee</h3>
-                </div>
-                <div class="card-body">
-                <form action=" {{ route('company-dashboard-follow-change-status') }}" method="POST">
-                @csrf
-                        <div class="mb-3">
-                            <label for="recruiter" class="form-label">Select Recruiter:</label>
-                            <!-- Recruiter -->
-                            <div class="row mb-5">
-                                <label class="col-lg-4 col-form-label fw-bold fs-6 required">Recruiter:</label>
-                                <div class="col-lg-8">
-                                <select name="recruiter_id" id="recruiter_id" data-control="select2"
-                                    class="form-control form-control-solid @error('recruiterId') is-invalid @enderror">
-                                    <option value="">Select a Recruiter</option>
-                                    @foreach ($recruiters as $recruiter)
-                                    @php
-                                        $image = $recruiter->profile_image 
-                                            ? asset('storage/uploads/recruiters/' . basename($recruiter->profile_image)) 
-                                            : asset('images/user-profile.png');
-                                    @endphp
-                                        <option value="{{ $recruiter->id }}" data-img="{{ $image }}">
-                                            {{ $recruiter->user->first_name }} {{ $recruiter->user->last_name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                <input type="hidden" name="company_id" value="{{auth()->user()->company->id}}">
-                                <input type="hidden" name="status" value="Active">
-                                    <span class="text-danger" id="recruiterIdEmpty">@error('recruiterId'){{ $message }}@enderror</span>
-                                </div>
-                            </div>
-
-                        </div>
-                        <button type="submit" class="btn btn-primary">Add Employee</button>
-                    </form>
-                </div>
-            </div>
+        <div class="col-8">
+             @include('company.components.company.form-add-employee')
         </div>
 
         <!-- Second Card: Send Email -->
-        <div class="col-12 mt-4">
-           @include('company.components.company.card-add-employees')
+            <div class="col-4">
+                @include('company.components.company.card-add-employees')
+            </div>
+        </div>
+        <div class="row mt-5">
+            @include('company.components.company.active-connections')
         </div>
         
-    </div>
+        
+   
 </div>
 @endsection
 <!-- Select2 Script for Image Support -->
@@ -61,24 +29,31 @@
 <script>
     $(document).ready(function() {
         function formatRecruiter(recruiter) {
-            if (!recruiter.id) {
-                return recruiter.text;
-            }
-            var image = $(recruiter.element).data('img') || "{{ asset('/images/icon-profile.png') }}";
-            var template = $('<span><img src="' + image +
-                '" class="rounded-circle" style="width:30px; height:30px; margin-right:10px;"/> ' +
-                recruiter.text + '</span>');
-            return template;
+        if (!recruiter.id) {
+            return recruiter.text;
         }
+        
+        var image = $(recruiter.element).data('img') || "{{ asset('/images/user-profile.png') }}";
+        var country = $(recruiter.element).data('country') || "Unknown Country";
+        var city = $(recruiter.element).data('city') || "Unknown City";
 
-        $('#recruiterId').select2({
-            templateResult: formatRecruiter,
-            templateSelection: formatRecruiter,
-            escapeMarkup: function(m) {
-                return m;
-            }
-        });
+        var template = $(
+            `<div style="display: flex; align-items: center;">
+                <img src="${image}" class="rounded-circle" style="width:30px; height:30px; margin-right:10px;"/>
+                <div>
+                    <strong>${recruiter.text}</strong><br>
+                    <small><i>${country}, ${city}</i></small>
+                </div>
+            </div>`
+        );
+        return template;
+    }
 
+    $('#recruiter_id').select2({
+        templateResult: formatRecruiter,
+        templateSelection: formatRecruiter,
+        escapeMarkup: function(m) { return m; } // Render HTML properly
+    });
         let isValid = true;
 
         // Email validation

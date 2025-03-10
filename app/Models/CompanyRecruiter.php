@@ -73,15 +73,17 @@ class CompanyRecruiter extends Pivot
         ->where('invite_type', 'Recruiter')->get();
     }
 
-    //all connections recruiter - companies
-    public function getAllConnections()
-    {
-        $recruiterId = auth()->user()->recruiter->id;
-        return self::where('recruiter_id', $recruiterId)
-        ->where('status', 'Active')
-        ->get();
-    
-    }
+     //all connections recruiter - companies
+     public function getAllConnections()
+     {
+         $recruiterId = auth()->user()->recruiter->id;
+         return self::where('recruiter_id', $recruiterId)
+         ->where('status', 'Active')
+         ->get();
+     
+     }
+
+   
 
 
    

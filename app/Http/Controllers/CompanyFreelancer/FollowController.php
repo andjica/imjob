@@ -89,4 +89,15 @@ class FollowController extends Controller
         }
     
     }
+
+    public function delete(Request $request)
+    {
+        $recruiterId = $request->input('recruiter_id');
+
+        $companyId = auth()->user()->company->id ?? abort(404);
+
+        $delete = $this->companyRecruiterServices->delete($companyId, $recruiterId);
+
+        return $delete;
+    }
 }

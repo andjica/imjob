@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Company;
 
+use App\Models\Job;
 use App\Models\User;
 use App\Models\Company;
 use Illuminate\Http\Request;
@@ -97,10 +98,12 @@ class FrontController extends Controller
     public function addEmployees(Request $request)
     {
         $search = $request->input('search');
-        $recruiters = $this->recruiterServices->getAllRecruiters($search);
         $companyId = auth()->user()->company->id;
-       // return dd($this->recruiterServices->getAvailableRecruiters($companyId));
-        return view('company.pages.add-employees', compact('recruiters'));
+        $recruiters = $this->recruiterServices->getAvailableRecruiters($companyId);
+        //$pendingRecruiters = $this->recruiterServices->getPendingRecruitersByCompany($companyId);
+        $activeRecruiters = $this->recruiterServices->getActiveRecruitersByCompany($companyId);
+        
+        return view('company.pages.add-employees', compact('recruiters', 'activeRecruiters'));
     
     }
 
@@ -173,5 +176,12 @@ class FrontController extends Controller
         return response()->json([
             'request' => $requestAll
         ]);
+    }
+
+    public function recruitmentProcess(Job $job): Factory|View|Application
+    {
+        $candidates = $job->candidates()->with('user')->get();
+       
+        return view('company.pages.recruitment.job-recruitment', compact('job', 'candidates'));
     }
 }

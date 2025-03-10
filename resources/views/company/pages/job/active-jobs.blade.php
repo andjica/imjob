@@ -80,8 +80,8 @@
                         <p class="card-text"><strong>Salary:</strong> {{$job->salary_min}} - {{$job->salary_max}} {{$job->country->currency_symbol}}</p>
                         <p class="card-text job-type">Job Type: {{$job->jobType->name}}</p>
                     </div>
-                    <!-- {{asset('/company/freelancer/'.$job->id.'/recruitment-process')}} -->
-                    <a href="" class="btn btn-sm btn-light-primary">Go to recruitment process</a>
+            
+                    <a href="{{asset('/company/dashboard/'.$job->id.'/recruitment-process')}}" class="btn btn-sm btn-light-primary">Go to recruitment process</a>
 
                 </div>
 

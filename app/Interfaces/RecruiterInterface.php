@@ -11,5 +11,8 @@ interface RecruiterInterface
 {
     public function getAllRecruiters(?string $search = null): LengthAwarePaginator;
     public function getAvailableRecruiters(int $companyId): Collection;
+    public function getPendingRecruitersByCompany(int $companyId);
+    public function getActiveRecruitersByCompany(int $companyId);
     public function store(Request $request);
+    
 }

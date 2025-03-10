@@ -99,8 +99,8 @@ Route::middleware(['auth', 'company', 'verified'])->prefix('company/dashboard')-
 
     Route::post('/store', [CompanyController::class, 'store'])->name('store');
 
+    //recruiters list
     Route::get('/find/recruiters', [CompanyFrontController::class, 'findRecruiters'])->name('find-recruiters');
-
     Route::post('/recruiters/call/{recruiter}', [RecruiterController::class, 'callRecruiter'])->name('recruiters-call');
 
     //jobs
@@ -108,16 +108,18 @@ Route::middleware(['auth', 'company', 'verified'])->prefix('company/dashboard')-
     Route::get('/active/jobs', [CompanyFrontController::class, 'getActiveJobs'])->name('active-jobs');
     Route::get('/inactive/jobs', [CompanyFrontController::class, 'getInactiveJobs'])->name('inactive-jobs');
 
+    //recruitment process
+    Route::get('/{job}/recruitment-process', [CompanyFrontController::class, 'recruitmentProcess'])->name('recruitment-process');
     //profile
     Route::get('/settings', [CompanyFrontController::class, 'settings'])->name('settings');
     Route::get('/company/{company}/details', [CompanyFrontController::class, 'detailsCompany'])->name('company-details');
     Route::get('/edit', [CompanyFrontController::class, 'editCompany'])->name('edit-company');
-    Route::get('/add/employees', [CompanyFrontController::class, 'addEmployees'])->name('add-employees');
 
     //follow and connections
     Route::post('/make-connection/change-status', [FollowCompanyController::class, 'changeStatus'])->name('follow-change-status');
     Route::post('/make-request', [FollowCompanyController::class, 'followRecruiter'])->name('make-request');
-
+    Route::get('/add/employees', [CompanyFrontController::class, 'addEmployees'])->name('add-employees');
+    Route::post('/status-change/to-delete', [FollowCompanyController::class, 'delete'])->name('status-change-to-delete');
     //email
     Route::post('/email/emoloyee-invitation', [EmailController::class, 'sendToEmployee'])->name('email-to-employeee');
 

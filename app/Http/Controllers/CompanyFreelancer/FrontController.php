@@ -350,4 +350,7 @@ class FrontController extends Controller
         
         return view('company-freelancer.pages.view', compact('recruiter'));
     }
+
+    
+ 
 }

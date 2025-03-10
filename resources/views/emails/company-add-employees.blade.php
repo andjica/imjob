@@ -74,7 +74,7 @@
     <div class="email-container">
         <div class="email-header">
             <a href="{{ route('home') }}" class="navbar-brand fw-bold">
-                <img src="{{ asset('images/im-job-logo.svg') }}" alt="Im Job Logo" height="60">
+            <img src="{{ asset('/images/logo1.png') }}" width="80px" class="img-fluid" alt="Im job logo">
             </a>
         </div>
 
@@ -82,14 +82,13 @@
         <h3>Hello,</h3>
         <p><strong>{{ $company->name }}</strong> has invited you to join their team on <strong>Im Job</strong>!</p>
         
-        <img src="{{ asset('images/invitation.svg') }}" alt="Invitation" height="160" style="margin: 20px auto;">
+        <img src="{{ asset('/images/workforce.webp') }}" alt="Invitation" width="60" style="margin: 20px auto;">
 
         <p>Click the button below to register and join {{ $company->name }}.</p>
 
         <!-- Call-to-Action button (Redirect to Register Page) -->
         <a href="{{ route('register', ['invited_by' => $company->id]) }}" class="cta-button">Register Now</a>
 
-        <p>If you have any questions, feel free to <a href="mailto:support@example.com">contact us</a>.</p>
     </div>
 
 

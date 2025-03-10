@@ -16,4 +16,5 @@ interface CompanyRecruiterInterface
      * @return bool
      */
     public function changeStatus(ChangeStatusRequest $changeStatusRequest): bool;
+    public function delete(int $companyId, int $recruiterId);
 }
