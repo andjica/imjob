@@ -100,7 +100,7 @@ class FrontController extends Controller
         $search = $request->input('search');
         $recruiters = $this->recruiterServices->getAllRecruiters($search);
         $companyId = auth()->user()->company->id;
-        return dd($this->recruiterServices->getAvailableRecruiters($companyId));
+        // return dd($this->recruiterServices->getAvailableRecruiters($companyId));
         return view('company.pages.add-employees', compact('recruiters'));
     
     }

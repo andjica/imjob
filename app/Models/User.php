@@ -69,7 +69,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function recruiter(): HasOne
     {
-        return $this->hasOne(Recruiter::class);
+        return $this->hasOne(Recruiter::class, 'user_id');
     }
 
     public function contributor(): HasOne

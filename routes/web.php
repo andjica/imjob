@@ -42,7 +42,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Public Routes
-Route::get('/', fn () => view('welcome'));
+Route::get('/', fn() => view('welcome'));
 
 Auth::routes(['verify' => true]);
 
@@ -74,8 +74,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/company/update', [CompanyController::class, 'update'])->name('company-update');
     Route::post('/job/store', [JobController::class, 'store'])->name('store-job');
     Route::put('/job/{id}/update', [JobController::class, 'update'])->name('update-job');
-
-
 });
 
 // Admin Routes
@@ -101,7 +99,7 @@ Route::middleware(['auth', 'company', 'verified'])->prefix('company/dashboard')-
     Route::post('/store', [CompanyController::class, 'store'])->name('store');
 
     Route::get('/find/recruiters', [CompanyFrontController::class, 'findRecruiters'])->name('find-recruiters');
-    
+
     Route::post('/recruiters/call/{recruiter}', [RecruiterController::class, 'callRecruiter'])->name('recruiters-call');
 
     //jobs
@@ -118,12 +116,11 @@ Route::middleware(['auth', 'company', 'verified'])->prefix('company/dashboard')-
     //follow and connections
     Route::post('/make-connection/change-status', [FollowCompanyController::class, 'changeStatus'])->name('follow-change-status');
     Route::post('/make-request', [FollowCompanyController::class, 'followRecruiter'])->name('make-request');
-
 });
 
 // Company Freelancer Routes
 Route::middleware(['auth', 'company.freelancer', 'verified'])->prefix('company/freelancer')->name('company-freelancer-')->group(function () {
-    
+
     Route::post('/recruiter/store', [FreelancerController::class, 'store'])->name('recruiter-store');
 
     Route::middleware(['recruiter.finish.profile'])->group(function () {
@@ -157,7 +154,7 @@ Route::middleware(['auth', 'company.freelancer', 'verified'])->prefix('company/f
         Route::post('/job/store', [JobController::class, 'store'])->name('store-job');
         Route::get('/job/{id}/edit', [JobController::class, 'edit'])->name('edit-job');
         Route::put('/job/{id}/update', [JobController::class, 'update'])->name('update-job');
-    
+
 
         Route::get('/{job}/recruitment-process', [CompanyFreelancerFrontController::class, 'recruitmentProcess'])->name('recruitment-process');
         Route::get('/job/candidate/{candidate}/recruitment-process', [CompanyFreelancerFrontController::class, 'candidateRecruitmentProcess'])->name('candidat-recruitment-process');
@@ -170,7 +167,6 @@ Route::middleware(['auth', 'company.freelancer', 'verified'])->prefix('company/f
         Route::post('/recruitment-process/{process}/advance', [CompanyFreelancerFrontController::class, 'advanceProcess'])->name('advance-process');
 
         Route::get('/notifications', [CompanyFreelancerFrontController::class, 'notifications'])->name('notifications');
-
     });
 });
 
@@ -181,18 +177,18 @@ Route::middleware(['auth', 'contributor', 'verified'])->prefix('contributor')->n
     //contributor information profile
     Route::post('/store', [ContributorController::class, 'store'])->name('create');
 
-    Route::get('/settings',[ContributorFrontController::class,'settings'])->name('settings');
+    Route::get('/settings', [ContributorFrontController::class, 'settings'])->name('settings');
 
     Route::middleware(['contributor.exists'])->group(function () {
-    
+
         Route::post('/update', [ContributorController::class, 'update'])->name('update');
         //ruta za ajax
         Route::post('/make-request', [FollowContributorController::class, 'followRecruiter'])->name('make-request');
-        
+
         Route::get('/find/companies', [ContributorFrontController::class, 'findCompanies'])->name('find-companies');
         Route::get('/find/recruiters', [ContributorFrontController::class, 'findRecruiters'])->name('find-recruiter');
 
-        Route::get('/company/{id}/details', [ContributorFrontController::class,'detailsCompany'])->name('company-details');
+        Route::get('/company/{id}/details', [ContributorFrontController::class, 'detailsCompany'])->name('company-details');
         //posts
         Route::get('/posts', [ContributorFrontController::class, 'allPost'])->name('posts');
         Route::get('/post/create', [ContributorFrontController::class, 'createPost'])->name('post-create');
@@ -200,18 +196,18 @@ Route::middleware(['auth', 'contributor', 'verified'])->prefix('contributor')->n
         Route::get('/edit', [ContributorFrontController::class, 'edit'])->name('edit');
 
         //connection
-        Route::get('/connections', [ContributorFrontController::class,'getActiveConnections'])->name('connections');
+        Route::get('/connections', [ContributorFrontController::class, 'getActiveConnections'])->name('connections');
 
-        Route::get('/settings',[ContributorFrontController::class,'settings'])->name('settings');
+        Route::get('/settings', [ContributorFrontController::class, 'settings'])->name('settings');
     });
 });
 
 //Recruter routes
 Route::middleware(['auth', 'recruiter', 'verified'])->prefix('recruiter')->name('recruiter-')->group(function () {
-    Route::get('/dashboard', [RecruiterFrontController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [RecruiterFrontController::class, 'dashboard'])->name('dashboard');
 
-    Route::get('/find/companies', [RecruiterFrontController::class, 'companies'])->name('find-companies');
-    Route::get('/find/contributor', [RecruiterFrontController::class, 'contributor'])->name('find-contributor');
+    Route::get('/find/companies', [RecruiterFrontController::class, 'findCompany'])->name('find-companies');
+    Route::get('/find/contributor', [RecruiterFrontController::class, 'findContributor'])->name('find-contributors');
 
     Route::get('/job/create', [RecruiterFrontController::class, 'createJob'])->name('create-job');
     Route::get('/active/jobs', [RecruiterFrontController::class, 'getActiveJobs'])->name('active-jobs');
@@ -219,11 +215,11 @@ Route::middleware(['auth', 'recruiter', 'verified'])->prefix('recruiter')->name(
 
     Route::get('/edit', [RecruiterFrontController::class, 'editRecruiter'])->name('recruiter-edit');
 
-    Route::get('/settings',[RecruiterFrontController::class,'settings'])->name('settings');
+    Route::get('/settings', [RecruiterFrontController::class, 'settings'])->name('settings');
 });
 
 
 //Landing routes
 Route::get('/', [LandingController::class, 'index'])->name('index');
 Route::get('/contact-us', [LandingController::class, 'getContactUs'])->name('contact-us');
-Route::get('/about-us', [LandingController::class,'getAboutUs'])->name('about-us');
+Route::get('/about-us', [LandingController::class, 'getAboutUs'])->name('about-us');
