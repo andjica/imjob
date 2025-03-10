@@ -85,7 +85,6 @@ class FrontController extends Controller
 
     public function findCompanies(Request $request)
     {
-        // da se proveri da li je dobra putanja i da li je dobro pozvana metoda
         $search = $request->input('search');
         $companies = $this->companyServices->getAllCompanies($search);
 
@@ -100,7 +99,7 @@ class FrontController extends Controller
         $search = $request->input('search');
         $recruiters = $this->recruiterServices->getAllRecruiters($search);
         $companyId = auth()->user()->company->id;
-        // return dd($this->recruiterServices->getAvailableRecruiters($companyId));
+       // return dd($this->recruiterServices->getAvailableRecruiters($companyId));
         return view('company.pages.add-employees', compact('recruiters'));
     
     }
