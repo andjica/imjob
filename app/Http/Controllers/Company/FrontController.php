@@ -52,8 +52,11 @@ class FrontController extends Controller
 
     public function dashboard()
     {
-        $user = User::find(auth()->user()->id) ?? abort(404);
-        $company = Company::where('user_id', $user->id)->first();
+        $user = auth()->user();
+        $companyId = $user->company->id;
+        $company = $this->companyServices->get($companyId);
+
+       
         if(!$company instanceof Company)
         {
             return redirect('/company/dashboard/information/create');
