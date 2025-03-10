@@ -86,7 +86,9 @@
                                                 alt="Profile Image" class="img-fluid rounded-circle shadow-sm"
                                                 style="width: 60px; height: 60px;"> <!-- Smaller size here -->
                                         @else
-                                            <span class="badge bg-secondary">No Image</span>
+                                            <img src="{{ asset('images/user-286.png') }}" alt="Profile Image"
+                                                class="img-fluid rounded-circle shadow-sm"
+                                                style="width: 60px; height: 60px;">
                                         @endif
                                     </div>
                                     <!--end::Image-->

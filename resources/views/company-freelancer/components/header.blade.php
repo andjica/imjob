@@ -17,7 +17,7 @@
                         <!--end::Aside mobile toggle-->
                         <!--begin::Mobile logo-->
                         <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
-                            <a href="" class="d-lg-none">
+                            {{-- <a href="" class="d-lg-none">
                                  <svg width="101" height="80" viewBox="0 0 141 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <g clip-path="url(#clip0_8:198)">
                                     <path fill-rule="evenodd" clip-rule="evenodd" d="M56.6462 35.6065C54.646 37.4118 51.9936 38.5113 49.0839 38.5113C42.856 38.5113 37.8074 33.4744 37.8074 27.2609C37.8074 25.5163 38.2054 23.8644 38.9159 22.3907C36.8349 21.897 34.6637 21.6357 32.4314 21.6357C17.0067 21.6357 4.50244 34.111 4.50244 49.5001C4.50244 64.8892 17.0067 77.3645 32.4314 77.3645C47.8561 77.3645 60.3603 64.8892 60.3603 49.5001C60.3603 44.4407 59.0088 39.6962 56.6462 35.6065Z" fill="#082E8E"/>
@@ -36,7 +36,7 @@
                                     </clipPath>
                                     </defs>
                                 </svg>
-                            </a>
+                            </a> --}}
                         </div>
                       
                         <!--end::Mobile logo-->
@@ -59,7 +59,7 @@
 
                             </a>
                         </li>
-                        <div class="app-navbar-item ms-1 mt-1 ms-md-3" id="kt_header_user_menu_toggle">
+                        <div class="app-navbar-item ms-1 mt-2 ms-md-3" id="kt_header_user_menu_toggle">
                        
                         <!--begin::Menu wrapper-->
                             <div class="cursor-pointer" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">
@@ -72,7 +72,7 @@
                         <div class="menu-item px-3">
                             <div class="menu-content d-flex align-items-center px-3">
                                 <!--begin::Avatar-->
-                                <div class="">
+                                <div class="logo">
                                     <img src="{{asset('/images/logo1.png')}}" width="70px" class="img-fluid">  
                                 </div>
                                 <!--end::Avatar-->

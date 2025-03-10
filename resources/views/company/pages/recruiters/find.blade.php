@@ -25,9 +25,7 @@
                         Once a recruiter accepts your request, you’ll be notified, and you can start collaborating to
                         build the team your company deserves.
                     </p>
-
                 </div>
-
                 <div class="card-body p-4">
                     <div class="card-header p-0" id="kt_contacts_list_header">
                         <!--begin::Form-->
@@ -86,24 +84,23 @@
                                                 alt="Profile Image" class="img-fluid rounded-circle shadow-sm"
                                                 style="width: 60px; height: 60px;"> <!-- Smaller size here -->
                                         @else
-                                            <span class="badge bg-secondary">No Image</span>
+                                            <img src="{{ asset('images/user-286.png') }}" alt="Profile Image"
+                                                class="img-fluid rounded-circle shadow-sm"
+                                                style="width: 60px; height: 60px;">
                                         @endif
                                     </div>
                                     <!--end::Image-->
-
                                     <!--begin::Section-->
                                     <div class="d-flex align-items-center flex-row-fluid flex-wrap">
                                         <!--begin:Recruiter-->
                                         <div class="flex-grow-1 me-2">
                                             <h5 class="card-title">{{ $recruiter->user->first_name }}
                                                 {{ $recruiter->user->last_name }}</h5>
-
                                             <span
                                                 class="text-muted fw-semibold d-block fs-7">{{ $recruiter->title_function }}</span>
                                             <p class="text-muted">{{ $recruiter->user->email }}</p>
                                         </div>
                                         <!--end:Recruiter-->
-
                                         <!--begin:Action-->
                                         <button type="button" data-recruiter-id="{{ $recruiter->id }}"
                                             data-status="Pending"
@@ -138,7 +135,7 @@
         followButtons.forEach(button => {
             button.addEventListener('click', function(event) {
 
-                
+
                 event.preventDefault();
 
                 const recruiterId = this.dataset.recruiterId;
