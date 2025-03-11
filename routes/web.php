@@ -211,7 +211,7 @@ Route::middleware(['auth', 'contributor', 'verified'])->prefix('contributor')->n
 
 //Recruter routes
 Route::middleware(['auth', 'recruiter', 'verified'])->prefix('recruiter')->name('recruiter-')->group(function () {
-    Route::middleware(['recruiter.finish.profile'])->group(function () {
+    // Route::middleware(['recruiter.finish.profile'])->group(function () {
     Route::get('/dashboard', [RecruiterFrontController::class, 'dashboard'])->name('dashboard');
 
     Route::get('/find/companies', [RecruiterFrontController::class, 'findCompany'])->name('find-companies');
@@ -227,7 +227,7 @@ Route::middleware(['auth', 'recruiter', 'verified'])->prefix('recruiter')->name(
 
     //follow 
     Route::post('/make-request', [FollowCompanyController::class, 'followCompany'])->name('make-request');
-    });
+    // });
 });
 
 

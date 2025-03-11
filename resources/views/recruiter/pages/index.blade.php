@@ -10,11 +10,10 @@
         </div>
         <div class="row">
             <div class="col-lg-12">
-                {{-- @include('recruiter.components.intro-banner') --}}
+                @include('recruiter.components.banner-find')
             </div>
-        </div>
-        <div class="row mt-5">
-            
+            <div class="col-lg-12">
+                @include('recruiter.components.info')
             </div>
         </div>
     </div>
