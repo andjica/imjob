@@ -224,6 +224,9 @@ Route::middleware(['auth', 'recruiter', 'verified'])->prefix('recruiter')->name(
     Route::get('/edit', [RecruiterFrontController::class, 'editRecruiter'])->name('recruiter-edit');
 
     Route::get('/settings', [RecruiterFrontController::class, 'settings'])->name('settings');
+
+    //follow 
+    Route::post('/make-request', [FollowCompanyController::class, 'followCompany'])->name('make-request');
     });
 });
 

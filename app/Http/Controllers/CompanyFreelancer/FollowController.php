@@ -75,7 +75,8 @@ class FollowController extends Controller
     //basic - agency, contributor following recruiter
     public function followRecruiter(Request $request) : JsonResponse
     {
-        return response()->json(['stiglo'=>'stiglo']);
+        $recruiterId = $request->get('recruiter_id');
+        return response()->json(['recuriter_id'=> $recruiterId]);
     }
 
     public function changeStatus(ChangeStatusRequest $request)
