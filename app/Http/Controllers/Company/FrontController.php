@@ -79,9 +79,17 @@ class FrontController extends Controller
         $search = $request->input('search');
         $recruiters = $this->recruiterServices->getAllRecruiters($search);
 
-        $company = auth()->user()->company;
-        
-        return view('company.pages.recruiters.find', compact('recruiters', 'company'));
+        $user = auth()->user();
+
+
+        $connectedOnPending = $user->company->recruiters()
+        ->wherePivot('status', 'Pending')
+        ->get();
+
+        $connectedSuccessfully = $user->company->recruiters()
+        ->wherePivot('status', 'Active')
+        ->get();
+        return view('company.pages.recruiters.find', compact('recruiters', 'connectedOnPending', 'connectedSuccessfully'));
     }
 
     public function findCompanies(Request $request)

@@ -4,18 +4,18 @@ namespace App\Http\Controllers\CompanyFreelancer;
 
 use Exception;
 use App\Http\Requests;
+use App\Models\Recruiter;
 use Illuminate\Http\Request;
 use App\Actions\FollowCompany;
+use App\Actions\FollowRecruiter;
 use Illuminate\Http\JsonResponse;
 use App\Actions\FollowContributor;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ChangeStatusRecruiterContributorRequest;
 use App\Http\Requests\ChangeStatusRequest;
 use App\Http\Requests\FollowCompanyRequest;
-use App\Http\Requests\FollowContributorRequest;
 use App\Interfaces\CompanyRecruiterInterface;
-use App\Interfaces\ContributorRecruiterInterface;
-use App\Models\Recruiter;
+use App\Http\Requests\FollowContributorRequest;
+
 
 class FollowController extends Controller
 {
@@ -73,10 +73,26 @@ class FollowController extends Controller
     }
 
     //basic - agency, contributor following recruiter
-    public function followRecruiter(Request $request) : JsonResponse
+    public function followRecruiter(Request $request, FollowRecruiter $followRecruiter): JsonResponse
     {
+        /** @var User $user */
+        $user = auth()->user();
+
+        if (!$user->company) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You must be a company to follow a recruiter.',
+            ], 403);
+        }
+
         $recruiterId = $request->get('recruiter_id');
-        return response()->json(['recuriter_id'=> $recruiterId]);
+        $companyRecruiter = $followRecruiter->execute($recruiterId, $user->company);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Successfully followed recruiter.',
+            'data' => $companyRecruiter
+        ]);
     }
 
     public function changeStatus(ChangeStatusRequest $request)
