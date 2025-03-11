@@ -31,8 +31,8 @@ class FrontController extends Controller
         $user   = auth()->user();
         $userId = $user->id;
 
-        $recruter = Recruiter::where("user_id", $userId)->first();
-        return view("recruiter.pages.index", compact("recruter"));
+        $recruiter = $this->recruterServices->getOne($userId);
+        return view("recruiter.pages.index", compact("recruiter"));
     }
 
     public function findCompany()
@@ -66,7 +66,16 @@ class FrontController extends Controller
     }
     public function editRecruiter()
     {
-        return view("recruiter.pages.edit");
+        $user   = auth()->user();
+        $userId = $user->id;
+
+        $recruiter = $this->recruterServices->getOne($userId);
+        return view("recruiter.pages.edit", compact("recruiter"));
+    }
+    public function update(Request $request)
+    {
+        $this->recruterServices->updateRecruiter($request);
+        return redirect()->back()->with('success', 'You upddated information successfully');
     }
 
     public function createJob()

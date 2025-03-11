@@ -13,14 +13,14 @@
             </div>
     </div>
    
-    {{-- @if(is_null($freelancer->education))
-        @include('company-freelancer.components.freelancer.create-education')
+    {{-- @if(is_null($recruiter->education))
+        @include('recruiter.components.create-education')
     @else
-        @include('company-freelancer.components.freelancer.edit-education')
+        @include('recruiter.components.edit-education')
     @endif --}}
 
     <!-- Div card for profile update -->
-     {{-- @include('company-freelancer.components.freelancer.edit-profile') --}}
+     @include('recruiter.components.edit-profile')
    
         <!-- End Div card for profile update -->
 </div>

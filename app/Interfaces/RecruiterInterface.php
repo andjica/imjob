@@ -14,6 +14,7 @@ interface RecruiterInterface
     public function getAvailableRecruiters(int $companyId): Collection;
     public function getPendingRecruitersByCompany(int $companyId);
     public function getActiveRecruitersByCompany(int $companyId);
+    public function updateRecruiter(Request $request);
     public function store(Request $request);
     
 }

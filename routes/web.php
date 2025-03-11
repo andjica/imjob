@@ -221,7 +221,8 @@ Route::middleware(['auth', 'recruiter', 'verified'])->prefix('recruiter')->name(
     Route::get('/active/jobs', [RecruiterFrontController::class, 'getActiveJobs'])->name('active-jobs');
     Route::get('/inactive/jobs', [RecruiterFrontController::class, 'getInactiveJobs'])->name('inactive-jobs');
 
-    Route::get('/edit', [RecruiterFrontController::class, 'editRecruiter'])->name('recruiter-edit');
+    Route::get('/edit', [RecruiterFrontController::class, 'editRecruiter'])->name('edit');
+    Route::post('/update', [RecruiterFrontController::class, 'update'])->name('update');
 
     Route::get('/settings', [RecruiterFrontController::class, 'settings'])->name('settings');
 

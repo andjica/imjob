@@ -12,7 +12,7 @@
             <div class="col-lg-12">
                 @include('recruiter.components.banner-find')
             </div>
-            <div class="col-lg-12">
+            <div class="col-lg-12 mt-5">
                 @include('recruiter.components.info')
             </div>
         </div>
