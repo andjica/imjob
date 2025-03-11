@@ -102,7 +102,8 @@
 
                                             <span
                                                 class="text-muted fw-semibold d-block fs-7">{{ $recruiter->title_function }}</span>
-                                                <p class="text-muted">{{ $recruiter->user->email }}<small><i>- @if($recruiter->is_freelancer == 1) Freelancer @else Recruiter @endif</i></small></p>
+                                                <small><i>- @if($recruiter->is_freelancer == 1) Freelancer @else Recruiter @endif</i></small><br>
+                                                <small><i>{{$recruiter->country->name}}, {{$recruiter->city->name}}</i></small><br>
 
                                         </div>
                                         @php

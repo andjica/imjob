@@ -19,6 +19,7 @@ use App\Interfaces\RecruiterInterface;
 use Illuminate\Contracts\View\Factory;
 use App\Interfaces\CompanyTypeInterface;
 use App\Interfaces\SubCategoryInterface;
+use App\Models\Recruiter;
 use Illuminate\Contracts\Foundation\Application;
 
 class FrontController extends Controller
@@ -108,6 +109,7 @@ class FrontController extends Controller
         $search = $request->input('search');
         $companyId = auth()->user()->company->id;
         $recruiters = $this->recruiterServices->getAvailableRecruiters($companyId);
+       
         //$pendingRecruiters = $this->recruiterServices->getPendingRecruitersByCompany($companyId);
         $activeRecruiters = $this->recruiterServices->getActiveRecruitersByCompany($companyId);
         

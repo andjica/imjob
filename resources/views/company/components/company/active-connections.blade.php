@@ -33,7 +33,7 @@
             <hr>
             
             <p class="text-muted fs-6">
-                You are connected with this persons, you can give 
+            "You are connected with this person! You can now grant them permission to post job listings, manage applications, and contribute to your recruitment process."
             </p>
 
         </div>
