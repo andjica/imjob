@@ -157,7 +157,9 @@ class FrontController extends Controller
          $countries = $this->countryServices->getCountries();
          $categories = $this->categoryServices->getAll();
          $jobTypes = $this->jobTypeServices->getAll();
- 
+         $companyId = $user->company->id;
+         $activeRecruiters = $this->recruiterServices->getActiveRecruitersByCompany($companyId);
+         return dd($activeRecruiters);
          return view('company.pages.job.create', compact('countries', 'categories', 'jobTypes'));
     }
 

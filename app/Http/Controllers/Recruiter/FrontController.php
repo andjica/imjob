@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Interfaces\ContributorInterface;
 use App\Interfaces\RecruiterInterface;
 use App\Models\ContributorRecruiter;
-use App\Models\Recruiter;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -15,14 +14,13 @@ use Illuminate\Contracts\View\View;
 class FrontController extends Controller
 {
     protected $contributorServices;
-    protected $recruterServices;
+    protected $recruiterServices;
 
     public function __construct(
-        ContributorInterface $contributorServices,
-        RecruiterInterface $recruterServices
+        ContributorInterface $contributorServices, RecruiterInterface $recruiterServices
     ) {
         $this->contributorServices = $contributorServices;
-        $this->recruterServices = $recruterServices;
+        $this->recruiterServices = $recruiterServices;
     }
 
 
@@ -31,7 +29,7 @@ class FrontController extends Controller
         $user   = auth()->user();
         $userId = $user->id;
 
-        $recruiter = $this->recruterServices->getOne($userId);
+        $recruiter = $this->recruiterServices->getOne($userId);
         return view("recruiter.pages.index", compact("recruiter"));
     }
 
@@ -69,12 +67,12 @@ class FrontController extends Controller
         $user   = auth()->user();
         $userId = $user->id;
 
-        $recruiter = $this->recruterServices->getOne($userId);
+        $recruiter = $this->recruiterServices->getOne($userId);
         return view("recruiter.pages.edit", compact("recruiter"));
     }
     public function update(Request $request)
     {
-        $this->recruterServices->updateRecruiter($request);
+        $this->recruiterServices->updateRecruiter($request);
         return redirect()->back()->with('success', 'You upddated information successfully');
     }
 
