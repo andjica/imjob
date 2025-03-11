@@ -29,8 +29,9 @@
 @section('content')
 <div class="container m-0 pb-5">
     <div class="row">
-        <div class="col-lg-12">
-            <div class="card mb-5 mb-xl-10">
+        @include('company.components.job.sidebar')
+        <div class="col-lg-9">
+            <div class="card mb-5 mb-xl-12">
                 <!--begin::Card header-->
                 <div class="card-header">
                     <h3 class="card-title">Create New Job</h3>
@@ -50,9 +51,7 @@
                 @endif
                     <form action="{{route('store-job')}}" method="POST" id="jobForm">
                         @csrf
-                        <div class="row">
-                            <!-- Left Column -->
-                            <div class="col-md-6 pe-10 border-end me-2">
+                      
                          <!-- Job World Type as Navigation -->
                          <div class="row mb-5">
                                 <label class="fw-bold fs-5 mb-3">Job World Type:</label>
@@ -80,7 +79,35 @@
                                     <input type="hidden" name="jobWorldType" id="jobWorldType" value="{{ old('jobWorldType', 'national') }}">
                             </div>
 
-
+                            <!-- Select recruiter for this job -->
+                            <div class="row">
+                            <!-- Left Column -->
+                            <div class="col-md-6 pe-10 border-end me-2">
+                            <div class="row mb-5">
+                            <label class="col-lg-4 col-form-label fw-bold fs-6 required">Recruiter:</label>
+                            <div class="col-lg-8">
+                            <select name="recruiter_id" id="recruiter_id" data-control="select2"
+                                class="form-control form-control-solid @error('recruiterId') is-invalid @enderror">
+                                <option value="">Select a Recruiter</option>
+                                @foreach ($recruiters as $recruiter)
+                                @php
+                                    $image = $recruiter->profile_image 
+                                        ? asset('storage/uploads/recruiters/' . basename($recruiter->profile_image)) 
+                                        : asset('images/user-profile.png');
+                                @endphp
+                                <option value="{{ $recruiter->id }}" 
+                                        data-img="{{ $image }}"
+                                        data-country="{{ $recruiter->country->name ?? '' }}"
+                                        data-city="{{ $recruiter->city->name ?? '' }}">
+                                    {{ $recruiter->user->first_name }} {{ $recruiter->user->last_name }}
+                                </option>
+                                @endforeach
+                            </select>
+                            <input type="hidden" name="company_id" value="{{auth()->user()->company->id}}">
+                            <input type="hidden" name="status" value="Active">
+                                <span class="text-danger" id="recruiterIdEmpty">@error('recruiterId'){{ $message }}@enderror</span>
+                            </div>
+                        </div>
                                 <!-- Job Title -->
                                 <div class="row mb-5">
                                     <label class="col-lg-4 col-form-label fw-bold fs-6 required">Job Title:</label>
@@ -394,6 +421,8 @@
 <script src="{{ asset('/js/custom/job/toogle-special-requirements.js') }}"></script>
 <script src="{{ asset('/js/custom/job/optional-skills.js') }}"></script>
 <script src="{{ asset('/js/custom/job/form-submit-validation.js') }}"></script>
+<script src="{{ asset('/js/custom/employee/select-recruiter.js')}}"></script>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Initialize Bootstrap modals

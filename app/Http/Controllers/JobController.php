@@ -21,6 +21,7 @@ class JobController extends Controller
     public function store(StoreJobRequest $request, CreateJob $createJob): RedirectResponse
     {
 
+        
         $createJob->execute($request->validated());
 
         if (auth()->user()->company->companyType->name === "Freelancer") {

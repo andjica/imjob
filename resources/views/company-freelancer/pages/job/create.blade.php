@@ -326,6 +326,7 @@
                             <span class="visually-hidden">Loading...</span>
                         </div>
                         <!-- Submit Button -->
+                         <input type="hidden" name="recuriter_id" value="{{auth()->user()->recruiter->id}}">
                         <div class="d-flex justify-content-end">
                             <button type="submit" class="btn btn-primary">Create Job</button>
                         </div>

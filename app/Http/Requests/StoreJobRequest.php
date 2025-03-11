@@ -53,6 +53,7 @@ class StoreJobRequest extends FormRequest
             'special_requirements' => ['nullable', 'string'],
             'validUntil' => ['required', 'date', 'after_or_equal:today'],
             'companyId' => ['required', 'integer', 'exists:companies,id'],
+            'recruiter_id' => ['nullable']
         ];
     }
 }

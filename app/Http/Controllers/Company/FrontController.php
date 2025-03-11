@@ -158,9 +158,11 @@ class FrontController extends Controller
          $categories = $this->categoryServices->getAll();
          $jobTypes = $this->jobTypeServices->getAll();
          $companyId = $user->company->id;
-         $activeRecruiters = $this->recruiterServices->getActiveRecruitersByCompany($companyId);
-         return dd($activeRecruiters);
-         return view('company.pages.job.create', compact('countries', 'categories', 'jobTypes'));
+
+         //get recruiters who are connected with logged company
+         $recruiters = $this->recruiterServices->getActiveRecruitersByCompany($companyId);
+         
+         return view('company.pages.job.create', compact('countries', 'categories', 'jobTypes', 'recruiters'));
     }
 
     public function getActiveJobs(Request $request)

@@ -14,7 +14,10 @@
                 <span class="text-danger" id="emailEmpty"> @error('email')
                         {{ $message }}
                     @enderror
-                </span>
+                </span><br>
+                <small>
+                Can't find your employee? Invite them to join the platform by sending them an email.
+                </small>
             </div>
             <button type="submit" class="btn btn-success">Send Email</button>
         </form>

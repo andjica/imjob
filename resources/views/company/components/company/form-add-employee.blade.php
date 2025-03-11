@@ -33,9 +33,13 @@
                         <span class="text-danger" id="recruiterIdEmpty">@error('recruiterId'){{ $message }}@enderror</span>
                     </div>
                 </div>
-
+                <small>
+                When you select a recruiter and submit this form, the recruiter will be automatically linked to your company, and their status will be set as "Active." If you are unsure about which recruiter to select, you can explore available recruiters using the Find Recruiters link and send a follow request before proceeding.
+                This ensures that you connect with the right candidate for your company.
+                 </small>
             </div>
             <button type="submit" class="btn btn-primary">Add Employee</button>
+           
         </form>
     </div>
 </div>

@@ -99,6 +99,15 @@
                                     data-recruiter-name="{{ $recruiter->user->first_name }} {{ $recruiter->user->last_name }}">
                                     Remove
                                 </button>
+                                @php
+                                    $numJobs = \App\Models\Job::where('recruiter_id',$recruiter->id)->where('company_id', auth()->user()->company->id)->count();
+                                @endphp
+                                @if($numJobs>0)
+                               
+                                <button class="btn btn-sm btn-primary me-2 mb-2">This recruiter has {{$numJobs}} jobs</button>
+                                @else
+                                <button class="btn btn-sm btn-primary me-2 mb-2" disabled>This recruiter has {{$numJobs}} jobs</button>
+                                @endif
                                 <!--end:Action-->
                             </div>
                             <!--end::Section-->

@@ -124,8 +124,7 @@
                                                     <i class="fas fa-link"></i>
                                                 </button>
 
-                                            @elseif($user->recruiter->id == $recruiter->id)
-                                                <!-- Hide Button If The User is the Recruiter -->
+                                        
                                             @else
                                                 <button type="button" data-recruiter-id="{{ $recruiter->id }}"
                                                     data-status="Pending"

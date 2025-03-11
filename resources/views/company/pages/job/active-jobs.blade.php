@@ -60,11 +60,12 @@
                             <span class="badge badge-warning mb-5">National</span>
                         @endif
                         <h5 class="card-title">{{$job->title}}</h5>
-                        <p>Company: {{$job->company->name}}</p>
-                        <p class="card-text">Location: {{$job->city->name}}, {{$job->country->name}}</p>
+                        <p>This job is added to {{$job->recruiter->user->first_name}} {{$job->recruiter->user->last_name}} recruiter</p>
+                        <p class="card-text">Location: {{$job->city->name}}, {{$job->country->name}}</p><br>
+                        
                     </div>
                     <div class="d-flex align-items-center">
-                        <a href="{{ asset('/company/freelancer/job/'.$job->id.'/edit') }}" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                        <a href="{{ asset('/company/job/'.$job->id.'/edit') }}" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
                             <i class="fas fa-pencil-alt edit-icon" data-bs-toggle="modal" data-bs-target="#statusModal"
                                 data-job="{{$job->title}}"></i>
                         </a>
