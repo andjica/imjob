@@ -95,7 +95,6 @@
                         </div>
                     </div>
                 </div>
-
                 <!-- Jobs -->
                 <div data-kt-menu-trigger="click" class="menu-item menu-accordion show">
                     <span class="menu-link">
@@ -113,7 +112,6 @@
                                     <rect opacity="0.3" x="2" y="13" width="9" height="9" rx="2"
                                         fill="currentColor"></rect>
                                 </svg>
-
                             </span>
                             <!--end::Svg Icon-->
                         </span>
@@ -123,7 +121,7 @@
                     <div class="menu-sub menu-sub-accordion">
 
                         <div class="menu-item">
-                            <a class="menu-link {{ request()->is('company/dashboard/job/create') ? 'active' : '' }}"
+                            <a class="menu-link {{ Route::currentRouteName() === 'company-dashboard-create-job' ? 'active' : '' }}"
                                 href="{{ url('/company/dashboard/job/create') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
@@ -132,7 +130,7 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link {{ Route::currentRouteName() === 'company-dashboard-active-jobs' ? 'active' : '' }}}"
+                            <a class="menu-link {{ Route::currentRouteName() === 'company-dashboard-active-jobs' ? 'active' : '' }}"
                                 href="{{ url('/company/dashboard/active/jobs') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
@@ -141,7 +139,7 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link {{ Route::currentRouteName() === 'company-inactive-jobs' ? 'active' : '' }}}"
+                            <a class="menu-link {{ Route::currentRouteName() === 'company-dashboard-inactive-jobs' ? 'active' : '' }}"
                                 href="{{ url('/company/dashboard/inactive/jobs') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
@@ -168,7 +166,6 @@
                                     <rect opacity="0.3" x="2" y="13" width="9" height="9" rx="2"
                                         fill="currentColor"></rect>
                                 </svg>
-
                             </span>
                             <!--end::Svg Icon-->
                         </span>
@@ -177,7 +174,7 @@
                     </span>
                     <div class="menu-sub menu-sub-accordion">
                         <div class="menu-item">
-                            <a class="menu-link {{ Route::currentRouteName() === 'edit' ? 'active' : '' }}"
+                            <a class="menu-link {{ Route::currentRouteName() === 'company-dashboard-edit-company' ? 'active' : '' }}"
                                 href="{{ asset('company/dashboard/edit') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
@@ -191,18 +188,13 @@
                 <!--end::Aside menu-->
                 <!--begin::Footer-->
                 <div class="aside-footer flex-column-auto pt-5 pb-7 px-5" id="kt_aside_footer">
-
                     <a href="{{ asset('/company/dashboard/settings') }}" class="btn btn-custom btn-primary w-100"
                         data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss-="click" title=""
                         data-bs-original-title="Make changes for your profile company">
                         <i class="fa-solid fa-bell"></i> <span class="btn-label">Settings</span>
-
                     </a>
-
-
                 </div>
                 <!--end::Footer-->
-
             </div>
         </div>
     </div>

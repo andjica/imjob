@@ -7,6 +7,9 @@
          @include('alerts.success')
         @include('alerts.errors')
         <!-- First Card: Add Employee :) -->
+        <div class="btn-back">
+            <button onclick="window.history.back()" class="btn btn-sm bg-linear-pink text-white  p-2 mb-5"> <i class="fa fa-chevron-left text-white"></i> Back</button>
+        </div>
         <div class="col-8">
              @include('company.components.company.form-add-employee')
         </div>

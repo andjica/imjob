@@ -1,5 +1,9 @@
 <!-- Security Settings Card -->
 <div class="row">
+    <div class="btn-back">
+        <button onclick="window.history.back()" class="btn btn-sm bg-linear-pink text-white p-2 mb-5"> <i
+                class="fa fa-chevron-left text-white"></i> Back</button>
+    </div>
     <div class="col-lg-10">
         <div class="card mb-5 mb-xl-10">
             <!--begin::Card header-->

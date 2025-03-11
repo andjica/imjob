@@ -6,7 +6,7 @@
 @section('content')
 <div class="container m-0">
     <!-- Alerts -->
-    <div class="row mb-5">
+    <div class="row">
             <div class="col-lg-10">
             @include('alerts.success')
             @include('alerts.errors')

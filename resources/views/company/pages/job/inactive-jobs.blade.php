@@ -13,6 +13,7 @@
         <!-- Search Box -->
         <div class="row search-container">
             <div class="col-md-12">
+                <button onclick="window.history.back()" class="btn btn-sm bg-linear-pink text-white  p-2 mb-5"> <i class="fa fa-chevron-left text-white"></i> Back</button>
                 <input type="text" class="search-input" placeholder="Search inactive jobs...">
             </div>
         </div>
