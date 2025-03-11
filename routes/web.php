@@ -56,7 +56,7 @@ Route::get('/choose/role', [HomeController::class, 'chooseRole'])->name('choose-
 Route::get('/account/activation-pending', [HomeController::class, 'pendingActivation'])->name('company-pending-activation');
 
 Route::get('/company/dashboard/information/freelancer/create', [HomeController::class, 'createFreelancer'])->name('company-freelancer-create');
-
+Route::get('/recruiter/create', [HomeController::class, 'createFreelancer'])->name('recruiter-create');
 Route::post('/choose/role/update', [RoleController::class, 'updateUserRole'])->name('choose-role-update');
 
 Route::get('/proba', [HomeController::class, 'proba']);
@@ -211,6 +211,7 @@ Route::middleware(['auth', 'contributor', 'verified'])->prefix('contributor')->n
 
 //Recruter routes
 Route::middleware(['auth', 'recruiter', 'verified'])->prefix('recruiter')->name('recruiter-')->group(function () {
+    Route::middleware(['recruiter.finish.profile'])->group(function () {
     Route::get('/dashboard', [RecruiterFrontController::class, 'dashboard'])->name('dashboard');
 
     Route::get('/find/companies', [RecruiterFrontController::class, 'findCompany'])->name('find-companies');
@@ -223,6 +224,7 @@ Route::middleware(['auth', 'recruiter', 'verified'])->prefix('recruiter')->name(
     Route::get('/edit', [RecruiterFrontController::class, 'editRecruiter'])->name('recruiter-edit');
 
     Route::get('/settings', [RecruiterFrontController::class, 'settings'])->name('settings');
+    });
 });
 
 

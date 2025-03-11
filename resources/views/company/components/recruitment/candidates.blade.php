@@ -96,7 +96,25 @@
                     <td>
                     @if ($candidate->status === 'pending')
                         <div class="d-flex">
-                           <span class="badge badge-warning p-3">Pending processing by recruiter</span>
+                            <!-- Accept Button -->
+                            <a href="javascript:;" 
+                            class="btn btn-sm btn-light-success btn-icon mx-1 accept-btn" 
+                            data-candidate-id="{{ $candidate->id }}" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#acceptCandidateModal-{{ $candidate->id }}"
+                            title="Accept Candidate">
+                                <i class="fa-solid fa-check"></i>
+                            </a>
+
+                            <!-- Reject Button -->
+                            <a href="javascript:;" 
+                            class="btn btn-sm btn-light-danger btn-icon mx-1 reject-btn" 
+                            data-candidate-id="{{ $candidate->id }}" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#rejectCandidateModal-{{ $candidate->id }}"
+                            title="Reject Candidate">
+                                <i class="fa-solid fa-trash-alt"></i>
+                            </a>
                         </div>
                         @elseif($candidate->status === 'reject')
                             This user is rejected by recruiter
