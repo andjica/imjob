@@ -13,11 +13,11 @@
             </div>
     </div>
    
-    {{-- @if(is_null($recruiter->education))
-        @include('recruiter.components.create-education')
+    @if(is_null($recruiter->education))
+        @include('recruiter.components.education.create')
     @else
-        @include('recruiter.components.edit-education')
-    @endif --}}
+        @include('recruiter.components.education.edit')
+    @endif
 
     <!-- Div card for profile update -->
      @include('recruiter.components.edit-profile')

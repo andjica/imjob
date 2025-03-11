@@ -224,6 +224,10 @@ Route::middleware(['auth', 'recruiter', 'verified'])->prefix('recruiter')->name(
     Route::get('/edit', [RecruiterFrontController::class, 'editRecruiter'])->name('edit');
     Route::post('/update', [RecruiterFrontController::class, 'update'])->name('update');
 
+    // Education Routes
+    Route::post('/education/create', [RecruiterEducationController::class, 'create'])->name('education-create');
+    Route::post('/education/update', [RecruiterEducationController::class, 'update'])->name('education-update');
+
     Route::get('/settings', [RecruiterFrontController::class, 'settings'])->name('settings');
 
     //follow 
