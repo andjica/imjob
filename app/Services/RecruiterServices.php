@@ -12,6 +12,12 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class RecruiterServices implements RecruiterInterface
 {
+    public function getOne(int $byUserId)
+    {
+        
+        $recruiter = Recruiter::where('user_id', $byUserId)->first() ?? abort(404);
+        return $recruiter;
+    }
     //get all recruiters
     public function getAllRecruiters(?string $search = null): LengthAwarePaginator
     {

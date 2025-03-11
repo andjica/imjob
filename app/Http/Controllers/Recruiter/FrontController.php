@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Recruiter;
 
 use App\Http\Controllers\Controller;
 use App\Interfaces\ContributorInterface;
+use App\Interfaces\RecruiterInterface;
 use App\Models\ContributorRecruiter;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Foundation\Application;
@@ -13,15 +14,21 @@ use Illuminate\Contracts\View\View;
 class FrontController extends Controller
 {
     protected $contributorServices;
+    protected $recruiterServices;
 
     public function __construct(
-        ContributorInterface $contributorServices
+        ContributorInterface $contributorServices, RecruiterInterface $recruiterServices
     ) {
         $this->contributorServices = $contributorServices;
+        $this->recruiterServices = $recruiterServices;
     }
+
+
     public function dashboard(): Factory|View|Application
     {
-        return view("recruiter.pages.index");
+        $userId = auth()->user()->id;
+        $recruiter = $this->recruiterServices->getOne($userId);
+        return view("recruiter.pages.index", compact('recruiter'));
     }
 
     public function findCompany()
