@@ -44,6 +44,7 @@ class FollowRecruiter
             'recruiter_id' => $recruiterToFollow->id,
             'company_id'   => $follower->id,
             'status'       => CompanyRecruiterStatus::PENDING,
+            'invite_type' => 'Company'
         ]);
     }
 
