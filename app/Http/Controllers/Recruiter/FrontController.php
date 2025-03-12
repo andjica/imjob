@@ -29,7 +29,7 @@ class FrontController extends Controller
         $user   = auth()->user();
         $userId = $user->id;
 
-        $recruiter = $this->recruiterServices->getOne($userId);
+        $recruiter = $this->recruiterServices->getOneByUserId($userId);
         return view("recruiter.pages.index", compact("recruiter"));
     }
 
@@ -67,7 +67,7 @@ class FrontController extends Controller
         $user   = auth()->user();
         $userId = $user->id;
 
-        $recruiter = $this->recruiterServices->getOne($userId);
+        $recruiter = $this->recruiterServices->getOneByUserId($userId);
         return view("recruiter.pages.edit", compact("recruiter"));
     }
     public function update(Request $request)

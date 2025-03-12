@@ -183,5 +183,13 @@ class JobRepository
      
          return $query->paginate(10);
      }
+
+     public function findAllByCompanyIdandRecruterId($companyId, $recruiterId)
+     {
+        $jobs = Job::where('company_id', $companyId)
+        ->where('recruiter_id', $recruiterId)
+        ->paginate(6);
+        return $jobs;
+     }
      
 }

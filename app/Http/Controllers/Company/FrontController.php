@@ -175,6 +175,15 @@ class FrontController extends Controller
         return view('company.pages.job.active-jobs', compact('jobs'));
     }
 
+    public function getActiveJobsByRecruiter($recruiterId)
+    {
+        $user = auth()->user();
+        $companyId = $user->company->id ?? abort(404);
+
+        $jobs = $this->jobRep->findAllByCompanyIdandRecruterId($companyId, $recruiterId);
+        $recruiter = $this->recruiterServices->getOne($recruiterId);
+        return view('company.pages.job.active-jobs-by-recruiter', compact('jobs', 'recruiter'));
+    }
     public function getInactiveJobs()
     {
        

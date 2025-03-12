@@ -13,7 +13,12 @@ use Illuminate\Support\Facades\Storage;
 
 class RecruiterServices implements RecruiterInterface
 {
-    public function getOne(int $byUserId)
+    public function getOne(int $id)
+    {
+        $recruiter = Recruiter::find($id) ?? abort(404);
+        return $recruiter;
+    }
+    public function getOneByUserId(int $byUserId)
     {
         
         $recruiter = Recruiter::where('user_id', $byUserId)->first() ?? abort(404);

@@ -9,7 +9,8 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 interface RecruiterInterface
 {
-    public function getOne(int $byUserId);
+    public function getOne(int $id);
+    public function getOneByUserId(int $byUserId);
     public function getAllRecruiters(?string $search = null): LengthAwarePaginator;
     public function getAvailableRecruiters(int $companyId): Collection;
     public function getPendingRecruitersByCompany(int $companyId);

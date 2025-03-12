@@ -104,7 +104,7 @@
                                 @endphp
                                 @if($numJobs>0)
                                
-                                <button class="btn btn-sm btn-primary me-2 mb-2">This recruiter has {{$numJobs}} jobs</button>
+                                <a href="{{asset('/company/dashboard/active/jobs/by/recruiter/'.$recruiter->id)}}" class="btn btn-sm btn-primary me-2 mb-2">This recruiter has {{$numJobs}} jobs</a>
                                 @else
                                 <button class="btn btn-sm btn-primary me-2 mb-2" disabled>This recruiter has {{$numJobs}} jobs</button>
                                 @endif

@@ -105,14 +105,18 @@
                                                 <td class="text-gray-600">{{ $recruiter->user->email }}</td>
                                                 <td>{{ $recruiter->birthday }}</td>
                                                 <td class="fw-bold">
-                                                    @if ($recruiter->is_freelancer == 1)
-                                                        {{ $recruiter->user->first_name }} is freelancer in own company
-                                                        <br>- <a
-                                                            href="">{{ $recruiter->freelancerCompany->company->name }}</a>
+                                                @if ($recruiter->is_freelancer == 1)
+                                                    {{ $recruiter->user->first_name }} is a freelancer in their own company
+                                                    @if (!empty($recruiter->freelancerCompany) && !empty($recruiter->freelancerCompany->company))
+                                                        <br>- <a href="#">{{ $recruiter->freelancerCompany->company->name }}</a>
                                                     @else
-                                                        {{ $recruiter->title_function }}
+                                                        <br>- <span class="text-muted">No company assigned</span>
                                                     @endif
-                                                </td>
+                                                @else
+                                                    {{ $recruiter->title_function ?? 'No title assigned' }}
+                                                @endif
+                                            </td>
+
                                                 <td>
                                                     <span class="d-block text-gray-800 fw-semibold">Current Works
                                                         for:</span>
