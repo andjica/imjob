@@ -106,7 +106,9 @@ Route::middleware(['auth', 'company', 'verified'])->prefix('company/dashboard')-
     //jobs
     Route::get('/job/create', [CompanyFrontController::class, 'createJob'])->name('create-job');
     Route::get('/active/jobs', [CompanyFrontController::class, 'getActiveJobs'])->name('active-jobs');
-    Route::get('/active/jobs/by/recruiter/{recruiterId}', [CompanyFrontController::class, 'getActiveJobsByRecruiter'])->name('active-jobs-by-recruiterid');
+        //new
+        Route::get('/active/jobs/by/recruiter/{recruiterId}', [CompanyFrontController::class, 'getActiveJobsByRecruiter'])->name('active-jobs-by-recruiterid');
+        Route::get('/jobs/in/recruitment-process', [CompanyFrontController::class, 'getjobsInRecruitmentProcess'])->name('job-in-recruitment-process');
     Route::get('/inactive/jobs', [CompanyFrontController::class, 'getInactiveJobs'])->name('inactive-jobs');
 
     //recruitment process

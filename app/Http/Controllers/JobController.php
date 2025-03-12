@@ -22,15 +22,22 @@ class JobController extends Controller
     {
 
 
-        $createJob->execute($request->validated());
+        $user = auth()->user();
+        $company = $user->company ?? null;
 
-        if (auth()->user()->company->companyType->name === "Freelancer") {
-            return redirect()->route('company-freelancer-active-jobs')->with('success', 'You created job successfully');
-        } else if (auth()->user()->company->companyType->name === "Basic" || auth()->user()->company->companyType->name === "Agency") {
+        if ($company) {
+        $companyType = $company->companyType->name ?? null;
+
+        if (in_array($companyType, ["Agency", "Basic"])) {
             return redirect()->route('company-dashboard-active-jobs')->with('success', 'You created job successfully');
-        } else {
-            return redirect()->route('recruiter-active-jobs')->with('success', 'You created job successfully');
         }
+
+        //if user is recruiter
+        return redirect()->route('recruiter-active-jobs')->with('success', 'You created job successfully');
+}
+
+// If no company exists, redirect to recruiter route
+return redirect()->route('recruiter-active-jobs')->with('success', 'You created job successfully');
     }
 
     public function edit($id)

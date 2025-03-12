@@ -52,6 +52,7 @@
             <div class="col-lg-3">
 
                 @include('company.components.job.sidebar-recruiter')
+                @include('company.components.job.sidebar-job')
             </div>
             <div class="col-lg-8">
                 @include('company.components.job.active-by-recruiter')
