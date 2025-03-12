@@ -21,13 +21,15 @@ class JobController extends Controller
     public function store(StoreJobRequest $request, CreateJob $createJob): RedirectResponse
     {
 
-        
+
         $createJob->execute($request->validated());
 
         if (auth()->user()->company->companyType->name === "Freelancer") {
-            return redirect()->route('company-freelancer-active-jobs')->with('success', 'You create job successfully');
+            return redirect()->route('company-freelancer-active-jobs')->with('success', 'You created job successfully');
+        } else if (auth()->user()->company->companyType->name === "Basic" || auth()->user()->company->companyType->name === "Agency") {
+            return redirect()->route('company-dashboard-active-jobs')->with('success', 'You created job successfully');
         } else {
-            return redirect()->route('company-dashboard-active-jobs')->with('success', 'You create job successfully');
+            return redirect()->route('recruiter-active-jobs')->with('success', 'You created job successfully');
         }
     }
 
@@ -53,7 +55,7 @@ class JobController extends Controller
     public function update(StoreJobRequest $request, $id, UpdateJob $updateJob)
     {
         $job = $this->jobRep->find($id) ?? abort(404);
-        
+
         if (!$job) {
             return redirect()->route('company-freelancer-active-jobs')->with('error', 'Job not found.');
         }
@@ -63,28 +65,17 @@ class JobController extends Controller
 
         if (!$updatedJob) {
 
-            if(auth()->user()->company->companyType->name == "Freelancer")
-            {
+            if (auth()->user()->company->companyType->name == "Freelancer") {
                 return redirect()->route('company-freelancer-active-jobs')->with('error', 'Failed to update job.');
-            }
-            else
-            {
+            } else {
                 return redirect()->route('company-dashboard-active-jobs')->with('error', 'Failed to update job.');
-
             }
-            
         }
 
-        if(auth()->user()->company->companyType->name == "Freelancer")
-        {
+        if (auth()->user()->company->companyType->name == "Freelancer") {
             return redirect()->route('company-freelancer-active-jobs')->with('success', 'Job updated successfully.');
-
-        }
-        else
-        {
+        } else {
             return redirect()->route('company-dashboard-active-jobs')->with('success', 'Job updated successfully.');
-
-
         }
     }
 }

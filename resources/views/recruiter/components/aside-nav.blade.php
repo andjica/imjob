@@ -123,7 +123,7 @@
                         <div class="menu-sub menu-sub-accordion">
                             <div class="menu-item">
                                 <a class="menu-link {{ Route::currentRouteName() === 'recruiter-create-job' ? 'active' : '' }}"
-                                    href="{{ asset('recruiter/job/create') }}">
+                                    href="{{ route('recruiter-create-job') }}">
                                     <span class="menu-bullet">
                                         <span class="bullet bullet-dot"></span>
                                     </span>

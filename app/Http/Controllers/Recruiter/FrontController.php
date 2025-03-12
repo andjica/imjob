@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Recruiter;
 
 use App\Http\Controllers\Controller;
+use App\Interfaces\CategoryInterface;
 use App\Interfaces\CompanyInterface;
 use App\Interfaces\ContributorInterface;
+use App\Interfaces\CountryInterface;
+use App\Interfaces\JobTypeInterface;
 use App\Interfaces\RecruiterInterface;
 use App\Models\Company;
 use App\Models\Contributor;
@@ -19,15 +22,24 @@ class FrontController extends Controller
     protected $contributorServices;
     protected $recruiterServices;
     protected $companyServices;
+    protected $countriesServices;
+    protected $categoryServices;
+    protected $jobTypesServices;
 
     public function __construct(
         ContributorInterface $contributorServices,
         RecruiterInterface $recruiterServices,
-        CompanyInterface $companyServices
+        CompanyInterface $companyServices,
+        JobTypeInterface $jobTypesServices,
+        CountryInterface $countriesServices,
+        CategoryInterface $categoryServices
     ) {
         $this->contributorServices = $contributorServices;
         $this->recruiterServices = $recruiterServices;
         $this->companyServices = $companyServices;
+        $this->countriesServices = $countriesServices;
+        $this->categoryServices = $categoryServices;
+        $this->jobTypesServices = $jobTypesServices;
     }
 
 
@@ -133,9 +145,18 @@ class FrontController extends Controller
         );
     }
 
-    public function createJob()
+    public function createJob(): Factory|View|Application
     {
-        return view("recruiter.pages.job.create");
+        /** @var User $user */
+        $user = auth()->user();
+
+        $recruiterWithCompanies = $user->recruiter->activeCompanies;
+       
+        //return dd($recruiterWithCompanies->count());
+        $countries = $this->countriesServices->getCountries();
+        $categories = $this->categoryServices->getAll();
+        $jobTypes = $this->jobTypesServices->getAll();
+        return view('recruiter.pages.job.create-job', compact('countries', 'categories', 'jobTypes', 'recruiterWithCompanies'));
     }
     public function getActiveJobs()
     {

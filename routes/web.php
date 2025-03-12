@@ -217,7 +217,7 @@ Route::middleware(['auth', 'recruiter', 'verified'])->prefix('recruiter')->name(
 
     Route::get('/find/companies', [RecruiterFrontController::class, 'findCompanies'])->name('find-companies');
     Route::get('/find/contributor', [RecruiterFrontController::class, 'findContributors'])->name('find-contributors');
-
+    // Jobs
     Route::get('/job/create', [RecruiterFrontController::class, 'createJob'])->name('create-job');
     Route::get('/active/jobs', [RecruiterFrontController::class, 'getActiveJobs'])->name('active-jobs');
     Route::get('/inactive/jobs', [RecruiterFrontController::class, 'getInactiveJobs'])->name('inactive-jobs');
