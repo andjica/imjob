@@ -133,7 +133,7 @@
                     indicatorProgress.classList.remove('d-none');
 
                     // Send AJAX request
-                    fetch('{{ route("company-freelancer-follow-contributor") }}', {
+                    fetch("{{ route('company-freelancer-follow-contributor') }}", {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',

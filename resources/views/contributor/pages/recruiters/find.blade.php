@@ -173,7 +173,7 @@
                 const recruiterId = this.dataset.recruiterId;
                 const status = this.dataset.status;
                 // Send AJAX request using Fetch API
-                fetch('{{ route('contributor-make-request') }}', {
+                fetch("{{ route('contributor-make-request') }}", {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',

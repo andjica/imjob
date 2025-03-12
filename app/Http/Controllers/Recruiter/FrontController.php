@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Recruiter;
 
 use App\Http\Controllers\Controller;
+use App\Interfaces\CompanyInterface;
 use App\Interfaces\ContributorInterface;
 use App\Interfaces\RecruiterInterface;
+use App\Models\Company;
+use App\Models\Contributor;
 use App\Models\ContributorRecruiter;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Foundation\Application;
@@ -15,12 +18,16 @@ class FrontController extends Controller
 {
     protected $contributorServices;
     protected $recruiterServices;
+    protected $companyServices;
 
     public function __construct(
-        ContributorInterface $contributorServices, RecruiterInterface $recruiterServices
+        ContributorInterface $contributorServices,
+        RecruiterInterface $recruiterServices,
+        CompanyInterface $companyServices
     ) {
         $this->contributorServices = $contributorServices;
         $this->recruiterServices = $recruiterServices;
+        $this->companyServices = $companyServices;
     }
 
 
@@ -33,11 +40,31 @@ class FrontController extends Controller
         return view("recruiter.pages.index", compact("recruiter"));
     }
 
-    public function findCompany()
+    public function findCompanies(Request $request): Factory|View|Application
     {
-        return view("recruiter.pages.company.find");
+        /** @var User $user */
+        $user = auth()->user();
+        $searchString = $request->get('query') ?? null;
+
+        $companies = $this->companyServices->getAllCompanies($searchString);
+
+        $connectedCompanies = $user->recruiter->companies;
+
+        $connectedOnPending = $user->recruiter->companies()
+            ->wherePivot('status', 'Pending')
+            ->get();
+        //return dd($connectedOnPending);
+        $connectedSuccessfully = $user->recruiter->companies()
+            ->wherePivot('status', 'Active')
+            ->get();
+        return view("recruiter.pages.company.find", compact(
+            'companies',
+            'connectedCompanies',
+            'connectedSuccessfully',
+            'connectedOnPending'
+        ));
     }
-    public function findContributor(Request $request): Factory|View|Application
+    public function findContributors(Request $request): Factory|View|Application
     {
         /** @var User $user */
         $user = auth()->user();
@@ -45,7 +72,6 @@ class FrontController extends Controller
 
         // Fetch contributors
         $contributors = $this->contributorServices->getAll($searchString);
-        // return dd( $user);
         // Get connections of the recruiter
         $connectedOnPending = $user->recruiter->contributors()
             ->wherePivot('status', ContributorRecruiter::PENDING) // Use the constant
@@ -74,6 +100,37 @@ class FrontController extends Controller
     {
         $this->recruiterServices->updateRecruiter($request);
         return redirect()->back()->with('success', 'You upddated information successfully');
+    }
+    public function detailsCompany(Company $company): Factory|View|Application
+    {
+        /** @var User $user */
+        $user = auth()->user();
+        $isConnected = $user->recruiter->companies->contains($company);
+        $isOwnCompany = $user->recruiter->company?->id === $company->id;
+        $similarCompanies = $this->companyServices->getCompaniesByCategory($company->category->id);
+
+        return view(
+            'recruiter.pages.company.details',
+            compact(
+                'company',
+                'similarCompanies',
+                'isConnected',
+                'isOwnCompany',
+            )
+        );
+    }
+    public function detailsContributor(Contributor $contributor): Factory|View|Application
+    {
+        /** @var User $user */
+        $user = auth()->user();
+        $isConnected = $user->recruiter->contributors->contains($contributor);
+        return view(
+            'recruiter.pages.contributor.details',
+            compact(
+                'contributor',
+                'isConnected',
+            )
+        );
     }
 
     public function createJob()

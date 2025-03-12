@@ -149,7 +149,7 @@
                     indicatorProgress.classList.remove('d-none');
 
                     // Send AJAX request using Fetch API
-                    fetch('{{ route('company-freelancer-make-request') }}', {
+                    fetch("{{ route('company-freelancer-make-request') }}", {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
