@@ -34,15 +34,16 @@ use App\Interfaces\SubCategoryInterface;
 use App\Services\ContributorTypeServices;
 use App\Services\CompanyRecruiterServices;
 use App\Services\CompanyFreelancerServices;
+use App\Services\RecruitmentProcessService;
 use App\Interfaces\ContributorTypeInterface;
 use App\Services\RecruiterEducationServices;
 use App\Interfaces\CompanyRecruiterInterface;
 use App\Interfaces\CompanyFreelancerInterface;
 use App\Services\ContributorRecruiterServices;
 use App\Interfaces\RecruiterEducationInterface;
-use App\Interfaces\ContributorRecruiterInterface;
 use App\Interfaces\RecruitmentProcessInterface;
-use App\Services\RecruitmentProcessService;
+use App\Interfaces\ContributorRecruiterInterface;
+
 
 class AppServiceProvider extends ServiceProvider
 {

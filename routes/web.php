@@ -177,6 +177,9 @@ Route::middleware(['auth', 'company.freelancer', 'verified'])->prefix('company/f
         Route::post('/recruitment-process/{process}/advance', [CompanyFreelancerFrontController::class, 'advanceProcess'])->name('advance-process');
         Route::post('/finish/recruitment-process', [RecruitmentController::class, 'finishRecruitmentProcess'])->name('finish-recruitment-process');
         
+        //pdf recruitment
+        Route::get('/recruitment/download-pdf/{recruitment_process_id}', [RecruitmentController::class, 'downloadPDF'])->name('recruitment-download.pdf');
+
         Route::get('/notifications', [CompanyFreelancerFrontController::class, 'notifications'])->name('notifications');
     });
 });

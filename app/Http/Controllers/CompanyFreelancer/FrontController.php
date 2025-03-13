@@ -219,6 +219,7 @@ class FrontController extends Controller
         }
         
         $recruitmentProcess = $candidate->recruitmentProcess()->with('subphases')->first();
+        
         $availablePhases = AvailableRecruitmentSubphases::where('phase', $candidate->recruitmentProcess->current_phase)->get();
     
         $candidateId = $candidate->id;

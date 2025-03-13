@@ -1,4 +1,6 @@
+@if($candidate->recruitmentProcess->current_phase == "offer_stage" && $candidate->recruitmentProcess->status != null)
 
+@else
 <div class="card">
     <div class="card-header">
         <h3 class="card-title">Schedule a Meeting</h3>
@@ -10,3 +12,4 @@
     </div>
 </div>
 
+@endif

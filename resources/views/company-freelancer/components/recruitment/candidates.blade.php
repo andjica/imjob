@@ -40,8 +40,8 @@
             <thead>
             <tr>
                 <th>Candidate</th>
-
                 <th>From</th>
+                <th>Years of experience</th>
                 <th>CV</th>
                 <th>Status</th>
                 <th style="width: 20%">Actions</th>
@@ -67,7 +67,11 @@
                     </td>
                     <td>
                         <!-- Full Name -->
-                        <span class="font-weight-bold text-dark">{{ $candidate->user->getFirstName()  }}</span>
+                        <span class="font-weight-bold text-dark">{{ $candidate->country->name }}, {{$candidate->city->name}}</span>
+                    </td>
+                    <td>
+                        <!-- Full Name -->
+                        <span class="font-weight-bold text-dark">{{ $candidate->years_of_experience}}</span>
                     </td>
                     <td>
                         <!-- PDF Link -->

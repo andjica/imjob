@@ -37,4 +37,9 @@ class RecruitmentProcess extends Model
     {
         return $this->belongsTo(Candidate::class);
     }
+
+    public static function findById(int $id): ?RecruitmentProcess
+    {
+        return self::find($id);
+    }
 }

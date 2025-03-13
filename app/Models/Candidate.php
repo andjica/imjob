@@ -53,6 +53,16 @@ class Candidate extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function country(): BelongsTo
+    {
+        return $this->belongsTo(Country::class);
+    }
+
+    public function city(): BelongsTo
+    {
+        return $this->belongsTo(City::class);
+    }
+
     public function recruitmentProcess(): HasOne
     {
         return $this->hasOne(RecruitmentProcess::class);

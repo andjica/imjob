@@ -30,8 +30,8 @@ class CreateRecruitmentTables extends Migration
             $table->string('company')->nullable();
             $table->integer('years_of_experience');
             $table->string('phone');
-            $table->string('country');
-            $table->string('city');
+            $table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade');
+            $table->foreign('city_id')->references('id')->on('cities')->onDelete('cascade');
             $table->enum('status', ['pending', 'accept', 'reject'])->default('pending');
             $table->timestamps();
         });

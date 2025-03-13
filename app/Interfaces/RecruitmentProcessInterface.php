@@ -2,16 +2,16 @@
 
 namespace App\Interfaces;
 
-use App\Models\Candidate;
+use App\Http\Requests\RecruitmentRequest;
 
 interface RecruitmentProcessInterface
 {
     /**
-     * Handle recruitment process for a given candidate ID and decision.
+     * Handle recruitment process for a given recruitment process ID.
      *
-     * @param int $candidateId
-     * @param string $decision
+     * @param int $recruitmentProcessId
+     * @param RecruitmentRequest $request
      * @return bool
      */
-    public function handleRecruitment(int $candidateId, string $decision): bool;
+    public function handleRecruitment(int $recruitmentProcessId, RecruitmentRequest $request): bool;
 }

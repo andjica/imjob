@@ -45,8 +45,17 @@
     @include('alerts.errors')
     @include('alerts.success')
     <button onclick="window.history.back()" class="btn btn-sm bg-linear-pink text-white  p-2"> <i class="fa fa-chevron-left text-white"></i> Back</button>
+    @if($candidate->recruitmentProcess->status != null)
+    <div class="text-end mt-3 mb-0">
+        <a href="{{ route('company-freelancer-recruitment-download.pdf', ['recruitment_process_id' => $candidate->recruitmentProcess->id]) }}" 
+        class="btn btn-primary  align-items-center justify-content-center" 
+        style="gap: 8px; padding: 10px 20px;">
+        <i class="fa-solid fa-file-pdf"></i> Download PDF
+        </a>
+    </div>
+    @endif
      <!-- Recruitment Process Overview -->
-     <div class="row process-overview mb-10">
+     <div class="row process-overview mb-10 mt-3">
         <div class="col-12">
            @include('company-freelancer.components.recruitment.overview')
            @include('company-freelancer.components.recruitment.feedback-and-delete-modal')
