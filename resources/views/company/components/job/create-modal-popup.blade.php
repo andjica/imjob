@@ -3,7 +3,7 @@
   <div class="modal-dialog modal-dialog-centered modal-xl"> <!-- Increased modal size for better layout -->
     <div class="modal-content">
       <div class="modal-header">
-        <h2 class="fw-bolder">For which company is this job being posted?</h2>
+        <h2 class="fw-bolder">Are you ready for posting live your job?</h2>
         <button type="button" class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal" aria-label="Close">
           <!-- Close Icon -->
           <span class="svg-icon svg-icon-1">
@@ -19,20 +19,20 @@
         <div class="row gx-9 gy-6">
          
           @if(auth()->user()->company)
-          <div class="col-xl-6" data-kt-billing-element="card">
+          <div class="col-xl-12" data-kt-billing-element="card">
             <!-- Card with radio button -->
             <div class="card card-dashed h-xl-100 p-6 d-flex flex-column justify-content-between border-primary shadow">
               <div class="d-flex align-items-start">
                 <!-- Radio Button -->
                 <div class="form-check me-4">
-                  <input class="form-check-input" type="radio" name="selectedCompany" id="company{{ auth()->user()->company->id }}" value="{{ auth()->user()->company->id }}">
+                  <input  type="radio" name="selectedCompany" id="company{{ auth()->user()->company->id }}" value="{{ auth()->user()->company->id }}" checked>
                 </div>
                 
                 <!-- Company Info -->
                 <div class="d-flex flex-column">
                   <div class="d-flex align-items-center fs-4 fw-bold mb-2">
                     {{ auth()->user()->company->name }}
-                    <span class="badge badge-light-primary fs-7 ms-2">You can create job for your company</span>
+                    <span class="badge badge-light-primary fs-7 ms-2">You are ready for posting a new job!</span>
                   </div>
                   <div class="d-flex align-items-center">
                     <img src="{{ auth()->user()->company->logo ? asset('storage/' . auth()->user()->company->logo) : asset('images/q-mark.png') }}" alt="{{ auth()->user()->company->name }} Logo" class="me-4" width="100px">
@@ -49,17 +49,7 @@
           </div>
           @endif
               <!-- Add Company Card -->
-              <div class="col-xl-6">
-              <div class="card card-dashed h-xl-100 p-6 d-flex align-items-center justify-content-center">
-                <div class="text-center">
-                  <h4 class="text-gray-900 fw-bold mb-3"><i class="fas fa-building me-2 fa-3x" aria-label="Company Icon" title="Company"></i>
-                   Add a New Company</h4>
-                  <button type="button" class="btn btn-primary px-6" id="addCompanyButton">
-                    Add Company
-                  </button>
-                </div>
-              </div>
-            </div>
+             
             <!-- End of Add Company Card -->
 
         </div>

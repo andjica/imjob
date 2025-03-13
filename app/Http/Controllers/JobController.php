@@ -24,9 +24,10 @@ class JobController extends Controller
 
         $createJob->execute($request->validated());
 
-        if (auth()->user()->company) 
+        $user = auth()->user();
+        if ($user?->company) 
         {
-            if(auth()->user()->company->companyType->name == "Freelancer")
+            if($user->company->companyType->name == "Freelancer")
             {
                 return redirect()->route('company-freelancer-active-jobs')->with('success', 'You created job successfully');
             }

@@ -326,6 +326,7 @@
                         <div class="spinner-border text-primary d-none" role="status" id="currencyLoading" style="position: absolute; top: 50%; left: 50%; z-index: 1000;">
                             <span class="visually-hidden">Loading...</span>
                         </div>
+                        <input type="hidden" name="recruiter_id" value="{{auth()->user()->recruiter->id}}">
                         <!-- Submit Button -->
                          <input type="hidden" name="recuriter_id" value="{{auth()->user()->recruiter->id}}">
                         <div class="d-flex justify-content-end">
