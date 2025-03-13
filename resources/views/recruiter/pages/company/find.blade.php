@@ -1,7 +1,6 @@
 @php use App\Models\User; @endphp
 @extends('recruiter.template-recruiter')
 @section('main-title', 'Find companies')
-
 @section('title-dash', 'Find Companies')
 @section('css')
     <style>

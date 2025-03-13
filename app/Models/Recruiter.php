@@ -44,7 +44,7 @@ class Recruiter extends Model
     }
 
     //working now for that companies
-    public function activeCompanies(): BelongsToMany
+    public static function activeCompanies(): BelongsToMany
     {
         return $this->belongsToMany(Company::class)
         ->withPivot(['from_date', 'until_date'])

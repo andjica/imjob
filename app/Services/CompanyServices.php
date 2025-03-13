@@ -7,6 +7,7 @@ use App\Models\Company;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Interfaces\CompanyInterface;
+use App\Models\Recruiter;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -240,6 +241,12 @@ class CompanyServices implements CompanyInterface
 
         return Company::where('user_id', $recruiterId)->with(['country', 'city', 'category', 'subCategory'])->first();
 
+    }
+
+    public function getCompaniesByRecruiter(Recruiter $recruiter)
+    {
+        $activeCompanies = $recruiter->getAcitveCompanies();
+        return $activeCompanies;
     }
 
     public function getCompaniesByCategory(int $categoryId): LengthAwarePaginator

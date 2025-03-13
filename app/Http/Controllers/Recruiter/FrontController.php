@@ -2,20 +2,22 @@
 
 namespace App\Http\Controllers\Recruiter;
 
+use App\Models\Company;
+use App\Models\Recruiter;
+use App\Models\Contributor;
+use Illuminate\Http\Request;
+use App\Repositories\JobRepository;
+use Illuminate\Contracts\View\View;
 use App\Http\Controllers\Controller;
-use App\Interfaces\CategoryInterface;
 use App\Interfaces\CompanyInterface;
-use App\Interfaces\ContributorInterface;
 use App\Interfaces\CountryInterface;
 use App\Interfaces\JobTypeInterface;
-use App\Interfaces\RecruiterInterface;
-use App\Models\Company;
-use App\Models\Contributor;
 use App\Models\ContributorRecruiter;
-use Illuminate\Http\Request;
-use Illuminate\Contracts\Foundation\Application;
+use App\Interfaces\CategoryInterface;
+use App\Interfaces\RecruiterInterface;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
+use App\Interfaces\ContributorInterface;
+use Illuminate\Contracts\Foundation\Application;
 
 class FrontController extends Controller
 {
@@ -25,6 +27,7 @@ class FrontController extends Controller
     protected $countriesServices;
     protected $categoryServices;
     protected $jobTypesServices;
+    protected $jobRep;
 
     public function __construct(
         ContributorInterface $contributorServices,
@@ -32,7 +35,8 @@ class FrontController extends Controller
         CompanyInterface $companyServices,
         JobTypeInterface $jobTypesServices,
         CountryInterface $countriesServices,
-        CategoryInterface $categoryServices
+        CategoryInterface $categoryServices,
+        JobRepository $jobRep
     ) {
         $this->contributorServices = $contributorServices;
         $this->recruiterServices = $recruiterServices;
@@ -40,6 +44,7 @@ class FrontController extends Controller
         $this->countriesServices = $countriesServices;
         $this->categoryServices = $categoryServices;
         $this->jobTypesServices = $jobTypesServices;
+        $this->jobRep=$jobRep;
     }
 
 
@@ -151,26 +156,44 @@ class FrontController extends Controller
         $user = auth()->user();
 
         $recruiterWithCompanies = $user->recruiter->activeCompanies;
-       
-        //return dd($recruiterWithCompanies->count());
+
         $countries = $this->countriesServices->getCountries();
         $categories = $this->categoryServices->getAll();
         $jobTypes = $this->jobTypesServices->getAll();
+
+        //get recruiters who are connected with logged company
+        //$recruiters = $this->recruiterServices->getActiveRecruitersByCompany($companyId);
         return view('recruiter.pages.job.create-job', compact('countries', 'categories', 'jobTypes', 'recruiterWithCompanies'));
     }
-    public function getActiveJobs()
+    public function getActiveJobs(Request $request)
     {
-        return view("recruiter.pages.job.active-jobs");
+        $companyId = auth()->user()->id ?? abort(404);
+
+        $searchString = $request->get('query') ?? null;
+        $jobs = $this->jobRep->searchJobsFromCompany($searchString, $companyId);
+        
+        $user = auth()->user();
+        $recruiterId = $user->recruiter->id;
+
+        $recruiter = $this->recruiterServices->getOne($recruiterId);
+       
+        $companies = $this->companyServices->getCompaniesByRecruiter($recruiter);
+        return dd($companies);
+        return view("recruiter.pages.job.active-jobs",compact('jobs'));
     }
     public function getInactiveJobs()
     {
-        return view("recruiter.pages.job.inactive-jobs");
+        $companyId = auth()->user()->id;
+
+        $jobs = $this->jobRep->findInactiveFromCompanyId($companyId);
+
+        return view("recruiter.pages.job.inactive-jobs",compact('jobs'));
     }
 
     public function settings(): Factory|View|Application
     {
         $user = auth()->user();
-        // dd($recruiter);
+
         return view('recruiter.pages.settings', compact('user'));
     }
 }

@@ -1,4 +1,5 @@
 @extends('recruiter.template-recruiter')
+@section('main-title', 'Dashboard')
 @section('title-dash', 'Welcome')
 @section('content')
     <div class="container m-0">
