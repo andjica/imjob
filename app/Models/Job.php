@@ -95,4 +95,10 @@ class Job extends Model
         return $this->hasMany(Candidate::class)->where('status', 'reject');
     }
 
+    public function hiredCandidatesCount(): int
+    {
+        return RecruitmentProcess::whereHas('candidate', function ($query) {
+            $query->where('job_id', $this->id);
+        })->where('status', 'hired')->count();
+    }
 }

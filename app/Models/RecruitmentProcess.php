@@ -26,7 +26,8 @@ class RecruitmentProcess extends Model
     protected $fillable = [
         'current_phase',
         'candidate_id',
-        'current_phase'
+        'current_phase',
+        'status'
     ];
     public function subphases(): HasMany
     {

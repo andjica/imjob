@@ -32,7 +32,7 @@
                             <div class="text-muted font-size-sm">Candidates who are employed for this job</div>
                         </div>
                     </div>
-                    <span class="badge badge-light-success font-weight-bold px-3 py-2">0</span>
+                    <span class="badge badge-light-success font-weight-bold px-3 py-2">{{$job->hiredCandidatesCount()}}</span>
                 </div>
                 <!--end:Item-->
                 <div class="navi-item d-flex align-items-center justify-content-between py-3">
