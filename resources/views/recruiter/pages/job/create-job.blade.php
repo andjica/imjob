@@ -441,8 +441,20 @@
                                 </div>
                             </form>
                         </div>
-                        <!--end::Card body-->
-                    </div>
+                        <!-- Loading Indicators (Optional) -->
+                        <div class="spinner-border text-primary d-none" role="status" id="loading" style="position: absolute; top: 50%; left: 50%; z-index: 1000;">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <div class="spinner-border text-primary d-none" role="status" id="currencyLoading" style="position: absolute; top: 50%; left: 50%; z-index: 1000;">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <input type="hidden" name="recruiter_id" value="{{auth()->user()->recruiter->id}}">
+                        <!-- Submit Button -->
+                         <input type="hidden" name="recuriter_id" value="{{auth()->user()->recruiter->id}}">
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-primary">Create Job</button>
+                        </div>
+                    </form>
                 </div>
                 <!-- Initialize Select2 -->
 

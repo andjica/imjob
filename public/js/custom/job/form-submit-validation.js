@@ -264,7 +264,7 @@ $(document).ready(function () {
     // Handle the Confirm button click in the Company Selection Modal
     $("#confirmCompany").on("click", function () {
         // Get the selected radio button value
-        const selectedCompany = $('input[name="companyId"]:checked');
+        const selectedCompany = $('input[name="selectedCompany"]:checked');
 
         // Clear previous error messages related to company selection (if any)
         $("#companySelectionError").text("").hide();

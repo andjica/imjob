@@ -1,5 +1,5 @@
 @extends('company.template-company') 
-@section('main-title', 'Setting')
+@section('main-title', 'Settings')
 
 @section('title-dash', 'Settings')
 

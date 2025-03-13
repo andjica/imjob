@@ -62,7 +62,7 @@
     <div class="row mb-4">
             <!-- Navigation Menu (kt_todo_aside) -->
             @include('company.components.recruitment.sidebar')
-
+            
             <!-- Job Information Card -->
             
             @include('company.components.recruitment.job-info')

@@ -309,7 +309,7 @@ class FrontController extends Controller
     public function getActiveJobs(Request $request)
     {
         $recruiterId = auth()->user()->recruiter->id ?? abort(404);
-
+        
         $searchString = $request->get('query') ?? null;
         $jobs = $this->jobRep->searchJobs($searchString, $recruiterId);
 

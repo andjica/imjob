@@ -25,7 +25,7 @@
               <div class="d-flex align-items-start">
                 <!-- Radio Button -->
                 <div class="form-check me-4">
-                  <input class="form-check-input" type="radio" name="companyId" id="company{{ $company->id }}" value="{{ $company->id }}">
+                  <input class="form-check-input" type="radio" name="selectedCompany" id="company{{ $company->id }}" value="{{ $company->id }}">
                 </div>
                 
                 <!-- Company Info -->

@@ -34,8 +34,9 @@
                         </span>
                         <div class="d-flex flex-column">
                             <h4 class="mb-1">No jobs Found</h4>
-                            <p class="mb-0">There are currently no inactive jobs in the system. Please <a href="{{asset('/company/freelancer/job/create')}}">create a new job.</a></p>
-                        </div>
+                            <p>There are currently no inactive jobs in the system. To manage active jobs that have not yet expired, visit the <a href="{{asset('/company/dashboard/active/jobs')}}">
+                                Active Jobs</a> page.</p>
+                            </div>
                     </div>
                 </div>
             </div>
@@ -44,6 +45,11 @@
         @else
         <!-- Inactive Job Cards -->
         <div class="row">
+            <div class="col-lg-3">
+                @include('company.components.job.sidebar-job')
+            </div>
+            <div class="col-lg-8">
+            <div class="row">
             <!-- Card  -->
             @foreach($jobs as $job)
             <div class="col-lg-5 col-md-6 mb-4">
@@ -76,6 +82,8 @@
             @endforeach
             {{$jobs->links()}}
             <!-- End card -->
+            </div>
+        </div>
         </div>
         @endif
 </div>

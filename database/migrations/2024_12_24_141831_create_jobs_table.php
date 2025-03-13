@@ -38,7 +38,7 @@ class CreateJobsTable extends Migration
 
             // Foreign Key Constraints
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
-            $table->foreign('recruiter_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('recruiter_id')->references('id')->on('recruiters')->onDelete('cascade');
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->foreign('sub_category_id')->references('id')->on('sub_categories')->onDelete('cascade');
             $table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade');
