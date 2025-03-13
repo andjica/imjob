@@ -72,6 +72,14 @@
                         <a href="#"  data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
                             <i class="fas fa-trash-alt  delete-icon" data-bs-toggle="modal" data-bs-target="#deleteJobModal{{ $job->id }}"></i>
                         </a>
+                        @if($job->candidates->count() > 0)
+                                <i class="fas fa-check-circle text-success fa-2x" 
+                                    data-bs-toggle="tooltip" 
+                                    data-bs-placement="top" 
+                                    title="This job has received applications from candidates and is currently in the recruitment process">
+                                    </i>
+                                        
+                                @endif
                     </div>
                 </div>
 

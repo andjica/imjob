@@ -29,6 +29,5 @@ interface CompanyInterface
     public function getCompanyByRecruiter(int $recruiterId) : object;
     public function getCompaniesByRecruiter(Recruiter $recruiter);
 
-
     public function getCompaniesByCategory(int $categoryId) : LengthAwarePaginator;
 }

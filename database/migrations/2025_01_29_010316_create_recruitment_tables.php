@@ -40,6 +40,7 @@ class CreateRecruitmentTables extends Migration
         Schema::create('recruitment_processes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('candidate_id')->constrained('candidates')->onDelete('cascade');
+            $table->string('status')->nullable();
             $table->enum('current_phase', ['application_received', 'selection', 'preparation', 'transfer', 'offer_stage'])->default('application_received');
             $table->foreignId('current_subphase_id')->nullable()->constrained('available_recruitment_subphases')->onDelete('set null');
             $table->timestamps();

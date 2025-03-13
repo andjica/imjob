@@ -1,5 +1,5 @@
 @extends('company-freelancer.template-company-freelancer')
-@section('main-title', 'Recruitment Process')
+@section('main-title', 'Recruitment Process for '.$candidate->user->first_name.' '.$candidate->user->last_name)
 
 @section('title-dash', 'Recruitment process for candidat')
 

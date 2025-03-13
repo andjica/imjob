@@ -1,7 +1,7 @@
 @extends('company-freelancer.template-company-freelancer')
-@section('main-title', 'Job')
+@section('main-title', 'Job '.$job->title)
 
-@section('title-dash', 'Recruitment Process')
+@section('title-dash', 'This job is active on mobile app')
 
 @section('css')
 <link rel="stylesheet" type="text/css" href="{{asset('/css/custom/recruitment-process.css')}}"/>
@@ -34,30 +34,13 @@
                             <h5 class="text-white font-weight-bold">{{ ucfirst($job->job_world_type) }}
                             </h5>
                         </div>
-                        <!-- Inactive Jobs Content -->
-                        <div class="tab-pane fade" id="inactive-jobs" role="tabpanel" aria-labelledby="inactive-jobs-tab">
-                            <h5 class="text-danger font-weight-bold">Inactive Jobs</h5>
-                            <p>View and reactivate inactive job postings.</p>
-                        </div>
-                        <!-- Other Jobs Content -->
-                        <div class="tab-pane fade" id="other-jobs" role="tabpanel" aria-labelledby="other-jobs-tab">
-                            <h5 class="text-info font-weight-bold">Other Jobs</h5>
-                            <p>Browse and explore other available job opportunities.</p>
-                        </div>
-                        <!-- Create Job Content -->
-                        <div class="tab-pane fade" id="create-job" role="tabpanel" aria-labelledby="create-job-tab">
-                            <h5 class="text-success font-weight-bold">Create Job</h5>
-                            <p>Use this section to create a new job posting.</p>
-                            <a href="#" class="btn btn-success mt-3">
-                                <i class="fa-solid fa-plus-circle mr-2"></i> Create New Job
-                            </a>
-                        </div>
+                       
                     </div>
                 </div>
+            
             </div>
         </div>
     </div>
-
     <!-- Job Information Card -->
     <div class="row mb-4">
             <!-- Navigation Menu (kt_todo_aside) -->
@@ -81,6 +64,7 @@
             <path id="path" stroke="#000" stroke-width="2" stroke-dasharray="5,5" fill="none" />
         </svg>
     </div>
+   
 @endsection
 
 @section('js')

@@ -1,4 +1,18 @@
-
+<div class="row">
+        <div class="col-lg-12">
+            <div class="card mb-2">
+                <div class="card-body bg-linear-pink rounded-top">
+                <div class="tab-content" id="myTabContent">
+                <!-- Active Jobs Content -->
+                <div class="tab-pane fade show active" id="active-job" role="tabpanel" aria-labelledby="active-jobs-tab">
+                    <h5 class="text-white font-weight-bold">International
+                    </h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
 
 <!-- Candidate Recruitment Process Overview -->
 <div class="card">
@@ -102,7 +116,15 @@
                         </tbody>
                     </table>
                 </div>
-
+                @if($candidate->recruitmentProcess->current_phase == "offer_stage")
+                   
+                  
+                   <!-- Button to trigger modal -->
+                    <button type="button" class="btn btn-sm bg-linear-pink text-white fw-light" data-bs-toggle="modal" data-bs-target="#confirmHireRefuseModal">
+                        <i class="fa-solid fa-flag-checkered me-1 text-white"></i> Finish
+                    </button>
+               
+                @else
                 <!-- Advance to Next Step Button -->
                 <form method="POST" action="{{ asset('/company/freelancer/recruitment-process/'.$recruitmentProcess->id.'/advance') }}">
                     @csrf
@@ -110,9 +132,47 @@
                         Advance to Next Step
                     </button>
                 </form>
+                @endif
             </div>
         </div>
     </div>
 </div>
 
 
+<!-- Modal for Hiring or Refusing the Candidate -->
+<div class="modal fade" id="confirmHireRefuseModal" tabindex="-1" aria-labelledby="confirmHireRefuseModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmHireRefuseModalLabel">
+                    <i class="fa-solid fa-user-check text-primary me-2"></i> Confirm Decision
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <h4 class="mb-4">Are you hiring or refusing this candidate for the job?</h4><br><br>
+                <form action="{{asset('/company/freelancer/finish/recruitment-process')}}" method="POST">
+                    @csrf
+                    <input type="hidden" name="candidateId" value="{{$candidate->id}}">
+                    <input type="hidden" name="jobId" value="{{$candidate->job->id}}">
+                    <div class="d-flex justify-content-center">
+                        <!-- Hire Button -->
+                        <button type="submit" name="decision" value="hire" class="btn btn-success me-2">
+                            <i class="fa-solid fa-user-check me-1"></i> Hire Candidate
+                        </button>
+
+                        <!-- Refuse Button -->
+                        <button type="submit" name="decision" value="refuse" class="btn btn-danger me-2">
+                            <i class="fa-solid fa-user-times me-1"></i> Refuse Candidate
+                        </button>
+
+                        <!-- Cancel Button -->
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <i class="fa-solid fa-times me-1"></i> Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

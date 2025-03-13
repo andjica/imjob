@@ -177,8 +177,8 @@ class FrontController extends Controller
 
         $recruiter = $this->recruiterServices->getOne($recruiterId);
        
-        $companies = $this->companyServices->getCompaniesByRecruiter($recruiter);
-        return dd($companies);
+        $activeCompanies = $this->companyServices->getCompaniesByRecruiter($recruiter);
+        return dd($activeCompanies);
         return view("recruiter.pages.job.active-jobs",compact('jobs'));
     }
     public function getInactiveJobs()

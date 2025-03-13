@@ -220,7 +220,7 @@ class FrontController extends Controller
         
         $recruitmentProcess = $candidate->recruitmentProcess()->with('subphases')->first();
         $availablePhases = AvailableRecruitmentSubphases::where('phase', $candidate->recruitmentProcess->current_phase)->get();
-
+    
         $candidateId = $candidate->id;
         $candidateSubphases = Candidate::with('recruitmentSubPhases')->find($candidateId);
         //return dd($candidateSubphases);
@@ -232,7 +232,7 @@ class FrontController extends Controller
         $contributors = $user->recruiter->contributors()
             ->wherePivot('status', ContributorRecruiter::ACTIVE)
             ->get();
-
+         
         return view(
             'company-freelancer.pages.recruitment.candidat-recruitment-process',
             compact(

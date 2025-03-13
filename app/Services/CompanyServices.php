@@ -245,7 +245,7 @@ class CompanyServices implements CompanyInterface
 
     public function getCompaniesByRecruiter(Recruiter $recruiter)
     {
-        $activeCompanies = $recruiter->getAcitveCompanies();
+        $activeCompanies = $recruiter->activeCompanies;
         return $activeCompanies;
     }
 

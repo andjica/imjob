@@ -41,6 +41,8 @@ use App\Interfaces\CompanyFreelancerInterface;
 use App\Services\ContributorRecruiterServices;
 use App\Interfaces\RecruiterEducationInterface;
 use App\Interfaces\ContributorRecruiterInterface;
+use App\Interfaces\RecruitmentProcessInterface;
+use App\Services\RecruitmentProcessService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -68,6 +70,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(CompanyRecruiterInterface::class, CompanyRecruiterServices::class);
         $this->app->bind(PostInterface::class, PostServices::class);
         $this->app->bind(ContributorRecruiterInterface::class, ContributorRecruiterServices::class);
+        $this->app->bind(RecruitmentProcessInterface::class, RecruitmentProcessService::class);
 
     }
 

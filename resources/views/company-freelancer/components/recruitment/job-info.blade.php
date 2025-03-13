@@ -1,4 +1,4 @@
-<div class="col-lg-9 col-md-8">
+<div class="col-lg-9">
     <div class="card card-custom shadow-lg" id="job-card">
         <div class="card-header text-white bg-light">
             <h3 class="card-title  text-dark d-flex align-items-center fw-light">

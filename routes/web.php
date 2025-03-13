@@ -23,7 +23,8 @@ use App\Http\Controllers\{
     SubCategoryController,
     UserController,
     Contributor\ContributorController,
-    EmailController
+    EmailController,
+    RecruitmentController
 };
 
 use App\Http\Controllers\CompanyFreelancer\FrontController;
@@ -163,18 +164,19 @@ Route::middleware(['auth', 'company.freelancer', 'verified'])->prefix('company/f
         Route::post('/job/store', [JobController::class, 'store'])->name('store-job');
         Route::get('/job/{id}/edit', [JobController::class, 'edit'])->name('edit-job');
         Route::put('/job/{id}/update', [JobController::class, 'update'])->name('update-job');
+        Route::get('/active/jobs', [CompanyFreelancerFrontController::class, 'getActiveJobs'])->name('active-jobs');
+        Route::get('/inactive/jobs', [CompanyFreelancerFrontController::class, 'getInactiveJobs'])->name('inactive-jobs');
 
-
+        //recruitment and jobs
         Route::get('/{job}/recruitment-process', [CompanyFreelancerFrontController::class, 'recruitmentProcess'])->name('recruitment-process');
         Route::get('/job/candidate/{candidate}/recruitment-process', [CompanyFreelancerFrontController::class, 'candidateRecruitmentProcess'])->name('candidat-recruitment-process');
         Route::put('/job/candidate/{candidate}/change-status', [CompanyFreelancerFrontController::class, 'changeCandidateStatus'])->name('candidat-recruitment-process');
-        Route::get('/active/jobs', [CompanyFreelancerFrontController::class, 'getActiveJobs'])->name('active-jobs');
-        Route::get('/inactive/jobs', [CompanyFreelancerFrontController::class, 'getInactiveJobs'])->name('inactive-jobs');
         Route::post('/job/candidate/{candidate}/plan-meeting', [CompanyFreelancerFrontController::class, 'createMeeting'])->name('create-meeting');
         Route::post('/recruitment-subphase/{subphase}/delete', [CompanyFreelancerFrontController::class, 'deleteSubphase'])->name('delete-subphase');
         Route::post('/recruitment-subphase/{subphase}/complete', [CompanyFreelancerFrontController::class, 'completeSubphase'])->name('complete-subphase');
         Route::post('/recruitment-process/{process}/advance', [CompanyFreelancerFrontController::class, 'advanceProcess'])->name('advance-process');
-
+        Route::post('/finish/recruitment-process', [RecruitmentController::class, 'finishRecruitmentProcess'])->name('finish-recruitment-process');
+        
         Route::get('/notifications', [CompanyFreelancerFrontController::class, 'notifications'])->name('notifications');
     });
 });
