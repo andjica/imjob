@@ -29,9 +29,9 @@
 @section('content')
     <div class="container m-0 pb-5">
         <div class="row">
-            {{-- <div class="col-lg-3">
-            @include('recruiter.components.sidebar-recruiter')
-            </div> --}}
+            <div class="col-lg-3">
+            @include('recruiter.components.sidebar-job')
+            </div>
             @if ($recruiterWithCompanies->count() == 0)
                 <div class="col-lg-9">
                     <div class="card card-flush shadow-sm mb-5">
@@ -49,8 +49,8 @@
                                     </svg>
                                 </span>
                                 <div class="d-flex flex-column">
-                                    <h4 class="mb-1">No jobs Found</h4>
-                                    <p class="mb-0">There are currently no active jobs in the system.</p>
+                                    <h4 class="mb-1">No connections found</h4>
+                                    <p class="mb-0">Please follow company  on <a href="{{asset('recruiter/find/companies')}}">Find companies</a> page.</p>
                                 </div>
                             </div>
                         </div>
@@ -435,24 +435,11 @@
                                     <span class="visually-hidden">Loading...</span>
                                 </div>
                                 <!-- Submit Button -->
-                                <input type="hidden" name="recuriter_id" value="{{ auth()->user()->recruiter->id }}">
+                                <input type="hidden" name="recruiter_id" value="{{ auth()->user()->recruiter->id }}">
                                 <div class="d-flex justify-content-end">
                                     <button type="submit" class="btn btn-primary">Create Job</button>
                                 </div>
                             </form>
-                        </div>
-                        <!-- Loading Indicators (Optional) -->
-                        <div class="spinner-border text-primary d-none" role="status" id="loading" style="position: absolute; top: 50%; left: 50%; z-index: 1000;">
-                            <span class="visually-hidden">Loading...</span>
-                        </div>
-                        <div class="spinner-border text-primary d-none" role="status" id="currencyLoading" style="position: absolute; top: 50%; left: 50%; z-index: 1000;">
-                            <span class="visually-hidden">Loading...</span>
-                        </div>
-                        <input type="hidden" name="recruiter_id" value="{{auth()->user()->recruiter->id}}">
-                        <!-- Submit Button -->
-                         <input type="hidden" name="recuriter_id" value="{{auth()->user()->recruiter->id}}">
-                        <div class="d-flex justify-content-end">
-                            <button type="submit" class="btn btn-primary">Create Job</button>
                         </div>
                     </form>
                 </div>

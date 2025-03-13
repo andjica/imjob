@@ -20,11 +20,12 @@
         </div>
         @include('alerts.success')
         @include('alerts.errors')
-        @if ($jobs->count() == 0)
+       
             <div class="row">
-                <div class="col-lg-4">
-                    @include('recruiter.components.sidebar-recruiter')
-                </div>
+                <div class="col-lg-3">
+                    @include('recruiter.components.sidebar-job')
+                    </div>
+                    @if ($jobs->count() == 0)
                 <div class="col-lg-8">
                     <div class="card card-flush shadow-sm mb-5">
                         <div class="card-body text-center">

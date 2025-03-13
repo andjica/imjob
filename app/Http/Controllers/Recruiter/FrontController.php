@@ -167,26 +167,30 @@ class FrontController extends Controller
     }
     public function getActiveJobs(Request $request)
     {
-        $companyId = auth()->user()->id ?? abort(404);
-
-        $searchString = $request->get('query') ?? null;
-        $jobs = $this->jobRep->searchJobsFromCompany($searchString, $companyId);
         
-        $user = auth()->user();
+ 
+        $user = auth()->user() ?? abort(404);
         $recruiterId = $user->recruiter->id;
 
         $recruiter = $this->recruiterServices->getOne($recruiterId);
        
+        $searchString = $request->get('query') ?? null;
+        $jobs = $this->jobRep->findAllByRecruterId($recruiterId);
+        // return dd($jobs);
         $activeCompanies = $this->companyServices->getCompaniesByRecruiter($recruiter);
-        return dd($activeCompanies);
-        return view("recruiter.pages.job.active-jobs",compact('jobs'));
+        // return dd($activeCompanies);
+        return view("recruiter.pages.job.active-jobs",compact('jobs','recruiter'));
     }
-    public function getInactiveJobs()
+    public function getInactiveJobs(Request $request)
     {
-        $companyId = auth()->user()->id;
+        $user = auth()->user() ?? abort(404);
+        $recruiterId = $user->recruiter->id;
 
-        $jobs = $this->jobRep->findInactiveFromCompanyId($companyId);
-
+        $recruiter = $this->recruiterServices->getOne($recruiterId);
+       
+        $searchString = $request->get('query') ?? null;
+        $jobs = $this->jobRep->findInactiveByRecruterId($recruiterId);
+        // return dd($jobs);
         return view("recruiter.pages.job.inactive-jobs",compact('jobs'));
     }
 
