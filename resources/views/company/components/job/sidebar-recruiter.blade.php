@@ -60,7 +60,7 @@
                 <ul class="nav nav-pills nav-pills-custom flex-column border-transparent fs-5 fw-bold">
 
                 <li class="nav-item">
-                    <a class="nav-link text-muted text-active-primary ps-4 border-0 active" href="/metronic8/demo1/pages/social/feeds.html">
+                    <a class="nav-link text-muted text-active-primary ps-4 border-0 active" href="{{asset('/company/dashboard/active/jobs/by/recruiter/'.$recruiter->id)}}">
                         <i class="ki-duotone ki-row-horizontal fs-3 text-muted me-3"></i>                            
                         Active Jobs by {{ $recruiter->user->first_name }}
                     </a>

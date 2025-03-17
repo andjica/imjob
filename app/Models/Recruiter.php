@@ -109,7 +109,7 @@ class Recruiter extends Model
 
     public function jobsForLoggedCompany()
     {
-        $companyId = auth()->user()->id; 
+        $companyId = auth()->user()->company->id; 
 
         return Job::where('company_id', $companyId)
                 ->where('recruiter_id', $this->id) 

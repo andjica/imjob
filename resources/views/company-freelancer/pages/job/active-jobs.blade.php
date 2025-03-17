@@ -81,7 +81,7 @@
                                     title="This job has received applications from candidates and is currently in the recruitment process">
                                     </i>
                                         
-                                @endif
+                        @endif
                     </div>
                 </div>
 

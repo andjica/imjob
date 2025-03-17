@@ -54,4 +54,11 @@
         <!--end::Body-->
     </div>
 <!--end::Card-->
+@php    
+                $recruiter = $job->recruiter;
+            @endphp
+          
+            @include('company.components.job.sidebar-recruiter')
+            
+         
 </div>
