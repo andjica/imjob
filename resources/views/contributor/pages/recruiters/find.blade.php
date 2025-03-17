@@ -5,6 +5,10 @@
 @section('title-dash', 'Recruiters')
 <div class="container m-0">
     <div class="row">
+        <div class="btn-back">
+            <button onclick="window.history.back()" class="btn btn-sm bg-linear-pink text-white  p-2 mb-5"> <i
+                    class="fa fa-chevron-left text-white"></i> Back</button>
+        </div> 
         <div class="col-lg-12">
             <div class="card shadow-sm">
                 <div class="card-header bg-muted text-white pt-10">

@@ -33,6 +33,10 @@
 @section('content')
     <div class="container m-0">
         <div class="row">
+            <div class="btn-back">
+                <button onclick="window.history.back()" class="btn btn-sm bg-linear-pink text-white  p-2 mb-5"> <i
+                        class="fa fa-chevron-left text-white"></i> Back</button>
+            </div>
             <div class="col-lg-6">
                 <!--begin::Card-->
                 <div class="card shadow-lg border-0 rounded-3">

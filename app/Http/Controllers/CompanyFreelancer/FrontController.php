@@ -25,6 +25,7 @@ use App\Models\AvailableRecruitmentSubphases;
 use App\Models\Candidate;
 use App\Models\Company;
 use App\Models\CompanyRecruiter;
+use App\Models\Contributor;
 use App\Models\ContributorRecruiter;
 use App\Models\Job;
 use App\Models\Recruiter;
@@ -191,6 +192,12 @@ class FrontController extends Controller
             )
         );
     }
+    public function detailsContributor(Contributor $contributor): Factory|View|Application
+    {
+        $user = auth()->user();
+        
+        return view('company-freelancer.pages.contributor.details', compact('contributor'));
+    }
 
     public function createJob(): Factory|View|Application
     {
@@ -226,8 +233,8 @@ class FrontController extends Controller
         $candidateSubphases = Candidate::with('recruitmentSubPhases')->find($candidateId);
         //return dd($candidateSubphases);
         $meetings = $candidateSubphases->recruitmentSubPhases->toArray();
+        $jobId = $candidate->job->id;
         
-        // return dd($candidate->job->id);
         /** @var User $user */
         $user = auth()->user();
         $contributors = $user->recruiter->contributors()
@@ -242,6 +249,7 @@ class FrontController extends Controller
                 'availablePhases',
                 'meetings',
                 'contributors',
+                'jobId',
             )
         );
     }
@@ -345,8 +353,5 @@ class FrontController extends Controller
         $recruiter->user;
         
         return view('company-freelancer.pages.view', compact('recruiter'));
-    }
-
-    
- 
+    } 
 }

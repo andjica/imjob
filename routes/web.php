@@ -160,6 +160,7 @@ Route::middleware(['auth', 'company.freelancer', 'verified'])->prefix('company/f
         Route::post('/make-connection/change-status', [FollowCompanyController::class, 'changeStatus'])->name('follow-change-status');
         // view profile
         Route::get('/view', [FrontController::class, 'getProfile'])->name('view');
+        Route::get('/contributor/{contributor}/details',[FrontController::class, 'detailsContributor'])->name('contributor-details');
 
         //Jobs Routes
         Route::get('/company/{company}/details', [CompanyFreelancerFrontController::class, 'detailsCompany'])->name('company-details');
