@@ -46,6 +46,14 @@
                                 <i class="fas fa-city me-2 text-dark"></i>
                                 <span>From: <strong>{{ $contributor->country->name }}, {{ $contributor->city->name ?? 'N/A' }}</strong></span>
                             </div>
+                            <div class="d-flex align-items-center mb-2">
+                                <i class="fas fa-tags me-2 text-muted"></i>
+                                <span>Type: <strong>@if($contributor->contributorType->name == "Other(Specify)")
+                                    {{$contributor->custom_contributor_type}}
+                                    @else
+                                    <u>{{ $contributor->contributorType->name }}</u><br>
+                                    @endif</strong></span>
+                            </div>
                         </div>
                         <!-- Column 2 -->
                         <div class="col-md-4 mb-4">
