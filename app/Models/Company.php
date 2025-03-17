@@ -53,6 +53,14 @@ class Company extends Model
         ->withTimestamps();
     }
 
+    public function recruitersCount(): int
+    {
+        return $this->belongsToMany(Recruiter::class, 'company_recruiter')
+            ->using(CompanyRecruiter::class)
+            ->withPivot('from_date', 'until_date', 'status')
+            ->wherePivot('status', 'Active') // Ensure only active recruiters are counted
+            ->count();
+    }
     //if user is freelancer he needs to have only one company
     public function freelancerCompany(): HasOne
     {

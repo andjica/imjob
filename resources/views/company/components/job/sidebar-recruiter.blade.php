@@ -39,7 +39,9 @@
                     <div class="col-md-6">
                         <div class="text-gray-800 fw-bold fs-3">
                             <span class="m-0 counted" data-kt-countup="true" data-kt-countup-value="642" data-kt-initialized="1">
-                                {{ $jobs->count() }}
+                                
+                            {{ $recruiter->jobsForLoggedCompany()->count() }}
+
                             </span> 
                         </div>
                         <span class="text-gray-500 fs-8 d-block fw-bold">Active Jobs</span>                          

@@ -1,7 +1,7 @@
 @extends('company.template-company')
-@section('main-title', 'Job')
+@section('main-title', 'Job '.$job->title)
 
-@section('title-dash', 'Recruitment Process')
+@section('title-dash', 'This job is active on mobile app')
 
 @section('css')
 <link rel="stylesheet" type="text/css" href="{{asset('/css/custom/recruitment-process.css')}}"/>
@@ -20,6 +20,27 @@
 <div class="container m-0 pb-5 mt-5" id="leader-line-container">
 @include('alerts.errors')
 @include('alerts.success')
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card mb-2">
+                @if($job->job_world_type == "International")
+                <div class="card-body bg-linear-pink">
+                @else
+                <div class="card-body bg-linear-pink rounded-top">
+                @endif
+                    <div class="tab-content" id="myTabContent">
+                        <!-- Active Jobs Content -->
+                        <div class="tab-pane fade show active" id="active-job" role="tabpanel" aria-labelledby="active-jobs-tab">
+                            <h5 class="text-white font-weight-bold">{{ ucfirst($job->job_world_type) }}
+                            </h5>
+                        </div>
+                       
+                    </div>
+                </div>
+            
+            </div>
+        </div>
+    </div>
    
     <!-- Job Information Card -->
     <div class="row mb-4">

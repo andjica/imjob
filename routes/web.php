@@ -115,6 +115,8 @@ Route::middleware(['auth', 'company', 'verified'])->prefix('company/dashboard')-
     //recruitment process
     //ruta za backbutton
     Route::get('/{job}/recruitment-process', [CompanyFrontController::class, 'recruitmentProcess'])->name('recruitment-process');
+    Route::get('/job/candidate/{candidate}/recruitment-process', [CompanyFrontController::class, 'candidateRecruitmentProcess'])->name('candidat-recruitment-process');
+
     //profile
     Route::get('/settings', [CompanyFrontController::class, 'settings'])->name('settings');
     Route::get('/company/{company}/details', [CompanyFrontController::class, 'detailsCompany'])->name('company-details');

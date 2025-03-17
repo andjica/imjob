@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Company;
 use App\Models\Job;
 use App\Models\User;
 use App\Models\Company;
+use App\Models\Candidate;
+use App\Models\Recruiter;
 use Illuminate\Http\Request;
 use App\Interfaces\CityInterface;
 use App\Repositories\JobRepository;
@@ -13,13 +15,14 @@ use App\Http\Controllers\Controller;
 use App\Interfaces\CompanyInterface;
 use App\Interfaces\CountryInterface;
 use App\Interfaces\JobTypeInterface;
+use App\Models\ContributorRecruiter;
 use App\Interfaces\CategoryInterface;
 use App\Services\CompanyTypeServices;
 use App\Interfaces\RecruiterInterface;
 use Illuminate\Contracts\View\Factory;
 use App\Interfaces\CompanyTypeInterface;
 use App\Interfaces\SubCategoryInterface;
-use App\Models\Recruiter;
+use App\Models\AvailableRecruitmentSubphases;
 use Illuminate\Contracts\Foundation\Application;
 
 class FrontController extends Controller
@@ -219,5 +222,43 @@ class FrontController extends Controller
         $candidates = $job->candidates()->with('user')->get();
        
         return view('company.pages.recruitment.job-recruitment', compact('job', 'candidates'));
+    }
+
+    public function candidateRecruitmentProcess(Candidate $candidate): Factory|View|Application
+    {
+       
+        if ($candidate->status !== 'accept' || !$candidate->recruitmentProcess) {
+            abort(404);
+        }
+
+        $recruitmentProcess = $candidate->recruitmentProcess()->with('subphases')->first();
+        
+        $availablePhases = AvailableRecruitmentSubphases::where('phase', $candidate->recruitmentProcess->current_phase)->get();
+    
+        $candidateId = $candidate->id;
+        $candidateSubphases = Candidate::with('recruitmentSubPhases')->find($candidateId);
+        //return dd($candidateSubphases);
+        //$meetings = $candidateSubphases->recruitmentSubPhases->toArray();
+        
+        $recruiterId = $candidate->job->recruiter->id;
+        $recruiter = $this->recruiterServices->getOne($recruiterId);
+      
+        /** @var User $user */
+        //$user = auth()->user();
+        // //$contributors = $user->recruiter->contributors();
+        //     ->wherePivot('status', ContributorRecruiter::ACTIVE)
+        //     ->get();
+
+            return view(
+                'company.pages.recruitment.candidat-recruitment-process',
+                compact(
+                    'candidate',
+                    'recruitmentProcess',
+                    'availablePhases',
+                    'recruiter'
+                    //'meetings',
+                    //'contributors',
+                )
+            );
     }
 }

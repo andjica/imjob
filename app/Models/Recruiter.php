@@ -57,6 +57,7 @@ class Recruiter extends Model
 
     }
 
+
     //working in the pass :)
     public function inactiveCompanies(): BelongsToMany
     {
@@ -105,6 +106,16 @@ class Recruiter extends Model
     {
         return $this->hasMany(Job::class);
     }
+
+    public function jobsForLoggedCompany()
+    {
+        $companyId = auth()->user()->id; 
+
+        return Job::where('company_id', $companyId)
+                ->where('recruiter_id', $this->id) 
+                ->get();
+    }
+    
 
     public function country()
     {
