@@ -5,6 +5,12 @@
 
 @section('content')
     <div class="container m-0">
+    <div class="row mb-5">
+            <div class="col-lg-10">
+            @include('alerts.success')
+            @include('alerts.errors')
+            </div>
+    </div>
         <div class="row">
             <div class="col-lg-10">
                 <div class="card mb-5 mb-xl-10">
@@ -47,17 +53,17 @@
                             <div class="row mb-5">
                                 <label class="col-lg-2 col-form-label fw-bold fs-6 required">Contributor type:</label>
                                 <div class="col-lg-8">
-                                    <select name="contributorTypeId" id="contributorTypeId" data-control="select2"
-                                        class="form-control form-control-solid @error('contributorTypeId') is-invalid @enderror">
-                                        <option value="{{$contributor->contributorType->id}}">{{$contributor->contributorType->name}}</option>
-                                        @foreach ($contributorTypes as $contributorType)
-                                            <option value="{{ $contributorType->id }}"
-                                                {{ old('contributorTypeId') == $contributorType->id ? 'selected' : '' }}
-                                                @if (trim($contributorType->name) === 'Other(Specify)') data-is-other="true" @endif>
-                                                {{ $contributorType->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
+                                <select name="contributorTypeId" id="contributorTypeId" data-control="select2"
+                                    class="form-control form-control-solid @error('contributorTypeId') is-invalid @enderror">
+                                    <option value="{{$contributor->contributorType->id}}">{{$contributor->contributorType->name}}</option>
+                                    @foreach ($contributorTypes as $contributorType)
+                                        <option value="{{ $contributorType->id }}"
+                                            {{ old('contributorTypeId', $contributor->contributorType->id) == $contributorType->id ? 'selected' : '' }}
+                                            @if (trim($contributorType->name) === 'Other(Specify)') data-is-other="true" @endif>
+                                            {{ $contributorType->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
                                     <span class="text-danger" id="contributorTypeIdEmpty">
                                         @error('contributorTypeId')
                                             {{ $message }}
@@ -66,15 +72,15 @@
                                 </div>
                             </div>
                             <!-- Custom Contributor Type -->
-                        <div class="row mb-5 d-none" id="customContributorTypeWrapper">
-                            <label class="col-lg-2 col-form-label fw-bold fs-6">Specify your type:</label>
-                            <div class="col-lg-8">
-                                <input type="text" name="customContributorType" id="customContributorType"
-                                    class="form-control form-control-solid @error('customContributorType') is-invalid @enderror"
-                                    value="{{ old('customContributorType') }}" placeholder="Enter your contributor type">
-                                <span class="text-danger" id="customContributorTypeEmpty">@error('customContributorType'){{ $message }}@enderror</span>
+                            <div class="row mb-5 {{ $contributor->contributorType->name === 'Other(Specify)' || $contributor->custom_contributor_type ? '' : 'd-none' }}" id="customContributorTypeWrapper">
+                                <label class="col-lg-2 col-form-label fw-bold fs-6">Specify your type:</label>
+                                <div class="col-lg-8">
+                                    <input type="text" name="customContributorType" id="customContributorType"
+                                        value="{{ old('customContributorType', $contributor->custom_contributor_type) }}"
+                                        class="form-control form-control-solid @error('customContributorType') is-invalid @enderror">
+                                    <span class="text-danger" id="customContributorTypeEmpty">@error('customContributorType'){{ $message }}@enderror</span>
+                                </div>
                             </div>
-                        </div>
                             <!-- Country -->
                             <div class="row mb-5">
                                 <label class="col-lg-2 col-form-label fw-bold fs-6 required">Country:</label>

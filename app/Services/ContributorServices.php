@@ -6,6 +6,7 @@ use App\Models\Contributor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Interfaces\ContributorInterface;
+use App\Models\ContributorType;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
@@ -35,7 +36,7 @@ class ContributorServices implements ContributorInterface
             throw new \Exception($validator->errors()->first());
         }
 
-    
+      
             $contributor = new Contributor();
             $contributor->user_id = auth()->id(); 
             $contributor->name = $request->get('name');
@@ -104,23 +105,34 @@ class ContributorServices implements ContributorInterface
             'countryId' => 'required|integer',
             'cityId' => 'required|integer',
         ]);
-
+       
         // If validation fails, throw an exception
         if ($validator->fails()) {
             throw new \Exception($validator->errors()->first());
         }
-
+        
         try {
+
             $contributor->name = $request->get('name');
             $contributor->email = $request->get('email');
             $contributor->contributor_type_id = $request->get('contributorTypeId');
-            $contributor->custom_contributor_type = $request->get('customContributorType', null);
+            $contributorType = ContributorType::find($request->get('contributorTypeId'));
+         
+            if($contributorType->name !== 'Other(Specify)')
+            {
+                $contributor->custom_contributor_type = null;
+            }
+            else
+            {
+                $contributor->custom_contributor_type = $request->get('customContributorType');
+            }
+            
             $contributor->country_id = $request->get('countryId');
             $contributor->city_id = $request->get('cityId');
             
             $contributor->save();
 
-            return $contributor;
+            return redirect()->back()->with('success', 'You update contributor profile successfully');
         } catch (\Exception $e) {
             Log::error("Contributor update failed: " . $e->getMessage());
             throw new \Exception("Something went wrong while updating the contributor.");

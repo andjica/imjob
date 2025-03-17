@@ -16,6 +16,7 @@
     {
         display: none !important;
     }
+   
 </style>
 @endsection
 
