@@ -4,14 +4,12 @@
             <!--begin::Heading-->
             <div class="text-center mt-15 mb-18" id="achievements" data-kt-scroll-offset="{default: 100, lg: 150}">
                 <!--begin::Title-->
-                <h3 class="fs-2hx text-white fw-bold mb-5">From local insights
-                to global opportunities</h3>
+                <h3 class="fs-2hx text-white fw-bold mb-5">Connecting careers globally</h3>
                 <!--end::Title-->
 
                 <!--begin::Description-->
                 <div class="fs-5 text-gray-700 fw-bold">
-                    Save  thousands to millions of bucks by using single tool <br>
-                    for different amazing and great useful admin   
+                    Join a supportive network that brings together<br> job seekers, recruiters, and service providers worldwide.
                 </div>   
                 <!--end::Description-->
             </div>  
@@ -97,7 +95,7 @@
             <div class="fs-2 fw-semibold text-muted text-center mb-3"> 
                 <span class="fs-1 lh-1 text-gray-700">“</span>
 
-                When you care about your topic, you’ll write about it in a <br><span class="text-gray-700 me-1">more powerful</span>, emotionally expressive way
+                More than just a job site, a vibrant community!<br><span class="text-gray-700 me-1"> a vibrant community!</span>
                 
                 <span class="fs-1 lh-1 text-gray-700">“</span>
             </div>
@@ -105,9 +103,9 @@
 
             <!--begin::Author-->
             <div class="fs-2 fw-semibold text-muted text-center"> 
-                <a href="/metronic8/demo1/account/security.html" class="link-primary fs-4 fw-bold">Marcus Levy,</a>   
+                <a href="/metronic8/demo1/account/security.html" class="link-primary fs-4 fw-bold">Predrag Novakovic,</a>   
 
-                <span class="fs-4 fw-bold text-gray-600">KeenThemes CEO</span>
+                <span class="fs-4 fw-bold text-gray-600">ImJob Ai CEO</span>
             </div>
             <!--end::Author-->
         </div>
