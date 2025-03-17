@@ -95,7 +95,9 @@
 
                     <td>
                     @if ($candidate->status === 'pending')
-                    /
+                    This action is under the recruiter's authority and is awaiting their decision.
+                    This candidate will have either Active or Rejected status in the future.
+
                         @elseif($candidate->status === 'reject')
                             This user is rejected by recruiter
                         @else

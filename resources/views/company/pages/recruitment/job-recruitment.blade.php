@@ -46,16 +46,21 @@
     <div class="row mb-4">
             <!-- Navigation Menu (kt_todo_aside) -->
             @include('company.components.recruitment.sidebar')
-            
+          
             <!-- Job Information Card -->
-            
+            <div class="col-lg-9 col-md-8">
+
             @include('company.components.recruitment.job-info')
+            
+            @include('company.components.recruitment.candidates')
+            </div>
+          
     </div>
 
         <!-- Candidate List and Recruitment Process -->
     <div class="row mt-5">
             <div class="col-lg-12">
-                @include('company.components.recruitment.candidates')
+             
               
             </div>
     </div>

@@ -65,8 +65,19 @@
                                     <span class="badge badge-warning mb-5">National</span>
                                 @endif
                                 <h5 class="card-title">{{$job->title}}</h5>
-                                <p>This job is added to {{$job->recruiter->user->first_name}} {{$job->recruiter->user->last_name}} recruiter</p>
-                                <p class="card-text">Location: {{$job->city->name}}, {{$job->country->name}}</p><br>
+                                <p>This job is assigned to
+                                <div class="symbol symbol-40px me-5">
+                                @if ($job->recruiter->profile_image)
+                                    <img src="{{ asset(Storage::url($job->recruiter->profile_image)) }}"
+                                        alt="Profile Image" class="img-fluid rounded-circle shadow-sm"
+                                        style="width: 60px; height: 60px;"> <!-- Smaller size here -->
+                                @else
+                                    <span class="badge bg-secondary">No Image</span>
+                                @endif<br>
+                               <b class="fw-bold"> {{$job->recruiter->user->first_name}} {{$job->recruiter->user->last_name}}</b><br>Email: <i>,,{{$job->recruiter->user->email}}''</i></p>
+                               
+                            </div>
+                                <p class="card-text">Location for job: {{$job->city->name}}, {{$job->country->name}}</p><br>
                                 
                             </div>
                             <div class="d-flex align-items-center">

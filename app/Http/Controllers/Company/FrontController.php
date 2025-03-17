@@ -219,8 +219,9 @@ class FrontController extends Controller
 
     public function recruitmentProcess(Job $job): Factory|View|Application
     {
+        
         $candidates = $job->candidates()->with('user')->get();
-       
+        
         return view('company.pages.recruitment.job-recruitment', compact('job', 'candidates'));
     }
 
