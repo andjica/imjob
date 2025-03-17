@@ -227,7 +227,7 @@ class FrontController extends Controller
         //return dd($candidateSubphases);
         $meetings = $candidateSubphases->recruitmentSubPhases->toArray();
         
-        
+        // return dd($candidate->job->id);
         /** @var User $user */
         $user = auth()->user();
         $contributors = $user->recruiter->contributors()
@@ -300,11 +300,6 @@ class FrontController extends Controller
         //     'success' => true,
         //     'message' => 'Status updated successfully.',
         // ]);
-    }
-
-    public function jobs(): Factory|View|Application
-    {
-        return view('company-freelancer.pages.job.active-jobs');
     }
 
     public function getActiveJobs(Request $request)

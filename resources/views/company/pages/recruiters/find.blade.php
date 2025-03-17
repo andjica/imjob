@@ -1,6 +1,7 @@
 @extends('company.template-company')
 
 @section('content')
+@section('main-title', 'Find your recruiters')
 @section('title-dash', 'Recruiters')
 <div class="container m-0">
     <div class="row">

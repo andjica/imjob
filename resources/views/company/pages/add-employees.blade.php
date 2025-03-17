@@ -1,7 +1,8 @@
 @extends('company.template-company')
 
 @section('content')
-@section('title-dash', 'Add emoloyee')
+@section('main-title', 'Add employee')
+@section('title-dash', 'Add employee')
 <div class="container m-0">
     <div class="row">
          @include('alerts.success')

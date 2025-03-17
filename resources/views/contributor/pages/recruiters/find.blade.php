@@ -1,6 +1,7 @@
 @extends('contributor.template-contributor')
 
 @section('content')
+@section('main-title', 'Recruiters List')
 @section('title-dash', 'Recruiters')
 <div class="container m-0">
     <div class="row">

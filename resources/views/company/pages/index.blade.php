@@ -1,4 +1,5 @@
 @extends('company.template-company')
+@section('main-title', 'Welcome user '. auth()->user()->first_name)
 @section('title-dash', 'Welcome')
 @section('content')
     <div class="container m-0">

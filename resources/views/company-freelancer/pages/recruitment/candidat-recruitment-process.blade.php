@@ -44,7 +44,7 @@
 <div class="container m-0 pb-5">
     @include('alerts.errors')
     @include('alerts.success')
-    <button onclick="window.history.back()" class="btn btn-sm bg-linear-pink text-white  p-2"> <i class="fa fa-chevron-left text-white"></i> Back</button>
+    <a href="{{asset('company/freelancer/'.$candidate->job->id.'/recruitment-process')}}" class="btn btn-sm bg-linear-pink text-white  p-2"> <i class="fa fa-chevron-left text-white"></i> Back</a>
     @if($candidate->recruitmentProcess->status != null)
     <div class="text-end mt-3 mb-0">
         <a href="{{ route('company-freelancer-recruitment-download.pdf', ['recruitment_process_id' => $candidate->recruitmentProcess->id]) }}" 
@@ -308,10 +308,10 @@
                 // Show/Hide Custom Phase Input
                 if (selectedValue === 'other') {
                     $('#customPhaseContainer').fadeIn();
-                    $('#custom_phase').prop('required', true);
+                    // $('#custom_phase').prop('required', true);
                 } else {
                     $('#customPhaseContainer').fadeOut();
-                    $('#custom_phase').prop('required', false);
+                    // $('#custom_phase').prop('required', false);
                 }
             });
 

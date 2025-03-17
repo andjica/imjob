@@ -1,4 +1,6 @@
 @extends('contributor.template-contributor')
+@section('main-title', 'All Posts')
+@section('title-dash', 'All Posts')
 @section('content')
     <div class="container m-0">
     @include('alerts.success')

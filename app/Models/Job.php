@@ -57,7 +57,7 @@ class Job extends Model
 
     public function recruiter(): BelongsTo
     {
-        return $this->belongsTo(Recruiter::class);
+        return $this->belongsTo(Recruiter::class, 'recruiter_id');
     }
 
     public function category(): BelongsTo

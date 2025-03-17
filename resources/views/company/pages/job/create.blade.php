@@ -37,338 +37,366 @@
     ovo je za joneta
     @else
     <div class="row">
-       
-        <div class="col-lg-12">
-            <div class="card mb-5 mb-xl-12">
-                <!--begin::Card header-->
-                <div class="card-header">
-                    <h3 class="card-title">Create New Job</h3>
+        <div class="col-lg-3">
+            @include('company.components.job.sidebar-job')
+        </div>
+       @if ($recruiters->count() == 0)
+       <div class="col-lg-9">
+        <div class="card card-flush shadow-sm mb-5">
+            <div class="card-body text-center">
+                <div class="alert alert-warning d-flex justify-content-center p-5 mb-0">
+                    <span class="svg-icon svg-icon-2hx svg-icon-warning me-4">
+                        <!-- Metronic SVG Icon -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                            viewBox="0 0 24 24">
+                            <path opacity="0.3"
+                                d="M12 22C17.523 22 22 17.523 22 12S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10Z"
+                                fill="currentColor" />
+                            <path d="M10.75 15.5h2.5v2.5h-2.5v-2.5Zm0-10h2.5v7.5h-2.5V5.5Z"
+                                fill="currentColor" />
+                        </svg>
+                    </span>
+                    <div class="d-flex flex-column">
+                        <h4 class="mb-1">No connections found</h4>
+                        <p class="mb-0">Please follow recruiters  on <a href="{{asset('company/dashboard/find/recruiters')}}">Find recruiters</a> page.</p>
+                    </div>
                 </div>
-                <!--end::Card header-->
+            </div>
+        </div>
+    </div>
+       @else
+       <div class="col-lg-9">
+        <div class="card mb-5 mb-xl-12">
+            <!--begin::Card header-->
+            <div class="card-header">
+                <h3 class="card-title">Create New Job</h3>
+            </div>
+            <!--end::Card header-->
 
-                <!--begin::Card body-->
-                <div class="card-body pt-3">
-                @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-                @endif
-                    <form action="{{route('store-job')}}" method="POST" id="jobForm">
-                        @csrf
-                      
-                         <!-- Job World Type as Navigation -->
-                         <div class="row mb-5">
-                                <label class="fw-bold fs-5 mb-3">Job World Type:</label>
-                                <div class="d-flex gap-3">
-                                    <!-- National Option -->
-                                    <button type="button"
-                                            class="btn btn-outline btn-light-primary fw-semibold fs-6 py-3 px-4 {{ old('jobWorldType') == 'national' ? 'active' : '' }}"
-                                            name="jobWorldTypeButton"
-                                            id="jobWorldTypeNational"
-                                            value="national"
-                                            onclick="setJobType('national')">
-                                        <i class="fas fa-flag me-2"></i> National
-                                    </button>
-                                    <!-- International Option -->
-                                    <button type="button"
-                                            class="btn btn-outline btn-light-primary fw-semibold fs-6 py-3 px-4 {{ old('jobWorldType') == 'international' ? 'active' : '' }}"
-                                            name="jobWorldTypeButton"
-                                            id="jobWorldTypeInternational"
-                                            value="international"
-                                            onclick="setJobType('international')">
-                                        <i class="fas fa-globe me-2"></i> International
-                                    </button>
-                                </div>
-                                    <!-- Hidden input to store the selected job type -->
-                                    <input type="hidden" name="jobWorldType" id="jobWorldType" value="{{ old('jobWorldType', 'national') }}">
+            <!--begin::Card body-->
+            <div class="card-body pt-3">
+            @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+                <form action="{{route('store-job')}}" method="POST" id="jobForm">
+                    @csrf
+                  
+                     <!-- Job World Type as Navigation -->
+                     <div class="row mb-5">
+                            <label class="fw-bold fs-5 mb-3">Job World Type:</label>
+                            <div class="d-flex gap-3">
+                                <!-- National Option -->
+                                <button type="button"
+                                        class="btn btn-outline btn-light-primary fw-semibold fs-6 py-3 px-4 {{ old('jobWorldType') == 'national' ? 'active' : '' }}"
+                                        name="jobWorldTypeButton"
+                                        id="jobWorldTypeNational"
+                                        value="national"
+                                        onclick="setJobType('national')">
+                                    <i class="fas fa-flag me-2"></i> National
+                                </button>
+                                <!-- International Option -->
+                                <button type="button"
+                                        class="btn btn-outline btn-light-primary fw-semibold fs-6 py-3 px-4 {{ old('jobWorldType') == 'international' ? 'active' : '' }}"
+                                        name="jobWorldTypeButton"
+                                        id="jobWorldTypeInternational"
+                                        value="international"
+                                        onclick="setJobType('international')">
+                                    <i class="fas fa-globe me-2"></i> International
+                                </button>
                             </div>
-
-                            <!-- Select recruiter for this job -->
-                            <div class="row">
-                            <!-- Left Column -->
-                            <div class="col-md-6 pe-10 border-end me-2">
-                            <div class="row mb-5">
-                            <label class="col-lg-4 col-form-label fw-bold fs-6 required">Recruiter:</label>
-                            <div class="col-lg-8">
-                            <select name="recruiter_id" id="recruiter_id" data-control="select2"
-                                class="form-control form-control-solid @error('recruiterId') is-invalid @enderror">
-                                <option value="">Select a Recruiter</option>
-                                @foreach ($recruiters as $recruiter)
-                                @php
-                                    $image = $recruiter->profile_image 
-                                        ? asset('storage/uploads/recruiters/' . basename($recruiter->profile_image)) 
-                                        : asset('images/user-profile.png');
-                                @endphp
-                                <option value="{{ $recruiter->id }}" 
-                                        data-img="{{ $image }}"
-                                        data-country="{{ $recruiter->country->name ?? '' }}"
-                                        data-city="{{ $recruiter->city->name ?? '' }}">
-                                    {{ $recruiter->user->first_name }} {{ $recruiter->user->last_name }}
-                                </option>
-                                @endforeach
-                            </select>
-                            <input type="hidden" name="company_id" value="{{auth()->user()->company->id}}">
-                            <input type="hidden" name="status" value="Active">
-                                <span class="text-danger" id="recruiterIdEmpty">@error('recruiterId'){{ $message }}@enderror</span>
-                            </div>
+                                <!-- Hidden input to store the selected job type -->
+                                <input type="hidden" name="jobWorldType" id="jobWorldType" value="{{ old('jobWorldType', 'national') }}">
                         </div>
-                                <!-- Job Title -->
-                                <div class="row mb-5">
-                                    <label class="col-lg-4 col-form-label fw-bold fs-6 required">Job Title:</label>
-                                    <div class="col-lg-8">
-                                        <input type="text" class="form-control form-control-solid @error('title') is-invalid @enderror" name="title" id="title"
-                                            value="{{ old('title') }}" />
-                                        <span class="text-danger" id="titleEmpty">@error('title'){{ $message }}@enderror</span>
-                                    </div>
-                                </div>
-                                 <!-- Job Description -->
-                                 <div class="row mb-5">
-                                    <label class="col-lg-4 col-form-label fw-bold fs-6 required">Job Description:</label>
-                                    <div class="col-lg-8">
-                                        <textarea class="form-control form-control-solid @error('description') is-invalid @enderror" name="description" id="description"
-                                            rows="6">{{ old('description') }}</textarea>
-                                        <span class="text-danger" id="descriptionEmpty">@error('description'){{ $message }}@enderror</span>
-                                    </div>
-                                </div>
 
-                                <!-- Country -->
-                                <div class="row mb-5">
-                                    <label class="col-lg-4 col-form-label fw-bold fs-6 required">Country:</label>
-                                    <div class="col-lg-8">
-                                        <select name="countryId" id="countryId" data-control="select2"
-                                            class="form-control form-control-solid @error('countryId') is-invalid @enderror">
-                                            <option value="">Select a Country</option>
-                                            @foreach ($countries as $country)
-                                                <option value="{{ $country->id }}" {{ old('countryId') == $country->id ? 'selected' : '' }}>
-                                                    {{ $country->name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        <span class="text-danger" id="countryIdEmpty">@error('countryId'){{ $message }}@enderror</span>
-                                    </div>
+                        <!-- Select recruiter for this job -->
+                        <div class="row">
+                        <!-- Left Column -->
+                        <div class="col-md-6 pe-10 border-end me-2">
+                        <div class="row mb-5">
+                        <label class="col-lg-4 col-form-label fw-bold fs-6 required">Recruiter:</label>
+                        <div class="col-lg-8">
+                        <select name="recruiter_id" id="recruiter_id" data-control="select2"
+                            class="form-control form-control-solid @error('recruiterId') is-invalid @enderror">
+                            <option value="">Select a Recruiter</option>
+                            @foreach ($recruiters as $recruiter)
+                            @php
+                                $image = $recruiter->profile_image 
+                                    ? asset('storage/uploads/recruiters/' . basename($recruiter->profile_image)) 
+                                    : asset('images/user-profile.png');
+                            @endphp
+                            <option value="{{ $recruiter->id }}" 
+                                    data-img="{{ $image }}"
+                                    data-country="{{ $recruiter->country->name ?? '' }}"
+                                    data-city="{{ $recruiter->city->name ?? '' }}">
+                                {{ $recruiter->user->first_name }} {{ $recruiter->user->last_name }}
+                            </option>
+                            @endforeach
+                        </select>
+                        <input type="hidden" name="company_id" value="{{auth()->user()->company->id}}">
+                        <input type="hidden" name="status" value="Active">
+                            <span class="text-danger" id="recruiterIdEmpty">@error('recruiterId'){{ $message }}@enderror</span>
+                        </div>
+                    </div>
+                            <!-- Job Title -->
+                            <div class="row mb-5">
+                                <label class="col-lg-4 col-form-label fw-bold fs-6 required">Job Title:</label>
+                                <div class="col-lg-8">
+                                    <input type="text" class="form-control form-control-solid @error('title') is-invalid @enderror" name="title" id="title"
+                                        value="{{ old('title') }}" />
+                                    <span class="text-danger" id="titleEmpty">@error('title'){{ $message }}@enderror</span>
                                 </div>
-                                 <!-- City -->
-                                 <div class="row mb-5">
-                                    <label class="col-lg-4 col-form-label fw-bold fs-6 required">City:</label>
-                                    <div class="col-lg-8">
-                                        <select name="cityId" id="cityId" data-control="select2"
-                                            class="form-control form-control-solid @error('cityId') is-invalid @enderror">
-                                            <option value="">Select a City</option>
-                                            <option value=""></option>
-                                        </select>
-                                        <span class="text-danger" id="cityIdEmpty">@error('cityId'){{ $message }}@enderror</span>
-                                    </div>
+                            </div>
+                             <!-- Job Description -->
+                             <div class="row mb-5">
+                                <label class="col-lg-4 col-form-label fw-bold fs-6 required">Job Description:</label>
+                                <div class="col-lg-8">
+                                    <textarea class="form-control form-control-solid @error('description') is-invalid @enderror" name="description" id="description"
+                                        rows="6">{{ old('description') }}</textarea>
+                                    <span class="text-danger" id="descriptionEmpty">@error('description'){{ $message }}@enderror</span>
                                 </div>
-                                <!-- Salary Minimum -->
-                                <div class="row mb-5">
-                                    <label class="col-lg-4 col-form-label fw-bold fs-6 required">Salary (Min):</label>
-                                    <div class="col-lg-8">
-                                        <input type="text" class="form-control form-control-solid @error('salaryMin') is-invalid @enderror" name="salaryMin" id="salaryMin"
-                                            value="{{ old('salaryMin') }}" />
-                                        <span class="text-danger" id="salaryMinEmpty">@error('salaryMin'){{ $message }}@enderror</span>
-                                    </div>
-                                </div>
-                                 <!-- Salary Maximum -->
-                                 <div class="row mb-5">
-                                    <label class="col-lg-4 col-form-label fw-bold fs-6 required">Salary (Max):</label>
-                                    <div class="col-lg-8">
-                                        <input type="text" class="form-control form-control-solid @error('salaryMax') is-invalid @enderror" name="salaryMax" id="salaryMax"
-                                            value="{{ old('salaryMax') }}" />
-                                        <span class="text-danger" id="salaryMaxEmpty">@error('salaryMax'){{ $message }}@enderror</span>
-                                    </div>
-                                </div>
-                                 <!-- Currency Information -->
-                                 <div class="row mb-5 d-none" id="currencyInfoRow">
-                                    <label class="col-lg-4 col-form-label fw-bold fs-6">Currency Information:</label>
-                                    <div class="col-lg-8">
-                                        <div class="alert alert-info" role="alert">
-                                            <strong>Currency Name:</strong> <span id="currencyName">N/A</span><br>
-                                            <strong>Currency Symbol:</strong> <span id="currencySymbol">N/A</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Experience Level -->
-                                <div class="row mb-5">
-                                    <label class="col-lg-4 col-form-label fw-bold fs-6 required">Experience Level:</label>
-                                    <div class="col-lg-8">
-                                        <select name="experienceLevel" id="experienceLevel" class="form-control form-control-solid @error('experienceLevel') is-invalid @enderror">
-                                            <option value="">Select Experience Level</option>
-                                            @foreach (['Entry-Level', 'Mid-Level', 'Senior-Level', 'Managerial'] as $level)
-                                                <option value="{{ $level }}" {{ old('experienceLevel') == $level ? 'selected' : '' }}>
-                                                    {{ $level }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        <span class="text-danger" id="experienceLevelEmpty">@error('experienceLevel'){{ $message }}@enderror</span>
-                                    </div>
-                                </div>
-
                             </div>
 
-                            <!-- Right Column -->
-                            <div class="col-md-5">
-                               <!-- Category -->
-                               <div class="row mb-5">
-                                    <label class="col-lg-4 col-form-label fw-bold fs-6 required">Category:</label>
-                                    <div class="col-lg-8">
-                                        <select name="categoryId" id="categoryId" data-control="select2"
-                                            class="form-control form-control-solid @error('categoryId') is-invalid @enderror">
-                                            <option value="">Select a Category</option>
-                                            @foreach ($categories as $category)
-                                                <option value="{{ $category->id }}" {{ old('categoryId') == $category->id ? 'selected' : '' }}>
-                                                    {{ $category->name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        <span class="text-danger" id="categoryIdEmpty">@error('categoryId'){{ $message }}@enderror</span>
-                                    </div>
-                                </div>
-                                <!-- SubCategory -->
-                                <div class="row mb-5">
-                                    <label class="col-lg-4 col-form-label fw-bold fs-6 required">SubCategory:</label>
-                                    <div class="col-lg-8">
-                                        <select name="subCategoryId" id="subCategoryId" data-control="select2"
-                                            class="form-control form-control-solid @error('subCategoryId') is-invalid @enderror">
-                                            <option value="">Select a SubCategory</option>
-                                            <option value=""></option>
-                                        </select>
-                                        <span class="text-danger" id="subCategoryIdEmpty">@error('subCategoryId'){{ $message }}@enderror</span>
-                                    </div>
-                                </div>
-                                <!-- Other categoty type -->
-                                <div class="row mb-5 d-none" id="otherSubRow">
-                                    <label class="col-lg-4 col-form-label fw-bold fs-6 required">Other:</label>
-                                    <div class="col-lg-8">
-                                        <input type="text" class="form-control form-control-solid" name="custom_subcategory" id="otherSub" />
-                                        <span class="text-danger" id="otherCategoryEmpty">@error('otherCategoryId'){{ $message }}@enderror</span>
-                                    </div>
-                                </div>
-                               <!-- Job Type -->
+                            <!-- Country -->
                             <div class="row mb-5">
-                                <label class="col-lg-4 col-form-label fw-bold fs-6 required">Job Type:</label>
+                                <label class="col-lg-4 col-form-label fw-bold fs-6 required">Country:</label>
                                 <div class="col-lg-8">
-                                    <select name="jobTypeId" id="jobTypeId" data-control="select2"
-                                        class="form-control form-control-solid @error('jobTypeId') is-invalid @enderror">
-                                        <option value="">Select a Job Type</option>
-                                        @foreach ($jobTypes as $jobType)
-                                            <option value="{{ $jobType->id }}" {{ old('jobTypeId') == $jobType->id ? 'selected' : '' }}>
-                                                {{ $jobType->name }}
+                                    <select name="countryId" id="countryId" data-control="select2"
+                                        class="form-control form-control-solid @error('countryId') is-invalid @enderror">
+                                        <option value="">Select a Country</option>
+                                        @foreach ($countries as $country)
+                                            <option value="{{ $country->id }}" {{ old('countryId') == $country->id ? 'selected' : '' }}>
+                                                {{ $country->name }}
                                             </option>
                                         @endforeach
                                     </select>
-                                    <span class="text-danger" id="jobTypeIdEmpty">@error('jobTypeId'){{ $message }}@enderror</span>
+                                    <span class="text-danger" id="countryIdEmpty">@error('countryId'){{ $message }}@enderror</span>
                                 </div>
                             </div>
-
-                                  <!-- Required Skills -->
-                                  <div class="row mb-5">
-                                    <label class="col-lg-4 col-form-label fw-bold fs-6 required">Required Skill:</label>
-                                    <div class="col-lg-8">
-                                        <input type="text" class="form-control form-control-solid @error('requiredSkills') is-invalid @enderror" name="requiredSkills" id="requiredSkills"
-                                            value="{{ old('requiredSkills') }}" />
-                                        <span class="text-danger" id="requiredSkillsEmpty">@error('requiredSkills'){{ $message }}@enderror</span>
-                                    </div>
+                             <!-- City -->
+                             <div class="row mb-5">
+                                <label class="col-lg-4 col-form-label fw-bold fs-6 required">City:</label>
+                                <div class="col-lg-8">
+                                    <select name="cityId" id="cityId" data-control="select2"
+                                        class="form-control form-control-solid @error('cityId') is-invalid @enderror">
+                                        <option value="">Select a City</option>
+                                        <option value=""></option>
+                                    </select>
+                                    <span class="text-danger" id="cityIdEmpty">@error('cityId'){{ $message }}@enderror</span>
                                 </div>
-                                 <!-- More Skills -->
-                                 <div class="row mb-5">
-                                    <label class="col-lg-4 col-form-label fw-bold fs-6">More Skills:</label>
-                                    <div class="col-lg-8">
-                                        <div id="skillsContainer">
-                                            <div class="input-group mb-2 skill-input-group">
-                                                <input type="text" class="form-control form-control-solid" name="moreSkill[]" placeholder="Enter a skill" />
-                                                <button class="btn btn-success add-skill-btn" type="button" title="Add Skill">
-                                                    <i class="fa fa-plus"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <span class="text-danger" id="moreSkillsEmpty"></span>
-                                    </div>
+                            </div>
+                            <!-- Salary Minimum -->
+                            <div class="row mb-5">
+                                <label class="col-lg-4 col-form-label fw-bold fs-6 required">Salary (Min):</label>
+                                <div class="col-lg-8">
+                                    <input type="text" class="form-control form-control-solid @error('salaryMin') is-invalid @enderror" name="salaryMin" id="salaryMin"
+                                        value="{{ old('salaryMin') }}" />
+                                    <span class="text-danger" id="salaryMinEmpty">@error('salaryMin'){{ $message }}@enderror</span>
                                 </div>
-                                <!-- Special Requirements -->
-                                <div class="row mb-5">
-                                    <label class="col-lg-4 col-form-label fw-bold fs-6">Special Requirements:</label>
-                                    <div class="col-lg-8">
-                                        <div class="form-check form-switch">
-                                            <input
-                                                class="form-check-input"
-                                                type="checkbox"
-                                                id="has_special_requirements"
-                                                name="has_special_requirements"
-                                                value="true"
-                                                {{ old('has_special_requirements') ? 'checked' : '' }}
-                                            >
-                                            <label class="form-check-label" for="has_special_requirements">
-                                                Check if there are special requirements.
-                                            </label>
-                                        </div>
-                                        <span class="text-danger" id="specialRequirementsEmpty">
-                                            @error('has_special_requirements'){{ $message }}@enderror
-                                        </span>
-                                    </div>
+                            </div>
+                             <!-- Salary Maximum -->
+                             <div class="row mb-5">
+                                <label class="col-lg-4 col-form-label fw-bold fs-6 required">Salary (Max):</label>
+                                <div class="col-lg-8">
+                                    <input type="text" class="form-control form-control-solid @error('salaryMax') is-invalid @enderror" name="salaryMax" id="salaryMax"
+                                        value="{{ old('salaryMax') }}" />
+                                    <span class="text-danger" id="salaryMaxEmpty">@error('salaryMax'){{ $message }}@enderror</span>
                                 </div>
-                                <!-- Additional Special Requirements Fields -->
-                                <div class="row mb-5 d-none" id="specialRequirementsFields">
-                                    <label for="special_requirements" class="col-lg-4 col-form-label fw-bold fs-6">Details:</label>
-                                    <div class="col-lg-8">
-                                        <textarea
-                                            class="form-control form-control-solid @error('special_requirements') is-invalid @enderror"
-                                            name="special_requirements"
-                                            id="special_requirements"
-                                            rows="4"
-                                            placeholder="Enter any special requirements here..."
-                                        >{{ old('special_requirements') }}</textarea>
-                                        <span class="text-danger" id="specialDetailsEmpty">
-                                            @error('special_requirements'){{ $message }}@enderror
-                                        </span>
-                                    </div>
-                                </div>
-
-
-                                <!-- Age Range -->
-                                <div class="row mb-5">
-                                    <label class="col-lg-4 col-form-label fw-bold fs-6">Age Range:</label>
-                                    <div class="col-lg-4">
-                                        <input type="number" class="form-control form-control-solid @error('min_age') is-invalid @enderror" name="min_age" id="min_age"
-                                            placeholder="Min Age" value="{{ old('min_age') }}" min="18" max="100" />
-                                        <span class="text-danger" id="minAgeEmpty">@error('min_age'){{ $message }}@enderror</span>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <input type="number" class="form-control form-control-solid @error('max_age') is-invalid @enderror" name="max_age" id="max_age"
-                                            placeholder="Max Age" value="{{ old('max_age') }}" min="18" max="100" />
-                                        <span class="text-danger" id="maxAgeEmpty">@error('max_age'){{ $message }}@enderror</span>
-                                    </div>
-                                </div>
-                                <!-- Valid Until -->
-                                <div class="row mb-5">
-                                    <label class="col-lg-4 col-form-label fw-bold fs-6 required">Valid Until:</label>
-                                    <div class="col-lg-8">
-                                        <input type="date" class="form-control form-control-solid @error('validUntil') is-invalid @enderror" name="validUntil" id="validUntil"
-                                            value="{{ old('validUntil') }}" />
-                                        <span class="text-danger" id="validUntilEmpty">@error('validUntil'){{ $message }}@enderror</span>
+                            </div>
+                             <!-- Currency Information -->
+                             <div class="row mb-5 d-none" id="currencyInfoRow">
+                                <label class="col-lg-4 col-form-label fw-bold fs-6">Currency Information:</label>
+                                <div class="col-lg-8">
+                                    <div class="alert alert-info" role="alert">
+                                        <strong>Currency Name:</strong> <span id="currencyName">N/A</span><br>
+                                        <strong>Currency Symbol:</strong> <span id="currencySymbol">N/A</span>
                                     </div>
                                 </div>
                             </div>
+                            <!-- Experience Level -->
+                            <div class="row mb-5">
+                                <label class="col-lg-4 col-form-label fw-bold fs-6 required">Experience Level:</label>
+                                <div class="col-lg-8">
+                                    <select name="experienceLevel" id="experienceLevel" class="form-control form-control-solid @error('experienceLevel') is-invalid @enderror">
+                                        <option value="">Select Experience Level</option>
+                                        @foreach (['Entry-Level', 'Mid-Level', 'Senior-Level', 'Managerial'] as $level)
+                                            <option value="{{ $level }}" {{ old('experienceLevel') == $level ? 'selected' : '' }}>
+                                                {{ $level }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <span class="text-danger" id="experienceLevelEmpty">@error('experienceLevel'){{ $message }}@enderror</span>
+                                </div>
+                            </div>
+
                         </div>
-                        <!-- Loading Indicators (Optional) -->
-                        <div class="spinner-border text-primary d-none" role="status" id="loading" style="position: absolute; top: 50%; left: 50%; z-index: 1000;">
-                            <span class="visually-hidden">Loading...</span>
+
+                        <!-- Right Column -->
+                        <div class="col-md-5">
+                           <!-- Category -->
+                           <div class="row mb-5">
+                                <label class="col-lg-4 col-form-label fw-bold fs-6 required">Category:</label>
+                                <div class="col-lg-8">
+                                    <select name="categoryId" id="categoryId" data-control="select2"
+                                        class="form-control form-control-solid @error('categoryId') is-invalid @enderror">
+                                        <option value="">Select a Category</option>
+                                        @foreach ($categories as $category)
+                                            <option value="{{ $category->id }}" {{ old('categoryId') == $category->id ? 'selected' : '' }}>
+                                                {{ $category->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <span class="text-danger" id="categoryIdEmpty">@error('categoryId'){{ $message }}@enderror</span>
+                                </div>
+                            </div>
+                            <!-- SubCategory -->
+                            <div class="row mb-5">
+                                <label class="col-lg-4 col-form-label fw-bold fs-6 required">SubCategory:</label>
+                                <div class="col-lg-8">
+                                    <select name="subCategoryId" id="subCategoryId" data-control="select2"
+                                        class="form-control form-control-solid @error('subCategoryId') is-invalid @enderror">
+                                        <option value="">Select a SubCategory</option>
+                                        <option value=""></option>
+                                    </select>
+                                    <span class="text-danger" id="subCategoryIdEmpty">@error('subCategoryId'){{ $message }}@enderror</span>
+                                </div>
+                            </div>
+                            <!-- Other categoty type -->
+                            <div class="row mb-5 d-none" id="otherSubRow">
+                                <label class="col-lg-4 col-form-label fw-bold fs-6 required">Other:</label>
+                                <div class="col-lg-8">
+                                    <input type="text" class="form-control form-control-solid" name="custom_subcategory" id="otherSub" />
+                                    <span class="text-danger" id="otherCategoryEmpty">@error('otherCategoryId'){{ $message }}@enderror</span>
+                                </div>
+                            </div>
+                           <!-- Job Type -->
+                        <div class="row mb-5">
+                            <label class="col-lg-4 col-form-label fw-bold fs-6 required">Job Type:</label>
+                            <div class="col-lg-8">
+                                <select name="jobTypeId" id="jobTypeId" data-control="select2"
+                                    class="form-control form-control-solid @error('jobTypeId') is-invalid @enderror">
+                                    <option value="">Select a Job Type</option>
+                                    @foreach ($jobTypes as $jobType)
+                                        <option value="{{ $jobType->id }}" {{ old('jobTypeId') == $jobType->id ? 'selected' : '' }}>
+                                            {{ $jobType->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <span class="text-danger" id="jobTypeIdEmpty">@error('jobTypeId'){{ $message }}@enderror</span>
+                            </div>
                         </div>
-                        <div class="spinner-border text-primary d-none" role="status" id="currencyLoading" style="position: absolute; top: 50%; left: 50%; z-index: 1000;">
-                            <span class="visually-hidden">Loading...</span>
+
+                              <!-- Required Skills -->
+                              <div class="row mb-5">
+                                <label class="col-lg-4 col-form-label fw-bold fs-6 required">Required Skill:</label>
+                                <div class="col-lg-8">
+                                    <input type="text" class="form-control form-control-solid @error('requiredSkills') is-invalid @enderror" name="requiredSkills" id="requiredSkills"
+                                        value="{{ old('requiredSkills') }}" />
+                                    <span class="text-danger" id="requiredSkillsEmpty">@error('requiredSkills'){{ $message }}@enderror</span>
+                                </div>
+                            </div>
+                             <!-- More Skills -->
+                             <div class="row mb-5">
+                                <label class="col-lg-4 col-form-label fw-bold fs-6">More Skills:</label>
+                                <div class="col-lg-8">
+                                    <div id="skillsContainer">
+                                        <div class="input-group mb-2 skill-input-group">
+                                            <input type="text" class="form-control form-control-solid" name="moreSkill[]" placeholder="Enter a skill" />
+                                            <button class="btn btn-success add-skill-btn" type="button" title="Add Skill">
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <span class="text-danger" id="moreSkillsEmpty"></span>
+                                </div>
+                            </div>
+                            <!-- Special Requirements -->
+                            <div class="row mb-5">
+                                <label class="col-lg-4 col-form-label fw-bold fs-6">Special Requirements:</label>
+                                <div class="col-lg-8">
+                                    <div class="form-check form-switch">
+                                        <input
+                                            class="form-check-input"
+                                            type="checkbox"
+                                            id="has_special_requirements"
+                                            name="has_special_requirements"
+                                            value="true"
+                                            {{ old('has_special_requirements') ? 'checked' : '' }}
+                                        >
+                                        <label class="form-check-label" for="has_special_requirements">
+                                            Check if there are special requirements.
+                                        </label>
+                                    </div>
+                                    <span class="text-danger" id="specialRequirementsEmpty">
+                                        @error('has_special_requirements'){{ $message }}@enderror
+                                    </span>
+                                </div>
+                            </div>
+                            <!-- Additional Special Requirements Fields -->
+                            <div class="row mb-5 d-none" id="specialRequirementsFields">
+                                <label for="special_requirements" class="col-lg-4 col-form-label fw-bold fs-6">Details:</label>
+                                <div class="col-lg-8">
+                                    <textarea
+                                        class="form-control form-control-solid @error('special_requirements') is-invalid @enderror"
+                                        name="special_requirements"
+                                        id="special_requirements"
+                                        rows="4"
+                                        placeholder="Enter any special requirements here..."
+                                    >{{ old('special_requirements') }}</textarea>
+                                    <span class="text-danger" id="specialDetailsEmpty">
+                                        @error('special_requirements'){{ $message }}@enderror
+                                    </span>
+                                </div>
+                            </div>
+
+
+                            <!-- Age Range -->
+                            <div class="row mb-5">
+                                <label class="col-lg-4 col-form-label fw-bold fs-6">Age Range:</label>
+                                <div class="col-lg-4">
+                                    <input type="number" class="form-control form-control-solid @error('min_age') is-invalid @enderror" name="min_age" id="min_age"
+                                        placeholder="Min Age" value="{{ old('min_age') }}" min="18" max="100" />
+                                    <span class="text-danger" id="minAgeEmpty">@error('min_age'){{ $message }}@enderror</span>
+                                </div>
+                                <div class="col-lg-4">
+                                    <input type="number" class="form-control form-control-solid @error('max_age') is-invalid @enderror" name="max_age" id="max_age"
+                                        placeholder="Max Age" value="{{ old('max_age') }}" min="18" max="100" />
+                                    <span class="text-danger" id="maxAgeEmpty">@error('max_age'){{ $message }}@enderror</span>
+                                </div>
+                            </div>
+                            <!-- Valid Until -->
+                            <div class="row mb-5">
+                                <label class="col-lg-4 col-form-label fw-bold fs-6 required">Valid Until:</label>
+                                <div class="col-lg-8">
+                                    <input type="date" class="form-control form-control-solid @error('validUntil') is-invalid @enderror" name="validUntil" id="validUntil"
+                                        value="{{ old('validUntil') }}" />
+                                    <span class="text-danger" id="validUntilEmpty">@error('validUntil'){{ $message }}@enderror</span>
+                                </div>
+                            </div>
                         </div>
-                        <!-- Submit Button -->
-                        <div class="d-flex justify-content-end">
-                            <button type="submit" class="btn btn-primary">Create Job</button>
-                        </div>
-                    </form>
-                </div>
-                <!--end::Card body-->
+                    </div>
+                    <!-- Loading Indicators (Optional) -->
+                    <div class="spinner-border text-primary d-none" role="status" id="loading" style="position: absolute; top: 50%; left: 50%; z-index: 1000;">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <div class="spinner-border text-primary d-none" role="status" id="currencyLoading" style="position: absolute; top: 50%; left: 50%; z-index: 1000;">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <!-- Submit Button -->
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-primary">Create Job</button>
+                    </div>
+                </form>
             </div>
+            <!--end::Card body-->
         </div>
+    </div>
+       @endif
         <!-- Initialize Select2 -->
 
         @include('company.components.job.create-modal-popup')

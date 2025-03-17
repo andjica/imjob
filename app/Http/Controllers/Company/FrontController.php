@@ -174,7 +174,7 @@ class FrontController extends Controller
 
         $searchString = $request->get('query') ?? null;
         $jobs = $this->jobRep->searchJobsFromCompany($searchString, $companyId);
-        
+        // return dd($jobs);
         return view('company.pages.job.active-jobs', compact('jobs'));
     }
 
