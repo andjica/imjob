@@ -215,10 +215,10 @@
 
                                     <div class="menu-item">
                                         <a class="menu-link {{ Route::currentRouteName() === 'company-freelancer-notifications' ? 'active' : '' }}" href="{{asset('/company/freelancer/notifications')}}">
-                                            <span class="menu-bullet">
+                                                    <span class="menu-bullet">
                                                 <span class="bullet bullet-dot"></span>
                                             </span>
-                                            <span class="menu-title"> All notifications</span>
+                                            <span class="menu-title notification-menu-title">All notifications</span> 
                                         </a>
                                     </div>
                                     

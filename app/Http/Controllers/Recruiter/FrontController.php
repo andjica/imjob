@@ -10,6 +10,7 @@ use App\Models\Contributor;
 use FontLib\Table\Type\fpgm;
 use Illuminate\Http\Request;
 use App\Actions\CreateMeeting;
+use App\Models\CompanyRecruiter;
 use App\Models\RecruitmentProcess;
 use App\Services\CandidateService;
 use App\Models\RecruitmentSubphase;
@@ -313,6 +314,19 @@ class FrontController extends Controller
         $subphase->delete();
 
         return redirect()->back()->with('success', 'You accept deleted phase successfully.');
+    }
+
+    public function notifications(CompanyRecruiter $notifications)
+    {
+        $newNotifications = $notifications->getCompaniesFollowRequest();
+        $recruiterToCompaniesFollowRequest = $notifications->getRecruiterFollowRequestToCompanies();
+        
+        $connections = $notifications->getAllConnections();
+        return view('recruiter.pages.notifications.all', 
+            compact('newNotifications', 
+            'connections',
+            'recruiterToCompaniesFollowRequest'
+        ));
     }
 
 }

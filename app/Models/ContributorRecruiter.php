@@ -9,7 +9,6 @@ class ContributorRecruiter extends Pivot
 {
     public const PENDING = 'pending';
     public const REJECTED = 'rejected';
-
     public const ACTIVE = 'active';
 
     protected $table = 'contributor_recruiter';

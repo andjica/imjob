@@ -1,5 +1,5 @@
 @php use App\Models\User; @endphp
-@extends('company-freelancer.template-company-freelancer')
+@extends('recruiter.template-recruiter')
 @section('main-title', 'Your notifications')
 
 @section('title-dash', 'All Notifications')
@@ -39,7 +39,7 @@
                     @else
                    
                         @foreach ($newNotifications as $not)
-                            <div class="alert alert-warning justify-content-between align-items-center mb-3">
+                            <div class="alert alert-success justify-content-between align-items-center mb-3">
                                 <div>
                                     @if($not->company->logo)
                                         <img src="{{ Storage::url($not->company->logo) }}" alt="{{ $not->company->name }}" class="rounded-circle" width="50" height="50">
@@ -178,6 +178,7 @@
                                         </div>
                                     </div>
                                     <div class="card-toolbar">
+                                  
                                     @if(trim($connection->status) === "Pending")
                                             <span class="badge bg-light-warning text-dark me-2 p-3 fw-light">Status on Pending</span>
                                         @elseif(trim($connection->status) === "Active")

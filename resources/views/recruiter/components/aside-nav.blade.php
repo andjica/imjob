@@ -197,7 +197,7 @@
                                 </div> -->
                     </div>
                     <!-- Notification settings  -->
-                    {{-- <div data-kt-menu-trigger="click" class="menu-item menu-accordion show">
+                    <div data-kt-menu-trigger="click" class="menu-item menu-accordion show">
                         <span class="menu-link">
                             <span class="menu-icon">
                                 <!--begin::Svg Icon | path: icons/duotune/ecommerce/ecm001.svg-->
@@ -215,17 +215,18 @@
                             <span class="menu-arrow"></span>
                         </span>
                         <div class="menu-sub menu-sub-accordion">
-
-                            <div class="menu-item">
-                                <a class="menu-link {{ Route::currentRouteName() === 'recruiter-notifications' ? 'active' : '' }}" href="{{asset('/company/freelancer/notifications')}}">
-                                    <span class="menu-bullet">
-                                        <span class="bullet bullet-dot"></span>
-                                    </span>
-                                    <span class="menu-title"> All notifications</span>
-                                </a>
-                            </div>
+                        <div class="menu-item">
+                            <a class="menu-link {{ Route::currentRouteName() === 'recruiter-notifications' ? 'active' : '' }}" 
+                            href="{{ asset('/recruiter/notifications') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title notification-menu-title">All notifications</span> 
+                            </a>
                         </div>
-                    </div> --}}
+                    </div>
+
+                    </div> 
                     <!--end::Aside menu-->
                     <!--begin::Footer-->
                     <div class="aside-footer flex-column-auto pt-5 pb-7 px-5" id="kt_aside_footer">

@@ -31,32 +31,32 @@ class CompanyRecruiter extends Pivot
     }
 
     //✅ Ispravljeni mutator koji sada NE MENJA "Rejected"
-    public function getStatusAttribute($value)
-    {
-        // ✅ Ako status u bazi postoji, vrati ga direktno bez promene
-        if (in_array($value, ['Rejected', 'Pending', 'Past'])) {
-            return $value;
-        }
+    // public function getStatusAttribute($value)
+    // {
+        
+    //     if (in_array($value, ['Rejected', 'Pending', 'Past'])) {
+    //         return $value;
+    //     }
     
-        // ✅ Ako je status 'Active', proveri `active_from`
-        if ($value === 'Active') {
-            // Ako `active_from` postoji i prošao je, status ostaje `Active`
-            if (!is_null($this->active_from) && $this->active_from <= now()) {
-                return 'Active';
-            }
+       
+    //     if ($value === 'Active') {
+    //         // Ako `active_from` postoji i prošao je, status ostaje `Active`
+    //         if (!is_null($this->active_from) && $this->active_from <= now()) {
+    //             return 'Active';
+    //         }
     
-            // Ako `active_from` još nije prošao, status je i dalje `Pending`
-            return 'Pending';
-        }
+          
+    //         return 'Pending';
+    //     }
     
-        // ✅ Ako `until_date` postoji i prošao je, status je `Past`
-        if (!is_null($this->until_date) && $this->until_date < now()) {
-            return 'Past';
-        }
+    //     // ✅ Ako `until_date` postoji i prošao je, status je `Past`
+    //     if (!is_null($this->until_date) && $this->until_date < now()) {
+    //         return 'Past';
+    //     }
     
-        // ✅ Ako ništa drugo ne odgovara, vrati 'Pending'
-        return 'Pending';
-    }
+    //     // ✅ Ako ništa drugo ne odgovara, vrati 'Pending'
+    //     return 'Pending';
+    // }
 
     public function company()
     {

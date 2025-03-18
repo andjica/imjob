@@ -3019,122 +3019,12 @@ function withinMaxClamp(min, value, max) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _bootstrap__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
-/* harmony import */ var _bootstrap__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_bootstrap__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var laravel_echo__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! laravel-echo */ "./node_modules/laravel-echo/dist/echo.js");
+/* harmony import */ var _notifications__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./notifications */ "./resources/js/notifications.js");
 
 
-window.Pusher = __webpack_require__(/*! pusher-js */ "./node_modules/pusher-js/dist/web/pusher.js");
-window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_1__["default"]({
-  broadcaster: 'pusher',
-  key: "ca6cda6818d754e9ff71",
-  cluster: "eu",
-  forceTLS: true
-});
+// ✅ Pokrećemo notifikacije kada se stranica učita
 window.onload = function () {
-  var _document$querySelect, _document$querySelect2;
-  var companyId = (_document$querySelect = document.querySelector('meta[name="company-id"]')) === null || _document$querySelect === void 0 ? void 0 : _document$querySelect.content;
-  var recruiterId = (_document$querySelect2 = document.querySelector('meta[name="recruiter-id"]')) === null || _document$querySelect2 === void 0 ? void 0 : _document$querySelect2.content;
-  if (!window.subscribedChannels) {
-    window.subscribedChannels = new Set();
-  }
-
-  // Function for listening to channels
-  function subscribeToChannel(entityType, entityId) {
-    if (!entityId) return;
-    var channelName = "".concat(entityType, ".").concat(entityId);
-
-    // If channel already exists, reset it
-    if (window.subscribedChannels.has(channelName)) {
-      console.warn("Reset channel:", channelName);
-      window.Echo.leave(channelName);
-    } else {
-      window.subscribedChannels.add(channelName);
-    }
-    var channel = window.Echo.channel(channelName);
-
-    // Reset event before adding new listener
-    channel.stopListening('.new-follow').listen('.new-follow', function (event) {
-      console.log("New notification arrived:", event);
-      var notificationIcon = document.getElementById("notification-icon");
-      var notificationBadge = document.getElementById("notification-badge");
-      if (!notificationIcon || !notificationBadge) return;
-      var notificationCount = 0;
-
-      // ✅ Save status for notification in `localStorage` separately for recruiter and company
-      if (entityType === "company") {
-        localStorage.setItem("companyHasNewNotification", "true");
-        notificationCount = parseInt(localStorage.getItem("companyNotificationCount") || "0") + 1;
-        localStorage.setItem("companyNotificationCount", notificationCount);
-      } else if (entityType === "recruiter") {
-        localStorage.setItem("recruiterHasNewNotification", "true");
-        notificationCount = parseInt(localStorage.getItem("recruiterNotificationCount") || "0") + 1;
-        localStorage.setItem("recruiterNotificationCount", notificationCount);
-      }
-      notificationIcon.classList.add("text-danger");
-      notificationBadge.innerText = notificationCount;
-      notificationBadge.style.display = "inline";
-    });
-    console.log("Subscribed to: ".concat(channelName));
-  }
-
-  // ✅ Check stored notifications
-  function checkStoredNotifications() {
-    var notificationIcon = document.getElementById("notification-icon");
-    var notificationBadge = document.getElementById("notification-badge");
-    var isCompanyDashboard = window.location.pathname.includes("company/dashboard");
-    var isRecruiterDashboard = window.location.pathname.includes("recruiter");
-    var isFreelancerDashboard = window.location.pathname.includes("company/freelancer"); // ✅ Freelancer koristi Recruiter notifikacije
-
-    var notificationCount = 0; // Ensure notificationCount exists
-
-    if (isCompanyDashboard && localStorage.getItem("companyHasNewNotification") === "true") {
-      notificationIcon.classList.add("text-danger");
-      notificationCount = localStorage.getItem("companyNotificationCount") || "0";
-      notificationBadge.innerText = notificationCount;
-      notificationBadge.style.display = "inline";
-    }
-    if ((isRecruiterDashboard || isFreelancerDashboard) && localStorage.getItem("recruiterHasNewNotification") === "true") {
-      notificationIcon.classList.add("text-danger");
-      notificationCount = localStorage.getItem("recruiterNotificationCount") || "0";
-      notificationBadge.innerText = notificationCount;
-      notificationBadge.style.display = "inline";
-    }
-  }
-
-  // ✅ Clear notifications when user visits notification route
-  function clearNotificationsOnRoute() {
-    var isCompanyNotificationPage = window.location.pathname === "/company/dashboard/notifications";
-    var isRecruiterNotificationPage = window.location.pathname === "/recruiter/notifications";
-    var isFreelancerNotificationPage = window.location.pathname === "/company/freelancer/notifications"; // ✅ Freelancer koristi istu logiku kao recruiter
-
-    if (isCompanyNotificationPage) {
-      localStorage.removeItem("companyHasNewNotification");
-      localStorage.removeItem("companyNotificationCount");
-      var notificationIcon = document.getElementById("notification-icon");
-      var notificationBadge = document.getElementById("notification-badge");
-      notificationIcon.classList.remove("text-danger");
-      notificationBadge.style.display = "none";
-    }
-    if (isRecruiterNotificationPage || isFreelancerNotificationPage) {
-      localStorage.removeItem("recruiterHasNewNotification");
-      localStorage.removeItem("recruiterNotificationCount");
-      var _notificationIcon = document.getElementById("notification-icon");
-      var _notificationBadge = document.getElementById("notification-badge");
-      _notificationIcon.classList.remove("text-danger");
-      _notificationBadge.style.display = "none";
-    }
-  }
-
-  // ✅ Listen for company and recruiter (freelancer == recruiter)
-  subscribeToChannel('company', companyId);
-  subscribeToChannel('recruiter', recruiterId);
-
-  // Check saved notifications from localStorage
-  checkStoredNotifications();
-
-  // Reset if user goes to notifications route
-  clearNotificationsOnRoute();
+  (0,_notifications__WEBPACK_IMPORTED_MODULE_0__["default"])();
 };
 
 /***/ }),
@@ -3164,6 +3054,136 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
  * for events that are broadcast by Laravel. Echo and event broadcasting
  * allows your team to easily build robust real-time web applications.
  */
+
+/***/ }),
+
+/***/ "./resources/js/notifications.js":
+/*!***************************************!*\
+  !*** ./resources/js/notifications.js ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _bootstrap__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
+/* harmony import */ var _bootstrap__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_bootstrap__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var laravel_echo__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! laravel-echo */ "./node_modules/laravel-echo/dist/echo.js");
+
+
+window.Pusher = __webpack_require__(/*! pusher-js */ "./node_modules/pusher-js/dist/web/pusher.js");
+window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_1__["default"]({
+  broadcaster: 'pusher',
+  key: "ca6cda6818d754e9ff71",
+  cluster: "eu",
+  forceTLS: true
+});
+function setupNotifications() {
+  var _document$querySelect, _document$querySelect2;
+  var companyId = (_document$querySelect = document.querySelector('meta[name="company-id"]')) === null || _document$querySelect === void 0 ? void 0 : _document$querySelect.content;
+  var recruiterId = (_document$querySelect2 = document.querySelector('meta[name="recruiter-id"]')) === null || _document$querySelect2 === void 0 ? void 0 : _document$querySelect2.content;
+  if (!window.subscribedChannels) {
+    window.subscribedChannels = new Set();
+  }
+  function subscribeToChannel(entityType, entityId) {
+    if (!entityId) return;
+    var channelName = "".concat(entityType, ".").concat(entityId);
+    if (window.subscribedChannels.has(channelName)) {
+      console.warn("Reset channel:", channelName);
+      window.Echo.leave(channelName);
+    } else {
+      window.subscribedChannels.add(channelName);
+    }
+    var channel = window.Echo.channel(channelName);
+    channel.stopListening('.new-follow').listen('.new-follow', function (event) {
+      console.log("New notification arrived:", event);
+      var notificationIcon = document.getElementById("notification-icon");
+      var notificationBadge = document.getElementById("notification-badge");
+      var notificationMenuTitles = document.querySelectorAll(".notification-menu-title");
+      if (!notificationIcon || !notificationBadge) return;
+      var notificationCount = 0;
+      if (entityType === "company") {
+        localStorage.setItem("companyHasNewNotification", "true");
+        notificationCount = parseInt(localStorage.getItem("companyNotificationCount") || "0") + 1;
+        localStorage.setItem("companyNotificationCount", notificationCount);
+      } else if (entityType === "recruiter") {
+        localStorage.setItem("recruiterHasNewNotification", "true");
+        notificationCount = parseInt(localStorage.getItem("recruiterNotificationCount") || "0") + 1;
+        localStorage.setItem("recruiterNotificationCount", notificationCount);
+      }
+      notificationIcon.classList.add("text-danger");
+      notificationBadge.innerText = notificationCount;
+      notificationBadge.style.display = "inline";
+      notificationMenuTitles.forEach(function (menu) {
+        return menu.classList.add("text-danger");
+      });
+    });
+    console.log("Subscribed to: ".concat(channelName));
+  }
+  function checkStoredNotifications() {
+    var notificationIcon = document.getElementById("notification-icon");
+    var notificationBadge = document.getElementById("notification-badge");
+    var notificationMenuTitles = document.querySelectorAll(".notification-menu-title");
+    var isCompanyDashboard = window.location.pathname.includes("company/dashboard");
+    var isRecruiterDashboard = window.location.pathname.includes("recruiter");
+    var isFreelancerDashboard = window.location.pathname.includes("company/freelancer");
+    var notificationCount = 0;
+    if (isCompanyDashboard && localStorage.getItem("companyHasNewNotification") === "true") {
+      notificationIcon.classList.add("text-danger");
+      notificationMenuTitles.forEach(function (menu) {
+        return menu.classList.add("text-danger");
+      });
+      notificationCount = localStorage.getItem("companyNotificationCount") || "0";
+      notificationBadge.innerText = notificationCount;
+      notificationBadge.style.display = "inline";
+    }
+    if ((isRecruiterDashboard || isFreelancerDashboard) && localStorage.getItem("recruiterHasNewNotification") === "true") {
+      notificationIcon.classList.add("text-danger");
+      notificationMenuTitles.forEach(function (menu) {
+        return menu.classList.add("text-danger");
+      });
+      notificationCount = localStorage.getItem("recruiterNotificationCount") || "0";
+      notificationBadge.innerText = notificationCount;
+      notificationBadge.style.display = "inline";
+    }
+  }
+  function clearNotificationsOnRoute() {
+    var isCompanyNotificationPage = window.location.pathname === "/company/dashboard/notifications";
+    var isRecruiterNotificationPage = window.location.pathname === "/recruiter/notifications";
+    var isFreelancerNotificationPage = window.location.pathname === "/company/freelancer/notifications";
+    if (isCompanyNotificationPage || isRecruiterNotificationPage || isFreelancerNotificationPage) {
+      localStorage.removeItem("companyHasNewNotification");
+      localStorage.removeItem("companyNotificationCount");
+      localStorage.removeItem("recruiterHasNewNotification");
+      localStorage.removeItem("recruiterNotificationCount");
+      var notificationIcon = document.getElementById("notification-icon");
+      var notificationBadge = document.getElementById("notification-badge");
+      var notificationMenuTitles = document.querySelectorAll(".notification-menu-title");
+      notificationIcon.classList.remove("text-danger");
+      notificationBadge.style.display = "none";
+      notificationMenuTitles.forEach(function (menu) {
+        return menu.classList.remove("text-danger");
+      });
+    }
+  }
+  function setupNotificationClickReset() {
+    var notificationLinks = document.querySelectorAll('.menu-link[href*="notifications"]');
+    notificationLinks.forEach(function (link) {
+      link.addEventListener('click', function () {
+        console.log("🔄 Resetting notifications on menu click...");
+        clearNotificationsOnRoute();
+      });
+    });
+  }
+  subscribeToChannel('company', companyId);
+  subscribeToChannel('recruiter', recruiterId);
+  checkStoredNotifications();
+  clearNotificationsOnRoute();
+  setupNotificationClickReset();
+}
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (setupNotifications);
 
 /***/ }),
 
