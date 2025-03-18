@@ -74,7 +74,8 @@
                                             <h5 class="card-title">{{ $job->title }}</h5>
                                             <p>This job is added to {{ $job->recruiter->user->first_name }}
                                                 {{ $job->recruiter->user->last_name }} recruiter</p>
-                                            <p class="card-text">Location: {{ $job->city->name }}, {{ $job->country->name }}
+                                            <p class="card-text">Location: {{ $job->city->name }}, {{ $job->country->name }}<br>
+                                            This job belons to <a href="{{asset('/recruiter/company/'.$job->company_id.'/details')}}">{{$job->company->name}}</a>
                                             </p><br>
 
                                         </div>
@@ -90,6 +91,14 @@
                                                 <i class="fas fa-trash-alt  delete-icon" data-bs-toggle="modal"
                                                     data-bs-target="#deleteJobModal{{ $job->id }}"></i>
                                             </a>
+                                            @if($job->candidates->count() > 0)
+                                                <i class="fas fa-check-circle text-success fa-2x" 
+                                                    data-bs-toggle="tooltip" 
+                                                    data-bs-placement="top" 
+                                                    title="This job has received applications from candidates and is currently in the recruitment process">
+                                                    </i>
+                                                        
+                                        @endif
                                         </div>
                                     </div>
 

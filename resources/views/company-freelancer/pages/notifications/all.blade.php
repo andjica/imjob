@@ -89,7 +89,7 @@
                                                     <input type="hidden" name="company_id" value="{{$not->company->id}}">
                                                     <input type="hidden" name="recruiter_id" value="{{auth()->user()->recruiter->id}}">
                                                     <input type="hidden" name="status" value="Active">
-                                                    <input type="submit" class="btn btn-success" value="Accept">
+                                                    <input type="submit" class="btn btn-success" value="Active">
                                                 </form>
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                                             </div>

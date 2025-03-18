@@ -3032,34 +3032,109 @@ window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_1__["default"]({
   forceTLS: true
 });
 window.onload = function () {
-  var _document$querySelect, _window$subscribedCha;
+  var _document$querySelect, _document$querySelect2;
   var companyId = (_document$querySelect = document.querySelector('meta[name="company-id"]')) === null || _document$querySelect === void 0 ? void 0 : _document$querySelect.content;
-  if (!companyId) return;
-  var channelName = "company.".concat(companyId);
-  if ((_window$subscribedCha = window.subscribedChannels) !== null && _window$subscribedCha !== void 0 && _window$subscribedCha.includes(channelName)) {
-    console.warn("⚠️ Već smo pretplaćeni na kanal:", channelName);
-    return;
+  var recruiterId = (_document$querySelect2 = document.querySelector('meta[name="recruiter-id"]')) === null || _document$querySelect2 === void 0 ? void 0 : _document$querySelect2.content;
+  if (!window.subscribedChannels) {
+    window.subscribedChannels = new Set();
   }
-  window.subscribedChannels = window.subscribedChannels || [];
-  window.subscribedChannels.push(channelName);
-  var notificationCount = 0;
-  var channel = window.Echo.channel(channelName);
-  channel.listen('.new-follow', function (event) {
-    console.log("New notificaion is from:", event);
+
+  // Function for listening to channels
+  function subscribeToChannel(entityType, entityId) {
+    if (!entityId) return;
+    var channelName = "".concat(entityType, ".").concat(entityId);
+
+    // If channel already exists, reset it
+    if (window.subscribedChannels.has(channelName)) {
+      console.warn("Reset channel:", channelName);
+      window.Echo.leave(channelName);
+    } else {
+      window.subscribedChannels.add(channelName);
+    }
+    var channel = window.Echo.channel(channelName);
+
+    // Reset event before adding new listener
+    channel.stopListening('.new-follow').listen('.new-follow', function (event) {
+      console.log("New notification arrived:", event);
+      var notificationIcon = document.getElementById("notification-icon");
+      var notificationBadge = document.getElementById("notification-badge");
+      if (!notificationIcon || !notificationBadge) return;
+      var notificationCount = 0;
+
+      // ✅ Save status for notification in `localStorage` separately for recruiter and company
+      if (entityType === "company") {
+        localStorage.setItem("companyHasNewNotification", "true");
+        notificationCount = parseInt(localStorage.getItem("companyNotificationCount") || "0") + 1;
+        localStorage.setItem("companyNotificationCount", notificationCount);
+      } else if (entityType === "recruiter") {
+        localStorage.setItem("recruiterHasNewNotification", "true");
+        notificationCount = parseInt(localStorage.getItem("recruiterNotificationCount") || "0") + 1;
+        localStorage.setItem("recruiterNotificationCount", notificationCount);
+      }
+      notificationIcon.classList.add("text-danger");
+      notificationBadge.innerText = notificationCount;
+      notificationBadge.style.display = "inline";
+    });
+    console.log("Subscribed to: ".concat(channelName));
+  }
+
+  // ✅ Check stored notifications
+  function checkStoredNotifications() {
     var notificationIcon = document.getElementById("notification-icon");
     var notificationBadge = document.getElementById("notification-badge");
-    if (!notificationIcon || !notificationBadge) return;
-    notificationIcon.classList.add("text-danger");
-    notificationCount = parseInt(notificationBadge.innerText) || 0;
-    notificationBadge.innerText = notificationCount + 1;
-    notificationBadge.style.display = "inline";
-  });
-  channel.listen("pusher:subscription_succeeded", function () {
-    console.log("\u2705 Successfully subscribed to ".concat(channelName));
-  });
-  channel.listen("pusher:subscription_error", function (err) {
-    console.error("\u274C Subscription error on ".concat(channelName, ":"), err);
-  });
+    var isCompanyDashboard = window.location.pathname.includes("company/dashboard");
+    var isRecruiterDashboard = window.location.pathname.includes("recruiter");
+    var isFreelancerDashboard = window.location.pathname.includes("company/freelancer"); // ✅ Freelancer koristi Recruiter notifikacije
+
+    var notificationCount = 0; // Ensure notificationCount exists
+
+    if (isCompanyDashboard && localStorage.getItem("companyHasNewNotification") === "true") {
+      notificationIcon.classList.add("text-danger");
+      notificationCount = localStorage.getItem("companyNotificationCount") || "0";
+      notificationBadge.innerText = notificationCount;
+      notificationBadge.style.display = "inline";
+    }
+    if ((isRecruiterDashboard || isFreelancerDashboard) && localStorage.getItem("recruiterHasNewNotification") === "true") {
+      notificationIcon.classList.add("text-danger");
+      notificationCount = localStorage.getItem("recruiterNotificationCount") || "0";
+      notificationBadge.innerText = notificationCount;
+      notificationBadge.style.display = "inline";
+    }
+  }
+
+  // ✅ Clear notifications when user visits notification route
+  function clearNotificationsOnRoute() {
+    var isCompanyNotificationPage = window.location.pathname === "/company/dashboard/notifications";
+    var isRecruiterNotificationPage = window.location.pathname === "/recruiter/notifications";
+    var isFreelancerNotificationPage = window.location.pathname === "/company/freelancer/notifications"; // ✅ Freelancer koristi istu logiku kao recruiter
+
+    if (isCompanyNotificationPage) {
+      localStorage.removeItem("companyHasNewNotification");
+      localStorage.removeItem("companyNotificationCount");
+      var notificationIcon = document.getElementById("notification-icon");
+      var notificationBadge = document.getElementById("notification-badge");
+      notificationIcon.classList.remove("text-danger");
+      notificationBadge.style.display = "none";
+    }
+    if (isRecruiterNotificationPage || isFreelancerNotificationPage) {
+      localStorage.removeItem("recruiterHasNewNotification");
+      localStorage.removeItem("recruiterNotificationCount");
+      var _notificationIcon = document.getElementById("notification-icon");
+      var _notificationBadge = document.getElementById("notification-badge");
+      _notificationIcon.classList.remove("text-danger");
+      _notificationBadge.style.display = "none";
+    }
+  }
+
+  // ✅ Listen for company and recruiter (freelancer == recruiter)
+  subscribeToChannel('company', companyId);
+  subscribeToChannel('recruiter', recruiterId);
+
+  // Check saved notifications from localStorage
+  checkStoredNotifications();
+
+  // Reset if user goes to notifications route
+  clearNotificationsOnRoute();
 };
 
 /***/ }),

@@ -5,7 +5,7 @@
                 <div class="tab-content" id="myTabContent">
                 <!-- Active Jobs Content -->
                 <div class="tab-pane fade show active" id="active-job" role="tabpanel" aria-labelledby="active-jobs-tab">
-                    <h5 class="text-white font-weight-bold">{{$candidate->job->job_world_type}} - {{$candidate->job->title}}
+                    <h5 class="text-white font-weight-bold">{{ ucfirst($candidate->job->job_world_type) }} - {{$candidate->job->title}}
                     </h5>
                 </div>
             </div>
@@ -138,6 +138,7 @@
                         </tbody>
                     </table>
                 </div>
+              
                 @if($candidate->recruitmentProcess->current_phase == "offer_stage" 
                     && $candidate->recruitmentProcess->status == null 
                     && $candidate->recruitmentProcess->subphases->where('phase', 'offer_stage')->where('completed', true)->count() > 0)
@@ -189,7 +190,7 @@
             </div>
             <div class="modal-body text-center">
                 <h4 class="mb-4">Are you hiring or refusing this candidate for the job?</h4><br><br>
-                <form action="{{asset('/company/freelancer/finish/recruitment-process')}}" method="POST">
+                <form action="{{asset('/recruiter/finish/recruitment-process')}}" method="POST">
                     @csrf
                     <input type="hidden" name="candidateId" value="{{$candidate->id}}">
                     <input type="hidden" name="recruitment_process_id" value="{{$recruitmentProcess->id}}">

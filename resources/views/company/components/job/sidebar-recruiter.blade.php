@@ -20,7 +20,8 @@
                         </a>
                         <span class="text-muted d-block fw-semibold">
                             {{ optional($recruiter->city)->name }}, {{ optional($recruiter->country)->name }}
-                        </span>  
+                        </span>  <br>
+                        <a href="mailto:{{$recruiter->user->email}}">Email: {{$recruiter->user->email}}</a>
                     </div>
 
                     <!-- Current Employment -->
@@ -62,7 +63,7 @@
                 <li class="nav-item">
                     <a class="nav-link text-muted text-active-primary ps-4 border-0 active" href="{{asset('/company/dashboard/active/jobs/by/recruiter/'.$recruiter->id)}}">
                         <i class="ki-duotone ki-row-horizontal fs-3 text-muted me-3"></i>                            
-                        Active Jobs by {{ $recruiter->user->first_name }}
+                        Active Jobs by {{ $recruiter->user->first_name }}<br>
                     </a>
                 </li>
                 </ul>

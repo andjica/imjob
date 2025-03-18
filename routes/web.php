@@ -30,6 +30,7 @@ use App\Http\Controllers\{
 use App\Http\Controllers\CompanyFreelancer\FrontController;
 use App\Http\Controllers\Contributor\PostController;
 use App\Http\Controllers\Front\LandingController;
+use App\Models\Recruiter;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -76,6 +77,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/company/update', [CompanyController::class, 'update'])->name('company-update');
     Route::post('/job/store', [JobController::class, 'store'])->name('store-job');
     Route::put('/job/{id}/update', [JobController::class, 'update'])->name('update-job');
+
 });
 
 // Admin Routes
@@ -129,6 +131,9 @@ Route::middleware(['auth', 'company', 'verified'])->prefix('company/dashboard')-
     Route::post('/status-change/to-delete', [FollowCompanyController::class, 'delete'])->name('status-change-to-delete');
     //email
     Route::post('/email/emoloyee-invitation', [EmailController::class, 'sendToEmployee'])->name('email-to-employeee');
+
+
+    Route::get('/notifications', [CompanyFrontController::class, 'getNotifications'])->name('notifications');
 });
 
 // Company Freelancer Routes
@@ -231,8 +236,19 @@ Route::middleware(['auth', 'recruiter', 'verified'])->prefix('recruiter')->name(
         Route::get('/job/create', [RecruiterFrontController::class, 'createJob'])->name('create-job');
         Route::get('/active/jobs', [RecruiterFrontController::class, 'getActiveJobs'])->name('active-jobs');
         Route::get('/inactive/jobs', [RecruiterFrontController::class, 'getInactiveJobs'])->name('inactive-jobs');
+        
         //recruitment process
-        Route::get('/{job}/recruitment-process', [CompanyFrontController::class, 'recruitmentProcess'])->name('recruitment-process');
+        Route::get('/{job}/recruitment-process', [RecruiterFrontController::class, 'recruitmentProcess'])->name('recruitment-process');
+        Route::get('/job/candidate/{candidate}/recruitment-process', [RecruiterFrontController::class, 'candidateRecruitmentProcess'])->name('candidat-recruitment-process');
+        Route::put('/job/candidate/{candidate}/change-status', [RecruiterFrontController::class, 'changeCandidateStatus'])->name('candidat-recruitment-process');
+        Route::post('/recruitment-process/{process}/advance', [RecruiterFrontController::class, 'advanceProcess'])->name('advance-process');
+        Route::post('/job/candidate/{candidate}/plan-meeting', [RecruiterFrontController::class, 'createMeeting'])->name('create-meeting');
+        Route::post('/recruitment-subphase/{subphase}/complete', [RecruiterFrontController::class, 'completeSubphase'])->name('complete-subphase');
+        Route::post('/recruitment-subphase/{subphase}/delete', [RecruiterFrontController::class, 'deleteSubphase'])->name('delete-subphase');
+        Route::post('/finish/recruitment-process', [RecruitmentController::class, 'finishRecruitmentProcess'])->name('finish-recruitment-process');
+        
+        //download pdf
+        Route::get('/recruitment/download-pdf/{recruitment_process_id}', [RecruitmentController::class, 'downloadPDF'])->name('recruitment-download.pdf');
 
         Route::get('/edit', [RecruiterFrontController::class, 'editRecruiter'])->name('edit');
         Route::post('/update', [RecruiterFrontController::class, 'update'])->name('update');
@@ -250,6 +266,10 @@ Route::middleware(['auth', 'recruiter', 'verified'])->prefix('recruiter')->name(
         //view
         Route::get('/company/{company}/details', [RecruiterFrontController::class, 'detailsCompany'])->name('company-details');
         Route::get('/contributor/{contributor}/details', [RecruiterFrontController::class, 'detailsContributor'])->name('contributor-details');
+    
+    
+        //notifications
+        Route::get('/notifications', [RecruiterFrontController::class, 'notifications'])->name('notifications');
     });
 });
 

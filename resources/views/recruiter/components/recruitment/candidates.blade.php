@@ -40,8 +40,8 @@
             <thead>
             <tr>
                 <th>Candidate</th>
-
                 <th>From</th>
+                <th>Years of experience</th>
                 <th>CV</th>
                 <th>Status</th>
                 <th style="width: 20%">Actions</th>
@@ -67,7 +67,11 @@
                     </td>
                     <td>
                         <!-- Full Name -->
-                        <span class="font-weight-bold text-dark">{{ $candidate->user->getFirstName()  }}</span>
+                        <span class="font-weight-bold text-dark">{{ $candidate->country->name }}, {{$candidate->city->name}}</span>
+                    </td>
+                    <td>
+                        <!-- Full Name -->
+                        <span class="font-weight-bold text-dark">{{ $candidate->years_of_experience}}</span>
                     </td>
                     <td>
                         <!-- PDF Link -->
@@ -94,13 +98,32 @@
                     </td>
 
                     <td>
-                    @if ($candidate->status === 'pending' || !$candidate->recruitmentProcess)
-                            This action is under the recruiter's authority and is awaiting their decision.
-                            This candidate will have either Active or Rejected status in the future.
+                    @if ($candidate->status === 'pending')
+                        <div class="d-flex">
+                            <!-- Accept Button -->
+                            <a href="javascript:;" 
+                            class="btn btn-sm btn-light-success btn-icon mx-1 accept-btn" 
+                            data-candidate-id="{{ $candidate->id }}" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#acceptCandidateModal-{{ $candidate->id }}"
+                            title="Accept Candidate">
+                                <i class="fa-solid fa-check"></i>
+                            </a>
+
+                            <!-- Reject Button -->
+                            <a href="javascript:;" 
+                            class="btn btn-sm btn-light-danger btn-icon mx-1 reject-btn" 
+                            data-candidate-id="{{ $candidate->id }}" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#rejectCandidateModal-{{ $candidate->id }}"
+                            title="Reject Candidate">
+                                <i class="fa-solid fa-trash-alt"></i>
+                            </a>
+                        </div>
                         @elseif($candidate->status === 'reject')
-                            This user is rejected by recruiter
+
                         @else
-                        <a href="{{asset('company/dashboard/job/candidate/'.$candidate->id.'/recruitment-process')}}" class="btn btn-sm bg-linear-pink text-white fw-light">Go to recruitment process</a>
+                        <a href="{{asset('recruiter/job/candidate/'.$candidate->id.'/recruitment-process')}}" class="btn btn-sm bg-linear-pink text-white fw-light">Go to recruitment process</a>
                     @endif
                 </td>
               
@@ -114,6 +137,5 @@
         </div>
     </div>
 
-    {{-- @include('company.components.recruitment.accept-reject-modal-popup') --}}
-
-@endif  
+@include('recruiter.components.recruitment.accept-reject-modal-popup')
+@endif

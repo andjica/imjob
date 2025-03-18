@@ -227,7 +227,7 @@ class FrontController extends Controller
 
     public function candidateRecruitmentProcess(Candidate $candidate): Factory|View|Application
     {
-       
+        
         if ($candidate->status !== 'accept' || !$candidate->recruitmentProcess) {
             abort(404);
         }
@@ -261,5 +261,10 @@ class FrontController extends Controller
                     //'contributors',
                 )
             );
+    }
+
+    public function getNotifications()
+    {
+        return view('company.pages.notifications.all');
     }
 }

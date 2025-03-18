@@ -11,31 +11,51 @@ class CompanyRecruiter extends Pivot
 
     protected $fillable = ['recruiter_id', 'company_id', 'from_date', 'until_date', 'status', 'invite_type'];
 
-    public $timestamps = true; // Ensure timestamps are enabled if the pivot table uses them.
+    public $timestamps = true; // ✅ Osigurava da timestamps funkcionišu.
 
-    // Example: Add a scope to query active relationships
+    // ✅ Osiguraj da Laravel koristi tačno ime tabele
+    protected $primaryKey = 'id';
+    public $incrementing = true;
+    protected $keyType = 'int';
+
+    // ✅ Scope za aktivne veze
     public function scopeActive($query)
     {
         return $query->where('status', 'Active');
     }
 
-    // Example: Add a scope to query past relationships
+    // ✅ Scope za prošle veze
     public function scopePast($query)
     {
         return $query->where('status', 'Past');
     }
 
+    //✅ Ispravljeni mutator koji sada NE MENJA "Rejected"
     public function getStatusAttribute($value)
     {
-        if ($value === 'onpending') {
-            return 'onpending';
+        // ✅ Ako status u bazi postoji, vrati ga direktno bez promene
+        if (in_array($value, ['Rejected', 'Pending', 'Past'])) {
+            return $value;
         }
-
-        if ($this->until_date === null || $this->until_date->isFuture()) {
-            return 'active';
+    
+        // ✅ Ako je status 'Active', proveri `active_from`
+        if ($value === 'Active') {
+            // Ako `active_from` postoji i prošao je, status ostaje `Active`
+            if (!is_null($this->active_from) && $this->active_from <= now()) {
+                return 'Active';
+            }
+    
+            // Ako `active_from` još nije prošao, status je i dalje `Pending`
+            return 'Pending';
         }
-
-        return 'past';
+    
+        // ✅ Ako `until_date` postoji i prošao je, status je `Past`
+        if (!is_null($this->until_date) && $this->until_date < now()) {
+            return 'Past';
+        }
+    
+        // ✅ Ako ništa drugo ne odgovara, vrati 'Pending'
+        return 'Pending';
     }
 
     public function company()
@@ -43,48 +63,38 @@ class CompanyRecruiter extends Pivot
         return $this->belongsTo(Company::class, 'company_id');
     }
 
-    // protected static function booted()
-    // {
-    //     static::created(function ($follow) {
-    //         $companyToFollow = Company::find($follow->company_id);
-    //         $follower = Recruiter::find($follow->recruiter_id);
+    // ✅ Proveri da li Laravel vidi tačan status direktno iz baze
+    public static function checkStatusFromDB($id)
+    {
+        return self::withoutGlobalScopes()->where('id', $id)->value('status');
+    }
 
-    //         if ($companyToFollow && $follower) {
-    //             broadcast(new NewFollowNotification($companyToFollow, $follower));
-    //         }
-    //     });
-    // }
-
-    //if company send to recruiter follow request
+    // ✅ Ako kompanija šalje recruiteru zahtev
     public static function getCompaniesFollowRequest()
     {
         $recruiterId = auth()->user()->recruiter->id;
         return self::where('recruiter_id', $recruiterId)
-        ->where('status', 'Pending')
-        ->where('invite_type', 'Company')->get();
+            ->where('status', 'Pending')
+            ->where('invite_type', 'Company')
+            ->get();
     }
 
-    //if recruiter send company follow request
+    // ✅ Ako recruiter šalje zahtev kompaniji
     public static function getRecruiterFollowRequestToCompanies()
     {
         $recruiterId = auth()->user()->recruiter->id;
         return self::where('recruiter_id', $recruiterId)
-        ->where('status', 'Pending')
-        ->where('invite_type', 'Recruiter')->get();
+            ->where('status', 'Pending')
+            ->where('invite_type', 'Recruiter')
+            ->get();
     }
 
-     //all connections recruiter - companies
-     public function getAllConnections()
-     {
-         $recruiterId = auth()->user()->recruiter->id;
-         return self::where('recruiter_id', $recruiterId)
-         ->where('status', 'Active')
-         ->get();
-     
-     }
-
-   
-
-
-   
+    // ✅ Prikazuje sve aktivne veze recruiter - kompanija
+    public function getAllConnections()
+    {
+        $recruiterId = auth()->user()->recruiter->id;
+        return self::where('recruiter_id', $recruiterId)
+            ->where('status', 'Active')
+            ->get();
+    }
 }

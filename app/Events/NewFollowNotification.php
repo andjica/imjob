@@ -13,18 +13,34 @@ class NewFollowNotification implements ShouldBroadcast
 {
     use Dispatchable, SerializesModels;
 
-    public $company;
     public $follower;
+    public $followedEntity;
+    public $channelName;
+    public $recruiter_id;
+    public $company_id;
 
-    public function __construct(Company $company, Recruiter $follower)
+    public function __construct($follower, $followedEntity)
     {
-        $this->company = $company;
         $this->follower = $follower;
+        $this->followedEntity = $followedEntity;
+
+        // ✅ Ako je recruiter follower, prati kompaniju
+        if ($follower instanceof Recruiter) {
+            $this->channelName = 'company.' . $followedEntity->id;
+            $this->recruiter_id = $follower->id;
+            $this->company_id = $followedEntity->id; // Praćena kompanija
+        }
+        // ✅ Ako je kompanija follower, prati recruitera
+        elseif ($follower instanceof Company) {
+            $this->channelName = 'recruiter.' . $followedEntity->id;
+            $this->company_id = $follower->id;
+            $this->recruiter_id = $followedEntity->id; // Praćeni recruiter
+        }
     }
 
     public function broadcastOn()
     {
-        return new Channel('company.' . $this->company->id);
+        return new Channel($this->channelName);
     }
 
     public function broadcastAs()

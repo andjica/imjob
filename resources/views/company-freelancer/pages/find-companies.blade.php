@@ -119,7 +119,7 @@
         <!-- Pagination -->
         <div class="row mt-2">
             <div class="col-12 d-flex justify-content-left">
-                {{ $companies->withQueryString()->links() }}
+            {{ $companies->appends(request()->query())->links('pagination::bootstrap-4') }}
             </div>
         </div>
 

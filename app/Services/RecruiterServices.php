@@ -168,19 +168,19 @@ class RecruiterServices implements RecruiterInterface
          $freelancer->availability = $validatedData['availability'];
          $freelancer->phone_number = $request->phoneNumber;
  
-         
-         $freelancer->title_function = "main in his own company ".auth()->user()->company->name;
-         
- 
+    
+        
          //if recruiter has company is freelancer 
-         $companyId = auth()->user()->company->id; // Assuming the authenticated user belongs to a company
- 
-         if($companyId)
-         {
+         // Assuming the authenticated user belongs to a company
+        $role = auth()->user()->role;
+         if($role->name == "Company")
+         { $companyId = auth()->user()->company->id;
              $company = Company::find($companyId);
              $freelancer->country_id = $company->country_id;
              $freelancer->city_id = $company->city_id;
              $freelancer->is_freelancer = 1;
+             $freelancer->title_function = "main in his own company ".auth()->user()->company->name;
+
              $freelancer->save();
  
               // Check if freelancer already exists in the company pivot table
@@ -204,8 +204,10 @@ class RecruiterServices implements RecruiterInterface
          }
          else
          {
-             $freelancer->save();
-             return redirect('/home')->with('success', 'Recruiter information saved successfully!');
+            $freelancer->title_function = null;
+            $freelancer->is_freelancer = 0;
+            $freelancer->save();
+            return redirect('/home')->with('success', 'Recruiter information saved successfully!');
          }
   
  

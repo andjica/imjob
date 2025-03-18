@@ -2,10 +2,17 @@
 
 namespace App\Http\Controllers\Recruiter;
 
+use App\Models\Job;
 use App\Models\Company;
+use App\Models\Candidate;
 use App\Models\Recruiter;
 use App\Models\Contributor;
+use FontLib\Table\Type\fpgm;
 use Illuminate\Http\Request;
+use App\Actions\CreateMeeting;
+use App\Models\RecruitmentProcess;
+use App\Services\CandidateService;
+use App\Models\RecruitmentSubphase;
 use App\Repositories\JobRepository;
 use Illuminate\Contracts\View\View;
 use App\Http\Controllers\Controller;
@@ -14,9 +21,15 @@ use App\Interfaces\CountryInterface;
 use App\Interfaces\JobTypeInterface;
 use App\Models\ContributorRecruiter;
 use App\Interfaces\CategoryInterface;
+use Illuminate\Http\RedirectResponse;
 use App\Interfaces\RecruiterInterface;
 use Illuminate\Contracts\View\Factory;
 use App\Interfaces\ContributorInterface;
+use App\Http\Requests\StoreMeetingRequest;
+use App\Services\RecruitmentProcessWorkflow;
+use App\Http\Requests\CandidateStatusRequest;
+use App\Models\AvailableRecruitmentSubphases;
+use App\Http\Requests\CompleteSubphaseRequest;
 use Illuminate\Contracts\Foundation\Application;
 
 class FrontController extends Controller
@@ -36,7 +49,9 @@ class FrontController extends Controller
         JobTypeInterface $jobTypesServices,
         CountryInterface $countriesServices,
         CategoryInterface $categoryServices,
-        JobRepository $jobRep
+        JobRepository $jobRep,private CandidateService $candidateService,
+        private RecruitmentProcessWorkflow $recruitmentProcessWorkflow
+        
     ) {
         $this->contributorServices = $contributorServices;
         $this->recruiterServices = $recruiterServices;
@@ -200,4 +215,104 @@ class FrontController extends Controller
 
         return view('recruiter.pages.settings', compact('user'));
     }
+
+    public function recruitmentProcess(Job $job): Factory|View|Application
+    {
+        $candidates = $job->candidates()->with('user')->get();
+        //return dd($candidates);
+        return view('recruiter.pages.recruitment.job-recruitment', compact('job', 'candidates'));   
+    }
+
+    public function candidateRecruitmentProcess(Candidate $candidate): Factory|View|Application
+    {
+       
+        if ($candidate->status !== 'accept' || !$candidate->recruitmentProcess) {
+            abort(404);
+        }
+        
+        $recruitmentProcess = $candidate->recruitmentProcess()->with('subphases')->first();
+        
+        $availablePhases = AvailableRecruitmentSubphases::where('phase', $candidate->recruitmentProcess->current_phase)->get();
+    
+        $candidateId = $candidate->id;
+        $candidateSubphases = Candidate::with('recruitmentSubPhases')->find($candidateId);
+        //return dd($candidateSubphases);
+        $meetings = $candidateSubphases->recruitmentSubPhases->toArray();
+        $jobId = $candidate->job->id;
+        
+        /** @var User $user */
+        $user = auth()->user();
+        $contributors = $user->recruiter->contributors()
+            ->wherePivot('status', ContributorRecruiter::ACTIVE)
+            ->get();
+         
+        return view(
+            'recruiter.pages.recruitment.candidat-recruitment-process',
+            compact(
+                'candidate',
+                'recruitmentProcess',
+                'availablePhases',
+                'meetings',
+                'contributors',
+                'jobId',
+            )
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function changeCandidateStatus(CandidateStatusRequest $request, Candidate $candidate): RedirectResponse
+    {
+        $changeStatus = $this->candidateService->handleCandidate($candidate, $request->get('status'));
+       
+       
+        return redirect()->back()->with('success', 'You change status to '.$changeStatus->status.'for Candidate '. $candidate->user->first_name.' '.$candidate->user->first_name . ' successfully');
+
+        // return response()->json([
+        //     'success' => true,
+        //     'message' => 'Status updated successfully.',
+        // ]);
+    }
+
+    public function advanceProcess(RecruitmentProcess $process): RedirectResponse
+    {
+        $process = $this->recruitmentProcessWorkflow->advance($process);
+
+        if(!$process) {
+            return redirect()->back()->with('error', 'You must finish one or more subphases and then to go on the next level of recruitment process');
+        }
+        return redirect()->back()->with('success', 'You advanced process successfully.');
+    }
+
+  /**
+     * @throws Exception
+     */
+    public function createMeeting(StoreMeetingRequest $request, Candidate $candidate, CreateMeeting $createMeeting): RedirectResponse
+    {
+        $createMeeting->execute($candidate, $request->validated());
+
+        return redirect()->back()->with('success', 'Meeting created succssfully');
+        // return response()->json([
+        //     'success' => true,
+        //     'message' => 'Meeting created successfully.',
+        // ]);
+    }
+
+    public function completeSubphase(CompleteSubphaseRequest $request, RecruitmentSubphase $subphase): RedirectResponse
+    {
+        $subphase->completed = true;
+        $subphase->feedback = $request->get('feedback');
+        $subphase->save();
+
+        return redirect()->back()->with('success', 'You accept deleted phase successfully.');
+    }
+
+    public function deleteSubphase(RecruitmentSubphase $subphase): RedirectResponse
+    {
+        $subphase->delete();
+
+        return redirect()->back()->with('success', 'You accept deleted phase successfully.');
+    }
+
 }

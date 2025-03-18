@@ -40,6 +40,16 @@ class FollowRecruiter
 
     private function createCompanyRecruiter(Recruiter $recruiterToFollow, Company $follower): CompanyRecruiter
     {
+        $existingRecord = CompanyRecruiter::where('recruiter_id', $recruiterToFollow->id)
+        ->where('company_id', $follower->id)
+        ->first();
+        
+        if ($existingRecord && $existingRecord->status == "Rejected") {
+            $existingRecord->status = 'Pending';
+            $existingRecord->save();
+
+            return $existingRecord;
+        }
         return CompanyRecruiter::create([
             'recruiter_id' => $recruiterToFollow->id,
             'company_id'   => $follower->id,

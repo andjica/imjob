@@ -10,7 +10,9 @@ use App\Actions\FollowCompany;
 use App\Actions\FollowRecruiter;
 use Illuminate\Http\JsonResponse;
 use App\Actions\FollowContributor;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Events\NewFollowNotification;
 use App\Http\Requests\ChangeStatusRequest;
 use App\Http\Requests\FollowCompanyRequest;
 use App\Interfaces\CompanyRecruiterInterface;
@@ -77,16 +79,31 @@ class FollowController extends Controller
     {
         /** @var User $user */
         $user = auth()->user();
-
+    
         if (!$user->company) {
             return response()->json([
                 'success' => false,
                 'message' => 'You must be a company to follow a recruiter.',
             ], 403);
         }
-
+    
         $recruiterId = $request->get('recruiter_id');
+    
+        // Pronađi recruitera u bazi
+        $recruiter = Recruiter::find($recruiterId);
+        if (!$recruiter) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Recruiter not found.',
+            ], 404);
+        }
+    
+        // Kompanija prati recruitera
         $companyRecruiter = $followRecruiter->execute($recruiterId, $user->company);
+    
+        // ✅ Popravljeno: šaljemo cele modele, ne samo ID-eve!
+        event(new NewFollowNotification($user->company, $recruiter));
+        Log::info("✅ Event NewFollowNotification successfully emitted for Company ({$user->company->id}) → Recruiter ({$recruiter->id})");
 
         return response()->json([
             'success' => true,
@@ -94,6 +111,7 @@ class FollowController extends Controller
             'data' => $companyRecruiter
         ]);
     }
+    
 
     public function changeStatus(ChangeStatusRequest $request)
     {

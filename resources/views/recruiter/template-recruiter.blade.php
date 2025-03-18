@@ -15,6 +15,7 @@
     <link href="{{ asset('templates/metronic') }}/plugins/global/plugins.bundle.css" rel="stylesheet">
     <link href="{{ asset('templates/metronic') }}/css/style.bundle.css" rel="stylesheet">
     <link href="{{ asset('templates/metronic') }}/css/custom.style.css" rel="stylesheet">
+    <meta name="recruiter-id" content="{{ auth()->user()->recruiter->id ?? '' }}">
 
     @yield('css')
 
@@ -73,6 +74,8 @@
 <script src="{{ asset('templates/metronic') }}/js/custom/modals/create-app.js"></script>
 <script src="{{ asset('templates/metronic') }}/js/custom/modals/upgrade-plan.js"></script>
 <script src="{{ asset('templates/metronic') }}/js/custom/modals/users-search.js"></script>
+<script src="{{ mix('js/app.js') }}" defer></script>
+
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         let asideMenu = document.querySelector("#kt_aside_menu");

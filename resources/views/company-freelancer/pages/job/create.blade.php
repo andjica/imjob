@@ -33,31 +33,7 @@
         <div class="col-lg-3">
             @include('company-freelancer.components.sidebar-job')
             </div>
-            @if ($recruiterWithCompanies->count() == 0)
-            <div class="col-lg-9">
-                <div class="card card-flush shadow-sm mb-5">
-                    <div class="card-body text-center">
-                        <div class="alert alert-warning d-flex justify-content-center p-5 mb-0">
-                            <span class="svg-icon svg-icon-2hx svg-icon-warning me-4">
-                                <!-- Metronic SVG Icon -->
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                                    viewBox="0 0 24 24">
-                                    <path opacity="0.3"
-                                        d="M12 22C17.523 22 22 17.523 22 12S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10Z"
-                                        fill="currentColor" />
-                                    <path d="M10.75 15.5h2.5v2.5h-2.5v-2.5Zm0-10h2.5v7.5h-2.5V5.5Z"
-                                        fill="currentColor" />
-                                </svg>
-                            </span>
-                            <div class="d-flex flex-column">
-                                <h4 class="mb-1">No connections found</h4>
-                                <p class="mb-0">Please follow company  on <a href="{{asset('company/freelancer/find/companies')}}">Find companies</a> page.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            @else
+         
             <div class="col-lg-9">
                 <div class="card mb-5 mb-xl-10">
                     <!--begin::Card header-->
@@ -365,7 +341,7 @@
                     <!--end::Card body-->
                 </div>
             </div>
-            @endif
+          
 
         @include('company-freelancer.components.job.create-modal-popup')
     </div>

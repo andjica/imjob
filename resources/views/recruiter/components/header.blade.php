@@ -73,10 +73,12 @@
             </div>
 
         </div>
+    
         <div class="nav-item mt-5">
-            <a href="/notifications" class="nav-link">
+            <a href="{{asset('/recruiter/notifications')}}" class="nav-link">
                 <i id="notification-icon" class="fas fa-bell"></i>
                 <span id="notification-badge" class="badge bg-danger" style="display: none;">0</span>
+                    
             </a>
         </div>
 
