@@ -351,6 +351,14 @@ class FrontController extends Controller
         ));
     }
 
+    public function connections(CompanyRecruiter $notifications, ContributorRecruiter $notificationsContributorRecruiter)
+    {
+        $recruiterCompanyConnections = $notifications->getAllConnections();
+        $recruiterContributorConnections = $notificationsContributorRecruiter->getAllConnections();
+
+        return view('company-freelancer.pages.connections.all', compact('recruiterCompanyConnections','recruiterContributorConnections'));
+    }
+
     
     public function getProfile()
     {

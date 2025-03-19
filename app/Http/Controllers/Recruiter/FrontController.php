@@ -316,17 +316,33 @@ class FrontController extends Controller
         return redirect()->back()->with('success', 'You accept deleted phase successfully.');
     }
 
-    public function notifications(CompanyRecruiter $notifications)
+    public function notifications(CompanyRecruiter $notifications, ContributorRecruiter $notificationsContributorRecruiter)
     {
         $newNotifications = $notifications->getCompaniesFollowRequest();
         $recruiterToCompaniesFollowRequest = $notifications->getRecruiterFollowRequestToCompanies();
         
         $connections = $notifications->getAllConnections();
+
+        $newNotificationsFromContributor = $notificationsContributorRecruiter->getContributorFollowRequest();
+        $recruiterToContributorFollowRequest = $notificationsContributorRecruiter->getRecruiterFollowRequestToContributor();
+        $recruiterContributorConnections = $notificationsContributorRecruiter->getAllConnections();
+
         return view('recruiter.pages.notifications.all', 
             compact('newNotifications', 
             'connections',
-            'recruiterToCompaniesFollowRequest'
+            'recruiterToCompaniesFollowRequest',
+            'newNotificationsFromContributor',
+            'recruiterToContributorFollowRequest',
+            'recruiterContributorConnections'
         ));
+    }
+
+    public function connections(CompanyRecruiter $notifications, ContributorRecruiter $notificationsContributorRecruiter)
+    {
+        $recruiterCompanyConnections = $notifications->getAllConnections();
+        $recruiterContributorConnections = $notificationsContributorRecruiter->getAllConnections();
+
+        return view('recruiter.pages.connection.all', compact('recruiterCompanyConnections','recruiterContributorConnections'));
     }
 
 }

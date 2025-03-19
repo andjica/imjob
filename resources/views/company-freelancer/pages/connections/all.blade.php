@@ -1,8 +1,8 @@
 @php use App\Models\User; @endphp
 @extends('company-freelancer.template-company-freelancer')
-@section('main-title', 'Your notifications')
+@section('main-title', 'Your active connections')
 
-@section('title-dash', 'All Notifications')
+@section('title-dash', 'All connections with companies and recruiter')
 @section('css')
    
 @endsection
@@ -20,11 +20,16 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-5">
-                @include('company-freelancer.components.notifications.company')
-            </div>
-            <div class="col-lg-5">
-            @include('company-freelancer.components.notifications.contributor')
+            <div class="col-lg-12">
+                <div class="row">
+                    <div class="col-lg-6">
+                       @include('company-freelancer.components.connection.company')
+                    </div>
+                    <div class="col-lg-6">
+                        @include('company-freelancer.components.connection.contributor')
+                    </div>
+                </div>
+             
             </div>
         </div>
      </div>

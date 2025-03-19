@@ -191,7 +191,9 @@ Route::middleware(['auth', 'company.freelancer', 'verified'])->prefix('company/f
         //pdf recruitment
         Route::get('/recruitment/download-pdf/{recruitment_process_id}', [RecruitmentController::class, 'downloadPDF'])->name('recruitment-download.pdf');
 
+        //notifications and connections
         Route::get('/notifications', [CompanyFreelancerFrontController::class, 'notifications'])->name('notifications');
+        Route::get('/connections', [CompanyFreelancerFrontController::class, 'connections'])->name('connections');
     });
 });
 
@@ -272,6 +274,8 @@ Route::middleware(['auth', 'recruiter', 'verified'])->prefix('recruiter')->name(
     
         //notifications
         Route::get('/notifications', [RecruiterFrontController::class, 'notifications'])->name('notifications');
+        Route::get('/connections', [RecruiterFrontController::class, 'connections'])->name('connections');
+
     });
 });
 

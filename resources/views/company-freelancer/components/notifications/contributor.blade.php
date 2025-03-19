@@ -3,7 +3,7 @@
         <h4 class="card-title">Your new Notifications by Contributors</h4>
     </div>
     <div class="card-body">
-        <small class="card-title fw-light fst-italic">Contributor follow request to you</small><br>
+       
         @if($newNotificationsFromContributor->count() == 0)
             <div class="alert alert-warning align-items-center p-5 mb-0">
                 <span class="svg-icon svg-icon-2hx svg-icon-warning me-4">
@@ -18,7 +18,7 @@
                 </div>
             </div>
     @else
-    
+    <small class="card-title fw-light fst-italic">Contributor follow request to you</small><br>
         @foreach ($newNotificationsFromContributor as $not)
             <div class="alert alert-warning justify-content-between align-items-center mb-3">
                 <div>
@@ -112,6 +112,7 @@
             </div>
         @endforeach
         @endif
+        @if($recruiterToContributorFollowRequest->count() > 0)
         <hr>
         <small class="card-title fw-light fst-italic">Your follow request</small>
         @foreach ($recruiterToContributorFollowRequest as $follow)
@@ -141,7 +142,9 @@
                 </div>
             </div>
         @endforeach
+        @endif
 
+        @if($recruiterContributorConnections->count() > 0)
         <hr>
         <small class="card-title fw-light fst-italic">Older Notifications</small>
 
@@ -179,7 +182,7 @@
             </div>
 
         @endforeach
-    
+        @endif
 
         </div>    
     </div>

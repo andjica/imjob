@@ -208,7 +208,7 @@
                                         </span>
                                         <!--end::Svg Icon-->
                                     </span>
-                                    <span class="menu-title">Your notifications</span>
+                                    <span class="menu-title">Social</span>
                                     <span class="menu-arrow"></span>
                                 </span>
                                 <div class="menu-sub menu-sub-accordion">
@@ -221,7 +221,14 @@
                                             <span class="menu-title notification-menu-title">All notifications</span> 
                                         </a>
                                     </div>
-                                    
+                                    <div class="menu-item">
+                                        <a class="menu-link {{ Route::currentRouteName() === 'company-freelancer-connections' ? 'active' : '' }}" href="{{asset('/company/freelancer/connections')}}">
+                                                    <span class="menu-bullet">
+                                                <span class="bullet bullet-dot"></span>
+                                            </span>
+                                            <span class="menu-title notification-menu-title">All connections</span> 
+                                        </a>
+                                    </div>
                                 </div>
                               
                               
