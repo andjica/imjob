@@ -17,9 +17,14 @@
                 @include('alerts.success')
                 @include('alerts.errors')
             
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-5">
+                
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Your new Notifications</h4>
+                        <h4 class="card-title">Your new Notifications by Companies</h4>
                     </div>
                     <div class="card-body">
                     <small class="card-title fw-light fst-italic">Companies follow request to you</small><br>
@@ -196,7 +201,11 @@
                         @endforeach
                   
                     </div>
+                    
                 </div>
+            </div>
+            <div class="col-lg-5">
+            @include('company-freelancer.components.notifications.contributor-notifications')
             </div>
         </div>
      </div>

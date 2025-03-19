@@ -103,7 +103,7 @@ class FollowController extends Controller
     
         // ✅ Popravljeno: šaljemo cele modele, ne samo ID-eve!
         event(new NewFollowNotification($user->company, $recruiter));
-        Log::info("✅ Event NewFollowNotification successfully emitted for Company ({$user->company->id}) → Recruiter ({$recruiter->id})");
+        Log::info("Event NewFollowNotification successfully emitted for Company ({$user->company->id}) → Recruiter ({$recruiter->id})");
 
         return response()->json([
             'success' => true,

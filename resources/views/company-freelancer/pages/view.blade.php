@@ -1,5 +1,5 @@
 @extends('company-freelancer.template-company-freelancer')
-
+@section('main-title', 'Profile overview')
 @section('title-dash', 'View')
 
 @section('content')

@@ -330,16 +330,24 @@ class FrontController extends Controller
         return view('company-freelancer.pages.job.inactive-jobs', compact('jobs'));
     }
 
-    public function notifications(CompanyRecruiter $notifications)
+    public function notifications(CompanyRecruiter $notifications, ContributorRecruiter $notificationsContributorRecruiter)
     {
         $newNotifications = $notifications->getCompaniesFollowRequest();
         $recruiterToCompaniesFollowRequest = $notifications->getRecruiterFollowRequestToCompanies();
         
         $connections = $notifications->getAllConnections();
+
+        $newNotificationsFromContributor = $notificationsContributorRecruiter->getContributorFollowRequest();
+        $recruiterToContributorFollowRequest = $notificationsContributorRecruiter->getRecruiterFollowRequestToContributor();
+        $recruiterContributorConnections = $notificationsContributorRecruiter->getAllConnections();
+
         return view('company-freelancer.pages.notifications.all', 
             compact('newNotifications', 
             'connections',
-            'recruiterToCompaniesFollowRequest'
+            'recruiterToCompaniesFollowRequest',
+            'newNotificationsFromContributor',
+            'recruiterToContributorFollowRequest',
+            'recruiterContributorConnections'
         ));
     }
 

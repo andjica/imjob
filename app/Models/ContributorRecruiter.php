@@ -26,4 +26,31 @@ class ContributorRecruiter extends Pivot
     {
         return $this->belongsTo(Contributor::class, 'contributor_id');
     }
+
+    public function getContributorFollowRequest()
+    {
+        $recruiterId = auth()->user()->recruiter->id;
+        return self::where('recruiter_id', $recruiterId)
+            ->where('status', 'pending')
+            ->where('invite_type', 'Contributor')
+            ->get();
+    }
+
+    // Recruiter follow contributor
+    public static function getRecruiterFollowRequestToContributor()
+    {
+        $recruiterId = auth()->user()->recruiter->id;
+        return self::where('recruiter_id', $recruiterId)
+            ->where('status', 'Pending')
+            ->where('invite_type', 'Recruiter')
+            ->get();
+    }
+
+    public function getAllConnections()
+    {
+        $recruiterId = auth()->user()->recruiter->id;
+        return self::where('recruiter_id', $recruiterId)
+            ->where('status', 'Active')
+            ->get();
+    }
 }

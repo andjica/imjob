@@ -1,6 +1,7 @@
 <?php
 
 use App\Actions\FollowCompany;
+use App\Actions\FollowContributor;
 use App\Http\Controllers\{
     Admin\FrontController as AdminFrontController,
     Auth\LoginController,
@@ -163,6 +164,7 @@ Route::middleware(['auth', 'company.freelancer', 'verified'])->prefix('company/f
         Route::post('/make-request', [FollowCompanyController::class, 'followCompany'])->name('make-request');
         Route::post('/make-connection', [FollowCompanyController::class, 'followContributor'])->name('follow-contributor');
         Route::post('/make-connection/change-status', [FollowCompanyController::class, 'changeStatus'])->name('follow-change-status');
+        Route::post('/make-connection/accept-contributor', [FollowContributorController::class, 'acceptContributor'])->name('make-connection-accept-contributor');
         // view profile
         Route::get('/view', [FrontController::class, 'getProfile'])->name('view');
         Route::get('/contributor/{contributor}/details',[FrontController::class, 'detailsContributor'])->name('contributor-details');
