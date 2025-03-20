@@ -11,26 +11,26 @@ class CompanyRecruiter extends Pivot
 
     protected $fillable = ['recruiter_id', 'company_id', 'from_date', 'until_date', 'status', 'invite_type'];
 
-    public $timestamps = true; // ✅ Osigurava da timestamps funkcionišu.
+    public $timestamps = true; //  Osigurava da timestamps funkcionišu.
 
-    // ✅ Osiguraj da Laravel koristi tačno ime tabele
+    //  Osiguraj da Laravel koristi tačno ime tabele
     protected $primaryKey = 'id';
     public $incrementing = true;
     protected $keyType = 'int';
 
-    // ✅ Scope za aktivne veze
+    // Scope za aktivne veze
     public function scopeActive($query)
     {
         return $query->where('status', 'Active');
     }
 
-    // ✅ Scope za prošle veze
+    //  Scope za prošle veze
     public function scopePast($query)
     {
         return $query->where('status', 'Past');
     }
 
-    //✅ Ispravljeni mutator koji sada NE MENJA "Rejected"
+    // Ispravljeni mutator koji sada NE MENJA "Rejected"
     // public function getStatusAttribute($value)
     // {
         
@@ -49,12 +49,12 @@ class CompanyRecruiter extends Pivot
     //         return 'Pending';
     //     }
     
-    //     // ✅ Ako `until_date` postoji i prošao je, status je `Past`
+    //     // Ako `until_date` postoji i prošao je, status je `Past`
     //     if (!is_null($this->until_date) && $this->until_date < now()) {
     //         return 'Past';
     //     }
     
-    //     // ✅ Ako ništa drugo ne odgovara, vrati 'Pending'
+    //     // Ako ništa drugo ne odgovara, vrati 'Pending'
     //     return 'Pending';
     // }
 
@@ -63,13 +63,19 @@ class CompanyRecruiter extends Pivot
         return $this->belongsTo(Company::class, 'company_id');
     }
 
-    // ✅ Proveri da li Laravel vidi tačan status direktno iz baze
+    public function recruiter()
+    {
+        return $this->belongsTo(Recruiter::class, 'recruiter_id');
+    }
+
+
+    // Proveri da li Laravel vidi tačan status direktno iz baze
     public static function checkStatusFromDB($id)
     {
         return self::withoutGlobalScopes()->where('id', $id)->value('status');
     }
 
-    // ✅ Ako kompanija šalje recruiteru zahtev
+    // Ako kompanija-freelancer šalje recruiteru zahtev
     public static function getCompaniesFollowRequest()
     {
         $recruiterId = auth()->user()->recruiter->id;
@@ -79,7 +85,7 @@ class CompanyRecruiter extends Pivot
             ->get();
     }
 
-    // ✅ Ako recruiter šalje zahtev kompaniji
+    // Ako recruiter šalje zahtev kompaniji
     public static function getRecruiterFollowRequestToCompanies()
     {
         $recruiterId = auth()->user()->recruiter->id;
@@ -89,12 +95,45 @@ class CompanyRecruiter extends Pivot
             ->get();
     }
 
-    // ✅ Prikazuje sve aktivne veze recruiter - kompanija
+    // Prikazuje sve aktivne veze recruiter - kompanija
     public function getAllConnections()
     {
-        $recruiterId = auth()->user()->recruiter->id;
-        return self::where('recruiter_id', $recruiterId)
-            ->where('status', 'Active')
-            ->get();
+        $user = auth()->user();
+    
+        if ($user->recruiter) {
+            // Ako je recruiter, vraćamo sve aktivne veze gde je recruiter_id njegov ID
+            return self::where('recruiter_id', $user->recruiter->id)
+                ->where('status', 'Active')
+                ->get();
+        } elseif ($user->company) {
+            // Ako je kompanija, vraćamo sve aktivne veze gde je company_id njen ID
+            return self::where('company_id', $user->company->id)
+                ->where('status', 'Active')
+                ->get();
+        }
+    
+        // Ako nije ni recruiter ni kompanija, vraćamo prazan rezultat
+        return collect();
     }
+
+     // Ako kompanija šalje recruiteru zahtev
+     public static function getBasciCompanyFollowRequest()
+     {
+         $companyId = auth()->user()->company->id;
+         return self::where('company_id', $companyId)
+             ->where('status', 'Pending')
+             ->where('invite_type', 'Company')
+             ->get();
+     }
+
+      // Ako je kompaniji poslat zahtev od rekrutera
+    public static function getRequestFromRecruiterToCompany()
+    {
+        $companyId = auth()->user()->company->id;
+         return self::where('company_id', $companyId)
+             ->where('status', 'Pending')
+             ->where('invite_type', 'Recruiter')
+             ->get();
+    }
+
 }

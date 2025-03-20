@@ -213,6 +213,15 @@
                                 <span class="menu-title notification-menu-title">All notifications</span> 
                             </a>
                         </div>
+                        <div class="menu-item">
+                            <a class="menu-link {{ Route::currentRouteName() === 'comapny-dashboard-connections' ? 'active' : '' }}" 
+                            href="{{ asset('/company/dashboard/connections') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">All Connections</span> 
+                            </a>
+                        </div>
                     </div>
 
                     </div> 

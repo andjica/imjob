@@ -23,6 +23,7 @@ use Illuminate\Contracts\View\Factory;
 use App\Interfaces\CompanyTypeInterface;
 use App\Interfaces\SubCategoryInterface;
 use App\Models\AvailableRecruitmentSubphases;
+use App\Models\CompanyRecruiter;
 use Illuminate\Contracts\Foundation\Application;
 
 class FrontController extends Controller
@@ -232,6 +233,10 @@ class FrontController extends Controller
             abort(404);
         }
 
+        $job = $candidate->job;
+        
+        $candidates = $job->candidates()->with('user')->get();
+        
         $recruitmentProcess = $candidate->recruitmentProcess()->with('subphases')->first();
         
         $availablePhases = AvailableRecruitmentSubphases::where('phase', $candidate->recruitmentProcess->current_phase)->get();
@@ -256,15 +261,29 @@ class FrontController extends Controller
                     'candidate',
                     'recruitmentProcess',
                     'availablePhases',
-                    'recruiter'
-                    //'meetings',
-                    //'contributors',
+                    'recruiter',
+                    'job',
+                    'candidates'
                 )
             );
     }
 
-    public function getNotifications()
+    public function getNotifications(CompanyRecruiter $notifications)
     {
-        return view('company.pages.notifications.all');
+        $recruiterToCompanyFollowRequest = $notifications->getRequestFromRecruiterToCompany();
+        $companyToRecruiterRequest = $notifications->getBasciCompanyFollowRequest();
+        
+        $connections = $notifications->getAllConnections();
+    
+       
+        return view('company.pages.notification.all', compact('companyToRecruiterRequest','recruiterToCompanyFollowRequest', 'connections'));
+    }
+
+    public function getConnections(CompanyRecruiter $connections)
+    {
+        $connections = $connections->getAllConnections();
+
+        return view('company.pages.connection.all', compact('connections'));
+
     }
 }

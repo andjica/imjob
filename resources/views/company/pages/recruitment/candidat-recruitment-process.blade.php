@@ -1,4 +1,4 @@
-@extends('company-freelancer.template-company-freelancer')
+@extends('company.template-company')
 @section('main-title', 'Recruitment Process for '.$candidate->user->first_name.' '.$candidate->user->last_name)
 
 @section('title-dash', 'Recruitment process for candidat')
@@ -64,6 +64,12 @@
      <div class="row">
         <div class="col-3">
             @include('company.components.job.sidebar-recruiter')
+            
+
+        </div>
+        <div class="col-lg-9">
+        @include('company.components.recruitment.candidates')
+
         </div>
      </div>
 </div>

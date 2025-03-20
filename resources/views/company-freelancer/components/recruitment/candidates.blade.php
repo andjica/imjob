@@ -30,7 +30,7 @@
         <div class="card-title">
             <h3 class="card-label">
                 Candidates
-                <div class="text-muted pt-2 font-size-sm">Candidates who reply to your job</div>
+                <div class="text-muted pt-2 font-size-sm">Candidates who reply to this job</div>
             </h3>
         </div>
     </div>

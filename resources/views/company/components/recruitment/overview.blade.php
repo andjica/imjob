@@ -5,7 +5,7 @@
                 <div class="tab-content" id="myTabContent">
                 <!-- Active Jobs Content -->
                 <div class="tab-pane fade show active" id="active-job" role="tabpanel" aria-labelledby="active-jobs-tab">
-                    <h5 class="text-white font-weight-bold">{{$candidate->job->job_world_type}} - {{$candidate->job->title}}
+                    <h5 class="text-white font-weight-bold">{{ ucfirst($candidate->job->job_world_type)}} - {{$candidate->job->title}}
                     </h5>
                 </div>
             </div>

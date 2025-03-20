@@ -226,7 +226,7 @@
                                                     <span class="menu-bullet">
                                                 <span class="bullet bullet-dot"></span>
                                             </span>
-                                            <span class="menu-title notification-menu-title">All connections</span> 
+                                            <span class="menu-title">All connections</span> 
                                         </a>
                                     </div>
                                 </div>

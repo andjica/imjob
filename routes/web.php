@@ -135,6 +135,7 @@ Route::middleware(['auth', 'company', 'verified'])->prefix('company/dashboard')-
 
 
     Route::get('/notifications', [CompanyFrontController::class, 'getNotifications'])->name('notifications');
+    Route::get('/connections', [CompanyFrontController::class, 'getConnections'])->name('connections');
 });
 
 // Company Freelancer Routes
