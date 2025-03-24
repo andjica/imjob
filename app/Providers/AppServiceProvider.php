@@ -32,6 +32,7 @@ use App\Interfaces\CompanyTypeInterface;
 use App\Interfaces\ContributorInterface;
 use App\Interfaces\SubCategoryInterface;
 use App\Services\ContributorTypeServices;
+use Illuminate\Support\Facades\Broadcast;
 use App\Services\CompanyRecruiterServices;
 use App\Services\CompanyFreelancerServices;
 use App\Services\RecruitmentProcessService;
@@ -82,6 +83,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Broadcast::routes();
+
+        require base_path('routes/channels.php');
         require_once app_path('Helpers/helpers.php');
     }
 }

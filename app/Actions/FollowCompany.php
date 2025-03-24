@@ -22,7 +22,7 @@ class FollowCompany
         $companyToFollow = $this->getCompany($companyToFollowId);
         $follower = $this->getFollower($follower);
 
-        //Log::info("Emitujem event za kanal: company.{$companyToFollow->id}");
+        Log::info("Emitujem event za kanal: company.{$companyToFollow->id}"."i recruiter".$follower);
  
         $companyRecruiter = $this->createOrUpdateCompanyRecruiter($companyToFollow, $follower);
     
