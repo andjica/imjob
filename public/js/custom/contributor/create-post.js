@@ -2,31 +2,53 @@ $(document).ready(function () {
     let descriptionTouched = false;
     let imageTouched = false;
 
+    let editableElement; // Declare the editableElement variable globally
+
+    // Initialize CKEditor 5 on the #description textarea
+    ClassicEditor.create(document.querySelector('#description'), {
+        toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote'],
+        heading: {
+            options: [
+                { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+                { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+                { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' }
+            ]
+        }
+    })
+    .then(editor => {
+        window.jobDescriptionEditor = editor;
+
+        // Store editableElement globally
+        editableElement = editor.ui.view.editable.element;
+
+        // Add keyup event listener on the editable element
+        $(editableElement).on('keyup', function () {
+            descriptionTouched = true; // Mark as touched
+            validateDescription();
+        });
+    })
+    .catch(error => {
+        console.error('Error initializing CKEditor:', error);
+    });
+
     function validateDescription() {
-        let description = $("#description").val().trim();
+        let description = window.jobDescriptionEditor.getData().trim(); // Get CKEditor content
         let errorMessage = "";
 
         if (!descriptionTouched) return; // Don't show error initially
 
-        if (description == "") {
-
-            errorMessage = "Description is required filed";
-            $("#description").addClass("border-danger").removeClass("border-success");
-
+        if (description === "") {
+            errorMessage = "Description is a required field";
+            $(editableElement).addClass("border-danger").removeClass("border-success");
+            $("#descriptionEmpty").text(errorMessage).addClass("text-danger").show();
         } else if (!/^.{4,}$/.test(description)) {
-
             errorMessage = "Must be at least 4 characters";
-            $("#description").addClass("border-danger") .removeClass("border-success");
-
+            $(editableElement).addClass("border-danger").removeClass("border-success");
+            $("#descriptionEmpty").text(errorMessage).addClass("text-danger").show();
         } else {
-            $("#description").removeClass("border-danger").addClass("border-success");
-            $("#description-error").hide(); // Hide error if valid
-            return;
+            $(editableElement).removeClass("border-danger").addClass("border-success");
+            $("#descriptionEmpty").text("").hide(); // Hide error when valid
         }
-
-        $("#description-error")
-            .text(errorMessage)
-            .addClass('text-danger')
     }
 
     function validateImage() {
@@ -82,9 +104,10 @@ $(document).ready(function () {
 
         // Check if there are any validation errors
         if (
-            $("#description").hasClass("border-danger") ||
+            $(editableElement).hasClass("border-danger") ||
             $("#image-error").is(":visible")
         ) {
+            console.log("Validation errors present. Form not submitted.");
             return; // Stop submission if errors exist
         }
 
@@ -105,11 +128,9 @@ $(document).ready(function () {
         } else {
             console.log("No image selected.");
         }
-        // Clear textarea and image before submiting
-        //$("#description").val("");
-        //$("#image").val("");
 
         // Submit the form after previewing data
-        this.submit();
+        console.log("Form submitted successfully.");
+        this.submit(); // Only submit if no validation errors
     });
 });

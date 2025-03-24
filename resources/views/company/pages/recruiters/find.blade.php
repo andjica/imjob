@@ -6,7 +6,8 @@
 <div class="container m-0">
     <div class="row">
         <div class="col-lg-12">
-            <button onclick="window.history.back()" class="btn btn-sm bg-linear-pink text-white  p-2 mb-5"> <i class="fa fa-chevron-left text-white"></i> Back</button>
+            <button onclick="window.history.back()" class="btn btn-sm bg-linear-pink text-white  p-2 mb-5"> <i
+                    class="fa fa-chevron-left text-white"></i> Back</button>
             <div class="card shadow-sm">
                 <div class="card-header bg-muted text-white pt-10">
                     <h3 class="card-title mt-3">Recruiters List</h3><br>
@@ -76,8 +77,8 @@
                             </div>
                         </div>
                     @else
-                    @foreach ($recruiters as $recruiter)
-                    <div class="row g-3 p-3 border-bottom">
+                        @foreach ($recruiters as $recruiter)
+                            <div class="row g-3 p-3 border-bottom">
                                 <div class="d-flex flex-stack pt-2 align-items-center w-100">
                                     <!--begin::Image-->
                                     <div class="symbol symbol-40px me-3">
@@ -97,11 +98,20 @@
                                     <div class="d-flex flex-row justify-content-between flex-grow-1 align-items-center">
                                         <!--begin:Recruiter Info-->
                                         <div class="flex-grow-1 me-3">
-                                            <h5 class="card-title">{{ $recruiter->user->first_name }} {{ $recruiter->user->last_name }}</h5>
-                                            <span class="text-muted fw-semibold d-block fs-7">{{ $recruiter->title_function }}</span>
-                                            <p class="text-muted">{{ $recruiter->user->email }} 
-                                                <small><i>- @if($recruiter->is_freelancer == 1) Freelancer @else Recruiter @endif</i></small><br>
-                                                <small><i>{{$recruiter->country->name}}, {{$recruiter->city->name}}</i></small><br>
+                                            <a href="{{ asset('/company/dashboard/recruiter/' . $recruiter->id . '/view') }}"
+                                                class="fw-bold card-title text-dark h5 text-hover-primary">{{ $recruiter->user->first_name }}
+                                                {{ $recruiter->user->last_name }}</a>
+                                            <span
+                                                class="text-muted fw-semibold d-block fs-7">{{ $recruiter->title_function }}</span>
+                                            <p class="text-muted">{{ $recruiter->user->email }}
+                                                <small><i>- @if ($recruiter->is_freelancer == 1)
+                                                            Freelancer
+                                                        @else
+                                                            Recruiter
+                                                        @endif
+                                                    </i></small><br>
+                                                <small><i>{{ $recruiter->country->name }},
+                                                        {{ $recruiter->city->name }}</i></small><br>
                                             </p>
                                         </div>
                                         <!--end:Recruiter Info-->
@@ -112,21 +122,21 @@
                                                 /** @var User $user */
                                                 $user = auth()->user();
                                             @endphp
-                                            
+
                                             @if ($connectedOnPending->contains($recruiter->id))
-                                                <button type="button" class="btn btn-outline btn-sm btn-outline-dashed me-2 bg-light"
+                                                <button type="button"
+                                                    class="btn btn-outline btn-sm btn-outline-dashed me-2 bg-light"
                                                     data-bs-toggle="tooltip" data-bs-placement="left"
                                                     title="You have to wait for company approval">
-                                                    <i class="fas fa-hourglass-half text-warning"></i> Connection Pending
+                                                    <i class="fas fa-hourglass-half text-warning"></i> Connection
+                                                    Pending
                                                 </button>
-
                                             @elseif($connectedSuccessfully->contains($recruiter->id))
-                                                <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="tooltip"
-                                                    data-bs-placement="left" title="You are connected with this company">
+                                                <button type="button" class="btn btn-primary btn-sm"
+                                                    data-bs-toggle="tooltip" data-bs-placement="left"
+                                                    title="You are connected with this company">
                                                     <i class="fas fa-link"></i>
                                                 </button>
-
-                                        
                                             @else
                                                 <button type="button" data-recruiter-id="{{ $recruiter->id }}"
                                                     data-status="Pending"
@@ -140,7 +150,6 @@
                                     <!--end::Section-->
                                 </div>
                             </div>
-
                         @endforeach
                         <div class="mt-3">
                             {{ $recruiters->links('pagination::bootstrap-4') }}

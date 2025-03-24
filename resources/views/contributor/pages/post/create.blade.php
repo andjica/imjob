@@ -48,15 +48,19 @@
                     <!--end::Card header-->
 
                     <!--begin::Form-->
-                    <form action="{{route('contributor-post-store')}}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('contributor-post-store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <!--begin::Card body-->
                         <div class="card-body p-3">
                             <!--begin::Input group-->
-                            <div class="mb-3">
-                                <textarea class="form-control form-control-sm" id="description" name="description" rows="3"
-                                    placeholder="What's on your mind?"></textarea>
-                                <span id="description-error"></span>
+                            <div class="mb-5">
+                                <textarea class="form-control form-control-sm @error('description') is-invalid @enderror" name="description"
+                                    id="description" rows="6">{{ old('description') }}</textarea>
+                                <span class="text-danger" id="descriptionEmpty">
+                                    @error('description')
+                                        {{ $message }}
+                                    @enderror
+                                </span>
                             </div>
                             <!--end::Input group-->
 
@@ -89,5 +93,6 @@
 @endsection
 
 @section('js')
-    <script src="{{asset('/js/custom/contributor/create-post.js')}}"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/35.3.2/classic/ckeditor.js"></script>
+    <script src="{{ asset('/js/custom/contributor/create-post.js') }}"></script>
 @endsection

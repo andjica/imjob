@@ -8,7 +8,7 @@
         <div class="btn-back">
             <button onclick="window.history.back()" class="btn btn-sm bg-linear-pink text-white  p-2 mb-5"> <i
                     class="fa fa-chevron-left text-white"></i> Back</button>
-        </div> 
+        </div>
         <div class="col-lg-12">
             <div class="card shadow-sm">
                 <div class="card-header bg-muted text-white pt-10">
@@ -30,9 +30,7 @@
                         Once a recruiter accepts your request, you’ll be notified, and you can start collaborating to
                         build the team your company deserves.
                     </p>
-
                 </div>
-
                 <div class="card-body p-4">
                     <div class="card-header p-0" id="kt_contacts_list_header">
                         <!--begin::Form-->
@@ -73,7 +71,6 @@
                                         </svg>
                                     </span>
                                     <div class="d-flex flex-column">
-
                                         <h4 class="mb-1">No Recruiters Found</h4>
                                         <p class="mb-0">There are currently no active recruiters in the system.</p>
                                     </div>
@@ -102,20 +99,24 @@
                                     <div class="d-flex align-items-center flex-row-fluid flex-wrap">
                                         <!--begin:Recruiter-->
                                         <div class="flex-grow-1 me-2">
-                                            <h5 class="card-title">{{ $recruiter->user->first_name }}
-                                                {{ $recruiter->user->last_name }}</h5>
-
+                                            <a href="{{ asset('/contributor/recruiter/' . $recruiter->id . '/view') }}"
+                                                class="fw-bold card-title text-dark h5 text-hover-primary">{{ $recruiter->user->first_name }}
+                                                {{ $recruiter->user->last_name }}</a>
                                             <span
                                                 class="text-muted fw-semibold d-block fs-7">{{ $recruiter->title_function }}</span>
-                                                <small><i>- @if($recruiter->is_freelancer == 1) Freelancer @else Recruiter @endif</i></small><br>
-                                                <small><i>{{$recruiter->country->name}}, {{$recruiter->city->name}}</i></small><br>
-
+                                            <small><i>- @if ($recruiter->is_freelancer == 1)
+                                                        Freelancer
+                                                    @else
+                                                        Recruiter
+                                                    @endif
+                                                </i></small><br>
+                                            <small><i>{{ $recruiter->country->name }},
+                                                    {{ $recruiter->city->name }}</i></small><br>
                                         </div>
                                         @php
                                             /** @var User $user */
                                             $user = auth()->user();
                                         @endphp
-
                                         <!-- Recruiter Status Check -->
                                         @if ($connectedOnPending->contains('id', $recruiter->id))
                                             <div class="card-toolbar">
@@ -145,7 +146,6 @@
                                                 Follow
                                             </button>
                                         @endif
-
                                         <!--end:Action-->
                                     </div>
                                     <!--end::Section-->

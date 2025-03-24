@@ -291,6 +291,12 @@ class FrontController extends Controller
     {
         $recruiter = $this->recruiterServices->getOne($id);
 
-        return view('company.pages.recruiter.view', compact('recruiter'));
+        $recruiter->user;
+        $recruiter->category;
+        $recruiter->sub_category;
+
+        // return dd($recruiter);
+
+        return view('company.pages.recruiters.view', compact('recruiter'));
     }
 }

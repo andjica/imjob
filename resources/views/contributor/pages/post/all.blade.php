@@ -40,7 +40,7 @@
                     <div class="col-lg-5">
                         <div class="card shadow-sm border mt-2">
                             <div class="card-body">
-                                {{ $p->description }}<br>
+                                {{ strip_tags($p->description) }}<br>
 
                                 @if ($p->image != null)
                                     <img src="{{ Storage::url($p->image) }}"
