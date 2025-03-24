@@ -11,16 +11,15 @@ $(document).ready(function () {
                 url: '/country/' + countryId + '/phone-code',
                 method: 'GET',
                 success: function (response) {
-                    if (response) {
-                        //za joneta
-                        alert(response);
+                    if (response && response) {
+                        let code = response.toString().replace(/^\+/, ''); // uklanja eventualni višak "+"
+                        $('#phoneCodeDisplay').text('+' + code);
                     } else {
-                        //nije ok
-                        alert("upada u else");
+                        $('#phoneCodeDisplay').text('+');
                     }
                 },
                 error: function () {
-                    //
+                    $('#phoneCodeDisplay').text('+');
                 }
             });
             $.ajax({

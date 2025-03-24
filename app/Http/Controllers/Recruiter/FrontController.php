@@ -141,7 +141,7 @@ class FrontController extends Controller
         $isConnected = $user->recruiter->companies->contains($company);
         $isOwnCompany = $user->recruiter->company?->id === $company->id;
         $similarCompanies = $this->companyServices->getCompaniesByCategory($company->category->id);
-
+        
         return view(
             'recruiter.pages.company.details',
             compact(
@@ -149,6 +149,7 @@ class FrontController extends Controller
                 'similarCompanies',
                 'isConnected',
                 'isOwnCompany',
+                'similarCompanies'
             )
         );
     }

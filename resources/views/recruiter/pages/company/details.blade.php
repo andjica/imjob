@@ -57,7 +57,7 @@
                             <div class="col-md-4 mb-4">
                                 <div class="d-flex align-items-center mb-2">
                                     <i class="fas fa-users me-2 text-muted"></i>
-                                    <span>Employees: <strong>{{ $company->number_of_employees }}</strong></span>
+                                    <span>Employees: <strong>{{ $company->recruitersCount() }}</strong></span>
                                 </div>
                                 <div class="d-flex align-items-center mb-2">
                                     <i class="fas fa-envelope fs-5 text-muted me-2"></i>
