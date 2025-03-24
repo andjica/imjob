@@ -106,7 +106,7 @@ Route::middleware(['auth', 'company', 'verified'])->prefix('company/dashboard')-
     //recruiters list
     Route::get('/find/recruiters', [CompanyFrontController::class, 'findRecruiters'])->name('find-recruiters');
     Route::post('/recruiters/call/{recruiter}', [RecruiterController::class, 'callRecruiter'])->name('recruiters-call');
-
+    Route::get('/recruiter/{id}/view', [CompanyFrontController::class, 'getRecruiter'])->name('recruiter-view');
     //jobs
     Route::get('/job/create', [CompanyFrontController::class, 'createJob'])->name('create-job');
     Route::get('/active/jobs', [CompanyFrontController::class, 'getActiveJobs'])->name('active-jobs');

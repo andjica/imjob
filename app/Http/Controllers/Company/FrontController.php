@@ -286,4 +286,11 @@ class FrontController extends Controller
         return view('company.pages.connection.all', compact('connections'));
 
     }
+
+    public function getRecruiter($id)
+    {
+        $recruiter = $this->recruiterServices->getOne($id);
+
+        return view('company.pages.recruiter.view', compact('recruiter'));
+    }
 }
