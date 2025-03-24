@@ -25,8 +25,10 @@ use App\Models\AvailableRecruitmentSubphases;
 use App\Models\Candidate;
 use App\Models\Company;
 use App\Models\CompanyRecruiter;
+use App\Models\Contributor;
 use App\Models\ContributorRecruiter;
 use App\Models\Job;
+use App\Models\Recruiter;
 use App\Models\RecruitmentProcess;
 use App\Models\RecruitmentSubphase;
 use App\Models\User;
@@ -88,9 +90,8 @@ class FrontController extends Controller
         ));
     }
 
-    public function editCompany(): Factory|View|Application
-    {
-        $user    = auth()->user()->id;
+    public function editCompany(): Factory|View|Application {
+        $user = auth()->user()->id;
         $company = $this->companyServices->getCompanyByRecruiter($user);
 
         $categories    = $this->categoryServices->getAll();
@@ -171,45 +172,7 @@ class FrontController extends Controller
         ));
     }
 
-    public function followCompany(FollowCompanyRequest $request, FollowCompany $followCompany): JsonResponse
-    {
-        $followCompany->execute((int) $request->get('company_id'));
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Follow request sent successfully.',
-        ]);
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function followContributor(FollowContributorRequest $request, FollowContributor $followContributor): JsonResponse
-    {
-        /** @var User $user */
-        $user = auth()->user();
-
-        if (!$user->recruiter) {
-            return response()->json([
-                'success' => false,
-                'message' => 'You must be a recruiter to follow contributors.',
-            ], 403);
-        }
-
-        try {
-            $followContributor->execute($user->recruiter, (int) $request->get('follow_id'));
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Follow request sent successfully.',
-            ]);
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage(),
-            ], 500);
-        }
-    }
+    
 
     public function detailsCompany(Company $company): Factory|View|Application
     {
@@ -228,6 +191,12 @@ class FrontController extends Controller
                 'isOwnCompany',
             )
         );
+    }
+    public function detailsContributor(Contributor $contributor): Factory|View|Application
+    {
+        $user = auth()->user();
+        
+        return view('company-freelancer.pages.contributor.details', compact('contributor'));
     }
 
     public function createJob(): Factory|View|Application
@@ -252,25 +221,27 @@ class FrontController extends Controller
 
     public function candidateRecruitmentProcess(Candidate $candidate): Factory|View|Application
     {
+       
         if ($candidate->status !== 'accept' || !$candidate->recruitmentProcess) {
             abort(404);
         }
         
         $recruitmentProcess = $candidate->recruitmentProcess()->with('subphases')->first();
+        
         $availablePhases = AvailableRecruitmentSubphases::where('phase', $candidate->recruitmentProcess->current_phase)->get();
-
+    
         $candidateId = $candidate->id;
         $candidateSubphases = Candidate::with('recruitmentSubPhases')->find($candidateId);
         //return dd($candidateSubphases);
         $meetings = $candidateSubphases->recruitmentSubPhases->toArray();
-        
+        $jobId = $candidate->job->id;
         
         /** @var User $user */
         $user = auth()->user();
         $contributors = $user->recruiter->contributors()
             ->wherePivot('status', ContributorRecruiter::ACTIVE)
             ->get();
-
+         
         return view(
             'company-freelancer.pages.recruitment.candidat-recruitment-process',
             compact(
@@ -279,6 +250,7 @@ class FrontController extends Controller
                 'availablePhases',
                 'meetings',
                 'contributors',
+                'jobId',
             )
         );
     }
@@ -339,15 +311,10 @@ class FrontController extends Controller
         // ]);
     }
 
-    public function jobs(): Factory|View|Application
-    {
-        return view('company-freelancer.pages.job.active-jobs');
-    }
-
     public function getActiveJobs(Request $request)
     {
         $recruiterId = auth()->user()->recruiter->id ?? abort(404);
-
+        
         $searchString = $request->get('query') ?? null;
         $jobs = $this->jobRep->searchJobs($searchString, $recruiterId);
 
@@ -363,11 +330,45 @@ class FrontController extends Controller
         return view('company-freelancer.pages.job.inactive-jobs', compact('jobs'));
     }
 
-    public function notifications(CompanyRecruiter $notifications)
+    public function notifications(CompanyRecruiter $notifications, ContributorRecruiter $notificationsContributorRecruiter)
     {
         $newNotifications = $notifications->getCompaniesFollowRequest();
-        $connections = $notifications->getAllConnections();
+        $recruiterToCompaniesFollowRequest = $notifications->getRecruiterFollowRequestToCompanies();
         
-        return view('company-freelancer.pages.notifications.all', compact('newNotifications', 'connections'));
+        $connections = $notifications->getAllConnections();
+
+        $newNotificationsFromContributor = $notificationsContributorRecruiter->getContributorFollowRequest();
+        $recruiterToContributorFollowRequest = $notificationsContributorRecruiter->getRecruiterFollowRequestToContributor();
+        $recruiterContributorConnections = $notificationsContributorRecruiter->getAllConnections();
+
+        return view('company-freelancer.pages.notifications.all', 
+            compact('newNotifications', 
+            'connections',
+            'recruiterToCompaniesFollowRequest',
+            'newNotificationsFromContributor',
+            'recruiterToContributorFollowRequest',
+            'recruiterContributorConnections'
+        ));
     }
+
+    public function connections(CompanyRecruiter $notifications, ContributorRecruiter $notificationsContributorRecruiter)
+    {
+        $recruiterCompanyConnections = $notifications->getAllConnections();
+        $recruiterContributorConnections = $notificationsContributorRecruiter->getAllConnections();
+
+        return view('company-freelancer.pages.connections.all', compact('recruiterCompanyConnections','recruiterContributorConnections'));
+    }
+
+    
+    public function getProfile()
+    {
+        $userId = auth()->user()->id;
+        $recruiter = Recruiter::where('user_id', $userId)->first();
+
+        $recruiter->education->school;
+
+        $recruiter->user;
+        
+        return view('company-freelancer.pages.view', compact('recruiter'));
+    } 
 }

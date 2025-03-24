@@ -3,14 +3,29 @@
 namespace App\Http\Requests;
 
 use App\Enums\JobType;
-use Illuminate\Foundation\Http\FormRequest;
+use App\Models\SubCategory;
 use Illuminate\Validation\Rule;
+use Illuminate\Foundation\Http\FormRequest;
 
 class StoreJobRequest extends FormRequest
 {
     public function authorize(): bool
     {
         return true;
+    }
+    protected function prepareForValidation()
+    {
+        // Ako korisnik popuni `otherSub`, pronađi ID "Other" podkategorije i postavi `subCategoryId`
+        if ($this->filled('custom_subcategory')) {
+            $otherSubCategory = SubCategory::where('name', 'Other')->first();
+
+            if ($otherSubCategory) {
+                $this->merge([
+                    'subCategoryId' => $otherSubCategory->id, 
+                    'custom_subcategory' => $this->input('custom_subcategory'),
+                ]);
+            }
+        }
     }
 
     public function rules(): array
@@ -20,7 +35,8 @@ class StoreJobRequest extends FormRequest
             'title' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
             'categoryId' => ['required', 'integer', 'exists:categories,id'],
-            'subCategoryId' => ['required', 'integer', 'exists:sub_categories,id'],
+            'subCategoryId' => ['nullable', 'integer', 'exists:sub_categories,id'],
+            'custom_subcategory' => ['nullable', 'string', 'max:255'],
             'countryId' => ['required', 'integer', 'exists:countries,id'],
             'cityId' => ['required', 'integer', 'exists:cities,id'],
             'jobTypeId' => ['required', 'integer', 'exists:job_types,id'],
@@ -37,6 +53,7 @@ class StoreJobRequest extends FormRequest
             'special_requirements' => ['nullable', 'string'],
             'validUntil' => ['required', 'date', 'after_or_equal:today'],
             'companyId' => ['required', 'integer', 'exists:companies,id'],
+            'recruiter_id' => ['nullable']
         ];
     }
 }

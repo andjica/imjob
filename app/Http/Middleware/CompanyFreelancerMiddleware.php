@@ -13,9 +13,14 @@ class CompanyFreelancerMiddleware
         /** @var User $user */
         $user = auth()->user();
 
-        if ($user->role_id !== 2 && $user->companyType !== 'Freelancer') {
-            abort(403);
+     
+        if ($user->company) {
+      
+            if ($user->company->companyType->name !== 'Freelancer') {
+                abort(403);
+            }
         }
+
         return $next($request);
     }
 }

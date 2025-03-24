@@ -27,6 +27,7 @@ class Job extends Model
         'recruiter_id',
         'category_id',
         'sub_category_id',
+        'custom_subcategory',
         'country_id',
         'city_id',
         'job_type_id',
@@ -40,6 +41,8 @@ class Job extends Model
         'special_requirements',
         'valid_until',
         'job_world_type',
+
+
     ];
 
     public function skills(): HasMany
@@ -54,7 +57,7 @@ class Job extends Model
 
     public function recruiter(): BelongsTo
     {
-        return $this->belongsTo(Recruiter::class);
+        return $this->belongsTo(Recruiter::class, 'recruiter_id');
     }
 
     public function category(): BelongsTo
@@ -92,4 +95,10 @@ class Job extends Model
         return $this->hasMany(Candidate::class)->where('status', 'reject');
     }
 
+    public function hiredCandidatesCount(): int
+    {
+        return RecruitmentProcess::whereHas('candidate', function ($query) {
+            $query->where('job_id', $this->id);
+        })->where('status', 'hired')->count();
+    }
 }

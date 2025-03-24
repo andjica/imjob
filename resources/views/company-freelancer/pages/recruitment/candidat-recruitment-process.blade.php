@@ -1,73 +1,84 @@
 @extends('company-freelancer.template-company-freelancer')
-@section('main-title', 'Recruitment Process')
+@section('main-title', 'Recruitment Process for ' . $candidate->user->first_name . ' ' . $candidate->user->last_name)
 
 @section('title-dash', 'Recruitment process for candidat')
 
 @section('css')
     <!-- Metronic CSS -->
-    <link href="{{ asset('templates/metronic/plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('templates/metronic/plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet"
+        type="text/css" />
     <!-- FullCalendar CSS -->
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="{{asset('/css/custom/recruitment-process.css')}}"/>
-    
+    <link rel="stylesheet" type="text/css" href="{{ asset('/css/custom/recruitment-process.css') }}" />
+
 @endsection
 
 
 @section('content')
-@php
-    use App\Models\Job;
-    use App\Models\RecruitmentProcess;
+    @php
+        use App\Models\Job;
+        use App\Models\RecruitmentProcess;
 
-    // Define recruitment phases based on job type
-    if ($candidate->job->job_world_type === Job::TYPE_INTERNATIONAL) {
-        $phases = [
-            RecruitmentProcess::APPLICATION_RECEIVED => 'Application Received',
-            RecruitmentProcess::SELECTION => 'Selection',
-            RecruitmentProcess::PREPARATION => 'Preparation',
-            RecruitmentProcess::TRANSFER => 'Transfer',
-            RecruitmentProcess::OFFER_STAGE => 'Offer Stage', 
-        ];
-    } else { // If job is National
-        $phases = [
-            RecruitmentProcess::APPLICATION_RECEIVED => 'Application Received',
-            RecruitmentProcess::SELECTION => 'Selection',
-            RecruitmentProcess::OFFER_STAGE => 'Offer Stage', 
-        ];
-    }
-    //return dd($recruitmentProcess);
-    // Determine the current phase index
-   $currentPhaseIndex = array_search($recruitmentProcess->current_phase, array_keys($phases));
-    //$currentPhaseIndex = array_search((int) $recruitmentProcess->current_phase, array_map('intval', array_keys($phases)));
+        // Define recruitment phases based on job type
+        if ($candidate->job->job_world_type === Job::TYPE_INTERNATIONAL) {
+            $phases = [
+                RecruitmentProcess::APPLICATION_RECEIVED => 'Application Received',
+                RecruitmentProcess::SELECTION => 'Selection',
+                RecruitmentProcess::PREPARATION => 'Preparation',
+                RecruitmentProcess::TRANSFER => 'Transfer',
+                RecruitmentProcess::OFFER_STAGE => 'Offer Stage',
+            ];
+        } else {
+            // If job is National
+            $phases = [
+                RecruitmentProcess::APPLICATION_RECEIVED => 'Application Received',
+                RecruitmentProcess::SELECTION => 'Selection',
+                RecruitmentProcess::OFFER_STAGE => 'Offer Stage',
+            ];
+        }
+        //return dd($recruitmentProcess);
+        // Determine the current phase index
+        $currentPhaseIndex = array_search($recruitmentProcess->current_phase, array_keys($phases));
+        //$currentPhaseIndex = array_search((int) $recruitmentProcess->current_phase, array_map('intval', array_keys($phases)));
+    @endphp
 
-@endphp
+    <div class="container m-0 pb-5">
+        @include('alerts.errors')
+        @include('alerts.success')
+        <a href="{{ asset('company/freelancer/' . $jobId . '/recruitment-process') }}"
+            class="btn btn-sm bg-linear-pink text-white  p-2"> <i class="fa fa-chevron-left text-white"></i> Back</a>
+        @if ($candidate->recruitmentProcess->status != null)
+            <div class="text-end mt-3 mb-0">
+                <a href="{{ route('company-freelancer-recruitment-download.pdf', ['recruitment_process_id' => $candidate->recruitmentProcess->id]) }}"
+                    class="btn btn-primary  align-items-center justify-content-center"
+                    style="gap: 8px; padding: 10px 20px;">
+                    <i class="fa-solid fa-file-pdf"></i> Download PDF
+                </a>
+            </div>
+        @endif
+        <!-- Recruitment Process Overview -->
+        <div class="row process-overview mb-10 mt-3">
+            <div class="col-12">
+                @include('company-freelancer.components.recruitment.overview')
+                @include('company-freelancer.components.recruitment.feedback-and-delete-modal')
+            </div>
+        </div>
+        <!-- End of Recruitment Process Overview -->
+        <div class="row">
+            <!-- Chat Box Section -->
+            <div class="col-lg-6 mb-5">
+                @include('company-freelancer.components.recruitment.chat')
+            </div>
 
-<div class="container m-0 pb-5">
-    @include('alerts.errors')
-    @include('alerts.success')
-    <button onclick="window.history.back()" class="btn btn-sm bg-linear-pink text-white  p-2"> <i class="fa fa-chevron-left text-white"></i> Back</button>
-     <!-- Recruitment Process Overview -->
-     <div class="row process-overview mb-10">
-        <div class="col-12">
-           @include('company-freelancer.components.recruitment.overview')
-           @include('company-freelancer.components.recruitment.feedback-and-delete-modal')
+            <!-- Meeting Planner Section -->
+            <div class="col-lg-6 mb-5">
+                @include('company-freelancer.components.recruitment.schedule-meeting')
+                @include('company-freelancer.components.recruitment.schedule-modal')
+
+                @include('company-freelancer.components.recruitment.calendar-with-modal')
+            </div>
         </div>
     </div>
-    <!-- End of Recruitment Process Overview -->
-    <div class="row">
-        <!-- Chat Box Section -->
-        <div class="col-lg-6 mb-5">
-           @include('company-freelancer.components.recruitment.chat')
-        </div>
-
-        <!-- Meeting Planner Section -->
-        <div class="col-lg-6 mb-5">
-           @include('company-freelancer.components.recruitment.schedule-meeting')
-           @include('company-freelancer.components.recruitment.schedule-modal')
-          
-           @include('company-freelancer.components.recruitment.calendar-with-modal')
-        </div>
-    </div>
-</div>
 
 
 
@@ -83,8 +94,8 @@
     <!-- SweetAlert2 for Pop-ups -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <!-- <script src="{{asset('/js/custom/recruitment/schedule-meeting.js')}}"></script> -->
-    <script src="{{asset('/js/custom/recruitment/feedback-and-delete.js')}}"></script>
+    <!-- <script src="{{ asset('/js/custom/recruitment/schedule-meeting.js') }}"></script> -->
+    <script src="{{ asset('/js/custom/recruitment/feedback-and-delete.js') }}"></script>
 
     <!-- Calendar overview with START  data -->
     <script>
@@ -106,27 +117,28 @@
             }
 
             console.log("Final candidateSubphases:", candidateSubphases);
-            
+
             var events = candidateSubphases.map(phase => {
-            let formattedPhaseName = phase.phase; // Default phase name
+                let formattedPhaseName = phase.phase; // Default phase name
 
-            // If the phase is "offer_stage", display "Offer Stage"
-            if (formattedPhaseName === "offer_stage") {
-                formattedPhaseName = "Offer Stage";
-            } else {
-                // Otherwise, capitalize the first letter of other phases
-                formattedPhaseName = formattedPhaseName.charAt(0).toUpperCase() + formattedPhaseName.slice(1);
-            }
+                // If the phase is "offer_stage", display "Offer Stage"
+                if (formattedPhaseName === "offer_stage") {
+                    formattedPhaseName = "Offer Stage";
+                } else {
+                    // Otherwise, capitalize the first letter of other phases
+                    formattedPhaseName = formattedPhaseName.charAt(0).toUpperCase() + formattedPhaseName
+                        .slice(1);
+                }
 
-            return {
-                id: phase.id,
-                title: `${formattedPhaseName} - ${phase.meeting_title ?? 'No Title'}`, // Show formatted phaseName + meeting title
-                phaseName: formattedPhaseName, // Store formatted phase name
-                start: new Date(phase.scheduled_at),
-                description: phase.description ?? 'No description available',
-                meetingLink: phase.meeting_link ?? null
-            };
-        });
+                return {
+                    id: phase.id,
+                    title: `${formattedPhaseName} - ${phase.meeting_title ?? 'No Title'}`, // Show formatted phaseName + meeting title
+                    phaseName: formattedPhaseName, // Store formatted phase name
+                    start: new Date(phase.scheduled_at),
+                    description: phase.description ?? 'No description available',
+                    meetingLink: phase.meeting_link ?? null
+                };
+            });
             console.log("FullCalendar Events:", events);
 
             var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -166,39 +178,38 @@
             }
         });
     </script>
-     <!-- Calendar overview with END data -->
+    <!-- Calendar overview with END data -->
     <!-- Schedule meeting validation START Validation form -->
     <script>
-
-        $(document).ready(function () {
+        $(document).ready(function() {
             $('#meeting_contributors').select2({
                 placeholder: "Select contributors...",
-                allowClear: true,  // Enables "X" to remove selected values
-                width: '100%'      // Ensures it takes full width
+                allowClear: true, // Enables "X" to remove selected values
+                width: '100%' // Ensures it takes full width
             });
 
             // Ensure old selected values are loaded correctly (Fix for Laravel)
             var selectedContributors = @json(old('contributors', []));
             $('#meeting_contributors').val(selectedContributors).trigger('change');
 
-            $('#select_phase').on('change', function () {
-                let selectedValue = $(this).val().toString().trim(); 
+            $('#select_phase').on('change', function() {
+                let selectedValue = $(this).val().toString().trim();
                 //alert(selectedValue);// Ensure it's a string and trimmed
                 console.log("Selected Phase Value:", selectedValue); // Debugging
 
                 if (selectedValue === "other") {
                     console.log("Other phase selected. Showing input field.");
                     $('#customPhaseContainer').fadeIn(); // Use fadeIn for better UX
-                    $('#custom_phase').prop('required', true);
+                    // $('#custom_phase').prop('required', true);
                 } else {
                     console.log("Normal phase selected. Hiding custom input.");
                     $('#customPhaseContainer').fadeOut(); // Use fadeOut for better UX
-                    $('#custom_phase').prop('required', false);
+                    // $('#custom_phase').prop('required', false);
                 }
             });
-           
+
             //validation form schedule meeting
-            $('#scheduleMeetingForm').submit(function (event) {
+            $('#scheduleMeetingForm').submit(function(event) {
                 // Prevent form submission for validation
                 event.preventDefault();
 
@@ -208,6 +219,8 @@
                 const selectPhase = $('#select_phase').val();
                 const meetingDate = $('#meeting_date').val();
                 const meetingContributors = $('#meeting_contributors').val();
+                const description = $('#meeting_description').val().trim();
+                const customPhase = $('#custom_phase').val().trim();
 
                 // Clear previous error states
                 $('.border-danger').removeClass('border-danger');
@@ -220,6 +233,12 @@
                 if (meetingTitle === '') {
                     $('#meeting_title').addClass('border-danger');
                     $('#meeting_titleError').text('Meeting Title is required.').show();
+                    isValid = false;
+                }
+
+                if (description === '') {
+                    $('#meeting_description').addClass('border-danger');
+                    $('#meeting_descriptionError').text('Description is required.').show();
                     isValid = false;
                 }
 
@@ -255,7 +274,7 @@
                 }
             });
 
-            $("#meeting_title").on('keyup', function () {
+            $("#meeting_title").on('keyup', function() {
                 var title = $(this).val().trim();
                 if (title === "") {
                     $("#meeting_titleError").text("Meeting Title is required").show();
@@ -285,9 +304,9 @@
             // });
 
             // Validate Phase Selection on Change
-            $('#select_phase').on('change', function () {
+            $('#select_phase').on('change', function() {
                 let selectedValue = $(this).val();
-                
+
                 if (selectedValue === "") {
                     $("#select_phaseError").text("Please select a phase").show();
                     $(this).addClass('border-danger').removeClass('border-success');
@@ -299,15 +318,15 @@
                 // Show/Hide Custom Phase Input
                 if (selectedValue === 'other') {
                     $('#customPhaseContainer').fadeIn();
-                    $('#custom_phase').prop('required', true);
+                    // $('#custom_phase').prop('required', true);
                 } else {
                     $('#customPhaseContainer').fadeOut();
-                    $('#custom_phase').prop('required', false);
+                    // $('#custom_phase').prop('required', false);
                 }
             });
 
             // Validate Custom Phase Input on Keyup
-            $("#custom_phase").on('keyup', function () {
+            $("#custom_phase").on('keyup', function() {
                 var customPhase = $(this).val().trim();
                 if (customPhase === "") {
                     $("#custom_phaseError").text("Custom Phase is required").show();
@@ -319,7 +338,7 @@
             });
 
             // Validate Date & Time Selection
-            $("#meeting_date").on('change', function () {
+            $("#meeting_date").on('change', function() {
                 var selectedDate = new Date($(this).val());
                 var currentDate = new Date();
                 if (!$(this).val() || selectedDate <= currentDate) {
@@ -332,7 +351,7 @@
             });
 
             // Validate Description on Keyup
-            $("#meeting_description").on('keyup', function () {
+            $("#meeting_description").on('keyup', function() {
                 var description = $(this).val().trim();
                 if (description === "") {
                     $("#meeting_descriptionError").text("Description is required").show();
@@ -344,7 +363,7 @@
             });
 
             // Validate Contributors on Change
-            $('#meeting_contributors').on('change', function () {
+            $('#meeting_contributors').on('change', function() {
                 if ($(this).val().length === 0) {
                     $("#meeting_contributorsError").text("Please select at least one contributor").show();
                     $(this).addClass('border-danger').removeClass('border-success');
@@ -355,11 +374,11 @@
             });
 
             // Final Form Submission Validation
-            $('#scheduleMeetingForm').on('submit', function (event) {
+            $('#scheduleMeetingForm').on('submit', function(event) {
                 let isValid = true;
 
                 // Check if any errors exist before submitting
-                $(".form-control").each(function () {
+                $(".form-control").each(function() {
                     if ($(this).hasClass("border-danger")) {
                         isValid = false;
                     }
@@ -371,8 +390,6 @@
                 }
             });
         });
-
-        
     </script>
     <!-- Schedule meeting validation END Validation form -->
 

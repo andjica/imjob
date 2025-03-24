@@ -7,22 +7,24 @@ $(document).ready(function () {
     const toggleCustomTypeField = () => {
         const selectedOption = contributorTypeSelect.find('option:selected');
         const isOther = selectedOption.data('is-other') === true;
+        const hasCustomType = customTypeInput.val().trim() !== ''; // Check if a custom type exists
 
         if (isOther) {
             customTypeWrapper.removeClass('d-none');
-            customTypeInput.prop('required', true); // Make the custom input required
+            customTypeInput.prop('required', true);
         } else {
             customTypeWrapper.addClass('d-none');
-            customTypeInput.prop('required', false).val(''); // Remove required and clear value
+            customTypeInput.prop('required', false).val('');
         }
     };
 
-    // Event listener for dropdown change
-    contributorTypeSelect.on('change', toggleCustomTypeField);
+    // Event listener for dropdown change (for dynamic updates)
+    contributorTypeSelect.on('change', function () {
+        toggleCustomTypeField();
+    });
 
-    // Initialize visibility on page load
+    // Ensure the correct state is set on page load (important for edit mode)
     toggleCustomTypeField();
-
     $('#contributorForm').submit(function (event) {
         event.preventDefault();
         

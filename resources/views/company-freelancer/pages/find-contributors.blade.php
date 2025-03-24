@@ -107,7 +107,7 @@
         <!-- Pagination -->
         <div class="row mt-2">
             <div class="col-12 d-flex justify-content-left">
-                {{ $contributors->withQueryString()->links() }}
+            {{ $contributors->appends(request()->query())->links('pagination::bootstrap-4') }}
             </div>
         </div>
     </div>
@@ -133,7 +133,7 @@
                     indicatorProgress.classList.remove('d-none');
 
                     // Send AJAX request
-                    fetch('{{ route("company-freelancer-follow-contributor") }}', {
+                    fetch("{{ route('company-freelancer-follow-contributor') }}", {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',

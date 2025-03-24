@@ -1,88 +1,35 @@
 @extends('company.template-company')
 
 @section('content')
-@section('title-dash', 'Add emoloyee')
-<div class="container">
+@section('main-title', 'Add employee')
+@section('title-dash', 'Add employee')
+<div class="container m-0">
     <div class="row">
-        <!-- First Card: Add Employee -->
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Add Employee</h3>
-                </div>
-                <div class="card-body">
-                    <form action="" method="POST">
-                        @csrf
-                        <div class="mb-3">
-                            <label for="recruiter" class="form-label">Select Recruiter:</label>
-                            <!-- Recruiter -->
-                            <div class="row mb-5">
-                                <label class="col-lg-4 col-form-label fw-bold fs-6 required">Recruiter:</label>
-                                <div class="col-lg-8">
-                                <select name="recruiterId" id="recruiterId" data-control="select2"
-                                    class="form-control form-control-solid @error('recruiterId') is-invalid @enderror">
-                                    <option value="">Select a Recruiter</option>
-                                    @foreach ($recruiters as $recruiter)
-                                    @php
-                                        $image = $recruiter->profile_image 
-                                            ? asset('storage/uploads/recruiters/' . basename($recruiter->profile_image)) 
-                                            : asset('images/user-profile.png');
-                                    @endphp
-                                        <option value="{{ $recruiter->id }}" data-img="{{ $image }}">
-                                            {{ $recruiter->user->first_name }} {{ $recruiter->user->last_name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                    <span class="text-danger" id="recruiterIdEmpty">@error('recruiterId'){{ $message }}@enderror</span>
-                                </div>
-                            </div>
-
-                        </div>
-                        <button type="submit" class="btn btn-primary">Add Employee</button>
-                    </form>
-                </div>
-            </div>
+         @include('alerts.success')
+        @include('alerts.errors')
+        <!-- First Card: Add Employee :) -->
+        <div class="btn-back">
+            <button onclick="window.history.back()" class="btn btn-sm bg-linear-pink text-white  p-2 mb-5"> <i class="fa fa-chevron-left text-white"></i> Back</button>
+        </div>
+        <div class="col-8">
+             @include('company.components.company.form-add-employee')
         </div>
 
         <!-- Second Card: Send Email -->
-        <div class="col-12 mt-4">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Send Email</h3>
-                </div>
-                <div class="card-body">
-                    <form action="" method="POST">
-                        @csrf
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email Address:</label>
-                            <input type="email" class="form-control" name="email" id="email" required>
-                        </div>
-                        <button type="submit" class="btn btn-success">Send Email</button>
-                    </form>
-                </div>
+            <div class="col-4">
+                @include('company.components.company.email-add-employees')
             </div>
         </div>
-    </div>
+        <div class="row mt-5">
+            @include('company.components.company.active-connections')
+        </div>
+        
+        
+   
 </div>
 @endsection
 <!-- Select2 Script for Image Support -->
 @section('js')
-<script>
-    $(document).ready(function() {
-        function formatRecruiter(recruiter) {
-            if (!recruiter.id) {
-                return recruiter.text;
-            }
-            var image = $(recruiter.element).data('img') || "{{ asset('/images/icon-profile.png') }}";
-            var template = $('<span><img src="' + image + '" class="rounded-circle" style="width:30px; height:30px; margin-right:10px;"/> ' + recruiter.text + '</span>');
-            return template;
-        }
-
-        $('#recruiterId').select2({
-            templateResult: formatRecruiter,
-            templateSelection: formatRecruiter,
-            escapeMarkup: function(m) { return m; }
-        });
-    });
-</script> 
+<script src="{{asset('/js/custom/employee/select-recruiter.js')}}"></script>
+<script src="{{asset('/js/custom/employee/email-validation.js')}}"></script>
 @endsection

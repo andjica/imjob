@@ -193,20 +193,22 @@
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <!-- Phone Number -->
-                            <label for="phoneNumber" class="col-lg-6 col-form-label text-end fw-bold">
-                                <i class="fas fa-phone text-primary me-2"></i> Phone Number
-                            </label>
-                            <div class="col-lg-6">
-                                <input type="text" name="phoneNumber" id="phoneNumber" 
-                                    class="form-control @error('phoneNumber') is-invalid @enderror" 
-                                    placeholder="Enter phone number" value="{{ old('phoneNumber') }}">
-                                    <span class="text-danger" id="phoneempty"> @error('phoneNumber')
-                                {{ $message }}
-                                @enderror</span>
-                               
-                            </div>
+                                <!-- Phone Number -->
+                                <label for="phoneNumber" class="col-lg-6 col-form-label text-end fw-bold">
+                                    <i class="fas fa-phone text-primary me-2"></i> Phone Number
+                                </label>
+                                <div class="col-lg-6">
+                                    <div class="input-group">
+                                        <span class="input-group-text border-0 border-end border-2 border-gray-300" id="phoneCodeDisplay">+XXX</span>
+                                        <input type="text" name="phoneNumber" id="phoneNumber" 
+                                            class="form-control @error('phoneNumber') is-invalid @enderror" 
+                                            placeholder="Enter phone number" value="{{ old('phoneNumber') }}" 
+                                            aria-describedby="phoneCodeDisplay">
+                                    </div>
+                                    <span class="text-danger" id="phoneempty">@error('phoneNumber') {{ $message }} @enderror</span>
+                                </div>
                         </div>
+
 
                         <div class="row mb-3">
                             <!-- Email -->

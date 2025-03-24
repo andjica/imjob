@@ -28,13 +28,15 @@ class DatabaseSeeder extends Seeder
         $this->call(JobTypesSeeder::class);
         $this->call(ContributorTypeSeeder::class);
         $this->call(AvailableSubphasesSeeder::class);
-        //factories
-        User::factory(10)->create();
+        // //factories
+        // User::factory(10)->create();
         //Company::factory()->count(20)->create();
         //Recruiter::factory()->count(20)->create();
         // $this->call(CompanyRecruiterSeeder::class);
 
         //$this->call(CountriesAndCitiesSeeder::class);
+
+        $this->call(UserRecruiterSeeder::class);
 
 
 

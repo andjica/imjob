@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Recruiter;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Contributor extends Model
 {
@@ -25,7 +27,6 @@ class Contributor extends Model
     {
         return $this->belongsTo(ContributorType::class, 'contributor_type_id');
     }
-
     
     public function country(): BelongsTo
     {
@@ -42,5 +43,13 @@ class Contributor extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function recruiters(): BelongsToMany
+    {
+        return $this->belongsToMany(Recruiter::class, 'contributor_recruiter', 'contributor_id', 'recruiter_id')
+                    ->withPivot('status', 'from_date', 'until_date')
+                    ->using(ContributorRecruiter::class)
+                    ->withTimestamps();
     }
 }

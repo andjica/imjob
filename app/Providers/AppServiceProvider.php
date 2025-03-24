@@ -4,9 +4,11 @@ namespace App\Providers;
 
 use App\Services\JobServices;
 use App\Services\CityServices;
+use App\Services\PostServices;
 use App\Services\RoleServices;
 use App\Interfaces\JobInterface;
 use App\Interfaces\CityInterface;
+use App\Interfaces\PostInterface;
 use App\Interfaces\RoleInterface;
 use App\Services\CompanyServices;
 use App\Services\CountryServices;
@@ -16,9 +18,12 @@ use App\Services\RecruiterServices;
 use App\Interfaces\CompanyInterface;
 use App\Interfaces\CountryInterface;
 use App\Interfaces\JobTypeInterface;
+use App\Services\ContributorService;
+use App\Services\ContributorServies;
 use App\Services\FreelancerServices;
 use App\Interfaces\CategoryInterface;
 use App\Services\CompanyTypeServices;
+use App\Services\ContributorServices;
 use App\Services\SubCategoryServices;
 use App\Interfaces\RecruiterInterface;
 use App\Interfaces\FreelancerInterface;
@@ -27,14 +32,19 @@ use App\Interfaces\CompanyTypeInterface;
 use App\Interfaces\ContributorInterface;
 use App\Interfaces\SubCategoryInterface;
 use App\Services\ContributorTypeServices;
+use Illuminate\Support\Facades\Broadcast;
+use App\Services\CompanyRecruiterServices;
 use App\Services\CompanyFreelancerServices;
+use App\Services\RecruitmentProcessService;
 use App\Interfaces\ContributorTypeInterface;
 use App\Services\RecruiterEducationServices;
+use App\Interfaces\CompanyRecruiterInterface;
 use App\Interfaces\CompanyFreelancerInterface;
+use App\Services\ContributorRecruiterServices;
 use App\Interfaces\RecruiterEducationInterface;
-use App\Services\ContributorService;
-use App\Services\ContributorServices;
-use App\Services\ContributorServies;
+use App\Interfaces\RecruitmentProcessInterface;
+use App\Interfaces\ContributorRecruiterInterface;
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -59,6 +69,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(JobTypeInterface::class, JobTypeServices::class);
         $this->app->bind(ContributorTypeInterface::class, ContributorTypeServices::class);
         $this->app->bind(ContributorInterface::class, ContributorServices::class);
+        $this->app->bind(CompanyRecruiterInterface::class, CompanyRecruiterServices::class);
+        $this->app->bind(PostInterface::class, PostServices::class);
+        $this->app->bind(ContributorRecruiterInterface::class, ContributorRecruiterServices::class);
+        $this->app->bind(RecruitmentProcessInterface::class, RecruitmentProcessService::class);
 
     }
 
@@ -69,6 +83,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Broadcast::routes();
+
+        require base_path('routes/channels.php');
         require_once app_path('Helpers/helpers.php');
     }
 }

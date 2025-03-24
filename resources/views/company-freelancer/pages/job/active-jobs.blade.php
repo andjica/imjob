@@ -9,7 +9,7 @@
 @endsection
 
 @section('content')
-<div class="container">
+<div class="container m-0">
          <!-- Quick Search Form -->
          <div class="row mb-6">
             <div class="col-12">
@@ -23,9 +23,13 @@
         </div>
         @include('alerts.success')
         @include('alerts.errors')
-        @if($jobs->count() == 0)
+        
         <div class="row">
-            <div class="col-lg-7">
+            <div class="col-lg-3">
+                @include('company-freelancer.components.sidebar-job')
+            </div>
+            @if($jobs->count() == 0)
+            <div class="col-lg-9">
             <div class="card card-flush shadow-sm mb-5">
                 <div class="card-body text-center">
                     <div class="alert alert-warning d-flex align-items-center p-5 mb-0">
@@ -44,13 +48,11 @@
                 </div>
             </div>
         </div>
-        </div>
         @else
-        <!-- Active Job Cards -->
-        <div class="row">
+        <div class="col-lg-9">
             <!-- Card  -->
             @foreach($jobs as $job)
-            <div class="col-lg-5 col-md-6 mb-4">
+            <div class="col-lg-4 col-md-6 mb-4">
                 <div class="card card-job">
                 <div class="card-header">
                     <div>
@@ -72,6 +74,14 @@
                         <a href="#"  data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
                             <i class="fas fa-trash-alt  delete-icon" data-bs-toggle="modal" data-bs-target="#deleteJobModal{{ $job->id }}"></i>
                         </a>
+                        @if($job->candidates->count() > 0)
+                                <i class="fas fa-check-circle text-success fa-2x" 
+                                    data-bs-toggle="tooltip" 
+                                    data-bs-placement="top" 
+                                    title="This job has received applications from candidates and is currently in the recruitment process">
+                                    </i>
+                                        
+                        @endif
                     </div>
                 </div>
 
@@ -113,6 +123,11 @@
             <!-- End card -->
         </div>
         @endif
+        </div>
+        
+        <!-- Active Job Cards -->
+        
+        
 </div>
 @endsection
 

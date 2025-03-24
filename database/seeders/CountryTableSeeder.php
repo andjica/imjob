@@ -33,6 +33,7 @@ class CountryTableSeeder extends Seeder
             return [
                 'name' => $country['name'],
                 'iso_code' => $country['iso2'],
+                'phone_code' => $country['phone_code'],
                 'currency'=> $country['currency'],
                 'currency_name' => $country['currency_name'],
                 'currency_symbol' => $country['currency_symbol'],// Assuming 'iso3' is the field for ISO 3166-1 alpha-3

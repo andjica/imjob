@@ -1,5 +1,5 @@
 @extends('company-freelancer.template-company-freelancer')
-
+@section('main-title', 'Company Detail')
 @section('title-dash', 'Company Detail')
 @section('css')
 <link
@@ -10,7 +10,11 @@
 @endsection
 @section('content')
 <div class="container m-0">
-    <div class="row mt-5">
+    <div class="btn-back">
+        <button onclick="window.history.back()" class="btn btn-sm bg-linear-pink text-white p-2 mb-5"> <i
+                class="fa fa-chevron-left text-white"></i> Back</button>
+    </div>
+    <div class="row">
         <!-- Company Information Card -->
         <div class="col-lg-10">
             <div class="card card-dashed shadow-sm">

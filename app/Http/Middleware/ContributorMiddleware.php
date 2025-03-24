@@ -20,6 +20,7 @@ class ContributorMiddleware
         if (auth()->check() && auth()->user()->role_id != 4) {
             return abort(403);
         }
+        
         return $next($request);
     }
 }

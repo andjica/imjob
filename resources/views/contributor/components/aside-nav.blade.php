@@ -38,6 +38,7 @@
                                     <span class="menu-heading text-muted text-uppercase fs-8 ls-1">Freelancer Management</span>
                                 </div>
                             </div>
+                            
                             <div class="menu-link">
                                 <span class="menu-icon">
                                     <!--begin::Svg Icon | path: icons/duotune/communication/com013.svg-->
@@ -66,8 +67,8 @@
                                     </a>
                                 </div>
                                 <div class="menu-item menu-sub-indention menu-accordion">
-                                    <a class="menu-link {{ Route::currentRouteName() === 'contributor-companies' ? 'active' : '' }}" 
-                                    href="{{ route('contributor-companies') }}">
+                                    <a class="menu-link {{ Route::currentRouteName() === 'contributor-find-companies' ? 'active' : '' }}" 
+                                    href="{{ route('contributor-find-companies') }}">
                                         <span class="menu-bullet">
                                             <span class="bullet bullet-dot"></span>
                                         </span>
@@ -151,7 +152,7 @@
                                 <div class="menu-sub menu-sub-accordion">
 
                                     <div class="menu-item">
-                                        <a class="menu-link {{ Route::currentRouteName() === 'contributor-edit' ? 'active' : '' }}" href="{{asset('contributoredit/edit')}}">
+                                        <a class="menu-link {{ Route::currentRouteName() === 'contributor-edit' ? 'active' : '' }}" href="{{asset('contributor/edit')}}">
                                             <span class="menu-bullet">
                                                 <span class="bullet bullet-dot"></span>
                                             </span>
@@ -174,6 +175,7 @@
 
                                 </div> -->
                             </div> 
+                            
                         <!--end::Aside menu-->
                         <!--begin::Footer-->
                         <div class="aside-footer flex-column-auto pt-5 pb-7 px-5" id="kt_aside_footer">

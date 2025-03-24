@@ -11,69 +11,129 @@ class CompanyRecruiter extends Pivot
 
     protected $fillable = ['recruiter_id', 'company_id', 'from_date', 'until_date', 'status', 'invite_type'];
 
-    public $timestamps = true; // Ensure timestamps are enabled if the pivot table uses them.
+    public $timestamps = true; //  Osigurava da timestamps funkcionišu.
 
-    // Example: Add a scope to query active relationships
+    //  Osiguraj da Laravel koristi tačno ime tabele
+    protected $primaryKey = 'id';
+    public $incrementing = true;
+    protected $keyType = 'int';
+
+    // Scope za aktivne veze
     public function scopeActive($query)
     {
-        return $query->where('status', 'active');
+        return $query->where('status', 'Active');
     }
 
-    // Example: Add a scope to query past relationships
+    //  Scope za prošle veze
     public function scopePast($query)
     {
-        return $query->where('status', 'past');
+        return $query->where('status', 'Past');
     }
 
-    public function getStatusAttribute($value)
-    {
-        if ($value === 'onpending') {
-            return 'onpending';
-        }
-
-        if ($this->until_date === null || $this->until_date->isFuture()) {
-            return 'active';
-        }
-
-        return 'past';
-    }
+    // Ispravljeni mutator koji sada NE MENJA "Rejected"
+    // public function getStatusAttribute($value)
+    // {
+        
+    //     if (in_array($value, ['Rejected', 'Pending', 'Past'])) {
+    //         return $value;
+    //     }
+    
+       
+    //     if ($value === 'Active') {
+    //         // Ako `active_from` postoji i prošao je, status ostaje `Active`
+    //         if (!is_null($this->active_from) && $this->active_from <= now()) {
+    //             return 'Active';
+    //         }
+    
+          
+    //         return 'Pending';
+    //     }
+    
+    //     // Ako `until_date` postoji i prošao je, status je `Past`
+    //     if (!is_null($this->until_date) && $this->until_date < now()) {
+    //         return 'Past';
+    //     }
+    
+    //     // Ako ništa drugo ne odgovara, vrati 'Pending'
+    //     return 'Pending';
+    // }
 
     public function company()
     {
-        return $this->belongsTo(Company::class);
+        return $this->belongsTo(Company::class, 'company_id');
     }
 
-    protected static function booted()
+    public function recruiter()
     {
-        static::created(function ($follow) {
-            $companyToFollow = Company::find($follow->company_id);
-            $follower = Recruiter::find($follow->recruiter_id);
-
-            if ($companyToFollow && $follower) {
-                broadcast(new NewFollowNotification($companyToFollow, $follower));
-            }
-        });
+        return $this->belongsTo(Recruiter::class, 'recruiter_id');
     }
 
-    //if company send to recruiter follow request
+
+    // Proveri da li Laravel vidi tačan status direktno iz baze
+    public static function checkStatusFromDB($id)
+    {
+        return self::withoutGlobalScopes()->where('id', $id)->value('status');
+    }
+
+    // Ako kompanija-freelancer šalje recruiteru zahtev
     public static function getCompaniesFollowRequest()
     {
         $recruiterId = auth()->user()->recruiter->id;
         return self::where('recruiter_id', $recruiterId)
-        ->where('status', 'Pending')
-        ->where('invite_type', 'Company')->get();
+            ->where('status', 'Pending')
+            ->where('invite_type', 'Company')
+            ->get();
     }
 
-    //all connections recruiter - companies
-    public function getAllConnections()
+    // Ako recruiter šalje zahtev kompaniji
+    public static function getRecruiterFollowRequestToCompanies()
     {
         $recruiterId = auth()->user()->recruiter->id;
         return self::where('recruiter_id', $recruiterId)
-        ->where('status', 'Active')
-        ->get();
-    
+            ->where('status', 'Pending')
+            ->where('invite_type', 'Recruiter')
+            ->get();
     }
 
+    // Prikazuje sve aktivne veze recruiter - kompanija
+    public function getAllConnections()
+    {
+        $user = auth()->user();
+    
+        if ($user->recruiter) {
+            // Ako je recruiter, vraćamo sve aktivne veze gde je recruiter_id njegov ID
+            return self::where('recruiter_id', $user->recruiter->id)
+                ->where('status', 'Active')
+                ->get();
+        } elseif ($user->company) {
+            // Ako je kompanija, vraćamo sve aktivne veze gde je company_id njen ID
+            return self::where('company_id', $user->company->id)
+                ->where('status', 'Active')
+                ->get();
+        }
+    
+        // Ako nije ni recruiter ni kompanija, vraćamo prazan rezultat
+        return collect();
+    }
 
-   
+     // Ako kompanija šalje recruiteru zahtev
+     public static function getBasciCompanyFollowRequest()
+     {
+         $companyId = auth()->user()->company->id;
+         return self::where('company_id', $companyId)
+             ->where('status', 'Pending')
+             ->where('invite_type', 'Company')
+             ->get();
+     }
+
+      // Ako je kompaniji poslat zahtev od rekrutera
+    public static function getRequestFromRecruiterToCompany()
+    {
+        $companyId = auth()->user()->company->id;
+         return self::where('company_id', $companyId)
+             ->where('status', 'Pending')
+             ->where('invite_type', 'Recruiter')
+             ->get();
+    }
+
 }

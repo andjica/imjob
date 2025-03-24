@@ -3,12 +3,22 @@
 namespace App\Http\Controllers\Contributor;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\PostRequest;
+use App\Interfaces\PostInterface;
 
 class PostController extends Controller
 {
-    public function store(Request $request)
+    protected $postServices;
+
+    public function __construct(PostInterface $postServices)
     {
-        return dd($request->all());
+        $this->postServices = $postServices;
+    }
+
+    public function store(PostRequest $request)
+    {
+        $post = $this->postServices->store($request);
+
+        return $post;
     }
 }

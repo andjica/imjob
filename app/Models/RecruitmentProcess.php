@@ -26,7 +26,8 @@ class RecruitmentProcess extends Model
     protected $fillable = [
         'current_phase',
         'candidate_id',
-        'current_phase'
+        'current_phase',
+        'status'
     ];
     public function subphases(): HasMany
     {
@@ -36,5 +37,10 @@ class RecruitmentProcess extends Model
     public function candidate()
     {
         return $this->belongsTo(Candidate::class);
+    }
+
+    public static function findById(int $id): ?RecruitmentProcess
+    {
+        return self::find($id);
     }
 }

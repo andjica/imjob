@@ -37,7 +37,7 @@
 
                     <!-- Action Buttons -->
                     <div class="d-flex justify-content-start gap-3 mt-4">
-                        <a href="" class="btn btn-sm btn-primary">
+                        <a href="{{asset('contributor/edit')}}" class="btn btn-sm btn-primary">
                             <i class="fas fa-edit me-1"></i> Edit
                         </a>
                     </div>

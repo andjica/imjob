@@ -22,7 +22,7 @@ class CreateJob
     public function execute(array $data): ?Job
     {
         return $this->transactionService->run(function () use ($data) {
-            $data = $this->setAdditionalFields($data);
+            //$data = $this->setAdditionalFields($data);
 
             $job = $this->jobRepository->create(camelToSnakeCase($data));
             $this->saveSkills($job, $this->extractSkills($data));

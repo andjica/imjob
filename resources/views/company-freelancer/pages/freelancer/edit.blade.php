@@ -6,7 +6,11 @@
 @section('content')
 
 <div class="container m-0">
-    <div class="row mb-5">
+    <div class="btn-back">
+        <button onclick="window.history.back()" class="btn btn-sm bg-linear-pink text-white p-2 mb-5"> <i
+                class="fa fa-chevron-left text-white"></i> Back</button>
+    </div>
+    <div class="row">
             <div class="col-lg-10">
             @include('alerts.success')
             @include('alerts.errors')

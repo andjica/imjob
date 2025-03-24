@@ -64,17 +64,14 @@
 
                         <!--begin::Title-->
                         <div class="fs-5 fs-lg-3 fw-bold text-gray-900">
-                            Jane Miller </div>
+                        Connect with Recruiters</div>
                         <!--end::Title-->
                     </div>
                     <!--end::Heading-->
 
                     <!--begin::Description-->
                     <div class="fw-semibold fs-6 fs-lg-4 text-muted">
-
-                        Save thousands to millions of bucks <br>
-                        by using single tool for different <br>
-                        amazing and great
+                    Companies can easily find and collaborate with professional recruiters to streamline the hiring process, ensuring access to top talent.
                     </div>
                     <!--end::Description-->
                 </div>
@@ -98,16 +95,14 @@
 
                         <!--begin::Title-->
                         <div class="fs-5 fs-lg-3 fw-bold text-gray-900">
-                            Setup Your App </div>
+                        Interact with Candidates </div>
                         <!--end::Title-->
                     </div>
                     <!--end::Heading-->
 
                     <!--begin::Description-->
                     <div class="fw-semibold fs-6 fs-lg-4 text-muted">
-                        Save thousands to millions of bucks <br>
-                        by using single tool for different <br>
-                        amazing and great
+                    Recruiters and companies manage job postings and track applications via the web app,<br> while candidates use a mobile app to apply, communicate, and stay updated on job opportunities.
                     </div>
                     <!--end::Description-->
                 </div>
@@ -131,17 +126,14 @@
 
                         <!--begin::Title-->
                         <div class="fs-5 fs-lg-3 fw-bold text-gray-900">
-                            Enjoy Nautica App </div>
+                        Hire with Confidence </div>
                         <!--end::Title-->
                     </div>
                     <!--end::Heading-->
 
                     <!--begin::Description-->
                     <div class="fw-semibold fs-6 fs-lg-4 text-muted">
-
-                        Save thousands to millions of bucks <br>
-                        by using single tool for different <br>
-                        amazing and great
+                    Streamline the entire recruitment process with AI-powered insights, ensuring the best candidate matches and an efficient hiring experience.
                     </div>
                     <!--end::Description-->
                 </div>
@@ -166,14 +158,14 @@
                             data-kt-initialized="1" style="transform: translate3d(-66.6667%, 0px, 0px);">
                             <div class="text-center px-5 pt-5 pt-lg-10 px-lg-10 tns-item tns-slide-cloned"
                                 aria-hidden="true" tabindex="-1">
-                                <img src="{{ asset('images/map.jpg') }}" class="card-rounded shadow mh-lg-650px mw-100 responsive-img"
+                                <img src="{{ asset('images/screen1.png') }}" class="card-rounded shadow mh-lg-650px mw-100 responsive-img"
                                     alt="">
                             </div>
 
                             <!--begin::Item-->
                             <div class="text-center px-5 pt-5 pt-lg-10 px-lg-10 tns-item" id="tns1-item0"
                                 aria-hidden="true" tabindex="-1">
-                                <img src="{{ asset('images/map2.jpg') }}" class="card-rounded shadow mh-lg-650px mw-100 responsive-img"
+                                <img src="{{ asset('images/screen2.png') }}" class="card-rounded shadow mh-lg-650px mw-100 responsive-img"
                                     alt="">
                             </div>
                             <!--end::Item-->

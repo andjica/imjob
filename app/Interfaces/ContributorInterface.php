@@ -7,6 +7,8 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 interface ContributorInterface 
 {
     public function create(Request $request);
-
     public function getAll(?string $search = null): LengthAwarePaginator;
+    public function getContributor(int $contributorId);
+    public function update(Request $request);
+
 }

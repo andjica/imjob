@@ -4,6 +4,7 @@ namespace App\Interfaces;
 
 
 use App\Models\Company;
+use App\Models\Recruiter;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
@@ -26,6 +27,7 @@ interface CompanyInterface
     public function update(Request $request);
 
     public function getCompanyByRecruiter(int $recruiterId) : object;
+    public function getCompaniesByRecruiter(Recruiter $recruiter);
 
     public function getCompaniesByCategory(int $categoryId) : LengthAwarePaginator;
 }

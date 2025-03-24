@@ -16,17 +16,30 @@ use App\Http\Requests\StoreJobRequest;
 class JobController extends Controller
 {
 
-    public function __construct(protected JobRepository $jobRep)
-    {
-        
-    }
+    public function __construct(protected JobRepository $jobRep) {}
 
     public function store(StoreJobRequest $request, CreateJob $createJob): RedirectResponse
     {
-       
+
+
         $createJob->execute($request->validated());
 
-        return redirect()->route('company-freelancer-active-jobs')->with('success', 'You create job successfully');
+        $user = auth()->user();
+        if ($user?->company) 
+        {
+            if($user->company->companyType->name == "Freelancer")
+            {
+                return redirect()->route('company-freelancer-active-jobs')->with('success', 'You created job successfully');
+            }
+            else
+            {
+                return redirect()->route('company-dashboard-active-jobs')->with('success', 'You created job successfully');
+            }
+           
+        } 
+        else {
+            return redirect()->route('recruiter-active-jobs')->with('success', 'You created job successfully');
+        }
     }
 
     public function edit($id)
@@ -60,11 +73,18 @@ class JobController extends Controller
         $updatedJob = $updateJob->execute($id, $request->validated());
 
         if (!$updatedJob) {
-            return redirect()->route('company-freelancer-active-jobs')->with('error', 'Failed to update job.');
+
+            if (auth()->user()->company->companyType->name == "Freelancer") {
+                return redirect()->route('company-freelancer-active-jobs')->with('error', 'Failed to update job.');
+            } else {
+                return redirect()->route('company-dashboard-active-jobs')->with('error', 'Failed to update job.');
+            }
         }
 
-        return redirect()->route('company-freelancer-active-jobs')->with('success', 'Job updated successfully.');
+        if (auth()->user()->company->companyType->name == "Freelancer") {
+            return redirect()->route('company-freelancer-active-jobs')->with('success', 'Job updated successfully.');
+        } else {
+            return redirect()->route('company-dashboard-active-jobs')->with('success', 'Job updated successfully.');
+        }
     }
-
-
 }

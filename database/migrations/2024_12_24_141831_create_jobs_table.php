@@ -18,7 +18,8 @@ class CreateJobsTable extends Migration
             $table->unsignedBigInteger('company_id');
             $table->unsignedBigInteger('recruiter_id')->nullable();
             $table->unsignedBigInteger('category_id');
-            $table->unsignedBigInteger('sub_category_id');
+            $table->unsignedBigInteger('sub_category_id')->nullable();
+            $table->string('custom_subcategory')->nullable();
             $table->unsignedBigInteger('country_id');
             $table->unsignedBigInteger('city_id');
             $table->unsignedBigInteger('job_type_id'); // Ensure this replaces any enum 'job_type' field
@@ -37,7 +38,7 @@ class CreateJobsTable extends Migration
 
             // Foreign Key Constraints
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
-            $table->foreign('recruiter_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('recruiter_id')->references('id')->on('recruiters')->onDelete('cascade');
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->foreign('sub_category_id')->references('id')->on('sub_categories')->onDelete('cascade');
             $table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade');

@@ -9,7 +9,7 @@
 
         <div class="d-flex justify-content-center gap-4">
             <!-- Create Post Button -->
-            <a href="" class="btn btn-lg btn-primary fw-bold px-5">
+            <a href="{{asset('contributor/post/create')}}" class="btn btn-lg btn-primary fw-bold px-5">
                 <i class="fas fa-plus me-2"></i> Create Post
             </a>
 

@@ -8,7 +8,9 @@
             
             <span
                 style="background: linear-gradient(to right, #12CE5D 0%, #FFD80C 100%);-webkit-background-clip: text;-webkit-text-fill-color: transparent;">
-                <span id="kt_landing_hero_text">Im job Ai</span>
+                <span id="kt_landing_hero_text">Im job Ai
+                    
+                </span>
             </span>
         </h1>
         <!--end::Title-->

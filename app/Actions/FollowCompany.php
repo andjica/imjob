@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Actions;
 
 use App\Models\User;
@@ -7,6 +6,7 @@ use App\Models\Company;
 use App\Models\Recruiter;
 use App\Models\CompanyRecruiter;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 use App\Interfaces\CompanyInterface;
 use App\Enums\CompanyRecruiterStatus;
 use App\Events\NewFollowNotification; 
@@ -22,15 +22,13 @@ class FollowCompany
         $companyToFollow = $this->getCompany($companyToFollowId);
         $follower = $this->getFollower($follower);
 
-        
-        Log::info("Emitujem event za kanal: company.{$companyToFollow->id}");
+        Log::info("Emitujem event za kanal: company.{$companyToFollow->id}"."i recruiter".$follower);
+ 
+        $companyRecruiter = $this->createOrUpdateCompanyRecruiter($companyToFollow, $follower);
+    
 
-        // Kreiramo zapis o praćenju
-        $companyRecruiter = $this->createCompanyRecruiter($companyToFollow, $follower);
-    
-        // Emitujemo event da bi Laravel poslao notifikaciju
-        broadcast(new NewFollowNotification($companyToFollow, $follower));
-    
+        event(new NewFollowNotification($follower, $companyToFollow));
+
         return $companyRecruiter;
     }
 
@@ -39,8 +37,20 @@ class FollowCompany
         return $this->companyService->get($companyId);
     }
 
-    private function createCompanyRecruiter(Company $companyToFollow, Recruiter $follower): CompanyRecruiter
+    private function createOrUpdateCompanyRecruiter(Company $companyToFollow, Recruiter $follower): CompanyRecruiter
     {
+       //check first if exist in db
+        $existingRecord = CompanyRecruiter::where('recruiter_id', $follower->id)
+            ->where('company_id', $companyToFollow->id)
+            ->first();
+        
+        if ($existingRecord && $existingRecord->status == "Rejected") {
+            $existingRecord->status = 'Pending';
+            $existingRecord->save();
+
+            return $existingRecord;
+        }
+
         return CompanyRecruiter::create([
             'recruiter_id' => $follower->id,
             'company_id'   => $companyToFollow->id,
