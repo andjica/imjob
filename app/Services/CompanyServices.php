@@ -4,10 +4,11 @@ namespace App\Services;
 
 use Log;
 use App\Models\Company;
+use App\Models\Country;
+use App\Models\Recruiter;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Interfaces\CompanyInterface;
-use App\Models\Recruiter;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -113,8 +114,16 @@ class CompanyServices implements CompanyInterface
         ]);
 
 
+
         $company = new Company();
-        $company->country_id = $request->countryId;
+        $country = Country::find($request->countryId);
+
+        if($country instanceof Country)
+        {
+            $company->country_id = $country->id;
+            $company->phone_number = '+' . trim($country->phone_code) . trim($request->phoneNumber);
+        }
+        
         $company->company_type_id = $request->companyTypeId;
         $company->category_id = $request->categoryId;
         $company->sub_category_id = $request->subCategoryId;
@@ -124,7 +133,6 @@ class CompanyServices implements CompanyInterface
         $company->name = $request->companyName;
         $company->registration_number = $request->registrationNumber;
         $company->tax_number = $request->taxNumber;
-        $company->phone_number = $request->phoneNumber;
         $company->email = $request->email;
         $company->active = 0;
         // $company->number_of_employees = $request->numberofEmployees;

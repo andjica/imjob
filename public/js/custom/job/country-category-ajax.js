@@ -1,5 +1,6 @@
 $(document).ready(function () {
     $("#countryId").on("change", function () {
+    
         var countryId = $(this).val();
         var cityRow = $("#cityRow"); // Assuming you have a row with id 'cityRow' for cities
         var currencyInfoRow = $("#currencyInfoRow");
@@ -16,6 +17,7 @@ $(document).ready(function () {
         currencyLoading.addClass("d-none");
 
         if (countryId) {
+            
             // Fetch Cities
             loading.removeClass("d-none");
             currencyLoading.removeClass("d-none");

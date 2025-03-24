@@ -69,6 +69,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/subcategories/{categoryId}', [SubCategoryController::class, 'getSubCategoriesByCategory'])->name('subcategories');
     Route::get('/cities/{countryId}', [CityController::class, 'getCitiesByCountry'])->name('cities');
     Route::get('/country/{countryId}/currency', [CountryController::class, 'getCurrency'])->name('currency');
+    Route::get('/country/{countryId}/phone-code', [CountryController::class, 'getPhoneCode'])->name('phone');
 
     Route::prefix('user/{id}')->name('user-')->group(function () {
         Route::put('/update-email', [UserController::class, 'userEmailUpdate'])->name('email-update');

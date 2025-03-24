@@ -16,6 +16,7 @@ $(document).ready(function() {
         currencyLoading.addClass("d-none");
 
         if (countryId) {
+        
             // Fetch Cities
             loading.removeClass("d-none");
             currencyLoading.removeClass("d-none");

@@ -19,4 +19,12 @@ class CountryServices implements CountryInterface
 
         return $country;
     }
+
+    public function getPhoneCode(int $countryId)
+    {
+        $country = Country::where('id', $countryId)->first() ?? abort(404);
+        $country = $country->phone_code;
+        
+        return $country;
+    }
 }

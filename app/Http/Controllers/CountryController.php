@@ -20,4 +20,11 @@ class CountryController extends Controller
 
         return $currency;
     }
+
+    public function getPhoneCode($countryId)
+    {
+        $phone = $this->countryServices->getPhoneCode($countryId);
+
+        return $phone;
+    }
 }

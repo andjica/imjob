@@ -1,11 +1,28 @@
 $(document).ready(function () {
     $("#countryId").on("change", function () {
+        
         var countryId = $(this).val();
 
         // Reset city dropdown
         $("#cityId").html('<option value="">Select a city</option>');
 
         if (countryId) {
+            $.ajax({
+                url: '/country/' + countryId + '/phone-code',
+                method: 'GET',
+                success: function (response) {
+                    if (response) {
+                        //za joneta
+                        alert(response);
+                    } else {
+                        //nije ok
+                        alert("upada u else");
+                    }
+                },
+                error: function () {
+                    //
+                }
+            });
             $.ajax({
                 url: "/cities/" + countryId,
                 method: "GET",
