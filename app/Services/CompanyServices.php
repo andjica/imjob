@@ -102,9 +102,8 @@ class CompanyServices implements CompanyInterface
             'companyTypeId' => 'required|exists:company_types,id',
             'categoryId' => 'required|exists:categories,id',
             'subCategoryId' => 'required|exists:sub_categories,id',
-            // 'numberofEmployees' => 'required|integer|min:1|max:100000',
             'companyName' => 'required|string|max:255', // Company name is required
-            'registrationNumber' => 'required|string|unique:companies,registration_number', // Ensure unique registration number
+            'registrationNumber' => 'required|string|max:255', // Ensure unique registration number
             'taxNumber' => 'required|string|unique:companies,tax_number', // Ensure unique tax number
             'phoneNumber' => 'required|string|max:20', // Phone number is required
             'email' => 'required|email|unique:companies,email', // Ensure unique email
@@ -123,19 +122,18 @@ class CompanyServices implements CompanyInterface
             $company->country_id = $country->id;
             $company->phone_number = '+' . trim($country->phone_code) . trim($request->phoneNumber);
         }
-        
+
+        $company->name = $request->companyName;
         $company->company_type_id = $request->companyTypeId;
         $company->category_id = $request->categoryId;
         $company->sub_category_id = $request->subCategoryId;
         $company->city_id = $request->cityId;
         $company->user_id = auth()->user()->id ?? abort(404);
         $company->owner_title = $request->ownerTitle;
-        $company->name = $request->companyName;
         $company->registration_number = $request->registrationNumber;
         $company->tax_number = $request->taxNumber;
         $company->email = $request->email;
         $company->active = 0;
-        // $company->number_of_employees = $request->numberofEmployees;
         $company->address = $request->address;
 
         // Handling logo upload if present
@@ -190,7 +188,7 @@ class CompanyServices implements CompanyInterface
             'categoryId' => 'required|exists:categories,id',
             'subCategoryId' => 'required|exists:sub_categories,id',
             'companyName' => 'required|string|max:255', // Company name is required
-            'registrationNumber' => 'required|string|', // Ensure unique registration number
+            'registrationNumber' => 'required|string|max:255', // Ensure unique registration number
             'taxNumber' => 'required|string', // Ensure unique tax number
             'phoneNumber' => 'required|string|max:20', // Phone number is required
             'email' => ['required','email', Rule::unique('companies', 'email')->ignore($company->id),],
@@ -200,21 +198,24 @@ class CompanyServices implements CompanyInterface
         ]);
 
 
+        $country = Country::find($request->countryId);
+
+        if($country instanceof Country)
+        {
+            $company->country_id = $country->id;
+            $company->phone_number = '+' . trim($country->phone_code) . trim($request->phoneNumber);
+        }
+
         $company->name = $request->companyName;
-        $company->country_id = $request->countryId;
         $company->company_type_id = $company->company_type_id;
         $company->category_id = $request->categoryId;
         $company->sub_category_id = $request->subCategoryId;
         $company->city_id = $request->cityId;
         $company->user_id = auth()->user()->id ?? abort(404);
         $company->owner_title = $request->ownerTitle;
-        $company->name = $request->companyName;
         $company->registration_number = $request->registrationNumber;
         $company->tax_number = $request->taxNumber;
-        $company->phone_number = $request->phoneNumber;
         $company->email = $request->email;
-        $company->active = $company->active;
-        // $company->number_of_employees = $request->numberofEmployees;
         $company->address = $request->address;
 
 
@@ -234,12 +235,12 @@ class CompanyServices implements CompanyInterface
             $company->save();
         }
 
-        // try {
+        try {
             $company->save();
             return $company;
-        // } catch (\Exception $e) {
-        //     return abort(500, 'Error updating company: ' . $e->getMessage());
-        // }
+        } catch (\Exception $e) {
+            return abort(500, 'Error updating company: ' . $e->getMessage());
+        }
 
     }
 

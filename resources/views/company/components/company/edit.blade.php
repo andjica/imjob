@@ -109,16 +109,7 @@
     <div class="card mb-5 mb-xl-10">
                 <!--begin::Card body-->
                 <div class="card-body pt-10">
-                   
-                        <!-- Phone Number -->
-                        <div class="row mb-5">
-                            <label class="col-lg-3 col-form-label fw-bold fs-6 required">Phone Number:</label>
-                            <div class="col-lg-9">
-                                <input type="text" class="form-control form-control-solid" id="phoneNumber" name="phoneNumber" value="{{ $company->phone_number }}" required />
-                                <span class="text-danger" id="phoneempty">@error('phone'){{ $message }}@enderror</span>
-                            </div>
-                        </div>
-
+                
                         <!-- Email -->
                         <div class="row mb-5">
                             <label class="col-lg-3 col-form-label fw-bold fs-6 required">Email:</label>
@@ -162,7 +153,35 @@
                                 <span class="text-danger" id="cityEmpty">@error('cityId'){{ $message }}@enderror</span>
                             </div>
                         </div>
+                        @php
+                                use Illuminate\Support\Str;
 
+                                $prefix = $company->country && $company->country->phone_code
+                                    ? '+' . trim($company->country->phone_code)
+                                    : '+';
+
+                                $numberWithoutPrefix = Str::startsWith($company->phone_number, $prefix)
+                                    ? Str::replaceFirst($prefix, '', $company->phone_number)
+                                    : $company->phone_number;
+                            @endphp
+
+                            <!-- Phone Number -->
+                            <div class="row mb-5">
+                                <label class="col-lg-3 col-form-label fw-bold fs-6 required">Phone Number:</label>
+                                <div class="col-lg-9">
+                                    <div class="input-group">
+                                    <span class="input-group-text border-0 border-end border-2 border-gray-300" id="phoneCodeDisplay">{{ $prefix }}</span>
+                                    <input type="text"
+                                            class="form-control form-control-solid"
+                                            id="phoneNumber"
+                                            name="phoneNumber"
+                                            value="{{ $numberWithoutPrefix }}"
+                                            required
+                                            aria-describedby="phoneCodeDisplay" />
+                                    </div>
+                                    <span class="text-danger" id="phoneempty">@error('phone'){{ $message }}@enderror</span>
+                                </div>
+                            </div>
                         <!-- Address -->
                         <div class="row mb-5">
                             <label class="col-lg-3 col-form-label fw-bold fs-6 required">Address:</label>
