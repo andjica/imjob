@@ -306,6 +306,10 @@ Route::middleware(['auth', 'contributor', 'verified'])->prefix('contributor')->n
         Route::get('/posts', [ContributorFrontController::class, 'allPost'])->name('posts');
         Route::get('/post/create', [ContributorFrontController::class, 'createPost'])->name('post-create');
         Route::post('/post/store', [PostController::class, 'store'])->name('post-store');
+        Route::post('/post/{postId}/update',[PostController::class, 'update'])->name('post-update');
+        Route::post('/post/{postId}/delete',[PostController::class, 'delete'])->name('post-delete');
+        Route::get('/post/{postId}/edit', [ContributorFrontController::class, 'editPost'])->name('post-edit');
+
         Route::get('/edit', [ContributorFrontController::class, 'edit'])->name('edit');
 
         //connection
