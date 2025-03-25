@@ -19,6 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
+    //za produkciju stavljamo https://imjob.ai u allowed origins
     'allowed_origins' => ['*'],
 
     'allowed_origins_patterns' => [],
