@@ -29,7 +29,7 @@ function setupNotifications() {
     function subscribeToChannel(entityType, entityId) {
         if (!entityId) return;
 
-        // Spreči pretplatu na kanal koji ne pripada ulogovanom korisniku
+        // Zabrani slušanje kanala koji ne pripada ulogovanom tipu korisnika
         if (entityType === 'company' && !isCompanyLoggedIn) return;
         if (entityType === 'recruiter' && !isRecruiterLoggedIn) return;
 
@@ -47,13 +47,8 @@ function setupNotifications() {
         channel.stopListening('.new-follow').listen('.new-follow', (event) => {
             console.log(`📬 New notification on ${channelName}:`, event);
 
-            const isFollowedCompany =
-                event.followed_type === 'company' &&
-                event.company_id.toString() === entityId.toString();
-
-            const isFollowedRecruiter =
-                event.followed_type === 'recruiter' &&
-                event.recruiter_id.toString() === entityId.toString();
+            const isFollowedCompany = event.followed_type === 'company' && parseInt(event.company_id) === parseInt(entityId);
+            const isFollowedRecruiter = event.followed_type === 'recruiter' && parseInt(event.recruiter_id) === parseInt(entityId);
 
             if (!isFollowedCompany && !isFollowedRecruiter) {
                 console.log("🚫 Ignored — current user is NOT the followed entity.");
