@@ -1,17 +1,26 @@
-import './bootstrap';  
-import Echo from 'laravel-echo';  
+import './bootstrap';
+import Echo from 'laravel-echo';
 window.Pusher = require('pusher-js');
 
 window.Echo = new Echo({
     broadcaster: 'pusher',
-    key: process.env.MIX_PUSHER_APP_KEY,  
-    cluster: process.env.MIX_PUSHER_APP_CLUSTER,
-    forceTLS: true
+    key: process.env.MIX_PUSHER_APP_KEY || 'localkey',
+    wsHost: window.location.hostname,
+    wsPort: 6001,
+    forceTLS: false,
+    encrypted: false,
+    disableStats: true,
+    enabledTransports: ['ws'],
+    cluster: 'mt1',
+    namespace: null
 });
 
 function setupNotifications() {
     const companyId = document.querySelector('meta[name="company-id"]')?.content;
     const recruiterId = document.querySelector('meta[name="recruiter-id"]')?.content;
+
+    const isCompanyLoggedIn = Boolean(companyId);
+    const isRecruiterLoggedIn = Boolean(recruiterId);
 
     if (!window.subscribedChannels) {
         window.subscribedChannels = new Set();
@@ -19,6 +28,10 @@ function setupNotifications() {
 
     function subscribeToChannel(entityType, entityId) {
         if (!entityId) return;
+
+        // Spreči pretplatu na kanal koji ne pripada ulogovanom korisniku
+        if (entityType === 'company' && !isCompanyLoggedIn) return;
+        if (entityType === 'recruiter' && !isRecruiterLoggedIn) return;
 
         const channelName = `${entityType}.${entityId}`;
 
@@ -32,11 +45,26 @@ function setupNotifications() {
         const channel = window.Echo.channel(channelName);
 
         channel.stopListening('.new-follow').listen('.new-follow', (event) => {
-            console.log("New notification arrived:", event);
+            console.log(`📬 New notification on ${channelName}:`, event);
 
-            let notificationIcon = document.getElementById("notification-icon");
-            let notificationBadge = document.getElementById("notification-badge");
-            let notificationMenuTitles = document.querySelectorAll(".notification-menu-title");
+            const isFollowedCompany =
+                event.followed_type === 'company' &&
+                event.company_id.toString() === entityId.toString();
+
+            const isFollowedRecruiter =
+                event.followed_type === 'recruiter' &&
+                event.recruiter_id.toString() === entityId.toString();
+
+            if (!isFollowedCompany && !isFollowedRecruiter) {
+                console.log("🚫 Ignored — current user is NOT the followed entity.");
+                return;
+            }
+
+            console.log("🔔 Showing notification to FOLLOWED entity:", channelName);
+
+            const notificationIcon = document.getElementById("notification-icon");
+            const notificationBadge = document.getElementById("notification-badge");
+            const notificationMenuTitles = document.querySelectorAll(".notification-menu-title");
 
             if (!notificationIcon || !notificationBadge) return;
 
@@ -46,8 +74,9 @@ function setupNotifications() {
                 localStorage.setItem("companyHasNewNotification", "true");
                 notificationCount = parseInt(localStorage.getItem("companyNotificationCount") || "0") + 1;
                 localStorage.setItem("companyNotificationCount", notificationCount);
-            } 
-            else if (entityType === "recruiter") {
+            }
+
+            if (entityType === "recruiter") {
                 localStorage.setItem("recruiterHasNewNotification", "true");
                 notificationCount = parseInt(localStorage.getItem("recruiterNotificationCount") || "0") + 1;
                 localStorage.setItem("recruiterNotificationCount", notificationCount);
@@ -59,17 +88,17 @@ function setupNotifications() {
             notificationMenuTitles.forEach(menu => menu.classList.add("text-danger"));
         });
 
-        console.log(`Subscribed to: ${channelName}`);
+        console.log(`✅ Subscribed to: ${channelName}`);
     }
 
     function checkStoredNotifications() {
-        let notificationIcon = document.getElementById("notification-icon");
-        let notificationBadge = document.getElementById("notification-badge");
-        let notificationMenuTitles = document.querySelectorAll(".notification-menu-title");
+        const notificationIcon = document.getElementById("notification-icon");
+        const notificationBadge = document.getElementById("notification-badge");
+        const notificationMenuTitles = document.querySelectorAll(".notification-menu-title");
 
-        let isCompanyDashboard = window.location.pathname.includes("company/dashboard");
-        let isRecruiterDashboard = window.location.pathname.includes("recruiter");
-        let isFreelancerDashboard = window.location.pathname.includes("company/freelancer");
+        const isCompanyDashboard = window.location.pathname.includes("company/dashboard");
+        const isRecruiterDashboard = window.location.pathname.includes("recruiter");
+        const isFreelancerDashboard = window.location.pathname.includes("company/freelancer");
 
         let notificationCount = 0;
 
@@ -91,9 +120,9 @@ function setupNotifications() {
     }
 
     function clearNotificationsOnRoute() {
-        let isCompanyNotificationPage = window.location.pathname === "/company/dashboard/notifications";
-        let isRecruiterNotificationPage = window.location.pathname === "/recruiter/notifications";
-        let isFreelancerNotificationPage = window.location.pathname === "/company/freelancer/notifications";
+        const isCompanyNotificationPage = window.location.pathname === "/company/dashboard/notifications";
+        const isRecruiterNotificationPage = window.location.pathname === "/recruiter/notifications";
+        const isFreelancerNotificationPage = window.location.pathname === "/company/freelancer/notifications";
 
         if (isCompanyNotificationPage || isRecruiterNotificationPage || isFreelancerNotificationPage) {
             localStorage.removeItem("companyHasNewNotification");
@@ -101,9 +130,9 @@ function setupNotifications() {
             localStorage.removeItem("recruiterHasNewNotification");
             localStorage.removeItem("recruiterNotificationCount");
 
-            let notificationIcon = document.getElementById("notification-icon");
-            let notificationBadge = document.getElementById("notification-badge");
-            let notificationMenuTitles = document.querySelectorAll(".notification-menu-title");
+            const notificationIcon = document.getElementById("notification-icon");
+            const notificationBadge = document.getElementById("notification-badge");
+            const notificationMenuTitles = document.querySelectorAll(".notification-menu-title");
 
             notificationIcon.classList.remove("text-danger");
             notificationBadge.style.display = "none";
@@ -112,7 +141,7 @@ function setupNotifications() {
     }
 
     function setupNotificationClickReset() {
-        let notificationLinks = document.querySelectorAll('.menu-link[href*="notifications"]');
+        const notificationLinks = document.querySelectorAll('.menu-link[href*="notifications"]');
         notificationLinks.forEach(link => {
             link.addEventListener('click', () => {
                 console.log("🔄 Resetting notifications on menu click...");
@@ -121,12 +150,17 @@ function setupNotifications() {
         });
     }
 
-    subscribeToChannel('company', companyId);
-    subscribeToChannel('recruiter', recruiterId);
+    if (isCompanyLoggedIn) {
+        subscribeToChannel('company', companyId);
+    }
+
+    if (isRecruiterLoggedIn) {
+        subscribeToChannel('recruiter', recruiterId);
+    }
 
     checkStoredNotifications();
     clearNotificationsOnRoute();
-    setupNotificationClickReset(); 
+    setupNotificationClickReset();
 }
 
 export default setupNotifications;
