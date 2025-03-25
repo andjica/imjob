@@ -37,76 +37,118 @@
         </div>
         <!-- Company Cards -->
         <div class="row g-6">
-            @forelse($companies as $company)
-                <div class="col-md-4">
-                    <div class="card shadow-sm">
-                        <div class="card-header text-right">
-                            <div class="card-toolbar">
-                                <a href="{{ asset('/recruiter/company/' . $company->id . '/details') }}"
-                                    class="btn btn-outline btn-sm btn-outline-dashed me-2 mb-2">View profile</a>
+            @if ($companies->count() === 0)
+            <div class="col-lg-9">
+                <div class="card card-flush shadow-sm mb-5">
+                    <div class="card-body text-center">
+                        <div class="alert alert-warning d-flex justify-content-center p-5 mb-0">
+                            <span class="svg-icon svg-icon-2hx svg-icon-warning me-4">
+                                <!-- Metronic SVG Icon -->
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                    viewBox="0 0 24 24">
+                                    <path opacity="0.3"
+                                        d="M12 22C17.523 22 22 17.523 22 12S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10Z"
+                                        fill="currentColor" />
+                                    <path d="M10.75 15.5h2.5v2.5h-2.5v-2.5Zm0-10h2.5v7.5h-2.5V5.5Z"
+                                        fill="currentColor" />
+                                </svg>
+                            </span>
+                            <div class="d-flex flex-column justify-content-center">
+                                <h4 class="mb-1">There are no companies</h4>
                             </div>
-                            @php
-                                /** @var User $user */
-                                $user = auth()->user();
-                            @endphp
-                            @if ($connectedOnPending->contains($company->id))
-                                <div class="card-toolbar">
-                                    <button type="button"
-                                        class="btn btn-outline btn-sm btn-outline-dashed me-2 mb-2 bg-light"
-                                        data-bs-toggle="tooltip" data-bs-placement="left"
-                                        title="You have to wait for company aproval">
-                                        <i class="fas fa-hourglass-half text-warning"></i> Connection on Pending
-                                    </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @else
+            @forelse($companies as $company)
+            <div class="col-md-4">
+                <div class="card shadow-sm">
+                    <div class="card-header text-right">
+                        <div class="card-toolbar">
+                            <a href="{{ asset('/recruiter/company/' . $company->id . '/details') }}"
+                                class="btn btn-outline btn-sm btn-outline-dashed me-2 mb-2">View profile</a>
+                        </div>
+                        @php
+                            /** @var User $user */
+                            $user = auth()->user();
+                        @endphp
+                        @if ($connectedOnPending->contains($company->id))
+                            <div class="card-toolbar">
+                                <button type="button"
+                                    class="btn btn-outline btn-sm btn-outline-dashed me-2 mb-2 bg-light"
+                                    data-bs-toggle="tooltip" data-bs-placement="left"
+                                    title="You have to wait for company aproval">
+                                    <i class="fas fa-hourglass-half text-warning"></i> Connection on Pending
+                                </button>
 
-                                </div>
-                            @elseif($connectedSuccessfully->contains($company->id))
-                                <!-- This button is shown if the company is connected and the status is active -->
-                                <div class="card-tolbar">
-                                    <button type="button" class="btn btn-primary btn-sm mt-4" data-bs-toggle="tooltip"
-                                        data-bs-placement="left" title="You are connected with this company">
-                                        <i class="fas fa-link"></i>
-                                    </button>
-                                </div>
-                            @else
-                                <div class="card-toolbar">
-                                    <a href="#" class="btn btn-sm btn-light-primary me-2 mb-2 follow-button"
-                                        id="kt_user_follow_button_{{ $company->id }}"
-                                        data-company-id="{{ $company->id }}">
-                                        <i class="ki-duotone ki-check fs-3 d-none"></i>
-                                        <!-- Indicator label -->
-                                        <span class="indicator-label"> <i class="fas fa-paper-plane"></i>Send request</span>
-                                        <!-- Indicator progress -->
-                                        <span class="indicator-progress d-none">
-                                            Please wait...
-                                            <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                                        </span>
-                                    </a>
-                                </div>
-                            @endif
-                        </div>
-                        <div class="card-body">
-                            <strong>{{ $company->name }}</strong><br>
-                            @if ($company->logo)
-                                <img src="{{ asset('storage/' . $company->logo) }}" alt="{{ $company->name }} Logo"
-                                    class="h-50px rounded img-fluid">
-                            @else
-                                <i class="fas fa-building text-muted fa-2x"></i> <!-- Fallback Icon -->
-                            @endif
-                            <br>
-                            <br>
-                            <u>{{ $company->category->name }}</u><small>- {{ $company->subCategory->name }} - </small><br>
-                            Type of company - {{ $company->companyType->name }},<i> <br>From {{ $company->city->name }},
-                                {{ $company->country->name }} </i>
+                            </div>
+                        @elseif($connectedSuccessfully->contains($company->id))
+                            <!-- This button is shown if the company is connected and the status is active -->
+                            <div class="card-tolbar">
+                                <button type="button" class="btn btn-primary btn-sm mt-4" data-bs-toggle="tooltip"
+                                    data-bs-placement="left" title="You are connected with this company">
+                                    <i class="fas fa-link"></i>
+                                </button>
+                            </div>
+                        @else
+                            <div class="card-toolbar">
+                                <a href="#" class="btn btn-sm btn-light-primary me-2 mb-2 follow-button"
+                                    id="kt_user_follow_button_{{ $company->id }}"
+                                    data-company-id="{{ $company->id }}">
+                                    <i class="ki-duotone ki-check fs-3 d-none"></i>
+                                    <!-- Indicator label -->
+                                    <span class="indicator-label"> <i class="fas fa-paper-plane"></i>Send request</span>
+                                    <!-- Indicator progress -->
+                                    <span class="indicator-progress d-none">
+                                        Please wait...
+                                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                    </span>
+                                </a>
+                            </div>
+                        @endif
+                    </div>
+                    <div class="card-body">
+                        <strong>{{ $company->name }}</strong><br>
+                        @if ($company->logo)
+                            <img src="{{ asset('storage/' . $company->logo) }}" alt="{{ $company->name }} Logo"
+                                class="h-50px rounded img-fluid">
+                        @else
+                            <i class="fas fa-building text-muted fa-2x"></i> <!-- Fallback Icon -->
+                        @endif
+                        <br>
+                        <br>
+                        <u>{{ $company->category->name }}</u><small>- {{ $company->subCategory->name }} - </small><br>
+                        Type of company - {{ $company->companyType->name }},<i> <br>From {{ $company->city->name }},
+                            {{ $company->country->name }} </i>
+                    </div>
+                </div>
+            </div>
+        @empty
+            <div class="col-lg-9">
+                <div class="card card-flush shadow-sm mb-5">
+                    <div class="card-body text-center">
+                        <div class="alert alert-warning d-flex justify-content-center p-5 mb-0">
+                            <span class="svg-icon svg-icon-2hx svg-icon-warning me-4">
+                                <!-- Metronic SVG Icon -->
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                    viewBox="0 0 24 24">
+                                    <path opacity="0.3"
+                                        d="M12 22C17.523 22 22 17.523 22 12S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10Z"
+                                        fill="currentColor" />
+                                    <path d="M10.75 15.5h2.5v2.5h-2.5v-2.5Zm0-10h2.5v7.5h-2.5V5.5Z"
+                                        fill="currentColor" />
+                                </svg>
+                            </span>
+                            <div class="d-flex flex-column justify-content-center">
+                                <h4 class="mb-1">No result found</h4>
+                            </div>
                         </div>
                     </div>
                 </div>
-            @empty
-                <div class="col-12">
-                    <div class="alert alert-warning" role="alert">
-                        No companies found matching your search criteria.
-                    </div>
-                </div>
-            @endforelse
+            </div>
+        @endforelse
+            @endif
         </div>
         <!-- Pagination -->
         <div class="row mt-2">

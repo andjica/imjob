@@ -32,8 +32,8 @@
                 <button onclick="window.history.back()" class="btn btn-sm bg-linear-pink text-white  p-2 mb-5"> <i
                         class="fa fa-chevron-left text-white"></i> Back</button>
                 <form action="{{ route('recruiter-find-contributors') }}" method="GET" class="d-flex">
-                    <input type="text" name="query" class="form-control me-2"
-                        placeholder="Search by contributor name..." value="{{ request('query') }}">
+                    <input type="text" name="query" class="form-control me-2" placeholder="Search by contributor name..."
+                        value="{{ request('query') }}">
                     <button type="submit" class="btn btn-primary">Search</button>
                 </form>
             </div>
@@ -41,67 +41,84 @@
         <!-- Contributor Cards -->
         <div class="row g-6">
             @forelse($contributors as $contributor)
-                <div class="col-md-10">
-                    <div class="card shadow-sm">
-                        <div class="card-header text-right">
-                            <div class="card-toolbar">
-                                <a href="{{ asset('/recruiter/contributor/' . $contributor->id . '/details') }}"
-                                    class="btn btn-outline btn-sm btn-outline-dashed me-2 mb-2">View Profile</a>
+                    <div class="col-md-10">
+                        <div class="card shadow-sm">
+                            <div class="card-header text-right">
+                                <div class="card-toolbar">
+                                    <a href="{{ asset('/recruiter/contributor/' . $contributor->id . '/details') }}"
+                                        class="btn btn-outline btn-sm btn-outline-dashed me-2 mb-2">View Profile</a>
+                                </div>
+                                @php
+                                    /** @var User $user */
+                                    $user = auth()->user();
+                                @endphp
+                                @if ($connectedOnPending->contains($contributor->id))
+                                    <div class="card-toolbar">
+                                        <button type="button"
+                                            class="btn btn-outline btn-sm btn-outline-dashed me-2 mb-2 bg-light-warning"
+                                            data-bs-toggle="tooltip" data-bs-placement="left" title="You have to wait for approval">
+                                            <i class="fas fa-hourglass-half"></i> Connection on Pending
+                                        </button>
+                                    </div>
+                                @elseif(!$connectedSuccessfully->contains($contributor->id))
+                                    <div class="card-toolbar">
+                                        <a href="#" class="btn btn-sm btn-light-primary me-2 mb-2 follow-button"
+                                            id="follow_button_{{ $contributor->id }}" data-contributor-id="{{ $contributor->id }}">
+                                            <i class="ki-duotone ki-check fs-3 d-none"></i>
+                                            <span class="indicator-label">
+                                                <i class="fas fa-paper-plane"></i> Send Request
+                                            </span>
+                                            <span class="indicator-progress d-none">
+                                                Please wait...
+                                                <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                            </span>
+                                        </a>
+                                    </div>
+                                @endif
+                                @if ($connectedSuccessfully->contains($contributor->id))
+                                    <div class="card-toolbar">
+                                        <button type="button" class="btn btn-primary btn-sm mt-4" data-bs-toggle="tooltip"
+                                            data-bs-placement="left" title="You are connected with this contributor">
+                                            <i class="fas fa-link"></i> Connected
+                                        </button>
+                                    </div>
+                                @endif
                             </div>
-                            @php
-                                /** @var User $user */
-                                $user = auth()->user();
-                            @endphp
-                            @if ($connectedOnPending->contains($contributor->id))
-                                <div class="card-toolbar">
-                                    <button type="button"
-                                        class="btn btn-outline btn-sm btn-outline-dashed me-2 mb-2 bg-light-warning"
-                                        data-bs-toggle="tooltip" data-bs-placement="left"
-                                        title="You have to wait for approval">
-                                        <i class="fas fa-hourglass-half"></i> Connection on Pending
-                                    </button>
-                                </div>
-                            @elseif(!$connectedSuccessfully->contains($contributor->id))
-                                <div class="card-toolbar">
-                                    <a href="#" class="btn btn-sm btn-light-primary me-2 mb-2 follow-button"
-                                        id="follow_button_{{ $contributor->id }}"
-                                        data-contributor-id="{{ $contributor->id }}">
-                                        <i class="ki-duotone ki-check fs-3 d-none"></i>
-                                        <span class="indicator-label">
-                                            <i class="fas fa-paper-plane"></i> Send Request
-                                        </span>
-                                        <span class="indicator-progress d-none">
-                                            Please wait...
-                                            <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                                        </span>
-                                    </a>
-                                </div>
-                            @endif
-                            @if ($connectedSuccessfully->contains($contributor->id))
-                                <div class="card-toolbar">
-                                    <button type="button" class="btn btn-primary btn-sm mt-4" data-bs-toggle="tooltip"
-                                        data-bs-placement="left" title="You are connected with this contributor">
-                                        <i class="fas fa-link"></i> Connected
-                                    </button>
-                                </div>
-                            @endif
-                        </div>
-                        <div class="card-body">
-                            <strong>{{ $contributor->name }}</strong><br>
-                            Contributor email: {{ $contributor->email }}<br>
-                            @if ($contributor->contributorType->name == 'Other(Specify)')
-                                {{ $contributor->custom_contributor_type }}
-                            @else
-                                <u>{{ $contributor->contributorType->name }}</u><br>
-                            @endif
-                            <i> From {{ $contributor->city->name }}, {{ $contributor->country->name }} </i>
+                            <div class="card-body">
+                                <strong>{{ $contributor->name }}</strong><br>
+                                Contributor email: {{ $contributor->email }}<br>
+                                @if ($contributor->contributorType->name == 'Other(Specify)')
+                                    {{ $contributor->custom_contributor_type }}
+                                @else
+                                    <u>{{ $contributor->contributorType->name }}</u><br>
+                                @endif
+                                <i> From {{ $contributor->city->name }}, {{ $contributor->country->name }} </i>
+                            </div>
                         </div>
                     </div>
-                </div>
             @empty
                 <div class="col-12">
-                    <div class="alert alert-warning" role="alert">
-                        No contributors found matching your search criteria.
+                    <div class="col-lg-9">
+                        <div class="card card-flush shadow-sm mb-5">
+                            <div class="card-body text-center">
+                                <div class="alert alert-warning d-flex justify-content-center p-5 mb-0">
+                                    <span class="svg-icon svg-icon-2hx svg-icon-warning me-4">
+                                        <!-- Metronic SVG Icon -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                            viewBox="0 0 24 24">
+                                            <path opacity="0.3"
+                                                d="M12 22C17.523 22 22 17.523 22 12S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10Z"
+                                                fill="currentColor" />
+                                            <path d="M10.75 15.5h2.5v2.5h-2.5v-2.5Zm0-10h2.5v7.5h-2.5V5.5Z"
+                                                fill="currentColor" />
+                                        </svg>
+                                    </span>
+                                    <div class="d-flex flex-column justify-content-center">
+                                        <h4 class="mb-1">No contributor is found</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             @endforelse
@@ -109,7 +126,7 @@
         <!-- Pagination -->
         <div class="row mt-2">
             <div class="col-12 d-flex justify-content-left">
-            {{ $contributors->withQueryString()->links('pagination::bootstrap-4') }}
+                {{ $contributors->withQueryString()->links('pagination::bootstrap-4') }}
             </div>
         </div>
     </div>
@@ -117,11 +134,11 @@
 
 @section('js')
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const followButtons = document.querySelectorAll('.follow-button');
 
             followButtons.forEach(button => {
-                button.addEventListener('click', function(event) {
+                button.addEventListener('click', function (event) {
                     event.preventDefault();
 
                     const contributorId = this.dataset.contributorId;
@@ -136,15 +153,15 @@
 
                     // Send AJAX request
                     fetch("{{ route('recruiter-make-request-contributor') }}", {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                            },
-                            body: JSON.stringify({
-                                follow_id: contributorId
-                            })
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({
+                            follow_id: contributorId
                         })
+                    })
                         .then(response => response.json())
                         .then(data => {
                             if (data.success) {
