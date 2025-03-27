@@ -86,7 +86,7 @@ class AuthController extends Controller
 
     public function verifyUser($userId,Request $request)
     {
-        $user = User::findOrFail($userId);
+        $user = User::find($userId);
 
         if($user)
         {
@@ -129,7 +129,7 @@ class AuthController extends Controller
 
     public function verifyUserResendVerificationCode($userId)
     {
-        $user = User::findOrFail($userId);
+        $user = User::find($userId);
 
         if($user)
         {
