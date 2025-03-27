@@ -42,7 +42,7 @@ class AuthController extends Controller
 
         // Vrati podatke u odgovoruU
         return response()->json([
-            'access_token' => $token,
+            'jwt_token' => $token,
             'token_type' => 'Bearer',
             'user' => $user,
             'message' => 'Verify code for authentification',
