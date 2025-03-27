@@ -84,46 +84,39 @@ class AuthController extends Controller
         return response()->json(auth()->user());
     }
 
-    public function verifyUser($userId,Request $request)
+    public function verifyUser($userId, Request $request)
     {
+        $verificationCode = $request->verification_code;
+
         $user = User::find($userId);
 
-        if($user)
-        {
-            $email = $request->email;
-            $verificationCode = $request->verification_code;
-
-            $user = User::where('email', $email)->where('verfication_code', $verificationCode)->first();
-        
-            if($user)
-            {
+        if ($user) {
+           
+           
                 if (now()->greaterThan($user->verification_expires_at)) {
+                    
                     return response()->json([
-                        'error' =>  'Verification code expired. New verification code is sent by email.',
-                    ], 400); 
+                        'error' =>  'Verification code expired, please click to resend verification code.',
+                    ], 410);
                 }
-        
-                // Kod je validan i još važi
-                return response()->json([
-                    'message' => 'User credentials are valid.',
-                ], 200);
-                return response()->json([
-                    'message' => 'User credentials is ok'
-                ]);
-            }
-            else
-            {
-                return response()->json([
-                    'error' => 'User with this credentials doesnt exist please check email and verification code', 
-                ]);
-            }
-
-        }
-        else
-        {
+                else if($user->verification_code != $verificationCode)
+                {
+                    return response()->json([
+                        'error' => 'Your code is not valid'
+                    ], 422);
+                }
+                else
+                {
+                    // Kod je validan i još važi
+                    return response()->json([
+                        'message' => 'User credentials are valid.',
+                    ], 200);
+                }
+                
+        } else {
             return response()->json([
-                'error' => 'User doesnt exist', 
-            ]);
+                'error' => 'User doesnt exist',
+            ], 404);
         }
     }
 
