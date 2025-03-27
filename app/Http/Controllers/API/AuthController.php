@@ -97,6 +97,16 @@ class AuthController extends Controller
         
             if($user)
             {
+                if (now()->greaterThan($user->verification_expires_at)) {
+                    return response()->json([
+                        'error' =>  'Verification code expired. New verification code is sent by email.',
+                    ], 400); 
+                }
+        
+                // Kod je validan i još važi
+                return response()->json([
+                    'message' => 'User credentials are valid.',
+                ], 200);
                 return response()->json([
                     'message' => 'User credentials is ok'
                 ]);
