@@ -22,4 +22,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:api')->get('/profile', [AuthController::class, 'me']);
-Route::post('/verify-user/{userId}', [AuthController::class, 'verifyUser'])->middleware('auth:api');
+Route::post('/verify-user/{userId}', [AuthController::class, 'verifyUser']);
+Route::post('/verify-user/{userId}/resend-code', [AuthController::class, 'verifyUserResendVerificationCode']);
