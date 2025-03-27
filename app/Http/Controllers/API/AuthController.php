@@ -87,7 +87,7 @@ class AuthController extends Controller
     public function verifyUser($userId, Request $request)
     {
         $verificationCode = $request->verification_code;
-
+     
         $user = User::find($userId);
 
         if ($user) {
@@ -99,19 +99,23 @@ class AuthController extends Controller
                         'error' =>  'Verification code expired, please click to resend verification code.',
                     ], 410);
                 }
-                else if($user->verification_code != $verificationCode)
-                {
-                    return response()->json([
-                        'error' => 'Your code is not valid'
-                    ], 422);
-                }
                 else
                 {
-                    // Kod je validan i još važi
-                    return response()->json([
-                        'message' => 'User credentials are valid.',
-                    ], 200);
+                    if($user->verification_code !== $verificationCode)
+                    {
+                        return response()->json([
+                            'error' => 'Your code is not valid'
+                        ], 422);
+                    }
+                    else
+                    {
+                        // Kod je validan i još važi
+                        return response()->json([
+                            'message' => 'User credentials are valid.',
+                        ], 200);
+                    }
                 }
+                
                 
         } else {
             return response()->json([
