@@ -18,7 +18,7 @@ class AuthController extends Controller
             'lastName' => 'required|string|max:50',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6',
-            'confirmPassword' => 'required|string|same:password',
+            'passwordConfirm' => 'required|string|same:password',
         ]);
 
         // Generiši 4-cifreni verifikacioni kod
@@ -26,8 +26,8 @@ class AuthController extends Controller
 
         // Kreiraj korisnika
         $user = User::create([
-            'first_name' => $validated['first_name'],
-            'last_name' => $validated['last_name'],
+            'first_name' => $validated['firstName'],
+            'last_name' => $validated['lastName'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
             'verification_code' => $code,
@@ -41,7 +41,7 @@ class AuthController extends Controller
 
         // Vrati podatke u odgovoru
         return response()->json([
-            'access_token' => $token,
+            'jwt_token' => $token,
             'token_type' => 'Bearer',
             'user' => $user,
             'message' => 'Verify code for authentification',
@@ -66,5 +66,38 @@ class AuthController extends Controller
     public function me()
     {
         return response()->json(auth()->user());
+    }
+
+    public function verifyUser($userId,Request $request)
+    {
+        $user = User::findOrFail($userId);
+
+        if($user)
+        {
+            $email = $request->email;
+            $verificationCode = $request->verification_code;
+
+            $user = User::where('email', $email)->where('verfication_code', $verificationCode)->first();
+        
+            if($user)
+            {
+                return response()->json([
+                    'message' => 'User credentials is ok'
+                ]);
+            }
+            else
+            {
+                return response()->json([
+                    'error' => 'User with this credentials doesnt exist please check email and verification code', 
+                ]);
+            }
+
+        }
+        else
+        {
+            return response()->json([
+                'error' => 'User doesnt exist', 
+            ]);
+        }
     }
 }
