@@ -84,7 +84,7 @@
         <div class="email-header">
             <!-- Metronic Logo (use your logo here) -->
             <a href="{{ route('home') }}" class="navbar-brand fw-bold">
-            <img src="{{ asset('images/im-job-logo.svg') }}" alt="Logo Im job" height="60">
+            <img src="{{ asset('images/logo1.png') }}" alt="Logo Im job" height="60">
            
         </a>
         </div>

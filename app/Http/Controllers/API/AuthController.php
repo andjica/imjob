@@ -86,7 +86,7 @@ class AuthController extends Controller
 
     public function verifyUser($userId, Request $request)
     {
-        $verificationCode = $request->verification_code;
+        $verificationCode = trim((string)$request->verification_code);
      
         $user = User::find($userId);
 
@@ -101,7 +101,8 @@ class AuthController extends Controller
                 }
                 else
                 {
-                    if($user->verification_code !== $verificationCode)
+                    $storedCode = trim((string) $user->verification_code);
+                    if($storedCode !== $verificationCode)
                     {
                         return response()->json([
                             'error' => 'Your code is not valid'
