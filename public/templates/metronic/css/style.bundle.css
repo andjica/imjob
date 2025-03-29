@@ -7090,7 +7090,7 @@ textarea.form-control-lg {
 }
 
 .border-danger {
-  border-color: #F1416C !important;
+  border-color: 0.5px solid #ff00ef57 !important;
 }
 
 .border-dark {
@@ -10491,6 +10491,11 @@ textarea.form-control-lg {
   color: rgba(var(--bs-success-rgb), var(--bs-text-opacity)) !important;
 }
 
+.text-purple
+{
+  color: #C15DDD !important;
+}
+
 .text-info {
   --bs-text-opacity: 1;
   color: rgba(var(--bs-info-rgb), var(--bs-text-opacity)) !important;
@@ -10585,7 +10590,10 @@ textarea.form-control-lg {
   --bs-bg-opacity: 1;
   background-color: rgba(var(--bs-success-rgb), var(--bs-bg-opacity)) !important;
 }
-
+.bg-gradient-purple {
+  background: linear-gradient(90deg, #6234D5 0%, #815DDD 50%, #C15DDD 100%);
+  color: #fff; /* belo slovo po defaultu */
+}
 .bg-info {
   --bs-bg-opacity: 1;
   background-color: rgba(var(--bs-info-rgb), var(--bs-bg-opacity)) !important;

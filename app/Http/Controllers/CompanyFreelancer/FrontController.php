@@ -67,8 +67,9 @@ class FrontController extends Controller
         /** @var User $user */
         $user   = auth()->user();
         $userId = $user->id;
+        
+        $freelancer = $this->companyFreelancerServices->findFreelancer($userId);
 
-        $freelancer = $this->companyFreelancerServices->findFreelancer($userId) ?? abort(404);
         return view('company-freelancer.pages.index', compact('freelancer'));
     }
 
@@ -214,7 +215,7 @@ class FrontController extends Controller
 
     public function recruitmentProcess(Job $job): Factory|View|Application
     {
-        $candidates = $job->candidates()->with('user')->get();
+        $candidates = $job->candidates()->with('user', 'candidate')->get();
        
         return view('company-freelancer.pages.recruitment.job-recruitment', compact('job', 'candidates'));
     }

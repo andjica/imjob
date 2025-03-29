@@ -3,13 +3,14 @@
 namespace App\Services;
 
 use App\Models\Company;
+use App\Models\Country;
 use App\Models\Recruiter;
 use Illuminate\Http\Request;
 use App\Models\FreelancerCompany;
 use App\Interfaces\RecruiterInterface;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Storage;
 
 class RecruiterServices implements RecruiterInterface
 {
@@ -119,6 +120,7 @@ class RecruiterServices implements RecruiterInterface
      //store freelancer
      public function store(Request $request)
      {
+        
          $validatedData = $request->validate([
              //'recruiterInformation' => 'required|string|max:255',
              'birthday' => 'required|date|before:today',
@@ -127,6 +129,7 @@ class RecruiterServices implements RecruiterInterface
              // 'profileImage' => 'required|image|mimes:jpeg,png,jpg,gif|max:5048',
              'experienceLevel' => 'required|in:junior,mid,senior',
              'availability' => 'required|in:morning,afternoon,evening,full_day',
+             'phoneNumber' => 'nullable|string|max:255'
              
          ], [
              // Custom error messages
@@ -154,10 +157,10 @@ class RecruiterServices implements RecruiterInterface
              $validatedData['profileImage'] = $filePath;
              $freelancer->profile_image = $filePath;
          }
-        
-           // Save the validated data
-         //new recruiter or freelancer
-        
+         $user = auth()->user();
+         $company = $user->company;
+         $country = Country::find($company->country_id);
+ 
          //$freelancer->recruiter_information = $validatedData['recruiterInformation'];
          $freelancer->user_id = auth()->user()->id;
          $freelancer->birthday = $validatedData['birthday'];
@@ -166,15 +169,19 @@ class RecruiterServices implements RecruiterInterface
          //$freelancer->profile_image = $validatedData['profileImage'];
          $freelancer->experience_level = $validatedData['experienceLevel'];
          $freelancer->availability = $validatedData['availability'];
-         $freelancer->phone_number = $request->phoneNumber;
+         $freelancer->phone_number = '+' . trim($country->phone_code) . trim($validatedData['phoneNumber']);
  
     
         
          //if recruiter has company is freelancer 
          // Assuming the authenticated user belongs to a company
         $role = auth()->user()->role;
-         if($role->name == "Company")
-         { $companyId = auth()->user()->company->id;
+
+
+         if($role->name === "company")
+         { 
+            
+            $companyId = auth()->user()->company->id;
              $company = Company::find($companyId);
              $freelancer->country_id = $company->country_id;
              $freelancer->city_id = $company->city_id;
@@ -193,7 +200,7 @@ class RecruiterServices implements RecruiterInterface
                  else
                  {
              
-                         // Save freelancer-company relation
+                   // Save freelancer-company relation
                      $freelancerCompany = new FreelancerCompany();
                      $freelancerCompany->freelancer_id = $freelancer->id;
                      $freelancerCompany->company_id = $companyId;
@@ -204,6 +211,7 @@ class RecruiterServices implements RecruiterInterface
          }
          else
          {
+            
             $freelancer->title_function = null;
             $freelancer->is_freelancer = 0;
             $freelancer->save();

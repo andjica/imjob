@@ -67,7 +67,7 @@
                     </td>
                     <td>
                         <!-- Full Name -->
-                        <span class="font-weight-bold text-dark">{{ $candidate->country->name }}, {{$candidate->city->name}}</span>
+                        <span class="font-weight-bold text-dark">{{$candidate->candidate->country->name}}, {{$candidate->candidate->city->name}}</span>
                     </td>
                     <td>
                         <!-- Full Name -->

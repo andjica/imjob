@@ -13,7 +13,7 @@
     }
     .border-danger
     {
-        border:1px solid red;
+        border:0.5px solid #ff00ef57 !important;
     }
    
 </style>
@@ -24,14 +24,24 @@
     <div class="row mb-20">
         <div class="col-12 mt-20">
         <div class="card shadow-sm mb-4">
-            <div class="card-header bg-success text-dark fw-light text-center py-5">
-                <h2 class="text-dark">
+            <div class="card-header bg-gradient-purple fw-light text-center py-5">
+                <h2 class="text-white">
                     One more step :) and you are finish..
-                    <i class="fas fa-arrow-right ms-2"></i> <!-- Font Awesome icon -->
+                    <i class="fas fa-arrow-right ms-2 text-white"></i> <!-- Font Awesome icon -->
                 </h2>
                 <p class="text-white text-left"></p>
             </div>
         </div>
+        @if ($errors->any())
+    <div class="alert alert-danger">
+        <strong>There were some problems with your input:</strong>
+        <ul class="mb-0 mt-2">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 
             <div class="card">
                 <div class="card-header text-center py-4">
@@ -41,10 +51,10 @@
             <div class="card-body p-4 background-image">
                 <form action="{{route('company-freelancer-recruiter-store')}}" method="post" id="recruiterForm" enctype="multipart/form-data">
                 @csrf
-                <h2 class="text-center">Freelancer Information</h2>
+                <h2 class="text-center mt-5 mb-5">Freelancer Information</h2>
                 <div class="row mb-3">
                     <!-- Recruiter Information -->
-                    <label for="recruiterInformation" class="col-lg-6 col-form-label text-end fw-bold">
+                    <label for="recruiterInformation" class="col-lg-6 col-form-label text-end fw-bold required">
                         <i class="fas fa-user text-primary me-2"></i> Recruiter Information
                     </label>
                     <div class="col-lg-6">
@@ -54,10 +64,9 @@
                         <span class="text-danger" id="recruiterInformationEmpty">@error('recruiterInformation'){{ $message }}@enderror</span>
                     </div>
                 </div>
-
                 <div class="row mb-3">
                     <!-- Birthday -->
-                    <label for="birthday" class="col-lg-6 col-form-label text-end fw-bold">
+                    <label for="birthday" class="col-lg-6 col-form-label text-end fw-bold required">
                         <i class="fas fa-calendar-alt text-primary me-2"></i> Birthday
                     </label>
                     <div class="col-lg-6">
@@ -82,7 +91,7 @@
 
                 <div class="row mb-3">
                     <!-- Experience Level -->
-                    <label for="experienceLevel" class="col-lg-6 col-form-label text-end fw-bold">
+                    <label for="experienceLevel" class="col-lg-6 col-form-label text-end fw-bold required">
                         <i class="fas fa-chart-line text-primary me-2"></i> Experience Level
                     </label>
                     <div class="col-lg-6">
@@ -99,7 +108,7 @@
 
                 <div class="row mb-3">
                     <!-- Availability -->
-                    <label for="availability" class="col-lg-6 col-form-label text-end fw-bold">
+                    <label for="availability" class="col-lg-6 col-form-label text-end fw-bold required">
                         <i class="fas fa-clock text-primary me-2"></i> Availability
                     </label>
                     <div class="col-lg-6">
@@ -114,22 +123,46 @@
                         <span class="text-danger" id="availabilityEmpty">@error('availability'){{ $message }}@enderror</span>
                     </div>
                 </div>
-                <div class="row mb-3">
-                    <!-- Recruiter Information -->
-                    <label for="phoneNumber" class="col-lg-6 col-form-label text-end fw-bold">
-                        <i class="fas fa-user text-primary me-2"></i>One more phone number
-                    </label>
-                    <div class="col-lg-6">
-                        <input type="text" name="phoneNumber" id="phoneNumber" 
-                            class="form-control @error('phoneNumber') is-invalid @enderror" 
-                            placeholder="Enter recruiter information" value="{{ old('phoneNumber') }}">
-                        <span class="text-danger" id="phoneNumberEmpty">@error('phoneNumber'){{ $message }}@enderror</span>
+                @php
+                                use Illuminate\Support\Str;
+
+                                $company = auth()->user()->company;
+                                $prefix = $company->country && $company->country->phone_code
+                                    ? '+' . trim($company->country->phone_code)
+                                    : '+';
+
+                                $numberWithoutPrefix = Str::startsWith($company->phone_number, $prefix)
+                                    ? Str::replaceFirst($prefix, '', $company->phone_number)
+                                    : $company->phone_number;
+                            @endphp
+
+                        <div class="row mb-3">
+                        <!-- Phone Number -->
+                        <label for="phoneNumber" class="col-lg-6 col-form-label text-end fw-bold">
+                            <i class="fas fa-phone-alt text-primary me-2"></i> Phone number
+                        </label>
+                        <div class="col-lg-6">
+                            <div class="input-group">
+                                <span class="input-group-text border-0 border-end border-2 border-gray-300" id="phoneCodeDisplay">
+                                    {{ $prefix }}
+                                </span>
+                                <input type="text"
+                                    class="form-control @error('phone') is-invalid @enderror"
+                                    id="phoneNumber"
+                                    name="phoneNumber"
+                                    value=""
+                                    required
+                                    placeholder="Your personal phone number"
+                                    aria-describedby="phoneCodeDisplay" />
+                            </div>
+                            <span class="text-danger" id="phoneempty">@error('phoneNumber'){{ $message }}@enderror</span>
+                        </div>
                     </div>
-                </div>
+
                 <!-- Submit Button -->
                 <div class="text-center">
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-check-circle me-2"></i> Submit Your personal freelancer information
+                    <button type="submit" class="btn btn-primary mt-10 mb-10">
+                        <i class="fas fa-check-circle me-2 text-purple"></i> Submit Your personal freelancer information
                     </button>
                 </div>
                 </form>

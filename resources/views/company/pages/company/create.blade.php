@@ -13,7 +13,7 @@
     }
     .border-danger
     {
-        border:1px solid red !important;
+        border: 0.5px solid #ff00ef57 !important;
     }
    
 </style>
@@ -23,14 +23,14 @@
     <div class="row mb-20">
         <div class="col-12 mt-20">
         <div class="card shadow-sm mb-4">
-            <div class="card-header bg-primary text-white text-center py-4">
+            <div class="card-header bg-gradient-purple text-white text-center py-4">
                 <h2 class="mb-1 text-white">Welcome {{auth()->user()->first_name}}!</h2>
                 <p class="text-white text-left"></p>
             </div>
         </div>
             <div class="card">
                 <div class="card-header text-center py-4">
-                    <h3 class="fw-bold">Before you start, complete Your Company Information</h3>
+                    <h3 class="fw-light">Before you start, complete Your Company Information</h3>
                     <p class="text-muted">Provide accurate details to set up your company dashboard.</p>
                 </div>
                 <div class="card-body p-4 background-image">
@@ -38,7 +38,7 @@
                         @csrf
                         <div class="row mb-4">
                     <!-- Company Type -->
-                    <label for="companyTypeId" class="col-lg-6 col-form-label text-end fw-bold text-uppercase">
+                    <label for="companyTypeId" class="col-lg-6 col-form-label text-end fw-bold text-uppercase required">
                         <i class="fas fa-briefcase text-primary me-2"></i> Choose Your Company Type
                     </label>
                     <div class="col-lg-6 form-label fw-semibold fs-6">
@@ -57,7 +57,7 @@
                 </div>
                         <div class="row mb-3">
                             <!-- Owner Title -->
-                            <label for="ownerTitle" class="col-lg-6 col-form-label text-end fw-bold">
+                            <label for="ownerTitle" class="col-lg-6 col-form-label text-end fw-bold required">
                                 <i class="fas fa-user-tie text-primary me-2"></i> Owner Title
                             </label>
                             <div class="col-lg-6">
@@ -76,7 +76,7 @@
 
                         <div class="row mb-3">
                             <!-- Company Name -->
-                            <label for="name" class="col-lg-6 col-form-label text-end fw-bold">
+                            <label for="name" class="col-lg-6 col-form-label text-end fw-bold required">
                                 <i class="fas fa-building text-primary me-2"></i> Company Name
                             </label>
                             <div class="col-lg-6">
@@ -89,7 +89,7 @@
                             </div>
                         </div>
                         <div class="row mb-3" id="categoryRow">
-                    <label for="categoryId" class="col-lg-6 col-form-label text-end fw-bold">
+                    <label for="categoryId" class="col-lg-6 col-form-label text-end fw-bold required">
                         <i class="fas fa-globe text-primary me-2"></i> Category
                     </label>
                     <div class="col-lg-6">
@@ -107,7 +107,7 @@
                 </div>
             
                  <div class="row mb-3" id="subCategoryRow">
-                            <label for="subCategoryId" class="col-lg-6 col-form-label text-end fw-bold">
+                            <label for="subCategoryId" class="col-lg-6 col-form-label text-end fw-bold required">
                                 <i class="fas fa-globe text-primary me-2"></i> Sub Category
                             </label>
                             <div class="col-lg-6">
@@ -120,7 +120,7 @@
                         </div>
                         <div class="row mb-3">
                             <!-- Registration Number -->
-                            <label for="registrationNumber" class="col-lg-6 col-form-label text-end fw-bold">
+                            <label for="registrationNumber" class="col-lg-6 col-form-label text-end fw-bold required">
                                 <i class="fas fa-id-card text-primary me-2"></i> Registration Number
                             </label>
                             <div class="col-lg-6">
@@ -135,7 +135,7 @@
 
                         <div class="row mb-3">
                             <!-- Tax Number -->
-                            <label for="taxNumber" class="col-lg-6 col-form-label text-end fw-bold">
+                            <label for="taxNumber" class="col-lg-6 col-form-label text-end fw-bold required">
                                 <i class="fas fa-receipt text-primary me-2"></i> Tax Number
                             </label>
                             <div class="col-lg-6">
@@ -147,10 +147,9 @@
                                
                             </div>
                         </div>
-
+                        <!-- Country -->
                         <div class="row mb-3">
-                            <!-- Country -->
-                            <label for="countryId" class="col-lg-6 col-form-label text-end fw-bold">
+                            <label for="countryId" class="col-lg-6 col-form-label text-end fw-bold required">
                                 <i class="fas fa-globe text-primary me-2"></i> Country
                             </label>
                             <div class="col-lg-6">
@@ -168,9 +167,9 @@
                                
                             </div>
                         </div>
-                       
+                       <!-- City -->
                         <div class="row mb-3" id="cityRow">
-                            <label for="cityId" class="col-lg-6 col-form-label text-end fw-bold">
+                            <label for="cityId" class="col-lg-6 col-form-label text-end fw-bold required">
                                 <i class="fas fa-globe text-primary me-2"></i> City
                             </label>
                             <div class="col-lg-6">
@@ -181,8 +180,9 @@
                                 <span class="text-danger" id="cityEmpty"></span>
                             </div>
                         </div>
+                        <!-- Address -->
                         <div class="row mb-3" id="addressRow">
-                            <label for="address" class="col-lg-6 col-form-label text-end fw-bold">
+                            <label for="address" class="col-lg-6 col-form-label text-end fw-bold required">
                                 <i class="fas fa-map-marker-alt text-primary me-2"></i> Address
                             </label>
                             <div class="col-lg-6">
@@ -192,9 +192,9 @@
                                 <span class="text-danger" id="addressEmpty"></span>
                             </div>
                         </div>
+                        <!-- Phone Number -->
                         <div class="row mb-3">
-                                <!-- Phone Number -->
-                                <label for="phoneNumber" class="col-lg-6 col-form-label text-end fw-bold">
+                                <label for="phoneNumber" class="col-lg-6 col-form-label text-end fw-bold required">
                                     <i class="fas fa-phone text-primary me-2"></i> Phone Number
                                 </label>
                                 <div class="col-lg-6">
@@ -209,9 +209,9 @@
                                 </div>
                         </div>
 
-
+                        <!-- Email -->
                         <div class="row mb-3">
-                            <!-- Email -->
+                          
                             <label for="email" class="col-lg-6 col-form-label text-end fw-bold">
                                 <i class="fas fa-envelope text-primary me-2"></i> Email Address of company
                             </label>
@@ -241,8 +241,8 @@
 
                         <!-- Submit Button -->
                         <div class="text-center">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-check-circle me-2"></i> Submit Company Information
+                            <button type="submit" class="btn btn-primary  mt-10 mb-10">
+                                <i class="fas fa-check-circle me-2 text-purple"></i> Submit Company Information
                             </button>
                         </div>
                     </form>

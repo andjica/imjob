@@ -21,7 +21,7 @@ class CreateRecruitersTable extends Migration
             $table->unsignedBigInteger('category_id')->nullable();
             $table->unsignedBigInteger('sub_category_id')->nullable();
             $table->date('birthday');
-            $table->string('title_function');
+            $table->string('title_function')->nullable();
             $table->string('experience_level');
             $table->string('availability');
             $table->string('phone_number')->nullable();

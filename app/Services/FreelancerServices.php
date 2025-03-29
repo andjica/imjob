@@ -2,11 +2,12 @@
 
 namespace App\Services;
 
+use App\Models\Country;
 use App\Models\Recruiter;
-use App\Interfaces\FreelancerInterface;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+use App\Interfaces\FreelancerInterface;
+use Illuminate\Support\Facades\Storage;
 
 class FreelancerServices implements FreelancerInterface
 {
@@ -38,7 +39,11 @@ class FreelancerServices implements FreelancerInterface
 
         // Find freelancer
         $freelancer = Recruiter::where('user_id', auth()->user()->id)->firstOrFail();
+        $user = auth()->user();
+        $company = $user->company;
+        $country = Country::find($company->country_id);
 
+       
         // Handle profile image upload
         if ($request->hasFile('profile_image')) {
             // Delete old image if exists
@@ -56,16 +61,18 @@ class FreelancerServices implements FreelancerInterface
             'first_name' => $validatedData['first_name'],
             'last_name' => $validatedData['last_name'],
         ]);
-
-        // Update freelancer-specific fields
-        $freelancer->update([
-            'birthday' => $validatedData['birthday'],
-            'title_function' => $validatedData['title_function'],
-            'experience_level' => $validatedData['experience_level'],
-            'availability' => $validatedData['availability'],
-            'phone_number' => $validatedData['phone_number'],
-            'profile_image' => $validatedData['profile_image'] ?? $freelancer->profile_image,
-        ]);
+        if ($country) {
+            // Update freelancer-specific fields
+            $freelancer->update([
+                'birthday' => $validatedData['birthday'],
+                'title_function' => $validatedData['title_function'],
+                'experience_level' => $validatedData['experience_level'],
+                'availability' => $validatedData['availability'],
+                'phone_number' =>  '+' . trim($country->phone_code) . trim($validatedData['phone_number']),
+                'profile_image' => $validatedData['profile_image'] ?? $freelancer->profile_image,
+            ]);
+        }
+       
 
         return redirect()->back()->with('success', 'Profile updated successfully!');
     }

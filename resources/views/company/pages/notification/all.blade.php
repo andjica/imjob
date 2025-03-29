@@ -14,7 +14,7 @@
     }
     .border-danger
     {
-        border:1px solid red !important;
+        border: 0.5px solid #ff00ef57 !important;
     }
    
 </style>

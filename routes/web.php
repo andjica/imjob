@@ -58,11 +58,10 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/choose/role', [HomeController::class, 'chooseRole'])->name('choose-role');
 Route::get('/account/activation-pending', [HomeController::class, 'pendingActivation'])->name('company-pending-activation');
 
-Route::get('/company/dashboard/information/freelancer/create', [HomeController::class, 'createFreelancer'])->name('company-freelancer-create');
+Route::get('/company/dashboard/information/freelancer/create/', [HomeController::class, 'createFreelancer'])->name('company-freelancer-create');
 Route::get('/recruiter/create', [HomeController::class, 'createFreelancer'])->name('recruiter-create');
 Route::post('/choose/role/update', [RoleController::class, 'updateUserRole'])->name('choose-role-update');
 
-Route::get('/proba', [HomeController::class, 'proba']);
 
 // Authenticated Routes
 Route::middleware('auth')->group(function () {
@@ -79,6 +78,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/company/update', [CompanyController::class, 'update'])->name('company-update');
     Route::post('/job/store', [JobController::class, 'store'])->name('store-job');
     Route::put('/job/{id}/update', [JobController::class, 'update'])->name('update-job');
+    Route::post('company/dashboard/store', [CompanyController::class, 'store'])->name('company-dashboard-store');
+    Route::get('company/dashboard/information/create', [CompanyFrontController::class, 'informationCreate'])->name('company-dashboard-information-create');
 
 });
 
@@ -100,9 +101,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin/dashboard')->name('admin-das
 // Company Routes - Basic - Agency
 Route::middleware(['auth', 'company', 'verified'])->prefix('company/dashboard')->name('company-dashboard-')->group(function () {
     Route::get('/', [CompanyFrontController::class, 'dashboard'])->name('index');
-    Route::get('/information/create', [CompanyFrontController::class, 'informationCreate'])->name('information-create');
 
-    Route::post('/store', [CompanyController::class, 'store'])->name('store');
 
     //recruiters list
     Route::get('/find/recruiters', [CompanyFrontController::class, 'findRecruiters'])->name('find-recruiters');

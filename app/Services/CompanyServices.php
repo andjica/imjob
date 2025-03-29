@@ -96,87 +96,68 @@ class CompanyServices implements CompanyInterface
 
     public function create(Request $request)
     {
+        // Validate incoming request data
         $validated = $request->validate([
-            'countryId' => 'required|exists:countries,id', // Validate country exists in the countries table
+            'countryId' => 'required|exists:countries,id',
             'ownerTitle' => 'required|string|max:255',
             'companyTypeId' => 'required|exists:company_types,id',
             'categoryId' => 'required|exists:categories,id',
             'subCategoryId' => 'required|exists:sub_categories,id',
-            'companyName' => 'required|string|max:255', // Company name is required
-            'registrationNumber' => 'required|string|max:255', // Ensure unique registration number
-            'taxNumber' => 'required|string|unique:companies,tax_number', // Ensure unique tax number
-            'phoneNumber' => 'required|string|max:20', // Phone number is required
-            'email' => 'required|email|unique:companies,email', // Ensure unique email
-            'address' => 'required|string|max:255', // Address is required
-            'cityId' => 'required|exists:cities,id', // Ensure city_id exists in cities table
-            'logo' => 'nullable|mimes:jpg,jpeg,png,svg|max:2048', // Logo is optional, validate if uploaded
+            'companyName' => 'required|string|max:255',
+            'registrationNumber' => 'required|string|max:255',
+            'taxNumber' => 'required|string|max:255',
+            'phoneNumber' => 'required|string|max:20',
+            'email' => 'required|email|unique:companies,email',
+            'address' => 'required|string|max:255',
+            'cityId' => 'required|exists:cities,id',
+            'logo' => 'nullable|mimes:jpg,jpeg,png,svg|max:2048',
         ]);
-
-
-
-        $company = new Company();
-        $country = Country::find($request->countryId);
-
-        if($country instanceof Country)
-        {
-            $company->country_id = $country->id;
-            $company->phone_number = '+' . trim($country->phone_code) . trim($request->phoneNumber);
-        }
-
-        $company->name = $request->companyName;
-        $company->company_type_id = $request->companyTypeId;
-        $company->category_id = $request->categoryId;
-        $company->sub_category_id = $request->subCategoryId;
-        $company->city_id = $request->cityId;
-        $company->user_id = auth()->user()->id ?? abort(404);
-        $company->owner_title = $request->ownerTitle;
-        $company->registration_number = $request->registrationNumber;
-        $company->tax_number = $request->taxNumber;
-        $company->email = $request->email;
-        $company->active = 0;
-        $company->address = $request->address;
-
-        // Handling logo upload if present
-        if ($request->hasFile('logo')) {
-            // Store the logo in the 'company_logos' folder within the 'public' directory
-            $logoPath = $request->file('logo')->store('uploads/company_logos', 'public');
-
-            // Generate the URL to access the uploaded logo
-            $logoUrl = asset('storage/' . $logoPath);
-
-            $company->logo = $logoPath;
-
-
-            try{
-                $company->save();
-                return $company;
+    
+        try {
+            $company = new Company();
+    
+            // Set basic company information
+            $company->name = $request->companyName;
+            $company->company_type_id = $request->companyTypeId;
+            $company->category_id = $request->categoryId;
+            $company->sub_category_id = $request->subCategoryId;
+            $company->city_id = $request->cityId;
+            $company->user_id = auth()->id() ?? abort(404);
+            $company->owner_title = $request->ownerTitle;
+            $company->registration_number = $request->registrationNumber;
+            $company->tax_number = $request->taxNumber;
+            $company->email = $request->email;
+            $company->address = $request->address;
+            $company->active = 0;
+    
+            // Assign country and format phone number with country code
+            $country = Country::find($request->countryId);
+            if ($country) {
+                $company->country_id = $country->id;
+                $company->phone_number = '+' . trim($country->phone_code) . trim($request->phoneNumber);
             }
-            catch(\Exception)
-            {
-                return abort(500);
+    
+            // Handle logo upload if provided
+            if ($request->hasFile('logo')) {
+                $logoPath = $request->file('logo')->store('uploads/company_logos', 'public');
+                $company->logo = $logoPath;
             }
-
-
-        } else {
-            // Handle when no logo is uploaded (optional)
-            $logoPath = null;
-            $logoUrl = null;
-                // Save company withouth logo :)
-
-                try{
-                    $company->save();
-                    return $company;
-                }
-                catch(\Exception)
-                {
-                    return abort(500);
-                }
-
+    
+            // Save company to database
+            $company->save();
+    
+            // Return successful response
+           return $company;
+    
+        } catch (\Exception $e) {
+            // Optionally log the error
+            // Log::error($e->getMessage());
+    
+            // Return error response
+            return abort(500);
         }
-
-
-
     }
+    
 
     public function update(Request $request)
     {

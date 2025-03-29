@@ -52,8 +52,9 @@
                             <h6 class="mb-0">{{ $candidate->user->first_name }} {{ $candidate->user->last_name }}</h6>
                             <p class="text-muted mb-0" style="font-size: 12px;">
                                 <i class="fa fa-envelope me-1"></i> {{ $candidate->user->email }} |
-                                <i class="fa fa-phone me-1"></i> {{ $candidate->phone }} |
-                                <i class="fa fa-map-marker-alt me-1"></i> {{ $candidate->city->name }}, {{ $candidate->country->name }}
+                                <i class="fa fa-phone me-1"></i> {{$candidate->candidate->phone}}|
+                                <i class="fa fa-map-marker-alt me-1"></i> {{ $candidate->candidate->city->name }}, {{ $candidate->candidate->country->name }}
+
                                 <a href="" class="btn btn-outline-light text-dark btn-sm">
                                         <i class="fas fa-file-download"></i> Download CV
                                     </a>

@@ -29,7 +29,8 @@ class PostServices implements PostInterface
 
         $contributorId = auth()->user()->contributor->id ?? abort(404);
         $post = new Post();
-        $post->description = $request->validated()['description'];
+        $descriptionHtml = $request->input('description'); // preuzmi sirov HTML
+        $post->description = $descriptionHtml;
         $post->image = $imagePath;
         $post->contributor_id = $contributorId;
 

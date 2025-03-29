@@ -1,19 +1,16 @@
-<!-- resources/views/company/waiting_activation.blade.php -->
-
 @extends('auth.template-auth')
+
 @section('css')
     <style>
-        /* Custom styling */
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #f4f6f9;
-            margin: 0;
-            padding: 0;
+        .full-height-center {
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            min-height: 75vh;
+            background-color: #f4f6f9;
+            padding: 30px;
         }
+
         .activation-container {
             max-width: 600px;
             background-color: #fff;
@@ -22,20 +19,24 @@
             padding: 30px;
             text-align: center;
         }
+
         .activation-container h1 {
             font-size: 24px;
             color: #4CAF50; /* Metronic green */
             margin-bottom: 10px;
         }
+
         .activation-container p {
             font-size: 16px;
             color: #333;
             line-height: 1.6;
         }
+
         .activation-container img {
             max-width: 200px;
             margin: 20px 0;
         }
+
         .cta-button {
             display: inline-block;
             padding: 10px 20px;
@@ -46,6 +47,11 @@
             font-weight: bold;
             margin-top: 20px;
         }
+
+        .bg-gradient-purple {
+            background: linear-gradient(90deg, #6234D5 0%, #815DDD 50%, #C15DDD 100%);
+        }
+
         .footer {
             text-align: center;
             font-size: 12px;
@@ -53,23 +59,22 @@
             margin-top: 20px;
         }
     </style>
-</head>
+@endsection
+
 @section('content')
+<div class="full-height-center">
+    <div class="activation-container">
+        <img src="{{ asset('/images/upgrade.svg') }}" alt="Awaiting Activation">
+        <h1 class="text-primary">Your Company Account is Pending for Activation</h1>
+        <p>
+            Thank you for registering your company with us!<br><br>
+            Your account is currently under review by our administrative team. Once the verification process is complete and your account is activated, you will receive a confirmation email. You will then be able to log in and start managing your activities on the platform.
+        </p>
 
-<div class="activation-container mb-20">
-    <img src="{{ asset('/images/upgrade.svg') }}" alt="Awaiting Activation">
-    <h1 class="text-primary">Your Company Account is Pending for Activation</h1>
-    <p>
-        Thank you for registering your company with us!<br><br> Your account is currently under review by our admin team.
-        Once your account is activated, you will be notified via email and can start managing your activities on our platform.
-    </p>
-    <p>
-        If you have any questions, feel free to <a href="mailto:support@example.com">contact our support team</a>.
-    </p>
-    <!-- Redirect to homepage -->
-    <a href="{{ url('/') }}" class="cta-button">Return to Home</a>
-
-   
+        <p>
+            If you have any questions, feel free to <a href="mailto:support@example.com">contact our support team</a>.
+        </p>
+        <a href="{{ url('/') }}" class="cta-button bg-gradient-purple">Return to Home</a>
+    </div>
 </div>
-
 @endsection

@@ -90,7 +90,8 @@
                                 </a>
                             </div>
                             <div class="card-body">
-                                {{ strip_tags($post->description) }}<br>
+                            {!! $post->description !!}
+                            <br>
 
                                 @if ($post->image != null)
                                     <img src="{{ Storage::url($post->image) }}"

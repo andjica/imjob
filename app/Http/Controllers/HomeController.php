@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Interfaces\CategoryInterface;
+use App\Interfaces\CompanyInterface;
 use App\Models\Company;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -10,16 +11,17 @@ use Illuminate\Support\Facades\Http;
 class HomeController extends Controller
 {
     protected $categoryServices;
-
+    protected $companyServices;
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct(CategoryInterface $categoryServices)
+    public function __construct(CategoryInterface $categoryServices, CompanyInterface $companyServices)
     {
         $this->middleware(['auth','verified']);
         $this->categoryServices = $categoryServices;
+        $this->companyServices = $companyServices;
     }
 
     /**
@@ -113,12 +115,12 @@ class HomeController extends Controller
                 if($company->company_type_id == 3)
                 {
                     //if company is freelancer - need to make freelancer(recruiter) record before goes to dash
-                    if (is_null($company?->recruiter)) {
-                        return redirect('/company/dashboard/information/freelancer/create');
-                    }
-                    else{
+                    // if (is_null($company?->recruiter)) {
+                    //     return redirect('/company/dashboard/information/freelancer/create');
+                    // }
+                    // else{
                         return redirect('/company/freelancer/dashboard');
-                    }
+                    // }
                     
                 }
                 else
@@ -150,21 +152,20 @@ class HomeController extends Controller
     public function createFreelancer()
     {
         
-        // $recruiter = auth()->user()->recruiter;
-        // if($recruiter?->is_freelancer == 1)
-        // {
-        //     return redirect('/company/freelancer/dashboard');
-        // }
-        // else if($recruiter?->is_freelancer == 0)
-        // {
-        //     return "ruta za rekruiter dash";
-        // }
-        // else
-        // {
-            $categories = $this->categoryServices->getAll();
+        // $secret = config('app.key');
+
+        // $expectedToken = hash_hmac('sha256', $companyId, $secret);
+    
+       // if (!hash_equals($expectedToken, $token)) {
+           // abort(403, 'Neautorizovan pristup.');
+        //}
+    
+       // $company = $this->companyServices->get($companyId);
+
+        $categories = $this->categoryServices->getAll();
         
-            return view('company.pages.freelancer.create', compact('categories'));
-        // }
+        return view('company.pages.freelancer.create', compact('categories'));
+        
        
     }
 }

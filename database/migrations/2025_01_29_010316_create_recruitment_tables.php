@@ -21,21 +21,35 @@ class CreateRecruitmentTables extends Migration
             $table->timestamps();
         });
 
-        // Table for candidates who applied to jobs
+        
+       // New table: candidat profiles
         Schema::create('candidates', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('job_id')->constrained('jobs')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->string('current_job_title')->nullable();
-            $table->string('company')->nullable();
-            $table->integer('years_of_experience');
-            $table->string('phone');
-            $table->foreignId('city_id')->constrained('cities')->onDelete('cascade');
             $table->foreignId('country_id')->constrained('countries')->onDelete('cascade');
-            $table->enum('status', ['pending', 'accept', 'reject'])->default('pending');
+            $table->foreignId('city_id')->constrained('cities')->onDelete('cascade');
+            $table->string('phone');
+            $table->string('profile_image')->nullable();
+            $table->date('birthday')->nullable();
+            $table->string('current_company')->nullable();
+            $table->string('cv');
+            $table->string('school_name');
+            $table->string('school_degree')->nullable();
+            $table->year('school_year_start')->nullable();
+            $table->year('school_year_end')->nullable();
             $table->timestamps();
         });
 
+        // New pivot table: candidat ↔ job
+        Schema::create('candidate_job', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('candidat_id')->constrained('candidates')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('job_id')->constrained('jobs')->onDelete('cascade');
+            $table->enum('status', ['pending', 'accept', 'reject'])->default('pending');
+            $table->timestamp('applied_at')->nullable()->default(now());
+            $table->timestamps();
+        });
         // Table for tracking the recruitment process for each candidate
         Schema::create('recruitment_processes', function (Blueprint $table) {
             $table->id();

@@ -26,20 +26,15 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 class Candidate extends Model
 {
     use HasFactory;
+    protected $table = 'candidate_job'; 
 
     public const STATUS_ACCEPT = 'accept';
     public const STATUS_REJECTED = 'reject';
     public const STATUS_PENDING = 'pending';
-
+    
     protected $fillable = [
         'job_id',
         'user_id',
-        'current_job_title',
-        'company',
-        'years_of_experience',
-        'phone',
-        'country',
-        'city',
         'status'
     ];
 
@@ -53,14 +48,10 @@ class Candidate extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function country(): BelongsTo
-    {
-        return $this->belongsTo(Country::class);
-    }
 
-    public function city(): BelongsTo
+    public function candidate(): BelongsTo
     {
-        return $this->belongsTo(City::class);
+        return $this->belongsTo(CandidatProfile::class, 'id');
     }
 
     public function recruitmentProcess(): HasOne

@@ -47,12 +47,14 @@ class CompanyController extends Controller
        
         // Call the service to create the company
         $company = $this->companyService->create($request);
+        //return dd($company->companyType->name);
         if($company->companyType->name === "Freelancer")
         {
             return redirect('/company/dashboard/information/freelancer/create');
         }
         else
         {
+            
             Mail::to($company->email) // Send email to the company owner
             ->cc(env('ADMIN_EMAIL')) // CC to the admin
             ->send(new CompanyPendingActivationEmail($company));

@@ -4,7 +4,7 @@
     </div>
     <div class="card-body">
     @if($recruiterCompanyConnections->count() == 0)
-    <div class="alert alert-warning align-items-center p-5 mb-0">
+        <div class="alert alert-warning align-items-center p-5 mb-0">
                 <span class="svg-icon svg-icon-2hx svg-icon-warning me-4">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                         <path opacity="0.3" d="M12 22C17.523 22 22 17.523 22 12S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10Z" fill="currentColor"/>
@@ -16,7 +16,7 @@
                     <p class="mb-0">Follow new companieso on <a href="{{asset('/company/freelancer/find/companies')}}">Find companies page</a></p>
                 </div>
             </div>
-    @else
+        @else
     
         <small class="card-title fw-light fst-italic">Your are connected with this companies</small>    
 
@@ -55,6 +55,7 @@
 
         @endforeach
 
-    </div>
     @endif
+    
+    </div>
 </div>
