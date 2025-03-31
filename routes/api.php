@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
-
+use App\Http\Controllers\API\FrontController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -24,3 +24,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:api')->get('/profile', [AuthController::class, 'me']);
 Route::post('/verify-user/{userId}', [AuthController::class, 'verifyUser']);
 Route::post('/verify-user/{userId}/resend-code', [AuthController::class, 'verifyUserResendVerificationCode']);
+
+//ruta koja vraca sve zemlje
+Route::get('/countries', [FrontController::class, 'getCountries']);
+//ruta koja vraca gradove po zemlji - po country_id
