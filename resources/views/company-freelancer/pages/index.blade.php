@@ -211,15 +211,16 @@
                                             Your connections
                                             <div class="symbol-group symbol-hover mb-3">
                                                 @foreach ($freelancer->companies as $cm)
-                                                    {{ $cm->name }}
                                                     <div class="symbol symbol-35px symbol-circle" data-bs-toggle="tooltip"
-                                                        data-bs-original-title="Alan Warden" data-kt-initialized="1">
+                                                        data-bs-original-title="" data-kt-initialized="1">
+                                                        <a href="{{asset('company/freelancer/company/'.$cm->id.'/details')}}">
                                                         @if ($cm->logo != null)
-                                                            <img alt="Pic" src="{{ Storage::url($cm->logo) }}">
+                                                            <img alt="Pic" src="{{ Storage::url($cm->logo) }}" width="30" class="img-fluid symbol-label">
                                                         @else
                                                             <span
-                                                                class="symbol-label bg-warning text-inverse-warning fw-bold">A</span>
+                                                                class="symbol-label bg-warning text-inverse-warning fw-bold">{{$firstLetter = substr($cm->name, 0, 1)}}</span>
                                                         @endif
+                                                        </a>
                                                     </div>
                                                 @endforeach
                                             </div>

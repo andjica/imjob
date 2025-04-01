@@ -8,6 +8,8 @@
             <div class="col-lg-10">
                 @include('alerts.success')
                 @include('alerts.errors')
+                <button onclick="window.history.back()" class="btn btn-sm bg-linear-pink text-white  p-2 mb-5"> <i
+                    class="fa fa-chevron-left text-white"></i> Back</button>
                 <div class="card shadow-sm">
                     <div class="card-header border-0 bg-light text-white d-flex justify-content-between align-items-center">
                         <h3 class="card-title mb-0 d-flex align-items-center">

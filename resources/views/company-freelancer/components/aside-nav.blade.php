@@ -156,7 +156,6 @@
                                     <span class="menu-arrow"></span>
                                 </span>
                                 <div class="menu-sub menu-sub-accordion">
-
                                     <div class="menu-item">
                                         <a class="menu-link {{ Route::currentRouteName() === 'company-freelancer-edit-company' ? 'active' : '' }}" href="{{asset('company/freelancer/edit/company')}}">
                                             <span class="menu-bullet">
@@ -165,10 +164,8 @@
                                             <span class="menu-title"><i class="fas fa-building text-muted fa-1x"></i> &nbsp;Edit company</span>
                                         </a>
                                     </div>
-                                    
                                 </div>
                                 <div class="menu-sub menu-sub-accordion">
-
                                     <div class="menu-item">
                                         <a class="menu-link {{ Route::currentRouteName() === 'company-freelancer-freelancer-edit' ? 'active' : '' }}" href="{{asset('/company/freelancer/edit')}}">
                                             <span class="menu-bullet">
@@ -177,7 +174,16 @@
                                             <span class="menu-title"><i class="fas fa-user text-muted fa-1x"></i> &nbsp;Edit freelancer</span>
                                         </a>
                                     </div>
-                                    
+                                </div>
+                                <div class="menu-sub menu-sub-accordion">
+                                    <div class="menu-item">
+                                        <a class="menu-link {{ Route::currentRouteName() === 'company-freelancer-view' ? 'active' : '' }}" href="{{asset('/company/freelancer/view')}}">
+                                            <span class="menu-bullet">
+                                                <span class="bullet bullet-dot"></span>
+                                            </span>
+                                            <span class="menu-title"><i class="fas fa-user text-muted fa-1x"></i> &nbsp;Freelancer view</span>
+                                        </a>
+                                    </div>
                                 </div>
                                 <!-- <div class="menu-sub menu-sub-accordion">
 
