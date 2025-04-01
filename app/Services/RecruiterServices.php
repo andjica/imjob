@@ -169,7 +169,7 @@ class RecruiterServices implements RecruiterInterface
          //$freelancer->profile_image = $validatedData['profileImage'];
          $freelancer->experience_level = $validatedData['experienceLevel'];
          $freelancer->availability = $validatedData['availability'];
-         $freelancer->phone_number = '+' . trim($country->phone_code) . trim($validatedData['phoneNumber']);
+         //$freelancer->phone_number = '+' . trim($country->phone_code) . trim($validatedData['phoneNumber']);
  
     
         
@@ -185,6 +185,7 @@ class RecruiterServices implements RecruiterInterface
              $company = Company::find($companyId);
              $freelancer->country_id = $company->country_id;
              $freelancer->city_id = $company->city_id;
+             $freelancer->phone_number = $company->phone_number;
              $freelancer->is_freelancer = 1;
              $freelancer->title_function = "main in his own company ".auth()->user()->company->name;
 

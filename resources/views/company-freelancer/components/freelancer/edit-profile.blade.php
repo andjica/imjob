@@ -156,7 +156,7 @@
                             : $freelancer->phone_number;
                     @endphp
 
-                    <div class="row mb-5">
+                    <!-- <div class="row mb-5">
                         <label class="col-lg-2 col-form-label fw-bold fs-6 required">Phone Number:</label>
                         <div class="col-lg-9">
                             <div class="input-group">
@@ -172,7 +172,7 @@
                                 @enderror
                             </span>
                         </div>
-                    </div>
+                    </div> -->
 
                     <!-- Form Actions -->
                     <div class="d-flex justify-content-end">

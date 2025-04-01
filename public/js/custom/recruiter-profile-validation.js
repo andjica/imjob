@@ -89,44 +89,44 @@ $("#availability").change(function () {
     }
 });
 
-$('input[name="phone_number"]').on("keypress", function (e) {
-    if (e.which < 48 || e.which > 57) {
-        e.preventDefault(); // Stops letters and special characters from appearing
-    }
-});
+// $('input[name="phone_number"]').on("keypress", function (e) {
+//     if (e.which < 48 || e.which > 57) {
+//         e.preventDefault(); // Stops letters and special characters from appearing
+//     }
+// });
 
 // Real-time validation for Phone Number
-$('input[name="phone_number"]').keyup(function () {
-    this.value = this.value.replace(/[^0-9]/g, "");
+// $('input[name="phone_number"]').keyup(function () {
+//     this.value = this.value.replace(/[^0-9]/g, "");
 
-    let phone = this.value;
+//     let phone = this.value;
 
-    if(phone.length === "") {
-        $("#phoneNumberEmpty").text("Phone number is required");
-        $("#phoneNumber")
-            .addClass("border-danger")
-            .removeClass("border-success");
-    }
+//     if(phone.length === "") {
+//         $("#phoneNumberEmpty").text("Phone number is required");
+//         $("#phoneNumber")
+//             .addClass("border-danger")
+//             .removeClass("border-success");
+//     }
 
-    if (phone.length < 4) {
-        $("#phoneNumberEmpty").text("Enter at least 4 numbers");
-        $("#phoneNumber")
-            .addClass("border-danger")
-            .removeClass("border-success");
-    } else if (phone.length > 10) {
-        $("#phoneNumberEmpty")
-            .text("Phone number can have max 10 characters")
-            .show();
-        $("#phoneNumber")
-            .addClass("border-danger")
-            .removeClass("border-success");
-    } else {
-        $("#phoneNumberEmpty").text("").hide();
-        $("#phoneNumber")
-            .removeClass("border-danger")
-            .addClass("border-success");
-    }
-});
+//     if (phone.length < 4) {
+//         $("#phoneNumberEmpty").text("Enter at least 4 numbers");
+//         $("#phoneNumber")
+//             .addClass("border-danger")
+//             .removeClass("border-success");
+//     } else if (phone.length > 10) {
+//         $("#phoneNumberEmpty")
+//             .text("Phone number can have max 10 characters")
+//             .show();
+//         $("#phoneNumber")
+//             .addClass("border-danger")
+//             .removeClass("border-success");
+//     } else {
+//         $("#phoneNumberEmpty").text("").hide();
+//         $("#phoneNumber")
+//             .removeClass("border-danger")
+//             .addClass("border-success");
+//     }
+// });
 
 $("#freelancerForm").submit(function (event) {
     // Prevent form submission for validation
@@ -199,18 +199,18 @@ $("#freelancerForm").submit(function (event) {
     }
 
     // Phone Number
-    var phoneNumber = $('input[name="phone_number"]').val().trim();
-    var phoneRegex =
-        /^\+?[0-9]{1,4}?[-.\s]?[(]?[0-9]{1,5}[)]?[-.\s]?[0-9]+([-.\s]?[0-9]+)*$/;
-    if (phoneNumber === "") {
-        $("#phoneNumberEmpty").text("Phone number is required").show();
-        $('input[name="phone_number"]').addClass("border-danger");
-        isValid = false;
-    } else if (!phoneRegex.test(phoneNumber)) {
-        $("#phoneNumberEmpty").text("Phone number must be valid").show();
-        $('input[name="phone_number"]').addClass("border-danger");
-        isValid = false;
-    }
+    // var phoneNumber = $('input[name="phone_number"]').val().trim();
+    // var phoneRegex =
+    //     /^\+?[0-9]{1,4}?[-.\s]?[(]?[0-9]{1,5}[)]?[-.\s]?[0-9]+([-.\s]?[0-9]+)*$/;
+    // if (phoneNumber === "") {
+    //     $("#phoneNumberEmpty").text("Phone number is required").show();
+    //     $('input[name="phone_number"]').addClass("border-danger");
+    //     isValid = false;
+    // } else if (!phoneRegex.test(phoneNumber)) {
+    //     $("#phoneNumberEmpty").text("Phone number must be valid").show();
+    //     $('input[name="phone_number"]').addClass("border-danger");
+    //     isValid = false;
+    // }
 
     // If validation passes, submit the form
     if (isValid) {

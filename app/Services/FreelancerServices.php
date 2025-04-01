@@ -34,7 +34,7 @@ class FreelancerServices implements FreelancerInterface
             'title_function' => 'required|string|max:255',
             'experience_level' => 'required|in:junior,mid,senior',
             'availability' => 'required|in:morning,afternoon,evening,full_day',
-            'phone_number' => 'required|string|max:20',
+            //'phone_number' => 'required|string|max:20',
         ]);
 
         // Find freelancer
@@ -68,7 +68,7 @@ class FreelancerServices implements FreelancerInterface
                 'title_function' => $validatedData['title_function'],
                 'experience_level' => $validatedData['experience_level'],
                 'availability' => $validatedData['availability'],
-                'phone_number' =>  '+' . trim($country->phone_code) . trim($validatedData['phone_number']),
+                //'phone_number' =>  '+' . trim($country->phone_code) . trim($validatedData['phone_number']),
                 'profile_image' => $validatedData['profile_image'] ?? $freelancer->profile_image,
             ]);
         }

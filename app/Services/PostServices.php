@@ -36,7 +36,7 @@ class PostServices implements PostInterface
 
         try{
             $post->save();
-            return redirect('/contributor/posts')->with('success', 'You created a post successfully');
+            return $post;
         }
         catch(Exception $e)
         {
@@ -47,31 +47,44 @@ class PostServices implements PostInterface
         
     }
 
+
     public function updatePost(int $postId, PostRequest $request)
     {
         $post = Post::findOrFail($postId);
-        $imagePath = null;
+        $imagePath = $post->image; 
+    
+       
         if ($request->hasFile('image')) {
+           
+            if ($post->image && Storage::disk('public')->exists($post->image)) {
+                Storage::disk('public')->delete($post->image);
+            }
+    
+           
             $imagePath = $request->file('image')->store('uploads/contributor/posts/image', 'public');
-
         }
-
+    
+       
+        if (!$request->hasFile('image') && $request->input('remove_image') === '1') {
+            if ($post->image && Storage::disk('public')->exists($post->image)) {
+                Storage::disk('public')->delete($post->image);
+            }
+            $imagePath = null;
+        }
+    
         $contributorId = auth()->user()->contributor->id ?? abort(404);
         $post->description = $request->validated()['description'];
         $post->image = $imagePath;
         $post->contributor_id = $contributorId;
-
-        try{
+    
+        try {
             $post->save();
-            return redirect('/contributor/posts')->with('success', 'You created a post successfully');
-        }
-        catch(Exception $e)
-        {
+           return $post;
+        } catch (Exception $e) {
             return abort(500);
         }
-
-        
     }
+    
 
     public function deletePost(int $postId)
     {

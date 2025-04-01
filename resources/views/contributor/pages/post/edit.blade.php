@@ -74,7 +74,13 @@
                             </div>
                             <!--end::Input group-->
                         </div>
-                    
+                        @if($post->image)
+                            <img src="{{ asset('storage/' . $post->image) }}" width="200" alt="Post image">
+                            <label>
+                                <input type="checkbox" name="remove_image" value="1"> Remove image
+                            </label>
+                        @endif
+
                         <div class="card-footer p-2  d-flex justify-content-end">
                             <button type="submit" class="btn btn-primary btn-sm ms-0">
                                 <i class="fas fa-paper-plane"></i> Post

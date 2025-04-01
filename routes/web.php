@@ -267,7 +267,7 @@ Route::middleware(['auth', 'contributor', 'verified'])->prefix('contributor')->n
 
         Route::get('/find/companies', [ContributorFrontController::class, 'findCompanies'])->name('find-companies');
         Route::get('/find/recruiters', [ContributorFrontController::class, 'findRecruiters'])->name('find-recruiter');
-
+        Route::get('/recruiter/{recruiterId}/view', [ContributorFrontController::class, 'getRecruiter'])->name('recruiter-view');
         Route::get('/company/{id}/details', [ContributorFrontController::class, 'detailsCompany'])->name('company-details');
         //posts
         Route::get('/posts', [ContributorFrontController::class, 'allPost'])->name('posts');

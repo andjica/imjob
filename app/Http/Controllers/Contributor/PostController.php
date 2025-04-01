@@ -20,7 +20,7 @@ class PostController extends Controller
     {
         $post = $this->postServices->store($request);
 
-        return $post;
+        return redirect('/contributor/posts')->with('success', 'You updated the post successfully');
     }
 
     public function editPost($id)
@@ -31,7 +31,7 @@ class PostController extends Controller
     public function update($postId, PostRequest $request)
     {
         $this->postServices->updatePost($postId,$request);
-        return redirect()->back()->with('success', 'You upddated post successfully');
+       return redirect('/contributor/posts')->with('success', 'You updated the post successfully');
     }
     public function delete($postId)
     {
