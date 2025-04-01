@@ -30,3 +30,4 @@ Route::get('/cities/{countryId}', [FrontController::class, 'getCitiesByCountry']
 Route::get('/countries', [FrontController::class, 'getCountries']);
 Route::get('/country/{countryId}/currency', [FrontController::class, 'getCurrency']);
 Route::get('/country/{countryId}/phone-code', [FrontController::class, 'getPhoneCode']);
+

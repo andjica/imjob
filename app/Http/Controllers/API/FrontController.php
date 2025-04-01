@@ -1,8 +1,7 @@
 <?php
 namespace App\Http\Controllers\API;
-
-use App\Http\Controllers\Controller;
 use App\Interfaces\CityInterface;
+use App\Http\Controllers\Controller;
 use App\Interfaces\CountryInterface;
 
 class FrontController extends Controller
@@ -14,6 +13,8 @@ class FrontController extends Controller
     {
         $this->countryServices = $countryServices;
         $this->cityServices = $cityServices;
+
+
     }
 
     public function getCountries()
