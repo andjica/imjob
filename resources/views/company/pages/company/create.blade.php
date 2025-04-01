@@ -199,7 +199,7 @@
                                 </label>
                                 <div class="col-lg-6">
                                     <div class="input-group">
-                                        <span class="input-group-text border-0 border-end border-2 border-gray-300" id="phoneCodeDisplay">+XXX</span>
+                                        <span class="input-group-text border-end border-2 border-gray-300" id="phoneCodeDisplay">+XXX</span>
                                         <input type="text" name="phoneNumber" id="phoneNumber" 
                                             class="form-control @error('phoneNumber') is-invalid @enderror" 
                                             placeholder="Enter phone number" value="{{ old('phoneNumber') }}" 

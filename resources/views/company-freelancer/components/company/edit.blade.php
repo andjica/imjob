@@ -128,7 +128,7 @@
                                 <label class="col-lg-3 col-form-label fw-bold fs-6 required">Phone Number:</label>
                                 <div class="col-lg-9">
                                     <div class="input-group">
-                                    <span class="input-group-text border-0 border-end border-2 border-gray-300" id="phoneCodeDisplay">{{ $prefix }}</span>
+                                    <span class="input-group-text border-end border-2 border-gray-300" id="phoneCodeDisplay">{{ $prefix }}</span>
                                     <input type="text"
                                             class="form-control form-control-solid"
                                             id="phoneNumber"

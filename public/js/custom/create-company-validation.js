@@ -1,6 +1,5 @@
 $(document).ready(function () {
     $("#countryId").on("change", function () {
-        
         var countryId = $(this).val();
 
         // Reset city dropdown
@@ -8,19 +7,19 @@ $(document).ready(function () {
 
         if (countryId) {
             $.ajax({
-                url: '/country/' + countryId + '/phone-code',
-                method: 'GET',
+                url: "/country/" + countryId + "/phone-code",
+                method: "GET",
                 success: function (response) {
                     if (response && response) {
-                        let code = response.toString().replace(/^\+/, ''); // uklanja eventualni višak "+"
-                        $('#phoneCodeDisplay').text('+' + code);
+                        let code = response.toString().replace(/^\+/, ""); // uklanja eventualni višak "+"
+                        $("#phoneCodeDisplay").text("+" + code);
                     } else {
-                        $('#phoneCodeDisplay').text('+');
+                        $("#phoneCodeDisplay").text("+");
                     }
                 },
                 error: function () {
-                    $('#phoneCodeDisplay').text('+');
-                }
+                    $("#phoneCodeDisplay").text("+");
+                },
             });
             $.ajax({
                 url: "/cities/" + countryId,
@@ -220,24 +219,30 @@ $("#taxNumber").on("keyup", function () {
         $("#taxNumber").removeClass("border-danger").addClass("border-success");
     }
 });
-$("#phoneNumber").on("keyup", function () {
-    var phone = $("#phoneNumber").val();
 
-    var filter =
-        /^\+?[0-9]{1,4}?[-.\s]?[(]?[0-9]{1,5}[)]?[-.\s]?[0-9]+([-.\s]?[0-9]+)*$/;
+$("#phoneNumber").on("input", function () {
+    this.value = this.value.replace(/[^0-9]/g, "");
 
-    if (!filter.test(phone)) {
-        $("#phoneempty").text("Must start with +31");
+    let phone = this.value;
+
+    if (phone.length < 4) {
+        $("#phoneempty").text("Enter at least 4 numbers");
+        $("#phoneNumber")
+            .addClass("border-danger")
+            .removeClass("border-success");
+    } else if (phone.length > 10) {
+        $("#phoneempty").text("Phone number can have max 10 characters").show();
         $("#phoneNumber")
             .addClass("border-danger")
             .removeClass("border-success");
     } else {
-        $("#phoneempty").text("");
+        $("#phoneempty").text("").hide();
         $("#phoneNumber")
             .removeClass("border-danger")
             .addClass("border-success");
     }
 });
+
 $("#email").on("keyup", function () {
     var email = $("#email").val();
     var emailFilter = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/; // Regex for email validation

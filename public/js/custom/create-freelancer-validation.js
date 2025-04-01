@@ -234,23 +234,31 @@ $('#availability').on('change', function () {
     }
 });
 
-$("#phoneNumber").keyup(function () {
-    var phoneNumber = $(this).val().trim();
-    var phoneRegex = /^\+?[0-9]{1,4}?[-.\s]?[(]?[0-9]{1,5}[)]?[-.\s]?[0-9]+([-.\s]?[0-9]+)*$/;
+// $("#phoneNumber").on("keypress", function (e) {
+//     if (e.which < 48 || e.which > 57) {
+//         e.preventDefault(); // Stops letters and special characters from appearing
+//     }
+// });
 
-    if (phoneNumber != '') {
-        if (!phoneRegex.test(phoneNumber)) {
-            $('#phoneNumberEmpty').text("Phone number must be valid").show();
-            $(this).addClass('border-danger').removeClass('border-success');
-        } else {
-            $('#phoneNumberEmpty').text('').hide();
-            $(this).addClass('border-success').removeClass('border-danger');
-        }
-    }
-    else
-    {
-        $(this).removeClass('border-danger');
-        $(this).removeClass('border-success');
-        $('#phoneNumberEmpty').text('').hide();
-    }
-});
+// $("#phoneNumber").keyup(function () {
+//     this.value = this.value.replace(/[^0-9]/g, "");
+
+//     let phone = this.value;
+
+//     if (phone.length < 4) {
+//         $("#phoneEmpty").text("Enter at least 4 numbers");
+//         $("#phoneNumber")
+//             .addClass("border-danger")
+//             .removeClass("border-success");
+//     } else if (phone.length > 10) {
+//         $("#phoneEmpty").text("Phone number can have max 10 characters").show();
+//         $("#phoneNumber")
+//             .addClass("border-danger")
+//             .removeClass("border-success");
+//     } else {
+//         $("#phoneEmpty").text("").hide();
+//         $("#phoneNumber")
+//             .removeClass("border-danger")
+//             .addClass("border-success");
+//     }
+// });
