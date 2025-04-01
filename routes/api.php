@@ -25,6 +25,8 @@ Route::middleware('auth:api')->get('/profile', [AuthController::class, 'me']);
 Route::post('/verify-user/{userId}', [AuthController::class, 'verifyUser']);
 Route::post('/verify-user/{userId}/resend-code', [AuthController::class, 'verifyUserResendVerificationCode']);
 
-//ruta koja vraca sve zemlje
+Route::get('/cities/{countryId}', [FrontController::class, 'getCitiesByCountry']);
 Route::get('/countries', [FrontController::class, 'getCountries']);
-//ruta koja vraca gradove po zemlji - po country_id
+Route::get('/country/{countryId}/currency', [FrontController::class, 'getCurrency']);
+Route::get('/country/{countryId}/phone-code', [FrontController::class, 'getPhoneCode']);
+
