@@ -235,7 +235,10 @@ class FrontController extends Controller
 
         $job = $candidate->job;
         
-        $candidates = $job->candidates()->with('user', 'candidate')->get();
+        $candidates = $job->candidates()
+        ->with('user', 'candidate')
+        ->where('id', '!=', $candidate->id)
+        ->get();
         
         $recruitmentProcess = $candidate->recruitmentProcess()->with('subphases')->first();
         

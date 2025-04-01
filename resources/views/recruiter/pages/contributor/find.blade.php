@@ -114,7 +114,7 @@
                                         </svg>
                                     </span>
                                     <div class="d-flex flex-column justify-content-center">
-                                        <h4 class="mb-1">No contributor is found</h4>
+                                        <h4 class="mb-1">No contributor found</h4>
                                     </div>
                                 </div>
                             </div>

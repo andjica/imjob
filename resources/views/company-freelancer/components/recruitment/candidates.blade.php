@@ -71,7 +71,7 @@
                     </td>
                     <td>
                         <!-- Full Name -->
-                        <span class="font-weight-bold text-dark">{{ $candidate->years_of_experience}}</span>
+                        <span class="font-weight-bold text-dark">{{ $candidate->candidate->years_of_experience}}</span>
                     </td>
                     <td>
                         <!-- PDF Link -->

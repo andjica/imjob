@@ -154,16 +154,17 @@
                             </div>
                         </div>
                         @php
-                                use Illuminate\Support\Str;
+                        use Illuminate\Support\Str;
 
-                                $prefix = $company->country && $company->country->phone_code
-                                    ? '+' . trim($company->country->phone_code)
-                                    : '+';
+                        $prefix = $company->country && $company->country->phone_code
+                            ? '+' . trim($company->country->phone_code)
+                            : '+';
 
-                                $numberWithoutPrefix = Str::startsWith($company->phone_number, $prefix)
-                                    ? Str::replaceFirst($prefix, '', $company->phone_number)
-                                    : $company->phone_number;
-                            @endphp
+                        $numberWithoutPrefix = Str::startsWith($company->phone_number, $prefix)
+                            ? Str::replaceFirst($prefix, '', $company->phone_number)
+                            : $company->phone_number;
+                    @endphp
+
 
                             <!-- Phone Number -->
                             <div class="row mb-5">

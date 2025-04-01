@@ -17,7 +17,7 @@
 <!-- Candidate Recruitment Process Overview -->
 <div class="card">
 <div class="card-header d-flex flex-column justify-content-center align-items-center text-center">
-    <h3 class="card-title mb-2">Recruitment Process Overview</h3>
+    <h3 class="card-title mb-2">Recruitment Process Overview for</h3>
 
     @if($candidate->recruitmentProcess->current_phase == "offer_stage" && $candidate->recruitmentProcess->status != null)
         @if($candidate->recruitmentProcess->status == "hired")
@@ -59,6 +59,16 @@
                                         <i class="fas fa-file-download"></i> Download CV
                                     </a>
                             </p>
+                            <p class="text-muted mb-0" style="font-size: 12px;">
+                                    Years of experience: {{ $candidate->candidate->years_of_experience }} |
+                                    Currently employed at: {{ $candidate->candidate->current_company }} |
+                                    Birthday: {{ \Carbon\Carbon::parse($candidate->candidate->birthday)->format('d.m.Y') }} |
+                                    School: {{ $candidate->candidate->school_name }} - {{ $candidate->candidate->school_degree }} 
+                                    ({{ $candidate->candidate->school_year_start }} - {{ $candidate->candidate->school_year_end }}) |
+
+                                   
+                            </p>  
+                          
                         </div>
                     </div>
                 </div>

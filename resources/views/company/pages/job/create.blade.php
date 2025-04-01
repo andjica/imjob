@@ -33,9 +33,7 @@
         $company = auth()->user()->company;
         
     @endphp
-    @if( $company->recruiters()->count() == 0)
-    ovo je za joneta
-    @else
+   
     <div class="row">
         <div class="col-lg-3">
             @include('company.components.job.sidebar-job')
@@ -401,7 +399,7 @@
 
         @include('company.components.job.create-modal-popup')
     </div>
-    @endif
+  
 </div>
 @endsection
 
