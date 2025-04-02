@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Interfaces\CandidateProfileInterface;
 use App\Services\JobServices;
 use App\Services\CityServices;
 use App\Services\PostServices;
@@ -44,7 +45,7 @@ use App\Services\ContributorRecruiterServices;
 use App\Interfaces\RecruiterEducationInterface;
 use App\Interfaces\RecruitmentProcessInterface;
 use App\Interfaces\ContributorRecruiterInterface;
-
+use App\Services\CandidateProfileService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -73,7 +74,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(PostInterface::class, PostServices::class);
         $this->app->bind(ContributorRecruiterInterface::class, ContributorRecruiterServices::class);
         $this->app->bind(RecruitmentProcessInterface::class, RecruitmentProcessService::class);
-
+        $this->app->bind(CandidateProfileInterface::class, CandidateProfileService::class);
     }
 
     /**

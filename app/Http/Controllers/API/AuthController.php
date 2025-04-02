@@ -101,8 +101,7 @@ class AuthController extends Controller
                 }
                 else
                 {
-                    if($user->verification_code !== $verificationCode)
-                    {
+                    if ((string) $user->verification_code !== (string) $verificationCode) {
                         return response()->json([
                             'error' => 'Your code is not valid'
                         ], 422);

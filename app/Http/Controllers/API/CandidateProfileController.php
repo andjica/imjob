@@ -18,8 +18,9 @@ class CandidateProfileController extends Controller
 
     public function store(Request $request)
     {
+        $candidateProfile = $this->candidateProfileService->store($request);
         return response()->json([
-            'message' => 'Stiglo'
+            'message' => 'Candidate profile created successfully'
         ], 200);
     }
 }
