@@ -16,7 +16,7 @@ class CandidateProfileService implements CandidateProfileInterface
             'country_id' => 'required|exists:countries,id',
             'city_id' => 'required|exists:cities,id',
             'phone' => 'required|string|max:255',
-            'profile_image' => 'nullable|string|max:255',
+            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120', 
             'birthday' => 'nullable|date',
             'current_company' => 'nullable|string|max:255',
             'years_of_experience' => 'nullable|integer',
@@ -27,10 +27,15 @@ class CandidateProfileService implements CandidateProfileInterface
             'school_year_end' => 'nullable|integer|min:1950|max:' . date('Y'),
         ]);
    
+       
+         if ($request->hasFile('profile_image')) {
+            $profileImagePath = $request->file('profile_image')->store('/uploads/mobile/candidate/profile_image', 'public'); 
+            $validated['profile_image'] = $profileImagePath;
+        }
         
-        //znaci cv odlazi u storage folder - pa u onda app/public/uploads/cv
+        
         if ($request->hasFile('cv')) {
-            $cvPath = $request->file('cv')->store('/uploads/cv', 'public'); // čuva u storage/app/public/cv
+            $cvPath = $request->file('cv')->store('/uploads/mobile/candidate/cv', 'public'); 
             $validated['cv'] = $cvPath;
         }
     

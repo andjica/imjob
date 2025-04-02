@@ -32,6 +32,7 @@ class CreateRecruitmentTables extends Migration
             $table->string('profile_image')->nullable();
             $table->date('birthday')->nullable();
             $table->string('current_company')->nullable();
+            $table->string('current_title_job')->nullable();
             $table->string('cv');
             $table->string('school_name');
             $table->string('school_degree')->nullable();
