@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\API;
 
 use App\Models\User;
@@ -27,8 +28,7 @@ class AuthController extends Controller
 
         $role = Role::where('name', 'candidat')->first();
 
-        if($role)
-        {
+        if ($role) {
             $user = User::create([
                 'first_name' => $validated['firstName'],
                 'last_name' => $validated['lastName'],
@@ -37,9 +37,9 @@ class AuthController extends Controller
                 'verification_code' => $code,
                 'verification_expires_at' => now()->addMinutes(2),
                 'role_id' => 5,
-    
+
             ]);
-             // Pošalji kod na email
+            // Pošalji kod na email
             Mail::to($user->email)->send(new VerificationCodeMail($user, $code));
 
             // Generiši JWT token
@@ -52,16 +52,11 @@ class AuthController extends Controller
                 'user' => $user,
                 'message' => 'Verify code for authentification',
             ]);
-        }
-        else
-        {
+        } else {
             return response()->json([
                 'error' => 'Role doesnt exists'
             ]);
         }
-       
-
-       
     }
 
 
@@ -86,36 +81,30 @@ class AuthController extends Controller
 
     public function verifyUser($userId, Request $request)
     {
-        $verificationCode = $request->verification_code;
-     
+        $verificationCode = trim((string)$request->verification_code);
+
         $user = User::find($userId);
 
         if ($user) {
-           
-           
-                if (now()->greaterThan($user->verification_expires_at)) {
-                    
+
+
+            if (now()->greaterThan($user->verification_expires_at)) {
+
+                return response()->json([
+                    'error' =>  'Verification code expired, please click to resend verification code.',
+                ], 410);
+            } else {
+                if ((string) $user->verification_code !== (string) $verificationCode) {
                     return response()->json([
-                        'error' =>  'Verification code expired, please click to resend verification code.',
-                    ], 410);
+                        'error' => 'Your code is not valid'
+                    ], 422);
+                } else {
+                    // Kod je validan i još važi
+                    return response()->json([
+                        'message' => 'User credentials are valid.',
+                    ], 200);
                 }
-                else
-                {
-                    if ((string) $user->verification_code !== (string) $verificationCode) {
-                        return response()->json([
-                            'error' => 'Your code is not valid'
-                        ], 422);
-                    }
-                    else
-                    {
-                        // Kod je validan i još važi
-                        return response()->json([
-                            'message' => 'User credentials are valid.',
-                        ], 200);
-                    }
-                }
-                
-                
+            }
         } else {
             return response()->json([
                 'error' => 'User doesnt exist',
@@ -127,34 +116,31 @@ class AuthController extends Controller
     {
         $user = User::find($userId);
 
-        if($user)
-        {
+        if ($user) {
             // Ako je kod istekao – generiši novi i pošalji
             if (now()->greaterThan($user->verification_expires_at)) {
-                
+
                 $newCode = rand(1000, 9999);
                 $user->verification_code = $newCode;
                 $user->verification_expires_at = now()->addMinutes(2);
                 $user->save();
-    
+
                 // Pošalji novi kod
                 Mail::to($user->email)->send(new VerificationCodeMail($user, $newCode));
-    
+
                 return response()->json([
                     'error' => 'Verification code expired. New verification code is sent by email.',
                     'resend' => true,
                 ], 400);
             }
-    
+
             // Kod je važeći – potvrdi korisnika ako želiš ovde
             return response()->json([
                 'message' => 'Verification is successfully.',
             ], 200);
-        }
-        else
-        {
+        } else {
             return response()->json([
-                'error' => 'User doesnt exist', 
+                'error' => 'User doesnt exist',
             ], 404);
         }
     }
