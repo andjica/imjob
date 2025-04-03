@@ -10,17 +10,18 @@ use App\Interfaces\CandidateProfileInterface;
 class CandidateProfileService implements CandidateProfileInterface
 {
     public function store(Request $request)
-    {
+    {     
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',
             'country_id' => 'required|exists:countries,id',
             'city_id' => 'required|exists:cities,id',
             'phone' => 'required|string|max:255',
-            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120', 
+            'profile_image' => 'nullable|mimes:jpeg,png,jpg,webp|max:5120', // max 5MB
             'birthday' => 'nullable|date',
             'current_company' => 'nullable|string|max:255',
+            // 'current_title_job' => 'nullable|string|max:255',
             'years_of_experience' => 'nullable|integer',
-            'cv' => 'required|file|mimes:pdf,doc,docx|max:5120', // max 5MB
+            'cv' => 'required|mimes:pdf,doc,docx|max:5120', // max 5MB
             'school_name' => 'required|string|max:255',
             'school_degree' => 'nullable|string|max:255',
             'school_year_start' => 'nullable|integer|min:1950|max:' . date('Y'),
