@@ -66,11 +66,11 @@
                         </div>
                     </td>
                     <td>
-                        <!-- Full Name -->
+                        <!-- Full Country And City -->
                         <span class="font-weight-bold text-dark">{{$candidate->candidate->country->name}}, {{$candidate->candidate->city->name}}</span>
                     </td>
                     <td>
-                        <!-- Full Name -->
+                        <!-- Full yeas of experience -->
                         <span class="font-weight-bold text-dark">{{ $candidate->candidate->years_of_experience}}</span>
                     </td>
                     <td>

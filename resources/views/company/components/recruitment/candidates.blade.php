@@ -50,8 +50,8 @@
             <tbody>
             @foreach($candidates as $candidate)
                 <tr>
-                <td>
-                 <div class="d-flex align-items-center">
+                    <td>
+                        <div class="d-flex align-items-center">
                             <!-- Profile Image -->
                             <div class="symbol symbol-50 symbol-light-info mr-5">
                                 <img src="{{ asset('/images/300-12.jpg') }}" class="img-fluid rounded-circle" alt="Profile Image" width="50">
@@ -66,23 +66,37 @@
                         </div>
                     </td>
                     <td>
-                        <!-- Full Country And City -->
-                        <span class="font-weight-bold text-dark">{{$candidate->candidate->country->name}}, {{$candidate->candidate->city->name}}</span>
-                    </td>
-                    <td>
-                        <!-- Full yeas of experience -->
-                        <span class="font-weight-bold text-dark">{{ $candidate->candidate->years_of_experience}}</span>
+                        <!-- Full Name -->
+                        <span class="font-weight-bold text-dark">{{ $candidate->user->getFirstName()  }}</span>
                     </td>
                     <td>
                         <!-- PDF Link -->
                         <a href="#" class="text-danger">
                             <i class="fa-solid fa-file-pdf fa-xl text-danger"></i>
                         </a>
-                    </td> 
-                  <td> 
+                    </td>
+                    <td>
+                        <!-- Status -->
+                        @if ($candidate->status === 'pending')
+                            <span class="badge badge-light-warning  py-2 px-4 rounded-pill">
+                                {{ $candidate->status }}
+                            </span>
+                        @elseif($candidate->status === 'accept')
+                            <!-- Status -->
+                            <span class="badge badge-light-success  py-2 px-4 rounded-pill">
+                                Acepted
+                            </span>
+                        @else
+                            <span class="badge badge-light-danger  py-2 px-4 rounded-pill">
+                                X Rejected
+                            </span>
+                        @endif
+                    </td>
+
+                    <td>
                     @if ($candidate->status === 'pending' || !$candidate->recruitmentProcess)
                             This action is under the recruiter's authority and is awaiting their decision.
-                            This candidate will have either <span class="badge badge-success">Accepted</span> or <span class="badge badge-danger">Rejected</span> status in the future.
+                            This candidate will have either Active or Rejected status in the future.
                         @elseif($candidate->status === 'reject')
                             This user is rejected by recruiter
                         @else
