@@ -20,3 +20,8 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 Broadcast::channel('company.{id}', function ($user, $id) {
     return true; // 👈 ili dodatna logika autentifikacije
 });
+
+Broadcast::channel('chat.{receiverId}', function ($user, $receiverId) {
+    // Dozvoli slušanje samo ako je prijavljeni user ID isti kao receiver ID
+    return (int) $user->id === (int) $receiverId;
+});

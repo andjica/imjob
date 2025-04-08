@@ -22,17 +22,17 @@ class AuthController extends Controller
             'password' => 'required|string|min:6',
             'passwordConfirm' => 'required|string|same:password',
         ]);
-
+    
         $code = rand(1000, 9999);
-
+    
         $role = Role::where('name', 'candidat')->first();
-
+    
         if (!$role) {
             return response()->json([
                 'error' => 'Role does not exist',
             ], 404);
         }
-
+    
         $user = User::create([
             'first_name' => $validated['firstName'],
             'last_name' => $validated['lastName'],
@@ -42,11 +42,11 @@ class AuthController extends Controller
             'verification_expires_at' => now()->addMinutes(2),
             'role_id' => $role->id,
         ]);
-
+    
         Mail::to($user->email)->send(new VerificationCodeMail($user, $code));
-
+    
         $token = JWTAuth::fromUser($user);
-
+    
         return response()->json([
             'jwt_token' => $token,
             'token_type' => 'Bearer',
