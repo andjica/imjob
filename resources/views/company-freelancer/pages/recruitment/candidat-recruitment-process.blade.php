@@ -66,12 +66,13 @@
         <!-- End of Recruitment Process Overview -->
         <div class="row">
             <!-- Chat Box Section -->
-            <div class="col-lg-6 mb-5">
+            <div class="col-lg-7 mb-5">
+                {{-- vue js --}}
                 @include('company-freelancer.components.recruitment.chat')
             </div>
 
             <!-- Meeting Planner Section -->
-            <div class="col-lg-6 mb-5">
+            <div class="col-lg-5 mb-5">
                 @include('company-freelancer.components.recruitment.schedule-meeting')
                 @include('company-freelancer.components.recruitment.schedule-modal')
 
