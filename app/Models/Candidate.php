@@ -75,4 +75,9 @@ class Candidate extends Model
             'id'                        // Local key on recruitment_processes
         );
     }
+
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
+    }
 }

@@ -2,9 +2,10 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\API\AuthController;
-use App\Http\Controllers\API\CandidateProfileController;
 use App\Http\Controllers\API\FrontController;
+use App\Http\Controllers\API\CandidateProfileController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -33,3 +34,9 @@ Route::get('/country/{countryId}/phone-code', [FrontController::class, 'getPhone
 
 //store Candidat Profile
 Route::post('/candidat/profile/create', [CandidateProfileController::class, 'store']);
+
+//only logged users can use chat
+Route::middleware('auth:api')->group(function () {
+    Route::get('/messages', [ChatController::class, 'index']); // prikaz poruka
+    Route::post('/messages', [ChatController::class, 'store']); // slanje poruka
+});

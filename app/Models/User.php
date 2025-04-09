@@ -94,4 +94,21 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     {
         return [];
     }
+
+    public function messagesSent()
+    {
+        return $this->hasMany(Message::class, 'user_id');
+    }
+
+    public function messagesReceived()
+    {
+        return $this->hasMany(Message::class, 'receiver_id');
+    }
+
+    // Sve poruke u kojima je ovaj user (bilo kao sender ili receiver)
+    public function allMessages()
+    {
+        return \App\Models\Message::where('user_id', $this->id)
+            ->orWhere('receiver_id', $this->id);
+    }
 }

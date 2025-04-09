@@ -52,4 +52,9 @@ class Contributor extends Model
                     ->using(ContributorRecruiter::class)
                     ->withTimestamps();
     }
+
+    public function messages()
+    {
+        return $this->hasMany(\App\Models\Message::class, 'user_id');
+    }
 }
