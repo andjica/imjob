@@ -41,8 +41,48 @@
                         data-kt-scroll-offset="5px"
                         style="max-height: 362px"
                     >
-                        <!--begin::User-->
-                        <div class="d-flex flex-stack py-4">
+                        <div class="d-flex d-flex__column py-4">
+                            <div>
+                                <div
+                                    class="d-flex align-items-center"
+                                    v-if="candidate && candidate.user"
+                                >
+                                    <div
+                                        class="symbol symbol-45px symbol-circle"
+                                    >
+                                        <span
+                                            class="symbol-label bg-light-danger text-danger fs-6 fw-bolder"
+                                            >{{
+                                                candidate.user.first_name
+                                                    .charAt(0)
+                                                    .toUpperCase()
+                                            }}</span
+                                        >
+                                    </div>
+
+                                    <div class="ms-5">
+                                        <a
+                                            @click.prevent="
+                                                selectUser(candidate.user)
+                                            "
+                                            href="#"
+                                            :class="[
+                                                'fs-5 fw-bold text-gray-900 text-hover-primary mb-2',
+                                                selectedUser &&
+                                                selectedUser.id ===
+                                                    candidate.user.id
+                                                    ? 'active-user'
+                                                    : '',
+                                            ]"
+                                        >
+                                            {{ candidate.user.first_name }}
+                                            {{ candidate.user.last_name }}
+                                        </a>
+
+                                        <p>{{ candidate.user.email }}</p>
+                                    </div>
+                                </div>
+                            </div>
                             <!--begin::Details-->
                             <div
                                 class="d-flex align-items-center"
@@ -62,29 +102,38 @@
                                 <!--begin::Details-->
                                 <div class="ms-5">
                                     <a
-                                        @click="selectContributor(user)"
+                                        @click.prevent="selectContributor(user)"
                                         href="#"
-                                        class="fs-5 fw-bold text-gray-900 text-hover-primary mb-2"
-                                        >{{ user.name }}</a
+                                        :class="[
+                                            'fs-5 fw-bold text-gray-900 text-hover-primary mb-2',
+                                            selectedContributor &&
+                                            selectedContributor.id === user.id
+                                                ? 'active-contributor'
+                                                : '',
+                                        ]"
                                     >
+                                        {{ user.name }}
+                                    </a>
+
                                     <p>{{ user.email }}</p>
                                 </div>
                                 <!--end::Details-->
+                                <!--begin::Lat seen-->
+                                <div
+                                    class="d-flex flex-column align-items-end ms-5"
+                                >
+                                    <span class="text-muted fs-7 mb-1"
+                                        >5 hrs</span
+                                    >
+
+                                    <span
+                                        class="badge badge-sm badge-circle badge-light-warning"
+                                        >9</span
+                                    >
+                                </div>
+                                <!--end::Lat seen-->
                             </div>
                             <!--end::Details-->
-
-                            <!--begin::Lat seen-->
-                            <div
-                                class="d-flex flex-column align-items-end ms-2"
-                            >
-                                <span class="text-muted fs-7 mb-1">5 hrs</span>
-
-                                <span
-                                    class="badge badge-sm badge-circle badge-light-warning"
-                                    >9</span
-                                >
-                            </div>
-                            <!--end::Lat seen-->
                         </div>
                         <!--end::User-->
 
@@ -102,7 +151,11 @@
                 <div class="card-header">
                     <h3 class="card-title">
                         Chat with
-                        {{ selectedUser ? selectedUser.user_id : "Candidate?" }}
+                        {{
+                            selectedContributor
+                                ? selectedContributor.name
+                                : selectedUser?.first_name || "Candidate?"
+                        }}
                     </h3>
                 </div>
                 <div class="card-body chat-box" id="chatBox">
@@ -151,16 +204,27 @@ export default {
             required: true,
             default: () => [],
         },
+        candidate: {
+            type: Object,
+            required: true,
+        },
     },
     data() {
         return {
+            selectedContributor: null,
             selectedUser: null,
             message: "",
         };
     },
     methods: {
         selectContributor(user) {
+            this.selectedContributor = user;
+            this.selectedUser = null;
+            console.log("Selected contributor: ", this.selectedContributor);
+        },
+        selectUser(user) {
             this.selectedUser = user;
+            this.selectedContributor = null;
             console.log("Selected user: ", this.selectedUser);
         },
         handleSubmit() {
@@ -170,6 +234,15 @@ export default {
     },
     mounted() {
         console.log("Users:", this.contributors);
+        console.log("Candidate: ", this.candidate);
     },
 };
 </script>
+<style>
+.active-user {
+    color: #0d6efd !important;
+}
+.active-contributor {
+    color: #0d6efd !important;
+}
+</style>

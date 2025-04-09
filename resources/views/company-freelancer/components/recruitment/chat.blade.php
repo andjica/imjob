@@ -1,4 +1,3 @@
-{{-- in chat.blade.php --}}
 <div id="app">
-    <chat-component :contributors='@json($contributors)'></chat-component>
+    <chat-component :contributors='@json($contributors)' :candidate='@json($candidate)'></chat-component>
 </div>  

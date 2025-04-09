@@ -48538,3 +48538,11 @@ i.fas.fa-check-circle.me-2 {
 div#kt_aside_menu_wrapper {
  height: 100vh !important;
 }
+
+.d-flex__column {
+  flex-direction: column;
+}
+
+.d-flex__row {
+  flex-direction: row;
+}
