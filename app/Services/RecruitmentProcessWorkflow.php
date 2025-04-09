@@ -21,7 +21,7 @@ class RecruitmentProcessWorkflow
             if ($existingProcess = $candidate->recruitmentProcess) {
                 return $existingProcess;
             }
-
+            
             return RecruitmentProcess::create([
                 'candidate_id' => $candidate->id,
                 'current_phase' => 'application_received',

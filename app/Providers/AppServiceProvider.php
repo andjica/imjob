@@ -2,12 +2,13 @@
 
 namespace App\Providers;
 
-use App\Interfaces\CandidateProfileInterface;
+use App\Services\ChatService;
 use App\Services\JobServices;
 use App\Services\CityServices;
 use App\Services\PostServices;
 use App\Services\RoleServices;
 use App\Interfaces\JobInterface;
+use App\Interfaces\ChatInterface;
 use App\Interfaces\CityInterface;
 use App\Interfaces\PostInterface;
 use App\Interfaces\RoleInterface;
@@ -32,6 +33,7 @@ use Illuminate\Support\ServiceProvider;
 use App\Interfaces\CompanyTypeInterface;
 use App\Interfaces\ContributorInterface;
 use App\Interfaces\SubCategoryInterface;
+use App\Services\CandidateProfileService;
 use App\Services\ContributorTypeServices;
 use Illuminate\Support\Facades\Broadcast;
 use App\Services\CompanyRecruiterServices;
@@ -39,13 +41,13 @@ use App\Services\CompanyFreelancerServices;
 use App\Services\RecruitmentProcessService;
 use App\Interfaces\ContributorTypeInterface;
 use App\Services\RecruiterEducationServices;
+use App\Interfaces\CandidateProfileInterface;
 use App\Interfaces\CompanyRecruiterInterface;
 use App\Interfaces\CompanyFreelancerInterface;
 use App\Services\ContributorRecruiterServices;
 use App\Interfaces\RecruiterEducationInterface;
 use App\Interfaces\RecruitmentProcessInterface;
 use App\Interfaces\ContributorRecruiterInterface;
-use App\Services\CandidateProfileService;
 
 class AppServiceProvider extends ServiceProvider
 {

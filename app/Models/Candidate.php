@@ -35,6 +35,7 @@ class Candidate extends Model
     protected $fillable = [
         'job_id',
         'user_id',
+        'candidate_id',
         'status'
     ];
 
@@ -51,7 +52,7 @@ class Candidate extends Model
 
     public function candidate(): BelongsTo
     {
-        return $this->belongsTo(CandidatProfile::class, 'id');
+        return $this->belongsTo(CandidatProfile::class, 'candidate_id');
     }
 
     public function recruitmentProcess(): HasOne
@@ -80,4 +81,6 @@ class Candidate extends Model
     {
         return $this->hasMany(Message::class);
     }
+
+    
 }
