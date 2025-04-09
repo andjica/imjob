@@ -216,17 +216,19 @@ class FrontController extends Controller
     public function recruitmentProcess(Job $job): Factory|View|Application
     {
         $candidates = $job->candidates()->with('user', 'candidate')->get();
-       
+    
         return view('company-freelancer.pages.recruitment.job-recruitment', compact('job', 'candidates'));
     }
 
     public function candidateRecruitmentProcess(Candidate $candidate): Factory|View|Application
     {
        
+       
+
         if ($candidate->status !== 'accept' || !$candidate->recruitmentProcess) {
             abort(404);
         }
-        
+           
         $recruitmentProcess = $candidate->recruitmentProcess()->with('subphases')->first();
         
         $availablePhases = AvailableRecruitmentSubphases::where('phase', $candidate->recruitmentProcess->current_phase)->get();

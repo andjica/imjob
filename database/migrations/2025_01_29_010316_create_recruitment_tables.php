@@ -44,7 +44,7 @@ class CreateRecruitmentTables extends Migration
         // New pivot table: candidat ↔ job
         Schema::create('candidate_job', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('candidat_id')->constrained('candidates')->onDelete('cascade');
+            $table->foreignId('candidate_id')->constrained('candidates')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('job_id')->constrained('jobs')->onDelete('cascade');
             $table->enum('status', ['pending', 'accept', 'reject'])->default('pending');
@@ -54,7 +54,7 @@ class CreateRecruitmentTables extends Migration
         // Table for tracking the recruitment process for each candidate
         Schema::create('recruitment_processes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('candidate_id')->constrained('candidates')->onDelete('cascade');
+            $table->foreignId('candidate_id');
             $table->string('status')->nullable();
             $table->enum('current_phase', ['application_received', 'selection', 'preparation', 'transfer', 'offer_stage'])->default('application_received');
             $table->foreignId('current_subphase_id')->nullable()->constrained('available_recruitment_subphases')->onDelete('set null');

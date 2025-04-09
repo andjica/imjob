@@ -20,6 +20,7 @@ class CandidateService
      */
     public function handleCandidate(Candidate $candidate, string $status): Candidate
     {
+        //return dd($candidate);
         if (!in_array($status, [Candidate::STATUS_REJECTED, Candidate::STATUS_ACCEPT])) {
             throw new Exception("Invalid candidate status");
         }

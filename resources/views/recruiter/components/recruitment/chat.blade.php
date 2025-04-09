@@ -1,10 +1,10 @@
-<div class="card h-100">
+<!-- <div class="card h-100">
     <div class="card-header">
         <h3 class="card-title">Chat with Candidate</h3>
         
     </div>
     <div class="card-body chat-box" id="chatBox">
-        <!-- Example Chat Messages -->
+        <!-- Example Chat Messages
         <div class="chat-message received">
             <strong>Candidate:</strong>
             <p>Hello! I'm excited about the opportunity.</p>
@@ -15,7 +15,7 @@
             <p>Thank you for your interest. Let's discuss further.</p>
             <small class="text-muted">10:05 AM</small>
         </div>
-        <!-- More messages will be appended here dynamically -->
+      
     </div>
     <div class="card-footer">
         <form id="chatForm">
@@ -25,4 +25,8 @@
             </div>
         </form>
     </div>
+</div>    -->
+{{-- in chat.blade.php --}}
+<div id="app">
+    <chat-component :contributors='@json($contributors)'></chat-component>
 </div>  
