@@ -6885,6 +6885,14 @@ textarea.form-control-lg {
   display: flex !important;
 }
 
+.d-flex__column {
+  flex-direction: column;
+}
+
+.d-flex__row {
+  flex-direction: row;
+}
+
 .d-inline-flex {
   display: inline-flex !important;
 }
