@@ -43,7 +43,7 @@
             <div id="content" class="d-flex flex-column flex-column-fluid">
                 @yield('content')
             </div>
-
+            @include('chat.chat')
         </div>
         <!-- End Wrapper -->
     </div>
