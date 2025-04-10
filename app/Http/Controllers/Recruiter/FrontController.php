@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\Recruiter;
 
 use App\Models\Job;
+use App\Models\City;
 use App\Models\Company;
+use App\Models\Country;
+use App\Models\JobType;
+use App\Models\Category;
 use App\Models\Candidate;
 use App\Models\Recruiter;
 use App\Models\Contributor;
@@ -344,6 +348,25 @@ class FrontController extends Controller
         $recruiterContributorConnections = $notificationsContributorRecruiter->getAllConnections();
 
         return view('recruiter.pages.connection.all', compact('recruiterCompanyConnections','recruiterContributorConnections'));
+    }
+
+    public function editJob($id)
+    {
+        $user = auth()->user();
+        $job = $this->jobRep->find($id);
+        $recruiterWithCompanies = $user->recruiter->activeCompanies;
+        if (!$job) {
+            return redirect()->route('company-freelancer-active-jobs')->with('error', 'Job not found.');
+        }
+        //return dd($job->skills);
+        return view('recruiter.pages.job.edit', [
+            'job'        => $job,
+            'countries'  => Country::all(),
+            'cities' => City::all(),
+            'categories' => Category::all(),
+            'jobTypes'   => JobType::all(),
+            'recruiterWithCompanies' => $recruiterWithCompanies
+        ]);
     }
 
 }

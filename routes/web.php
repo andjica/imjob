@@ -210,7 +210,7 @@ Route::middleware(['auth', 'recruiter', 'verified'])->prefix('recruiter')->name(
         Route::get('/job/create', [RecruiterFrontController::class, 'createJob'])->name('create-job');
         Route::get('/active/jobs', [RecruiterFrontController::class, 'getActiveJobs'])->name('active-jobs');
         Route::get('/inactive/jobs', [RecruiterFrontController::class, 'getInactiveJobs'])->name('inactive-jobs');
-        
+        Route::get('/job/{id}/edit', [RecruiterFrontController::class, 'editJob'])->name('edit-job');
         //recruitment process
         Route::get('/{job}/recruitment-process', [RecruiterFrontController::class, 'recruitmentProcess'])->name('recruitment-process');
         Route::get('/job/candidate/{candidate}/recruitment-process', [RecruiterFrontController::class, 'candidateRecruitmentProcess'])->name('candidat-recruitment-process');

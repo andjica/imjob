@@ -15,7 +15,7 @@ class StoreMeetingRequest extends FormRequest
     {
         return [
             //fali google link for google meet
-            'candidate_id' => ['required', 'exists:candidates,id'],
+            //'candidate_id' => ['required', 'exists:candidates,id'],
             'meeting_title' => ['required', 'string', 'max:255'],
             'description' => ['string'],
             'available_subphase_id' => ['required', 'exists:available_recruitment_subphases,id'],

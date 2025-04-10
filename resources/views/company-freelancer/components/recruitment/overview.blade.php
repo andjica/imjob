@@ -186,7 +186,15 @@
         </div>
     </div>
 </div>
-
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 
 <!-- Modal for Hiring or Refusing the Candidate -->
 <div class="modal fade" id="confirmHireRefuseModal" tabindex="-1" aria-labelledby="confirmHireRefuseModalLabel" aria-hidden="true">
@@ -202,7 +210,7 @@
                 <h4 class="mb-4">Are you hiring or refusing this candidate for the job?</h4><br><br>
                 <form action="{{asset('/company/freelancer/finish/recruitment-process')}}" method="POST">
                     @csrf
-                    <input type="hidden" name="candidateId" value="{{$candidate->id}}">
+                    <!-- <input type="hidden" name="candidateId" value="{{$candidate->candidate_id}}"> -->
                     <input type="hidden" name="recruitment_process_id" value="{{$recruitmentProcess->id}}">
                     <div class="d-flex justify-content-center">
                         <!-- Hire Button -->

@@ -216,13 +216,12 @@ class FrontController extends Controller
     public function recruitmentProcess(Job $job): Factory|View|Application
     {
         $candidates = $job->candidates()->with('user', 'candidate')->get();
-    
+        
         return view('company-freelancer.pages.recruitment.job-recruitment', compact('job', 'candidates'));
     }
 
     public function candidateRecruitmentProcess(Candidate $candidate): Factory|View|Application
     {
-       
        
 
         if ($candidate->status !== 'accept' || !$candidate->recruitmentProcess) {
@@ -263,7 +262,8 @@ class FrontController extends Controller
      */
     public function createMeeting(StoreMeetingRequest $request, Candidate $candidate, CreateMeeting $createMeeting): RedirectResponse
     {
-        $createMeeting->execute($candidate, $request->validated());
+        
+        $createMeeting->execute($candidate, $request->all());
 
         return redirect()->back()->with('success', 'Meeting created succssfully');
         // return response()->json([

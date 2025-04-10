@@ -193,7 +193,7 @@
                 <h4 class="mb-4">Are you hiring or refusing this candidate for the job?</h4><br><br>
                 <form action="{{asset('/recruiter/finish/recruitment-process')}}" method="POST">
                     @csrf
-                    <input type="hidden" name="candidateId" value="{{$candidate->id}}">
+                    <!-- <input type="hidden" name="candidateId" value="{{$candidate->id}}"> -->
                     <input type="hidden" name="recruitment_process_id" value="{{$recruitmentProcess->id}}">
                     <div class="d-flex justify-content-center">
                         <!-- Hire Button -->

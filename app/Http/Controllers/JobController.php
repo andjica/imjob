@@ -56,27 +56,35 @@ class JobController extends Controller
     public function update(StoreJobRequest $request, $id, UpdateJob $updateJob)
     {
         $job = $this->jobRep->find($id) ?? abort(404);
-
+    
         if (!$job) {
-            return redirect()->route('company-freelancer-active-jobs')->with('error', 'Job not found.');
+            return redirect()->back()->with('error', 'Job not found.');
         }
-
+    
         // Use UpdateJob action to update the job
         $updatedJob = $updateJob->execute($id, $request->validated());
-
+    
         if (!$updatedJob) {
-
+            if (auth()->user()->role->name == 'recruiter') {
+                return redirect()->route('recruiter-active-jobs')->with('error', 'Failed to update job.');
+            }
+    
             if (auth()->user()->company->companyType->name == "Freelancer") {
                 return redirect()->route('company-freelancer-active-jobs')->with('error', 'Failed to update job.');
             } else {
                 return redirect()->route('company-dashboard-active-jobs')->with('error', 'Failed to update job.');
             }
         }
-
+    
+        if (auth()->user()->role->name == 'recruiter') {
+            return redirect()->route('recruiter-active-jobs')->with('success', 'Job updated successfully.');
+        }
+    
         if (auth()->user()->company->companyType->name == "Freelancer") {
             return redirect()->route('company-freelancer-active-jobs')->with('success', 'Job updated successfully.');
         } else {
             return redirect()->route('company-dashboard-active-jobs')->with('success', 'Job updated successfully.');
         }
     }
+    
 }

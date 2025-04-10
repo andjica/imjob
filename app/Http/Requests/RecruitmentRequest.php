@@ -22,17 +22,10 @@ class RecruitmentRequest extends FormRequest
                 'integer',
                 'exists:recruitment_processes,id',
             ],
-            'candidateId' => [
-                'required',
-                'integer',
-                'exists:candidates,id',
-                function ($attribute, $value, $fail) {
-                    $candidate = Candidate::find($value);
-                    if (!$candidate) {
-                        $fail('The selected candidate does not exist.');
-                    }
-                },
-            ],
+            // 'candidateId' => [
+            //     'required',
+            //     'integer',
+            // ],
             'decision' => [
                 'required',
                 Rule::in(['hire', 'refuse']),
@@ -47,7 +40,7 @@ class RecruitmentRequest extends FormRequest
     {
         $validator->after(function ($validator) {
             $recruitmentProcess = RecruitmentProcess::where('id', $this->recruitment_process_id)
-                ->where('candidate_id', $this->candidateId)
+                // ->where('candidate_id', $this->candidateId)
                 ->first();
 
             if (!$recruitmentProcess) {

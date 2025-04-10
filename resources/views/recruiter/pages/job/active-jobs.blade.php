@@ -80,7 +80,7 @@
 
                                         </div>
                                         <div class="d-flex align-items-center">
-                                            <a href="{{ asset('/company/job/' . $job->id . '/edit') }}" data-bs-toggle="tooltip"
+                                            <a href="{{ asset('/recruiter/job/' . $job->id . '/edit') }}" data-bs-toggle="tooltip"
                                                 data-bs-placement="top" title="Edit">
                                                 <i class="fas fa-pencil-alt edit-icon" data-bs-toggle="modal"
                                                     data-bs-target="#statusModal" data-job="{{ $job->title }}"></i>
