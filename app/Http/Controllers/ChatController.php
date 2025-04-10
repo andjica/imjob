@@ -47,8 +47,8 @@ class ChatController extends Controller
         $message = $request->user()->messages()->create([
             'receiver_id' => $data['receiver_id'],
             'text' => $data['text'] ?? null,
-            'file_path' => $filePath,
-            'file_type' => $fileType,
+            'file_path' => $filePath ?? null,
+            'file_type' => $fileType ?? null,
         ]);
 
         broadcast(new MessageSent($message->load('sender', 'receiver')))->toOthers();

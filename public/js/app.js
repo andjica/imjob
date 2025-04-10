@@ -23007,6 +23007,9 @@ __webpack_require__.r(__webpack_exports__);
     candidate: {
       type: Object,
       required: true
+    },
+    currentUserId: {
+      type: Object
     }
   },
   data: function data() {
@@ -23038,14 +23041,20 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     handleSubmit: function handleSubmit() {
-      var _this = this;
+      var _this$selectedUser,
+        _this$selectedUser2,
+        _this = this;
       if (this.message.trim() === "") {
         alert("Please enter a message!");
         return;
       }
       var payload = {
+        user_id: this.candidate.id,
         text: this.message,
-        created_at: new Date().toISOString()
+        created_at: new Date().toISOString(),
+        file: "",
+        receiver_id: (_this$selectedUser = this.selectedUser) === null || _this$selectedUser === void 0 ? void 0 : _this$selectedUser.id,
+        candidate_id: (_this$selectedUser2 = this.selectedUser) === null || _this$selectedUser2 === void 0 ? void 0 : _this$selectedUser2.id
       };
       fetch("http://127.0.0.1:8000/api/messages", {
         method: "POST",
@@ -23068,8 +23077,9 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     var _this2 = this;
-    console.log("Users:", this.contributors);
     console.log("Candidate: ", this.candidate);
+    console.log("Selected user: ", this.selectedUser);
+    console.log("Current login user: ", this.currentUserId);
     this.picker = new _joeattardi_emoji_button__WEBPACK_IMPORTED_MODULE_0__.EmojiButton({
       position: "top-end"
     });

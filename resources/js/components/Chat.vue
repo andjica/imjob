@@ -65,7 +65,7 @@
                                 <div class="symbol symbol-45px symbol-circle">
                                     <span class="symbol-label bg-light-danger text-danger fs-6 fw-bolder">{{
                                         user.name.charAt(0).toUpperCase()
-                                    }}</span>
+                                        }}</span>
                                 </div>
                                 <!--end::Avatar-->
                                 <!--begin::Details-->
@@ -166,6 +166,9 @@ export default {
             type: Object,
             required: true,
         },
+        currentUserId: {
+            type: Object,
+  }
     },
     data() {
         return {
@@ -204,8 +207,12 @@ export default {
             }
 
             const payload = {
+                user_id: this.candidate.id,
                 text: this.message,
                 created_at: new Date().toISOString(),
+                file: "",
+                receiver_id: this.selectedUser?.id,
+                candidate_id: this.selectedUser?.id,
             };
 
             fetch("http://127.0.0.1:8000/api/messages", {
@@ -236,8 +243,9 @@ export default {
         },
     },
     mounted() {
-        console.log("Users:", this.contributors);
         console.log("Candidate: ", this.candidate);
+        console.log("Selected user: ", this.selectedUser);
+        console.log("Current login user: ", this.currentUserId);
         this.picker = new EmojiButton({
             position: "top-end",
         });
