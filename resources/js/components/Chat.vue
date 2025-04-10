@@ -8,20 +8,13 @@
                     <form class="w-100 position-relative" autocomplete="off">
                         <!--begin::Icon-->
                         <i
-                            class="ki-duotone ki-magnifier fs-3 text-gray-500 position-absolute top-50 ms-5 translate-middle-y"
-                            ><span class="path1"></span
-                            ><span class="path2"></span
-                        ></i>
+                            class="ki-duotone ki-magnifier fs-3 text-gray-500 position-absolute top-50 ms-5 translate-middle-y"><span
+                                class="path1"></span><span class="path2"></span></i>
                         <!--end::Icon-->
 
                         <!--begin::Input-->
-                        <input
-                            type="text"
-                            class="form-control form-control-solid px-13"
-                            name="search"
-                            value=""
-                            placeholder="Search by username or email..."
-                        />
+                        <input type="text" class="form-control form-control-solid px-13" name="search" value=""
+                            placeholder="Search by username or email..." />
                         <!--end::Input-->
                     </form>
                     <!--end::Form-->
@@ -31,50 +24,33 @@
                 <!--begin::Card body-->
                 <div class="card-body pt-5" id="kt_chat_contacts_body">
                     <!--begin::List-->
-                    <div
-                        class="scroll-y me-n5 pe-5 h-200px h-lg-auto"
-                        data-kt-scroll="true"
-                        data-kt-scroll-activate="{default: false, lg: true}"
-                        data-kt-scroll-max-height="auto"
+                    <div class="scroll-y me-n5 pe-5 h-200px h-lg-auto" data-kt-scroll="true"
+                        data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto"
                         data-kt-scroll-dependencies="#kt_header, #kt_app_header, #kt_toolbar, #kt_app_toolbar, #kt_footer, #kt_app_footer, #kt_chat_contacts_header"
                         data-kt-scroll-wrappers="#kt_content, #kt_app_content, #kt_chat_contacts_body"
-                        data-kt-scroll-offset="5px"
-                        style="max-height: 362px"
-                    >
+                        data-kt-scroll-offset="5px" style="max-height: 362px">
                         <div class="d-flex d-flex__column py-4">
                             <div>
-                                <div
-                                    class="d-flex align-items-center"
-                                    v-if="candidate && candidate.user"
-                                >
-                                    <div
-                                        class="symbol symbol-45px symbol-circle"
-                                    >
-                                        <span
-                                            class="symbol-label bg-light-danger text-danger fs-6 fw-bolder"
-                                            >{{
-                                                candidate.user.first_name
-                                                    .charAt(0)
-                                                    .toUpperCase()
-                                            }}</span
-                                        >
+                                <div class="d-flex align-items-center" v-if="candidate && candidate.user">
+                                    <div class="symbol symbol-45px symbol-circle">
+                                        <span class="symbol-label bg-light-danger text-danger fs-6 fw-bolder">{{
+                                            candidate.user.first_name
+                                                .charAt(0)
+                                                .toUpperCase()
+                                        }}</span>
                                     </div>
 
                                     <div class="ms-5">
-                                        <a
-                                            @click.prevent="
-                                                selectUser(candidate.user)
-                                            "
-                                            href="#"
-                                            :class="[
+                                        <a @click.prevent="
+                                            selectUser(candidate.user)
+                                            " href="#" :class="[
                                                 'fs-5 fw-bold text-gray-900 text-hover-primary mb-2',
                                                 selectedUser &&
-                                                selectedUser.id ===
+                                                    selectedUser.id ===
                                                     candidate.user.id
                                                     ? 'active-user'
                                                     : '',
-                                            ]"
-                                        >
+                                            ]">
                                             {{ candidate.user.first_name }}
                                             {{ candidate.user.last_name }}
                                         </a>
@@ -84,34 +60,23 @@
                                 </div>
                             </div>
                             <!--begin::Details-->
-                            <div
-                                class="d-flex align-items-center"
-                                v-for="user in contributors"
-                                :key="user.id"
-                            >
+                            <div class="d-flex align-items-center" v-for="user in contributors" :key="user.id">
                                 <!--begin::Avatar-->
                                 <div class="symbol symbol-45px symbol-circle">
-                                    <span
-                                        class="symbol-label bg-light-danger text-danger fs-6 fw-bolder"
-                                        >{{
-                                            user.name.charAt(0).toUpperCase()
-                                        }}</span
-                                    >
+                                    <span class="symbol-label bg-light-danger text-danger fs-6 fw-bolder">{{
+                                        user.name.charAt(0).toUpperCase()
+                                    }}</span>
                                 </div>
                                 <!--end::Avatar-->
                                 <!--begin::Details-->
                                 <div class="ms-5">
-                                    <a
-                                        @click.prevent="selectContributor(user)"
-                                        href="#"
-                                        :class="[
-                                            'fs-5 fw-bold text-gray-900 text-hover-primary mb-2',
-                                            selectedContributor &&
+                                    <a @click.prevent="selectContributor(user)" href="#" :class="[
+                                        'fs-5 fw-bold text-gray-900 text-hover-primary mb-2',
+                                        selectedContributor &&
                                             selectedContributor.id === user.id
-                                                ? 'active-contributor'
-                                                : '',
-                                        ]"
-                                    >
+                                            ? 'active-contributor'
+                                            : '',
+                                    ]">
                                         {{ user.name }}
                                     </a>
 
@@ -119,17 +84,10 @@
                                 </div>
                                 <!--end::Details-->
                                 <!--begin::Lat seen-->
-                                <div
-                                    class="d-flex flex-column align-items-end ms-5"
-                                >
-                                    <span class="text-muted fs-7 mb-1"
-                                        >5 hrs</span
-                                    >
+                                <div class="d-flex flex-column align-items-end ms-5">
+                                    <span class="text-muted fs-7 mb-1">5 hrs</span>
 
-                                    <span
-                                        class="badge badge-sm badge-circle badge-light-warning"
-                                        >9</span
-                                    >
+                                    <span class="badge badge-sm badge-circle badge-light-warning">9</span>
                                 </div>
                                 <!--end::Lat seen-->
                             </div>
@@ -140,6 +98,7 @@
                         <!--begin::Separator-->
                         <div class="separator separator-dashed d-none"></div>
                         <!--end::Separator-->
+
                     </div>
                     <!--end::List-->
                 </div>
@@ -175,17 +134,14 @@
                     <!-- More messages will be appended here dynamically -->
                 </div>
                 <div class="card-footer">
-                    <form id="chatForm" @submit.prevent="handleSubmit">
+                    <form id="chatForm">
                         <div class="input-group">
-                            <input
-                                type="text"
-                                class="form-control"
-                                placeholder="Type your message..."
-                                id="chatInput"
-                                v-model="message"
-                                required
-                            />
-                            <button class="btn btn-primary" type="submit">
+                            <input type="text" class="form-control form-control-solid px-13" name="input" value=""
+                                placeholder="Type your message..." v-model="message" />
+                            <button class="btn-emojis" ref="emojiBtn" @click.prevent="toggleEmojiPicker">
+                                😀
+                            </button>
+                            <button class="btn btn-primary" type="submit" @click.prevent="handleSubmit">
                                 Send
                             </button>
                         </div>
@@ -197,6 +153,8 @@
 </template>
 
 <script>
+import { EmojiButton } from "@joeattardi/emoji-button";
+
 export default {
     props: {
         contributors: {
@@ -213,7 +171,9 @@ export default {
         return {
             selectedContributor: null,
             selectedUser: null,
+            picker: null,
             message: "",
+            messages: [],
         };
     },
     methods: {
@@ -227,14 +187,64 @@ export default {
             this.selectedContributor = null;
             console.log("Selected user: ", this.selectedUser);
         },
+        toggleEmojiPicker() {
+            console.log("Toggling picker");
+            if (this.picker && this.$refs.emojiBtn) {
+                this.picker.togglePicker(this.$refs.emojiBtn);
+            } else {
+                console.warn(
+                    "Emoji picker not initialized or button ref missing."
+                );
+            }
+        },
         handleSubmit() {
-            alert(`You wrote: ${this.message}`);
-            this.message = ""; // Optionally clear the message after submitting
+            if (this.message.trim() === "") {
+                alert("Please enter a message!");
+                return;
+            }
+
+            const payload = {
+                text: this.message,
+                created_at: new Date().toISOString(),
+            };
+
+            fetch("http://127.0.0.1:8000/api/messages", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(payload),
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error(
+                            `HTTP error! Status: ${response.status}`
+                        );
+                    }
+                    return response.json();
+                })
+                .then((text) => {
+                    console.log("Message sent successfully:", data);
+                    this.message = "";
+                })
+                .catch((error) => {
+                    console.error(
+                        "There was an error sending the message:",
+                        error
+                    );
+                });
         },
     },
     mounted() {
         console.log("Users:", this.contributors);
         console.log("Candidate: ", this.candidate);
+        this.picker = new EmojiButton({
+            position: "top-end",
+        });
+
+        this.picker.on("emoji", (emoji) => {
+            this.message += emoji.emoji;
+        });
     },
 };
 </script>
@@ -242,7 +252,17 @@ export default {
 .active-user {
     color: #0d6efd !important;
 }
+
 .active-contributor {
     color: #0d6efd !important;
+}
+
+.btn-emojis {
+    background: transparent;
+    border: none;
+    position: absolute;
+    right: 80px;
+    top: 11px;
+    z-index: 9999 !important;
 }
 </style>

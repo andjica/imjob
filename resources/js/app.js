@@ -25,5 +25,5 @@ app.mount('#app');
 // ✅ Pokrećemo notifikacije kada se stranica učita
 window.onload = function () {
     setupNotifications();
-    
+
 };
