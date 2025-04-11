@@ -8,7 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Message extends Model
 {
     use HasFactory;
-
+    protected $fillable = [
+        'user_id',
+        'receiver_id',
+        'candidate_id',
+        'text',
+        'file_path',
+        'file_type'
+    ];
     public function sender()
     {
         return $this->belongsTo(User::class, 'user_id');

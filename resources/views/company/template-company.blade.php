@@ -52,6 +52,7 @@
 
 
 <script>var hostUrl = "assets/";</script>
+
 <!-- Global Javascript Bundle -->
 <script src="{{ asset('templates/metronic') }}/plugins/global/plugins.bundle.js"></script>
 <script src="{{ asset('templates/metronic') }}/js/scripts.bundle.js"></script>

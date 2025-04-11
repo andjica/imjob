@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\MessageSent;
 use Illuminate\Http\Request;
 use App\Interfaces\ChatInterface;
+use App\Models\Message;
 
 class ChatController extends Controller
 {
@@ -33,6 +34,7 @@ class ChatController extends Controller
             'text' => 'nullable|string',
             'file' => 'nullable|file|max:5120',
             'receiver_id' => 'required|exists:users,id',
+            'candidate_id' => 'required|int'
         ]);
 
         $filePath = null;
@@ -44,16 +46,34 @@ class ChatController extends Controller
             $fileType = explode('/', $file->getMimeType())[0];
         }
 
-        $message = $request->user()->messages()->create([
-            'receiver_id' => $data['receiver_id'],
-            'text' => $data['text'] ?? null,
-            'file_path' => $filePath ?? null,
-            'file_type' => $fileType ?? null,
-        ]);
+        $message = new Message();
+        $message->candidate_id = $data['candidate_id'];
+        $message->user_id = auth()->user()->id;
+        $message->receiver_id = $data['receiver_id'];
+        $message->text = $data['text'];
+        $message->file_path = $filePath ?? null;
+        $message->file_type = $fileType ?? null;
 
-        broadcast(new MessageSent($message->load('sender', 'receiver')))->toOthers();
+        $message->save();
+
+        //broadcast(new MessageSent($message->load('sender', 'receiver')))->toOthers();
 
         return response()->json(['message' => $message]);
     }
 
+    public function getMessages($receiverId)
+    {
+        $user = auth('web')->user();
+    
+        $messages = Message::where(function ($q) use ($user, $receiverId) {
+            $q->where('user_id', $user->id)->where('receiver_id', $receiverId);
+        })->orWhere(function ($q) use ($user, $receiverId) {
+            $q->where('user_id', $receiverId)->where('receiver_id', $user->id);
+        })
+        ->orderBy('created_at', 'asc')
+        ->get();
+    
+        return response()->json($messages);
+    }
+    
 }

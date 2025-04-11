@@ -23009,7 +23009,8 @@ __webpack_require__.r(__webpack_exports__);
       required: true
     },
     currentUserId: {
-      type: Object
+      type: Number,
+      required: true
     }
   },
   data: function data() {
@@ -23025,67 +23026,95 @@ __webpack_require__.r(__webpack_exports__);
     selectContributor: function selectContributor(user) {
       this.selectedContributor = user;
       this.selectedUser = null;
-      console.log("Selected contributor: ", this.selectedContributor);
+      this.fetchMessages(user.id);
+      localStorage.setItem("lastChatUser", JSON.stringify(user));
     },
     selectUser: function selectUser(user) {
       this.selectedUser = user;
       this.selectedContributor = null;
-      console.log("Selected user: ", this.selectedUser);
+      this.fetchMessages(user.id);
+      localStorage.setItem("lastChatUser", JSON.stringify(user));
+    },
+    fetchMessages: function fetchMessages(receiverId) {
+      var _this = this;
+      fetch("/web/messages/".concat(receiverId), {
+        method: "GET",
+        headers: {
+          "X-CSRF-TOKEN": window.csrfToken,
+          "Accept": "application/json"
+        }
+      }).then(function (res) {
+        return res.json();
+      }).then(function (data) {
+        _this.messages = data;
+        _this.scrollToBottom();
+      })["catch"](function (err) {
+        console.error("Greška pri dohvatanju poruka:", err);
+      });
+    },
+    scrollToBottom: function scrollToBottom() {
+      this.$nextTick(function () {
+        var chatBox = document.getElementById("chatBox");
+        if (chatBox) {
+          chatBox.scrollTop = chatBox.scrollHeight;
+        }
+      });
     },
     toggleEmojiPicker: function toggleEmojiPicker() {
-      console.log("Toggling picker");
       if (this.picker && this.$refs.emojiBtn) {
         this.picker.togglePicker(this.$refs.emojiBtn);
       } else {
-        console.warn("Emoji picker not initialized or button ref missing.");
+        console.warn("Emoji picker nije inicijalizovan.");
       }
     },
     handleSubmit: function handleSubmit() {
       var _this$selectedUser,
-        _this$selectedUser2,
-        _this = this;
+        _this$selectedContrib,
+        _this2 = this;
       if (this.message.trim() === "") {
-        alert("Please enter a message!");
+        alert("Unesi poruku!");
         return;
       }
+      var receiverId = ((_this$selectedUser = this.selectedUser) === null || _this$selectedUser === void 0 ? void 0 : _this$selectedUser.id) || ((_this$selectedContrib = this.selectedContributor) === null || _this$selectedContrib === void 0 ? void 0 : _this$selectedContrib.id);
+      console.log(this.candidate);
       var payload = {
-        user_id: this.candidate.id,
+        user_id: this.currentUserId,
         text: this.message,
-        created_at: new Date().toISOString(),
-        file: "",
-        receiver_id: (_this$selectedUser = this.selectedUser) === null || _this$selectedUser === void 0 ? void 0 : _this$selectedUser.id,
-        candidate_id: (_this$selectedUser2 = this.selectedUser) === null || _this$selectedUser2 === void 0 ? void 0 : _this$selectedUser2.id
+        receiver_id: this.selectedUser.id,
+        candidate_id: this.candidate.candidate_id
       };
-      fetch("http://127.0.0.1:8000/api/messages", {
+      fetch("/web/messages", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "X-CSRF-TOKEN": window.csrfToken
         },
         body: JSON.stringify(payload)
-      }).then(function (response) {
-        if (!response.ok) {
-          throw new Error("HTTP error! Status: ".concat(response.status));
-        }
-        return response.json();
-      }).then(function (text) {
-        console.log("Message sent successfully:", data);
-        _this.message = "";
+      }).then(function (res) {
+        return res.json();
+      }).then(function (data) {
+        _this2.messages.push(data.message);
+        _this2.message = "";
+        _this2.scrollToBottom();
       })["catch"](function (error) {
-        console.error("There was an error sending the message:", error);
+        console.error("Greška pri slanju poruke:", error);
       });
     }
   },
   mounted: function mounted() {
-    var _this2 = this;
-    console.log("Candidate: ", this.candidate);
-    console.log("Selected user: ", this.selectedUser);
-    console.log("Current login user: ", this.currentUserId);
+    var _this3 = this;
     this.picker = new _joeattardi_emoji_button__WEBPACK_IMPORTED_MODULE_0__.EmojiButton({
       position: "top-end"
     });
     this.picker.on("emoji", function (emoji) {
-      _this2.message += emoji.emoji;
+      _this3.message += emoji.emoji;
     });
+    var lastUser = localStorage.getItem("lastChatUser");
+    if (lastUser) {
+      var parsed = JSON.parse(lastUser);
+      this.selectedUser = parsed;
+      this.fetchMessages(parsed.id);
+    }
   }
 });
 
@@ -23168,12 +23197,19 @@ var _hoisted_18 = {
   "class": "card-title"
 };
 var _hoisted_19 = {
-  "class": "card-footer"
+  "class": "card-body chat-box",
+  id: "chatBox"
 };
 var _hoisted_20 = {
-  id: "chatForm"
+  "class": "text-muted"
 };
 var _hoisted_21 = {
+  "class": "card-footer"
+};
+var _hoisted_22 = {
+  id: "chatForm"
+};
+var _hoisted_23 = {
   "class": "input-group"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -23203,7 +23239,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }, "9")], -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Lat seen")]);
   }), 128 /* KEYED_FRAGMENT */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Details")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::User"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Separator"), _cache[5] || (_cache[5] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
     "class": "separator separator-dashed d-none"
-  }, null, -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Separator")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::List")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Card body")])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_15, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_16, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_17, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", _hoisted_18, " Chat with " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.selectedContributor ? $data.selectedContributor.name : ((_$data$selectedUser = $data.selectedUser) === null || _$data$selectedUser === void 0 ? void 0 : _$data$selectedUser.first_name) || "Candidate?"), 1 /* TEXT */)]), _cache[7] || (_cache[7] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"card-body chat-box\" id=\"chatBox\"><!-- Example Chat Messages --><div class=\"chat-message received\"><strong>Candidate:</strong><p>Hello! I&#39;m excited about the opportunity.</p><small class=\"text-muted\">10:00 AM</small></div><div class=\"chat-message sent\"><strong>You:</strong><p> Thank you for your interest. Let&#39;s discuss further. </p><small class=\"text-muted\">10:05 AM</small></div><!-- More messages will be appended here dynamically --></div>", 1)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_19, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", _hoisted_20, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_21, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+  }, null, -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Separator")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::List")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Card body")])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_15, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_16, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_17, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", _hoisted_18, " Chat with " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.selectedContributor ? $data.selectedContributor.name : ((_$data$selectedUser = $data.selectedUser) === null || _$data$selectedUser === void 0 ? void 0 : _$data$selectedUser.first_name) || "Candidate?"), 1 /* TEXT */)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_19, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.messages, function (msg) {
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
+      key: msg.id,
+      "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(msg.user_id === $props.currentUserId ? 'chat-message sent' : 'chat-message received')
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("strong", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(msg.user_id === $props.currentUserId ? 'You' : 'Them') + ":", 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(msg.text), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("small", _hoisted_20, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(new Date(msg.created_at).toLocaleTimeString()), 1 /* TEXT */)], 2 /* CLASS */);
+  }), 128 /* KEYED_FRAGMENT */))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_21, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", _hoisted_22, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_23, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     type: "text",
     "class": "form-control form-control-solid px-13",
     name: "input",
@@ -23241,6 +23282,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 /* harmony import */ var _components_Chat_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/Chat.vue */ "./resources/js/components/Chat.vue");
 /* harmony import */ var laravel_echo__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! laravel-echo */ "./node_modules/laravel-echo/dist/echo.js");
+/* provided dependency */ var process = __webpack_require__(/*! process/browser.js */ "./node_modules/process/browser.js");
 
 
 
@@ -23248,7 +23290,7 @@ __webpack_require__.r(__webpack_exports__);
 window.Pusher = __webpack_require__(/*! pusher-js */ "./node_modules/pusher-js/dist/web/pusher.js");
 window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_3__["default"]({
   broadcaster: 'pusher',
-  key: "localkey" || 0,
+  key: process.env.MIX_PUSHER_APP_KEY || 'localkey',
   wsHost: window.location.hostname,
   wsPort: 6001,
   forceTLS: false,
@@ -29893,7 +29935,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.active-user {\r\n    color: #0d6efd !important;\n}\n.active-contributor {\r\n    color: #0d6efd !important;\n}\n.btn-emojis {\r\n    background: transparent;\r\n    border: none;\r\n    position: absolute;\r\n    right: 80px;\r\n    top: 11px;\r\n    z-index: 9999 !important;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.active-user {\n    color: #0d6efd !important;\n}\n.active-contributor {\n    color: #0d6efd !important;\n}\n.btn-emojis {\n    background: transparent;\n    border: none;\n    position: absolute;\n    right: 80px;\n    top: 11px;\n    z-index: 9999 !important;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

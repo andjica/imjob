@@ -56,7 +56,9 @@
     </div>
     <!-- End Page -->
 </div>
-
+<script>
+    window.csrfToken = '{{ csrf_token() }}';
+</script>
 
 <script>var hostUrl = "assets/";</script>
 <!-- Global Javascript Bundle -->

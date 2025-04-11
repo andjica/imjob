@@ -117,21 +117,16 @@
                         }}
                     </h3>
                 </div>
-                <div class="card-body chat-box" id="chatBox">
-                    <!-- Example Chat Messages -->
-                    <div class="chat-message received">
-                        <strong>Candidate:</strong>
-                        <p>Hello! I'm excited about the opportunity.</p>
-                        <small class="text-muted">10:00 AM</small>
+               <div class="card-body chat-box" id="chatBox">
+                    <div
+                        v-for="msg in messages"
+                        :key="msg.id"
+                        :class="msg.user_id === currentUserId ? 'chat-message sent' : 'chat-message received'"
+                    >
+                        <strong>{{ msg.user_id === currentUserId ? 'You' : 'Them' }}:</strong>
+                        <p>{{ msg.text }}</p>
+                        <small class="text-muted">{{ new Date(msg.created_at).toLocaleTimeString() }}</small>
                     </div>
-                    <div class="chat-message sent">
-                        <strong>You:</strong>
-                        <p>
-                            Thank you for your interest. Let's discuss further.
-                        </p>
-                        <small class="text-muted">10:05 AM</small>
-                    </div>
-                    <!-- More messages will be appended here dynamically -->
                 </div>
                 <div class="card-footer">
                     <form id="chatForm">
@@ -167,8 +162,9 @@ export default {
             required: true,
         },
         currentUserId: {
-            type: Object,
-  }
+            type: Number,
+            required: true,
+        },
     },
     data() {
         return {
@@ -183,69 +179,84 @@ export default {
         selectContributor(user) {
             this.selectedContributor = user;
             this.selectedUser = null;
-            console.log("Selected contributor: ", this.selectedContributor);
+            this.fetchMessages(user.id);
+            localStorage.setItem("lastChatUser", JSON.stringify(user));
         },
         selectUser(user) {
             this.selectedUser = user;
             this.selectedContributor = null;
-            console.log("Selected user: ", this.selectedUser);
+            this.fetchMessages(user.id);
+            localStorage.setItem("lastChatUser", JSON.stringify(user));
+        },
+        fetchMessages(receiverId) {
+            fetch(`/web/messages/${receiverId}`, {
+                method: "GET",
+                headers: {
+                    "X-CSRF-TOKEN": window.csrfToken,
+                    "Accept": "application/json",
+                },
+            })
+                .then((res) => res.json())
+                .then((data) => {
+                    this.messages = data;
+                    this.scrollToBottom();
+                })
+                .catch((err) => {
+                    console.error("Greška pri dohvatanju poruka:", err);
+                });
+        },
+        scrollToBottom() {
+            this.$nextTick(() => {
+                const chatBox = document.getElementById("chatBox");
+                if (chatBox) {
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                }
+            });
         },
         toggleEmojiPicker() {
-            console.log("Toggling picker");
             if (this.picker && this.$refs.emojiBtn) {
                 this.picker.togglePicker(this.$refs.emojiBtn);
             } else {
-                console.warn(
-                    "Emoji picker not initialized or button ref missing."
-                );
+                console.warn("Emoji picker nije inicijalizovan.");
             }
         },
         handleSubmit() {
             if (this.message.trim() === "") {
-                alert("Please enter a message!");
+                alert("Unesi poruku!");
                 return;
             }
-
+        
+            const receiverId = this.selectedUser?.id || this.selectedContributor?.id;
+            console.log(this.candidate);
+    
             const payload = {
-                user_id: this.candidate.id,
+                user_id : this.currentUserId,
                 text: this.message,
-                created_at: new Date().toISOString(),
-                file: "",
-                receiver_id: this.selectedUser?.id,
-                candidate_id: this.selectedUser?.id,
+                receiver_id: this.selectedUser.id,
+                candidate_id : this.candidate.candidate_id,
+
             };
 
-            fetch("http://127.0.0.1:8000/api/messages", {
+            fetch("/web/messages", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": window.csrfToken,
                 },
                 body: JSON.stringify(payload),
             })
-                .then((response) => {
-                    if (!response.ok) {
-                        throw new Error(
-                            `HTTP error! Status: ${response.status}`
-                        );
-                    }
-                    return response.json();
-                })
-                .then((text) => {
-                    console.log("Message sent successfully:", data);
+                .then((res) => res.json())
+                .then((data) => {
+                    this.messages.push(data.message);
                     this.message = "";
+                    this.scrollToBottom();
                 })
                 .catch((error) => {
-                    console.error(
-                        "There was an error sending the message:",
-                        error
-                    );
+                    console.error("Greška pri slanju poruke:", error);
                 });
         },
     },
     mounted() {
-        console.log("Candidate: ", this.candidate);
-        console.log("Selected user: ", this.selectedUser);
-        console.log("Current login user: ", this.currentUserId);
         this.picker = new EmojiButton({
             position: "top-end",
         });
@@ -253,9 +264,17 @@ export default {
         this.picker.on("emoji", (emoji) => {
             this.message += emoji.emoji;
         });
+
+        const lastUser = localStorage.getItem("lastChatUser");
+        if (lastUser) {
+            const parsed = JSON.parse(lastUser);
+            this.selectedUser = parsed;
+            this.fetchMessages(parsed.id);
+        }
     },
 };
 </script>
+
 <style>
 .active-user {
     color: #0d6efd !important;

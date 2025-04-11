@@ -25,7 +25,8 @@ use App\Http\Controllers\{
     UserController,
     Contributor\ContributorController,
     EmailController,
-    RecruitmentController
+    RecruitmentController,
+    ChatController
 };
 
 use App\Http\Controllers\CompanyFreelancer\FrontController;
@@ -80,8 +81,11 @@ Route::middleware('auth')->group(function () {
     Route::put('/job/{id}/update', [JobController::class, 'update'])->name('update-job');
     Route::post('company/dashboard/store', [CompanyController::class, 'store'])->name('company-dashboard-store');
     Route::get('company/dashboard/information/create', [CompanyFrontController::class, 'informationCreate'])->name('company-dashboard-information-create');
-
 });
+
+Route::middleware(['auth:web'])->post('/web/messages', [ChatController::class, 'store']);
+Route::middleware(['auth:web'])->get('/web/messages/{receiver_id}', [ChatController::class, 'getMessages']);
+
 
 // Admin Routes
 Route::middleware(['auth', 'admin'])->prefix('admin/dashboard')->name('admin-dashboard-')->group(function () {
@@ -289,3 +293,4 @@ Route::middleware(['auth', 'contributor', 'verified'])->prefix('contributor')->n
 Route::get('/', [LandingController::class, 'index'])->name('index');
 Route::get('/contact-us', [LandingController::class, 'getContactUs'])->name('contact-us');
 Route::get('/about-us', [LandingController::class, 'getAboutUs'])->name('about-us');
+
