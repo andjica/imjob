@@ -32,7 +32,7 @@ class ChatController extends Controller
     {
         $data = $request->validate([
             'text' => 'nullable|string',
-            'file' => 'nullable|file|max:5120',
+            // 'file' => 'nullable|file|max:5120',
             'receiver_id' => 'required|exists:users,id',
             'candidate_id' => 'required|int'
         ]);
@@ -40,11 +40,11 @@ class ChatController extends Controller
         $filePath = null;
         $fileType = null;
 
-        if ($request->hasFile('file')) {
-            $file = $request->file('file');
-            $filePath = $file->store('chat_uploads', 'public');
-            $fileType = explode('/', $file->getMimeType())[0];
-        }
+        // if ($request->hasFile('file')) {
+        //     $file = $request->file('file');
+        //     $filePath = $file->store('chat_uploads', 'public');
+        //     $fileType = explode('/', $file->getMimeType())[0];
+        // }
 
         $message = new Message();
         $message->candidate_id = $data['candidate_id'];

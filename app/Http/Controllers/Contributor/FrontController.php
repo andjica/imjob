@@ -174,4 +174,13 @@ class FrontController extends Controller
 
             return view('contributor.pages.recruiters.view', compact('recruiter'));
         }
+
+        public function chats()
+        {
+            $userId = auth()->user()->id;
+            $contributor = Contributor::where('user_id', $userId)->first();
+            $activeConnections = $contributor->recruiters()->with('user')->wherePivot('status', 'Active')->get();
+            // return dd($activeConnections);
+            return view('contributor.pages.chats.view', compact('activeConnections'));
+        }
 }

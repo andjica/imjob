@@ -242,6 +242,7 @@ class FrontController extends Controller
         /** @var User $user */
         $user = auth()->user();
         $contributors = $user->recruiter->contributors()
+            ->with('user')
             ->wherePivot('status', ContributorRecruiter::ACTIVE)
             ->get();
         

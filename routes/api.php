@@ -40,3 +40,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/messages', [ChatController::class, 'index']); // prikaz poruka
     Route::post('/messages', [ChatController::class, 'store']); // slanje poruka
 });
+
+// Route::middleware('auth:api')->get('/me', function (Request $request) {
+//     return response()->json($request->user());
+// });

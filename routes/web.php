@@ -287,6 +287,8 @@ Route::middleware(['auth', 'contributor', 'verified'])->prefix('contributor')->n
         Route::get('/connections', [ContributorFrontController::class, 'getActiveConnections'])->name('connections');
 
         Route::get('/settings', [ContributorFrontController::class, 'settings'])->name('settings');
+
+        Route::get('/chats', [ContributorFrontController::class, 'chats'])->name('chats');
     });
 });
 //Landing routes

@@ -52,6 +52,9 @@
 
 <script>var hostUrl = "assets/";</script>
 <!-- Global Javascript Bundle -->
+<script>
+    window.csrfToken = '{{ csrf_token() }}';
+</script>
 <script src="{{ asset('templates/metronic') }}/plugins/global/plugins.bundle.js"></script>
 <script src="{{ asset('templates/metronic') }}/js/scripts.bundle.js"></script>
 <script src="{{ asset('templates/metronic') }}/plugins/custom/datatables/datatables.bundle.js"></script>
@@ -62,6 +65,7 @@
 <script src="{{ asset('templates/metronic') }}/js/custom/modals/create-app.js"></script>
 <script src="{{ asset('templates/metronic') }}/js/custom/modals/upgrade-plan.js"></script>
 <script src="{{ asset('templates/metronic') }}/js/custom/modals/users-search.js"></script>
+<script src="{{ mix('js/app.js') }}"></script>
 @yield('js')
 </body>
 </html>

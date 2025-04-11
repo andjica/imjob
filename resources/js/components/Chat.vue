@@ -60,7 +60,7 @@
                                 </div>
                             </div>
                             <!--begin::Details-->
-                            <div class="d-flex align-items-center" v-for="user in contributors" :key="user.id">
+                            <div class="d-flex align-items-center" v-for="user in contributors" :key="user?.user?.id || user?.id">
                                 <!--begin::Avatar-->
                                 <div class="symbol symbol-45px symbol-circle">
                                     <span class="symbol-label bg-light-danger text-danger fs-6 fw-bolder">{{
@@ -72,10 +72,8 @@
                                 <div class="ms-5">
                                     <a @click.prevent="selectContributor(user)" href="#" :class="[
                                         'fs-5 fw-bold text-gray-900 text-hover-primary mb-2',
-                                        selectedContributor &&
-                                            selectedContributor.id === user.id
-                                            ? 'active-contributor'
-                                            : '',
+                                       selectedContributor?.user?.id === user?.user?.id
+,
                                     ]">
                                         {{ user.name }}
                                     </a>
@@ -123,8 +121,7 @@
                         :key="msg.id"
                         :class="msg.user_id === currentUserId ? 'chat-message sent' : 'chat-message received'"
                     >
-                        <strong>{{ msg.user_id === currentUserId ? 'You' : 'Them' }}:</strong>
-                        <p>{{ msg.text }}</p>
+                        <p>{{ msg.text }}</p><br>
                         <small class="text-muted">{{ new Date(msg.created_at).toLocaleTimeString() }}</small>
                     </div>
                 </div>
@@ -226,13 +223,17 @@ export default {
                 return;
             }
         
-            const receiverId = this.selectedUser?.id || this.selectedContributor?.id;
+            const receiverId = this.selectedUser?.id || this.selectedContributor?.user?.id;
+            if (!receiverId) {
+                    alert("Nije odabran korisnik za slanje poruke.");
+                    return;
+                }
             console.log(this.candidate);
     
             const payload = {
                 user_id : this.currentUserId,
                 text: this.message,
-                receiver_id: this.selectedUser.id,
+                receiver_id: receiverId,
                 candidate_id : this.candidate.candidate_id,
 
             };
@@ -261,6 +262,8 @@ export default {
             position: "top-end",
         });
 
+        console.log(this.candidate);
+ console.log(this.contributors);
         this.picker.on("emoji", (emoji) => {
             this.message += emoji.emoji;
         });
