@@ -60,7 +60,7 @@
                                 </div>
                             </div>
                             <!--begin::Details-->
-                            <div class="d-flex align-items-center" v-for="user in contributors" :key="user?.user?.id || user?.id">
+                            <div class="d-flex align-items-center" v-for="user in sortedContributors" :key="user?.user?.id || user?.id">
                                 <!--begin::Avatar-->
                                 <div class="symbol symbol-45px symbol-circle">
                                     <span class="symbol-label bg-light-danger text-danger fs-6 fw-bolder">{{
@@ -108,11 +108,7 @@
                 <div class="card-header">
                     <h3 class="card-title">
                         Chat with
-                        {{
-                            selectedContributor
-                                ? selectedContributor.name
-                                : selectedUser?.first_name || "Candidate?"
-                        }}
+                       {{ selectedContributor?.name || selectedUser?.first_name || candidate?.user?.first_name + " " + candidate?.user?.last_name|| 'Candidate?' }}
                     </h3>
                 </div>
                <div class="card-body chat-box" id="chatBox">
@@ -172,6 +168,27 @@ export default {
             messages: [],
         };
     },
+      computed: {
+        defaultImage() {
+            return userImage;
+        },
+        sortedContributors() {
+            const lastUser = localStorage.getItem("lastChatUser");
+            if (!lastUser) return this.contributors;
+
+            const parsed = JSON.parse(lastUser);
+            const sorted = [...this.contributors];
+
+            // Prvo nađi indeks poslednjeg
+            const index = sorted.findIndex(c => c.user?.id === parsed.id);
+            if (index > -1) {
+            const [last] = sorted.splice(index, 1);
+            sorted.unshift(last); // Stavi ga na početak
+            }
+
+            return sorted;
+        }
+        },
     methods: {
         selectContributor(user) {
             this.selectedContributor = user;
@@ -257,24 +274,55 @@ export default {
                 });
         },
     },
-    mounted() {
-        this.picker = new EmojiButton({
-            position: "top-end",
-        });
-
-        console.log(this.candidate);
- console.log(this.contributors);
+        mounted() {
+        this.picker = new EmojiButton({ position: "top-end" });
         this.picker.on("emoji", (emoji) => {
             this.message += emoji.emoji;
         });
 
         const lastUser = localStorage.getItem("lastChatUser");
+    
         if (lastUser) {
             const parsed = JSON.parse(lastUser);
             this.selectedUser = parsed;
             this.fetchMessages(parsed.id);
+        } else if (this.candidate && this.candidate.user) {
+            this.selectedUser = this.candidate.user;
+            this.fetchMessages(this.candidate.user.id);
+            localStorage.setItem("lastChatUser", JSON.stringify(this.candidate.user));
+        } else if (this.contributors.length > 0 && this.contributors[0].user) {
+            this.selectedUser = this.contributors[0].user;
+            this.fetchMessages(this.contributors[0].user.id);
+            localStorage.setItem("lastChatUser", JSON.stringify(this.contributors[0].user));
         }
-    },
+
+        Echo.private("chat." + this.currentUserId)
+            .subscribed(() => {
+            console.log("✅ Subscribed na kanal: chat." + this.currentUserId);
+            })
+            .listen("MessageSent", (payload) => {
+                alert(3);
+            console.log("📡 WebSocket primio:", payload);
+
+            const activeReceiverId =
+                this.selectedUser?.id || this.selectedContributor?.user?.id;
+
+            if (
+                payload.message &&
+                (payload.message.user_id === activeReceiverId ||
+                payload.message.receiver_id === activeReceiverId)
+            ) {
+                this.messages.push(payload.message);
+                this.scrollToBottom();
+            }
+            })
+            .error((error) => {
+            console.error("❌ Greška:", error);
+            });
+        },
+
+      
+
 };
 </script>
 

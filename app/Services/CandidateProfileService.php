@@ -42,10 +42,9 @@ class CandidateProfileService implements CandidateProfileInterface
     
         $profile = CandidatProfile::create($validated);
     
-        return response()->json([
-            'message' => 'Profile created successfully.',
-            'data' => $profile
-        ], 201);
+        $profile->load('country', 'city');
+        return $profile;    
+
       
     }
 }

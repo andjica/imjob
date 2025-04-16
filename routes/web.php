@@ -51,8 +51,8 @@ Route::get('/', fn() => view('welcome'));
 
 Auth::routes(['verify' => true]);
 
-Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('auth-google');
-Route::get('callback/google/register', [GoogleController::class, 'handleGoogleCallback']);
+Route::get('/auth/google', [GoogleController::class, 'redirectToGoogle'])->name('auth-google');
+Route::get('/callback/google/register', [GoogleController::class, 'handleGoogleCallback']);
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout-route');
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');

@@ -14,6 +14,8 @@
     <link href="{{ asset('templates/metronic') }}/plugins/global/plugins.bundle.css" rel="stylesheet">
     <link href="{{ asset('templates/metronic') }}/css/style.bundle.css" rel="stylesheet">
     <link href="{{ asset('templates/metronic') }}/css/custom.style.css" rel="stylesheet">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
         @yield('css')
 </head>
 <body>

@@ -6,49 +6,35 @@
     <div class="container m-0">
         <button onclick="window.history.back()" class="btn btn-sm bg-linear-pink text-white  p-2 mb-5"> <i
                 class="fa fa-chevron-left text-white"></i> Back</button>
-        <div class="row">
-            {{-- <div class="col-lg-5">
-                <div class="contributor__recruiters">
-                    @foreach ($activeConnections as $recruiter)
-                        <div class="d-flex flex-stack pt-2 border-bottom recruiter-item"
-                            data-id="{{ $recruiter->user->id }}"
-                            data-name="{{ $recruiter->user->first_name }} {{ $recruiter->user->last_name }}">
-                            <div class="symbol symbol-40px me-5">
-                                @if ($recruiter->profile_image)
-                                    <img src="{{ asset(Storage::url($recruiter->profile_image)) }}" alt="Profile Image"
-                                        class="img-fluid rounded-circle shadow-sm" style="width: 60px; height: 60px;">
-                                    <!-- Smaller size here -->
-                                @else
-                                    <img src="{{ asset('images/user-286.png') }}" alt="Profile Image"
-                                        class="img-fluid rounded-circle shadow-sm" style="width: 60px; height: 60px;">
-                                @endif
-                            </div>
-                            <div class="d-flex align-items-center flex-row-fluid flex-wrap">
-                                <!--begin:Recruiter-->
-                                <div class="flex-grow-1 me-2">
-                                    <p class="fw-bold card-title text-dark h5"
-                                        data-name="{{ $recruiter->user->first_name }} {{ $recruiter->user->last_name }}">
-                                        {{ $recruiter->user->first_name }}
-                                        {{ $recruiter->user->last_name }}</p>
-                                    <span
-                                        class="text-muted fw-semibold d-block fs-7">{{ $recruiter->title_function }}</span>
-                                    <small><i>- @if ($recruiter->is_freelancer == 0)
-                                                Freelancer
-                                            @else
-                                                Recruiter
-                                            @endif
-                                        </i></small><br>
-                                    <small><i>{{ $recruiter->country->name }},
-                                            {{ $recruiter->city->name }}</i></small><br>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
+        @if($activeConnections->count() == 0)
+        <div class="card card-flush shadow-sm mb-5">
+            <div class="card-body text-center">
+                <div class="alert alert-warning d-flex align-items-center p-5 mb-0">
+                    <span class="svg-icon svg-icon-2hx svg-icon-warning me-4">
+                        <!-- Metronic SVG Icon -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <path opacity="0.3" d="M12 22C17.523 22 22 17.523 22 12S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10Z" fill="currentColor"/>
+                            <path d="M10.75 15.5h2.5v2.5h-2.5v-2.5Zm0-10h2.5v7.5h-2.5V5.5Z" fill="currentColor"/>
+                        </svg>
+                    </span>
+                    <div class="d-flex flex-column">
+                        <h4 class="mb-1">No connections found</h4>
+                        <p class="mb-0">
+                            To start chatting, please first connect with recruiters on the
+                            <a href="{{ asset('/contributor/find/recruiters') }}">Find Recruiters</a> page.
+                        </p>
+                    </div>
                 </div>
-            </div> --}}
+            </div>
+        </div>
+
+        @else
+        <div class="row">
+        
             <div class="col-lg-12">
                 @include('contributor.components.chat')
             </div>
         </div>
+        @endif
     </div>
 @endsection
