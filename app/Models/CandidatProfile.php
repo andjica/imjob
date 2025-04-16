@@ -19,6 +19,8 @@ class CandidatProfile extends Model
         'profile_image',
         'birthday',
         'current_company',
+        'current_title_job',
+        'years_of_experience',
         'cv',
         'school_name',
         'school_degree',

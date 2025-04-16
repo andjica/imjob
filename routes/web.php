@@ -28,7 +28,7 @@ use App\Http\Controllers\{
     RecruitmentController,
     ChatController
 };
-
+use App\Http\Controllers\API\FrontController as APIFrontController;
 use App\Http\Controllers\CompanyFreelancer\FrontController;
 use App\Http\Controllers\Contributor\PostController;
 use App\Http\Controllers\Front\LandingController;
@@ -48,11 +48,10 @@ use Illuminate\Support\Facades\Route;
 
 // Public Routes
 Route::get('/', fn() => view('welcome'));
-
 Auth::routes(['verify' => true]);
 
-Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('auth-google');
-Route::get('callback/google/register', [GoogleController::class, 'handleGoogleCallback']);
+Route::get('/auth/google', [GoogleController::class, 'redirectToGoogle'])->name('auth-google');
+Route::get('/callback/google/register', [GoogleController::class, 'handleGoogleCallback']);
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout-route');
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');

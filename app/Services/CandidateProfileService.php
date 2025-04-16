@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Exception;
+use App\Models\City;
 use Illuminate\Http\Request;
 use App\Models\CandidatProfile;
 use App\Interfaces\CandidateProfileInterface;
@@ -19,7 +20,7 @@ class CandidateProfileService implements CandidateProfileInterface
             'profile_image' => 'nullable|mimes:jpeg,png,jpg,webp|max:5120', // max 5MB
             'birthday' => 'nullable|date',
             'current_company' => 'nullable|string|max:255',
-            // 'current_title_job' => 'nullable|string|max:255',
+            'current_title_job' => 'nullable|string|max:255',
             'years_of_experience' => 'nullable|integer',
             'cv' => 'required|mimes:pdf,doc,docx|max:5120', // max 5MB
             'school_name' => 'required|string|max:255',
@@ -42,10 +43,16 @@ class CandidateProfileService implements CandidateProfileInterface
     
         $profile = CandidatProfile::create($validated);
     
+        $cities = City::where('country_id', $profile->country_id)
+        ->where('id', '!=',$profile->city_id)
+        ->get();
+
+        $data = $profile->load('country', 'city', 'user');
         return response()->json([
-            'message' => 'Profile created successfully.',
-            'data' => $profile
-        ], 201);
+            'message' => 'Created candidate',
+            'data' => $data,
+            'cities' => $cities
+        ]);
       
     }
 }
