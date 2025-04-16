@@ -24,14 +24,16 @@ class RoleServices implements RoleInterface
     public function updateRole(int $roleId)
     {
         $userId = auth()->user()->id;
+        
         $user = User::find($userId) ?? abort(404); 
 
 
         if (!$roleId) {
+            
             return abort(404);
         }
  
-        if ($roleId != 2 && $roleId != 3) {
+        if ($roleId != 2 && $roleId != 3 && $roleId != 4) {
             return abort(404);
         }
 

@@ -16,7 +16,14 @@ window.Echo = new Echo({
     disableStats: true,
     enabledTransports: ['ws'],
     cluster: 'mt1',
-    namespace: null
+    namespace: null,
+    //novo
+    authEndpoint: '/broadcasting/auth',
+    auth: {
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        }
+    }
 });
 
 const app = createApp({});

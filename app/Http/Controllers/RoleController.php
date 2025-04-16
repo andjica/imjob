@@ -36,6 +36,10 @@ class RoleController extends Controller
 
                 return redirect('/company/dashboard');
             }
+            else if($userUpdated->role_id == 4)
+            {
+                return redirect('/contributor/dashboard');
+            }
             else
             {
                 // go to recruiter dashboard

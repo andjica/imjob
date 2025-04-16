@@ -15,6 +15,7 @@
     <link href="{{ asset('templates/metronic') }}/css/style.bundle.css" rel="stylesheet">
     <link href="{{ asset('templates/metronic') }}/css/custom.style.css" rel="stylesheet">
     <meta name="recruiter-id" content="{{ auth()->user()->recruiter->id ?? '' }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
         @yield('css')
 
