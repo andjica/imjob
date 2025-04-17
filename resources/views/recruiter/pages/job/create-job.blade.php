@@ -34,7 +34,7 @@
             <div class="col-lg-3">
             @include('recruiter.components.sidebar-job')
             </div>
-            @if ($recruiterWithCompanies->count() == 0)
+            @if ($recruiterWithCompanies->count() < 0)
                 <div class="col-lg-9">
                     <div class="card card-flush shadow-sm mb-5">
                         <div class="card-body text-center">

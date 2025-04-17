@@ -31,11 +31,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        
         if(auth()->user()->role_id == null)
         { 
             return redirect('choose/role');
-
         }
         //admin
         if(auth()->user()->role_id == 1)
@@ -73,12 +71,9 @@ class HomeController extends Controller
                                 return redirect('/company/freelancer/dashboard');
                             } 
                             return redirect('company/dashboard');
-                        }
-                        
+                        }   
                 }
-            }
-
-            
+            } 
         }
         //contributor
         else if(auth()->user()->role_id == 4)
@@ -101,57 +96,66 @@ class HomeController extends Controller
 
     //if company has status 0 means is not activated from admin
     //if user doesnt have company, user must be recruiter
-    public function pendingActivation()
-    {
-        $companyExists = auth()->user()->company->id;
+    // public function pendingActivation()
+    // {
+    //     $companyExists = auth()->user()->company->id;
         
-        if($companyExists)
-        {
-            $company = Company::where('user_id', auth()->user()->id)->first();
+    //     if($companyExists)
+    //     {
+    //         $company = Company::where('user_id', auth()->user()->id)->first();
             
-            //check if company is active 
-            if($company->active == 1)
-            {
-                if($company->company_type_id == 3)
-                {
-                    //if company is freelancer - need to make freelancer(recruiter) record before goes to dash
-                    // if (is_null($company?->recruiter)) {
-                    //     return redirect('/company/dashboard/information/freelancer/create');
-                    // }
-                    // else{
-                        return redirect('/company/freelancer/dashboard');
-                    // }
-                    
-                }
-                else
-                {
-                    return redirect('/company/dashboard');
-                }
-              
-            }
-            else
-            {
-               
-                
-                return view('company.pages.company.pending-activation');
-            }
-           
-            
-            
-        }
-        else
-        {
-            return redirect('/home');
-        }
-        
-       
-    }
+    //         //check if company is active 
+    //         if($company->active == 1)
+    //         {
+    //             if($company->company_type_id == 3)
+    //             {
+    //                 //if company is freelancer - need to make freelancer(recruiter) record before goes to dash
+    //                 // if (is_null($company?->recruiter)) {
+    //                 //     return redirect('/company/dashboard/information/freelancer/create');
+    //                 // }
+    //                 // else{
+    //                     return redirect('/company/freelancer/dashboard');
+    //                 // }
+    //             }
+    //             else
+    //             {
+    //                 return redirect('/company/dashboard');
+    //             }
+    //         }
+    //         else
+    //         {
+    //             return view('company.pages.company.pending-activation');
+    //         }
+    //     }
+    //     else
+    //     {
+    //         return redirect('/home');
+    //     }
+    // }
 
-   
+    public function pendingActivation()
+{
+    $company = auth()->user()->company;
+
+    if ($company) {
+        //check if company is active 
+        if ($company->active == 1) {
+            if ($company->company_type_id == 3) {
+                return redirect('/company/freelancer/dashboard');
+            } else {
+                return redirect('/company/dashboard');
+            }
+        } else {
+            return view('company.pages.company.pending-activation');
+        }
+    } else {
+        return redirect('/home');
+    }
+}
+
 
     public function createFreelancer()
     {
-        
         // $secret = config('app.key');
 
         // $expectedToken = hash_hmac('sha256', $companyId, $secret);
@@ -165,7 +169,5 @@ class HomeController extends Controller
         $categories = $this->categoryServices->getAll();
         
         return view('company.pages.freelancer.create', compact('categories'));
-        
-       
     }
 }

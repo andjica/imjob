@@ -60,20 +60,21 @@
                                 </div>
                             </div>
                             <!--begin::Details-->
-                            <div class="d-flex align-items-center" v-for="user in sortedContributors" :key="user?.user?.id || user?.id">
+                            <div class="d-flex align-items-center" v-for="user in sortedContributors"
+                                :key="user?.user?.id || user?.id">
                                 <!--begin::Avatar-->
                                 <div class="symbol symbol-45px symbol-circle">
                                     <span class="symbol-label bg-light-danger text-danger fs-6 fw-bolder">{{
                                         user.name.charAt(0).toUpperCase()
-                                        }}</span>
+                                    }}</span>
                                 </div>
                                 <!--end::Avatar-->
                                 <!--begin::Details-->
                                 <div class="ms-5">
                                     <a @click.prevent="selectContributor(user)" href="#" :class="[
                                         'fs-5 fw-bold text-gray-900 text-hover-primary mb-2',
-                                       selectedContributor?.user?.id === user?.user?.id
-,
+                                        selectedContributor?.user?.id === user?.user?.id
+                                        ,
                                     ]">
                                         {{ user.name }}
                                     </a>
@@ -108,17 +109,21 @@
                 <div class="card-header">
                     <h3 class="card-title">
                         Chat with
-                       {{ selectedContributor?.name || selectedUser?.first_name || candidate?.user?.first_name + " " + candidate?.user?.last_name|| 'Candidate?' }}
+                        {{ selectedContributor?.name || selectedUser?.first_name || candidate?.user?.first_name + " " +
+                            candidate?.user?.last_name || 'Candidate?' }}
                     </h3>
                 </div>
-               <div class="card-body chat-box" id="chatBox">
-                    <div
-                        v-for="msg in messages"
-                        :key="msg.id"
-                        :class="msg.user_id === currentUserId ? 'chat-message sent' : 'chat-message received'"
-                    >
+                <div class="card-body chat-box" id="chatBox">
+                    <div v-for="msg in messages" :key="msg.id"
+                        :class="msg.user_id === currentUserId ? 'chat-message sent' : 'chat-message received'">
                         <p>{{ msg.text }}</p><br>
                         <small class="text-muted">{{ new Date(msg.created_at).toLocaleTimeString() }}</small>
+                    </div>
+                    <div v-if="messages.length === 0">
+                        <p class="message-info">Start a conversation with user {{ selectedContributor?.name ||
+                            selectedUser?.first_name || candidate?.user?.first_name + " " + candidate?.user?.last_name
+                            }} to begin your collaboration. Introduce yourself, share your ideas, or ask any questions
+                            to get things moving</p>
                     </div>
                 </div>
                 <div class="card-footer">
@@ -142,22 +147,16 @@
 
 <script>
 import { EmojiButton } from "@joeattardi/emoji-button";
+import userImage from '../../../public/images/user-286.png';
 
 export default {
     props: {
-        contributors: {
-            type: Array,
-            required: true,
-            default: () => [],
-        },
+        contributors: Array,
         candidate: {
             type: Object,
             required: true,
         },
-        currentUserId: {
-            type: Number,
-            required: true,
-        },
+        currentUserId: Number
     },
     data() {
         return {
@@ -168,7 +167,7 @@ export default {
             messages: [],
         };
     },
-      computed: {
+    computed: {
         defaultImage() {
             return userImage;
         },
@@ -182,13 +181,13 @@ export default {
             // Prvo nađi indeks poslednjeg
             const index = sorted.findIndex(c => c.user?.id === parsed.id);
             if (index > -1) {
-            const [last] = sorted.splice(index, 1);
-            sorted.unshift(last); // Stavi ga na početak
+                const [last] = sorted.splice(index, 1);
+                sorted.unshift(last); // Stavi ga na početak
             }
 
             return sorted;
         }
-        },
+    },
     methods: {
         selectContributor(user) {
             this.selectedContributor = user;
@@ -239,20 +238,18 @@ export default {
                 alert("Unesi poruku!");
                 return;
             }
-        
+
             const receiverId = this.selectedUser?.id || this.selectedContributor?.user?.id;
             if (!receiverId) {
-                    alert("Nije odabran korisnik za slanje poruke.");
-                    return;
-                }
-            console.log(this.candidate);
-    
+                alert("Nije odabran korisnik za slanje poruke.");
+                return;
+            }
+
             const payload = {
-                user_id : this.currentUserId,
+                user_id: this.currentUserId,
                 text: this.message,
                 receiver_id: receiverId,
-                candidate_id : this.candidate.candidate_id,
-
+                candidate_id: this.candidate.candidate_id,
             };
 
             fetch("/web/messages", {
@@ -265,23 +262,25 @@ export default {
             })
                 .then((res) => res.json())
                 .then((data) => {
-                    this.messages.push(data.message);
                     this.message = "";
-                    this.scrollToBottom();
                 })
                 .catch((error) => {
                     console.error("Greška pri slanju poruke:", error);
                 });
         },
     },
-        mounted() {
+    mounted() {
         this.picker = new EmojiButton({ position: "top-end" });
-        this.picker.on("emoji", (emoji) => {
-            this.message += emoji.emoji;
-        });
+        if (this.picker) {
+            this.picker.on("emoji", (emoji) => {
+                this.message += emoji.emoji;
+            });
+        } else {
+            console.warn("Emoji picker failed to initialize.");
+        }
 
         const lastUser = localStorage.getItem("lastChatUser");
-    
+
         if (lastUser) {
             const parsed = JSON.parse(lastUser);
             this.selectedUser = parsed;
@@ -298,31 +297,27 @@ export default {
 
         Echo.private("chat." + this.currentUserId)
             .subscribed(() => {
-            console.log("✅ Subscribed na kanal: chat." + this.currentUserId);
+                console.log("✅ Subscribed na kanal: chat." + this.currentUserId);
             })
-            .listen("MessageSent", (payload) => {
-                alert(3);
-            console.log("📡 WebSocket primio:", payload);
+            .listen('.MessageSent', (payload) => {
+                console.log("📡 WebSocket primio:", payload);
 
-            const activeReceiverId =
-                this.selectedUser?.id || this.selectedContributor?.user?.id;
+                const activeReceiverId =
+                    this.selectedUser?.id || this.selectedContributor?.user?.id;
 
-            if (
-                payload.message &&
-                (payload.message.user_id === activeReceiverId ||
-                payload.message.receiver_id === activeReceiverId)
-            ) {
-                this.messages.push(payload.message);
-                this.scrollToBottom();
-            }
+                if (
+                    payload.message &&
+                    (payload.message.user_id === activeReceiverId ||
+                        payload.message.receiver_id === activeReceiverId)
+                ) {
+                    this.messages.push(payload.message);
+                    this.scrollToBottom();
+                }
             })
             .error((error) => {
-            console.error("❌ Greška:", error);
+                console.error("❌ Greška:", error);
             });
-        },
-
-      
-
+    },
 };
 </script>
 
@@ -342,5 +337,14 @@ export default {
     right: 80px;
     top: 11px;
     z-index: 9999 !important;
+}
+
+.message-info {
+    position: absolute;
+    bottom: 90px;
+    left: 21px;
+    background-color: #E4E6EF !important;
+    padding: 10px 15px;
+    border-radius: 15px;
 }
 </style>

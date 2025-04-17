@@ -17,7 +17,7 @@
     <meta name="recruiter-id" content="{{ auth()->user()->recruiter->id ?? '' }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        @yield('css')
+    @yield('css')
 
     <!-- Pusher js -->
     <script src="https://js.pusher.com/7.0/pusher.min.js"></script>

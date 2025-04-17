@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,6 +15,7 @@
     <link href="{{ asset('templates/metronic') }}/css/style.bundle.css" rel="stylesheet">
     <link href="{{ asset('templates/metronic') }}/css/custom.style.css" rel="stylesheet">
     <meta name="recruiter-id" content="{{ auth()->user()->recruiter->id ?? '' }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     @yield('css')
 
@@ -59,9 +59,11 @@
     <!-- End Page -->
 </div>
 
-
 <script>
     var hostUrl = "assets/";
+</script>
+<script>
+    window.csrfToken = '{{ csrf_token() }}';
 </script>
 <!-- Global Javascript Bundle -->
 <script src="{{ asset('templates/metronic') }}/plugins/global/plugins.bundle.js"></script>
@@ -74,6 +76,7 @@
 <script src="{{ asset('templates/metronic') }}/js/custom/modals/create-app.js"></script>
 <script src="{{ asset('templates/metronic') }}/js/custom/modals/upgrade-plan.js"></script>
 <script src="{{ asset('templates/metronic') }}/js/custom/modals/users-search.js"></script>
+<script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
 <script src="{{ mix('js/app.js') }}" defer></script>
 
 <script>

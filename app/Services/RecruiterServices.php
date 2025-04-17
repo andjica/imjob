@@ -21,7 +21,6 @@ class RecruiterServices implements RecruiterInterface
     }
     public function getOneByUserId(int $byUserId)
     {
-        
         $recruiter = Recruiter::where('user_id', $byUserId)->first() ?? abort(404);
         return $recruiter;
     }
@@ -29,7 +28,6 @@ class RecruiterServices implements RecruiterInterface
     public function getAllRecruiters(?string $search = null): LengthAwarePaginator
     {
         $query = Recruiter::query();
-
         // Include the `users` table in the query using a join or relationship
         $query->with('user')
         ->when($search, function ($q) use ($search) {
@@ -41,11 +39,9 @@ class RecruiterServices implements RecruiterInterface
           });
         
     });
-    
         return $query->orderBy('created_at', 'desc')->paginate(10);
     }
 
-   
     //recruiters who are not in connection with thath specific company
     public function getAvailableRecruiters(int $companyId): Collection
     {
@@ -120,7 +116,6 @@ class RecruiterServices implements RecruiterInterface
      //store freelancer
      public function store(Request $request)
      {
-        
          $validatedData = $request->validate([
              //'recruiterInformation' => 'required|string|max:255',
              'birthday' => 'required|date|before:today',
@@ -158,9 +153,15 @@ class RecruiterServices implements RecruiterInterface
              $freelancer->profile_image = $filePath;
          }
          $user = auth()->user();
+         if (!$user->company) {
+            return redirect()->back()->with('error', 'You are not associated with any company.');
+        }
          $company = $user->company;
-         $country = Country::find($company->country_id);
- 
+         if (!$company) {
+            return redirect()->back()->with('error', 'You must be associated with a company to perform this action.');
+        }
+        $country = Country::find($company->country_id);
+
          //$freelancer->recruiter_information = $validatedData['recruiterInformation'];
          $freelancer->user_id = auth()->user()->id;
          $freelancer->birthday = $validatedData['birthday'];
@@ -180,7 +181,6 @@ class RecruiterServices implements RecruiterInterface
 
          if($role->name === "company")
          { 
-            
             $companyId = auth()->user()->company->id;
              $company = Company::find($companyId);
              $freelancer->country_id = $company->country_id;
@@ -208,20 +208,13 @@ class RecruiterServices implements RecruiterInterface
                      $freelancerCompany->save();
                  }
                  return redirect('/home')->with('success', 'Freelancer information saved successfully!');
- 
          }
          else
          {
-            
             $freelancer->title_function = null;
             $freelancer->is_freelancer = 0;
             $freelancer->save();
             return redirect('/home')->with('success', 'Recruiter information saved successfully!');
          }
-  
- 
-         
      }
- 
-
 }

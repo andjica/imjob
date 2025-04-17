@@ -231,7 +231,7 @@ class FrontController extends Controller
 
     public function candidateRecruitmentProcess(Candidate $candidate): Factory|View|Application
     {
-       
+        $currentLoginUser = auth()->user();
         if ($candidate->status !== 'accept' || !$candidate->recruitmentProcess) {
             abort(404);
         }
