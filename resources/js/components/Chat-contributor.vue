@@ -304,7 +304,7 @@ export default {
             this.selectedUser = parsed;
             this.fetchMessages(parsed.id);
         }
-        
+
         Echo.private("chat." + this.currentUserId)
             .subscribed(() => {
                 console.log(

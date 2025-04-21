@@ -53,7 +53,7 @@ class ChatController extends Controller
     
         $message->load('sender', 'receiver');
     
-        Log::info('📨 Nova poruka kreirana:', $message->toArray());
+        Log::info(' Nova poruka kreirana:', $message->toArray());
     
         broadcast(new MessageSent($message));
     
@@ -76,4 +76,41 @@ class ChatController extends Controller
         return response()->json($messages);
     }
     
+    public function markAsRead($userId, Request $request)
+    {
+        $userIdReceiver = $request->user()->id;
+
+        Message::where('sender_id', $userId)
+            ->where('receiver_id', $userIdReceiver)
+            ->where('is_read', false)
+            ->update(['is_read' => true]);
+
+        return response()->json(['status' => 'ok']);
+    }
+
+    public function unreadCount(Request $request)
+    {
+        $userId = $request->user()->id;
+
+        $counts = Message::select('sender_id')
+            ->where('receiver_id', $userId)
+            ->where('is_read', false)
+            ->groupBy('sender_id')
+            ->selectRaw('sender_id, COUNT(*) as unread_count')
+            ->get();
+
+        return response()->json($counts);
+    }
+
+
+    public function unreadTotal(Request $request)
+    {
+        $userId = $request->user()->id;
+
+        $count = Message::where('receiver_id', $userId)
+            ->where('is_read', false)
+            ->count();
+
+        return response()->json(['unread_total' => $count]);
+    }
 }

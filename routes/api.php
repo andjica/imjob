@@ -32,15 +32,24 @@ Route::get('/countries', [FrontController::class, 'getCountries']);
 Route::get('/country/{countryId}/currency', [FrontController::class, 'getCurrency']);
 Route::get('/country/{countryId}/phone-code', [FrontController::class, 'getPhoneCode']);
 
-//store Candidat Profile
-Route::post('/candidat/profile/create', [CandidateProfileController::class, 'store']);
-
 //only logged users can use chat
 Route::middleware('auth:api')->group(function () {
     Route::get('/messages', [ChatController::class, 'index']); // prikaz poruka
     Route::post('/messages', [ChatController::class, 'store']); // slanje poruka
+    //store Candidat Profile
+    Route::post('/candidat/profile/create', [CandidateProfileController::class, 'store']);
 });
 
-// Route::middleware('auth:api')->get('/me', function (Request $request) {
-//     return response()->json($request->user());
-// });
+Route::middleware('auth:api')->get('/me', function (Request $request) {
+    return response()->json($request->user());
+});
+
+// 🎯 WEB + VUE korisnici (Sanctum)
+Route::middleware(['auth:sanctum'])->prefix('messages')->group(function () {
+    Route::get('/messages', [ChatController::class, 'index']); // prikaz poruka
+    Route::post('/messages', [ChatController::class, 'store']); // slanje poruka   
+    Route::post('/mark-as-read/{userId}', [ChatController::class, 'markAsRead']);
+    Route::get('/unread-count', [ChatController::class, 'unreadCount']);
+    Route::get('/unread-total', [ChatController::class, 'unreadTotal']);
+});
+
