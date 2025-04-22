@@ -58,7 +58,9 @@
                 </div>
                 <!--end::Menu wrapper-->
             </div>
-
+            <div class="logo__notification">
+                @include('contributor.components.notification')
+        </div>
         </div>
         <div class="app-navbar-item ms-1 mt-5 ms-md-3" id="kt_header_user_menu_toggle">
             <!--begin::Menu wrapper-->

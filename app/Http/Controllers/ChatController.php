@@ -78,10 +78,11 @@ class ChatController extends Controller
     
     public function markAsRead($userId, Request $request)
     {
-        $userIdReceiver = $request->user()->id;
+        $receiverId = auth()->user()->id;
+        $userId = $request->userId;
 
-        Message::where('sender_id', $userId)
-            ->where('receiver_id', $userIdReceiver)
+        Message::where('user_id', $userId)
+            ->where('receiver_id', $receiverId)
             ->where('is_read', false)
             ->update(['is_read' => true]);
 
@@ -92,11 +93,11 @@ class ChatController extends Controller
     {
         $userId = $request->user()->id;
 
-        $counts = Message::select('sender_id')
+        $counts = Message::select('user_id')
             ->where('receiver_id', $userId)
             ->where('is_read', false)
-            ->groupBy('sender_id')
-            ->selectRaw('sender_id, COUNT(*) as unread_count')
+            ->groupBy('user_id')
+            ->selectRaw('user_id, COUNT(*) as unread_count')
             ->get();
 
         return response()->json($counts);

@@ -5,78 +5,51 @@
                 <div class="card-header pt-7" id="kt_chat_contacts_header">
                     <form class="w-100 position-relative" autocomplete="off">
                         <i
-                            class="ki-duotone ki-magnifier fs-3 text-gray-500 position-absolute top-50 ms-5 translate-middle-y"
-                        >
-                            <span class="path1"></span
-                            ><span class="path2"></span>
+                            class="ki-duotone ki-magnifier fs-3 text-gray-500 position-absolute top-50 ms-5 translate-middle-y">
+                            <span class="path1"></span><span class="path2"></span>
                         </i>
-                        <input
-                            type="text"
-                            class="form-control form-control-solid px-13"
-                            name="search"
-                            value=""
-                            placeholder="Search by username or email..."
-                        />
+                        <input type="text" class="form-control form-control-solid px-13" name="search" value=""
+                            placeholder="Search by username or email..." />
                     </form>
                 </div>
                 <div class="card-body pt-5" id="kt_chat_contacts_body">
-                    <div
-                        class="scroll-y me-n5 pe-5 h-200px h-lg-auto"
-                        data-kt-scroll="true"
-                        data-kt-scroll-activate="{default: false, lg: true}"
-                        data-kt-scroll-max-height="auto"
+                    <div class="scroll-y me-n5 pe-5 h-200px h-lg-auto" data-kt-scroll="true"
+                        data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto"
                         data-kt-scroll-dependencies="#kt_header, #kt_app_header, #kt_toolbar, #kt_app_toolbar, #kt_footer, #kt_app_footer, #kt_chat_contacts_header"
                         data-kt-scroll-wrappers="#kt_content, #kt_app_content, #kt_chat_contacts_body"
-                        data-kt-scroll-offset="5px"
-                        style="max-height: 362px"
-                    >
+                        data-kt-scroll-offset="5px" style="max-height: 362px">
                         <div class="d-flex d-flex__column py-4">
-                            <div
-                                v-for="recruiter in uniqueRecruiters"
-                                :key="recruiter.user_id"
-                            >
-                                <div
-                                    v-if="recruiter && recruiter.user_id"
+                            <div v-for="recruiter in uniqueRecruiters" :key="recruiter.user_id">
+                                <div v-if="recruiter && recruiter.user_id"
                                     class="d-flex align-items-center px-2 user-card"
-                                    @click.prevent="selectUser(recruiter.user)"
-                                    :class="{
+                                    @click.prevent="selectUser(recruiter.user)" :class="{
                                         'user-active':
                                             selectedUser &&
                                             selectedUser.id ===
-                                                recruiter.user_id,
-                                    }"
-                                >
-                                    <div
-                                        class="symbol symbol-45px symbol-circle"
-                                    >
-                                        <img
-                                            :src="
-                                                recruiter.profile_image
-                                                    ? recruiter.profile_image
-                                                    : defaultImage
-                                            "
-                                            alt="Profile Image"
-                                            class="img-fluid rounded-circle shadow-sm"
-                                            style="width: 60px; height: 60px"
-                                        />
+                                            recruiter.user_id,
+                                    }">
+                                    <div class="symbol symbol-45px symbol-circle">
+                                        <img :src="recruiter.profile_image
+                                                ? recruiter.profile_image
+                                                : defaultImage
+                                            " alt="Profile Image" class="img-fluid rounded-circle shadow-sm"
+                                            style="width: 60px; height: 60px" />
                                     </div>
                                     <div class="ms-5">
-                                        <a
-                                            href="#"
-                                            class="fs-5 fw-bold text-gray-900 text-hover-primary mb-2"
-                                        >
+                                        <a href="#" class="fs-5 fw-bold text-gray-900 text-hover-primary mb-2">
                                             {{ recruiter.user.first_name }}
                                             {{ recruiter.user.last_name }}
                                         </a>
                                         <p>{{ recruiter.user.email }}</p>
-                                        <small
-                                            ><i>{{
-                                                recruiter.is_freelancer === 0
-                                                    ? "Freelancer"
-                                                    : "Recruiter"
-                                            }}</i></small
-                                        >
+                                        <small><i>{{
+                                            recruiter.is_freelancer === 0
+                                                ? "Freelancer"
+                                                : "Recruiter"
+                                        }}</i></small>
                                     </div>
+                                    <span v-if="unreadMap[recruiter.user.id]" class="badge badge-danger">{{
+                                        unreadMap[recruiter.user.id]
+                                    }}</span>
                                 </div>
                                 <div v-else>
                                     <p class="text-danger">
@@ -98,37 +71,26 @@
                         Chat with
                         {{
                             selectedUser
-                                ? selectedUser.first_name + " " + selectedUser.last_name
+                                ? selectedUser.first_name +
+                                " " +
+                                selectedUser.last_name
                                 : "Select a user"
                         }}
                     </h3>
                 </div>
-                <div
-                    class="card-body chat-box chat-box__contributor"
-                    id="chatBox__contributor"
-                >
-                    <div
-                        v-for="msg in messages"
-                        :key="msg.id"
-                        :class="[
-                            'chat-message',
-                            msg.user_id === currentUserId ? 'sent' : 'received',
-                        ]"
-                    >
-                        <div
-                            :class="
-                                msg.user_id === currentUserId
-                                    ? 'text-end'
-                                    : 'text-start'
-                            "
-                        >
-                            <p
-                                :class="
-                                    msg.user_id === currentUserId
-                                        ? 'p-3 rounded bg-primary text-white d-inline-block'
-                                        : 'p-3 rounded bg-light text-dark d-inline-block'
-                                "
-                            >
+                <div class="card-body chat-box chat-box__contributor" id="chatBox__contributor">
+                    <div v-for="msg in messages" :key="msg.id" :class="[
+                        'chat-message',
+                        msg.user_id === currentUserId ? 'sent' : 'received',
+                    ]">
+                        <div :class="msg.user_id === currentUserId
+                                ? 'text-end'
+                                : 'text-start'
+                            ">
+                            <p :class="msg.user_id === currentUserId
+                                    ? 'p-3 rounded bg-primary text-white d-inline-block'
+                                    : 'p-3 rounded bg-light text-dark d-inline-block'
+                                ">
                                 {{ msg.text }}
                             </p>
                             <div class="mt-1">
@@ -141,31 +103,28 @@
                         </div>
                     </div>
                     <div v-if="messages.length === 0">
-                        <p class="message-info">Start a conversation with user {{ selectedUser?.first_name + " " + selectedUser?.last_name }} to begin your collaboration. Introduce yourself, share your ideas, or ask any questions to get things moving</p>
+                        <p class="message-info">
+                            Start a conversation with user
+                            {{
+                                selectedUser?.first_name +
+                                " " +
+                                selectedUser?.last_name
+                            }}
+                            to begin your collaboration. Introduce yourself,
+                            share your ideas, or ask any questions to get things
+                            moving
+                        </p>
                     </div>
                 </div>
                 <div class="card-footer border-top pt-4">
                     <form id="chatForm">
                         <div class="input-group">
-                            <input
-                                type="text"
-                                class="form-control form-control-solid px-13"
-                                name="input"
-                                placeholder="Type your message..."
-                                v-model="message"
-                            />
-                            <button
-                                class="btn-emojis"
-                                ref="emojiBtn"
-                                @click.prevent="toggleEmojiPicker"
-                            >
+                            <input type="text" class="form-control form-control-solid px-13" name="input"
+                                placeholder="Type your message..." v-model="message" />
+                            <button class="btn-emojis" ref="emojiBtn" @click.prevent="toggleEmojiPicker">
                                 😀
                             </button>
-                            <button
-                                class="btn btn-primary"
-                                type="submit"
-                                @click.prevent="handleSubmit"
-                            >
+                            <button class="btn btn-primary" type="submit" @click.prevent="handleSubmit">
                                 Send
                             </button>
                         </div>
@@ -178,7 +137,8 @@
 
 <script>
 import { EmojiButton } from "@joeattardi/emoji-button";
-import userImage from '../../../public/images/user-286.png';
+import userImage from "../../../public/images/user-286.png";
+import emitter from "../eventBus";
 
 export default {
     props: {
@@ -192,12 +152,13 @@ export default {
             picker: null,
             message: "",
             messages: [],
+            unreadMap: {},
         };
     },
     computed: {
-              defaultImage() {
-        return userImage;
-      },
+        defaultImage() {
+            return userImage;
+        },
         uniqueRecruiters() {
             const seen = new Set();
             return this.recruiters.filter((r) => {
@@ -208,6 +169,14 @@ export default {
         },
     },
     methods: {
+        updateUnreadTotal() {
+            this.unreadTotal = Object.values(this.unreadMap).reduce(
+                (sum, count) => sum + count,
+                0
+            );
+
+            emitter.emit("update-navbar-badge", this.unreadTotal);
+        },
         selectRecruiter(user) {
             this.selectedRecruiter = user;
             this.selectedUser = null;
@@ -219,6 +188,34 @@ export default {
             this.selectedRecruiter = null;
             this.fetchMessages(user.id);
             localStorage.setItem("lastChatUser", JSON.stringify(user));
+            fetch(`/api/messages/mark-as-read/${this.selectedUser.id}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": window.csrfToken,
+                },
+            })
+                .then((res) => res.json())
+                .then(() => {
+                    // Set the unread count to 0 for this user
+                    if (this.unreadMap[this.selectedUser.id]) {
+                        this.unreadMap[this.selectedUser.id] = 0;
+                    }
+
+                    this.updateUnreadTotal();
+                })
+                .catch((err) => {
+                    console.error(
+                        "Greška pri označavanju poruka kao pročitanih:",
+                        err
+                    );
+                });
+        },
+        updateUnreadTotal() {
+            this.unreadTotal = Object.values(this.unreadMap).reduce(
+                (sum, count) => sum + count,
+                0
+            );
         },
         fetchMessages(receiverId) {
             if (!receiverId) return;
@@ -284,27 +281,54 @@ export default {
                 .catch((error) => {
                     console.error("Greška pri slanju poruke:", error);
                 });
+            console.log(window.csrfToken);
         },
     },
     mounted() {
-        this.picker = new EmojiButton({ position: "top-end" });
+        this.$nextTick(() => {
+            emitter.emit("reset-navbar-badge");
+        });
 
+        // Dohvati nepročitane poruke po korisniku
+        fetch("/api/messages/unread-count", {
+            method: "GET",
+            headers: {
+                "X-Requested-With": "XMLHttpRequest",
+                "X-CSRF-TOKEN": window.csrfToken,
+                Accept: "application/json",
+            },
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                data.forEach((item) => {
+                    this.unreadMap[item.user_id] = item.unread_count;
+                });
+                this.updateUnreadTotal();
+            })
+            .catch((err) => {
+                console.error(
+                    "Greška pri dohvatanju nepročitanih poruka:",
+                    err
+                );
+            });
+
+        // Emoji picker
+        this.picker = new EmojiButton({ position: "top-end" });
         if (this.picker) {
             this.picker.on("emoji", (emoji) => {
                 this.message += emoji.emoji;
             });
-        } else {
-            console.warn("Emoji picker failed to initialize.");
         }
 
+        // Zapamti poslednjeg korisnika (ako postoji)
         const lastUser = localStorage.getItem("lastChatUser");
-
         if (lastUser) {
             const parsed = JSON.parse(lastUser);
             this.selectedUser = parsed;
             this.fetchMessages(parsed.id);
         }
 
+        // WebSocket povezivanje
         Echo.private("chat." + this.currentUserId)
             .subscribed(() => {
                 console.log(
@@ -312,20 +336,67 @@ export default {
                 );
             })
             .listen(".MessageSent", (payload) => {
-                console.log("📡 WebSocket primio:", payload);
-                
                 const message = payload.message;
                 const activeReceiverId =
                     this.selectedUser?.id || this.selectedRecruiter?.user?.id;
 
+                // Ako je poruka za aktivnog korisnika – dodaj direktno u chat
                 if (
                     message.user_id === activeReceiverId ||
                     message.receiver_id === activeReceiverId
                 ) {
                     this.messages.push(message);
                     this.scrollToBottom();
+
+                    fetch(
+                        `/api/messages/mark-as-read/${this.selectedUser.id}`,
+                        {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "X-CSRF-TOKEN": window.csrfToken,
+                            },
+                        }
+                    )
+                        .then((res) => res.json())
+                        .then(() => {
+                            // Set the unread count to 0 for this user
+                            if (this.unreadMap[this.selectedUser.id]) {
+                                this.unreadMap[this.selectedUser.id] = 0;
+                            }
+
+                            this.updateUnreadTotal();
+                        })
+                        .catch((err) => {
+                            console.error(
+                                "Greška pri označavanju poruka kao pročitanih:",
+                                err
+                            );
+                        });
+                } else {
+                    // Inače, povećaj broj nepročitanih i pokaži badge
+                    if (this.unreadMap[message.user_id]) {
+                        this.unreadMap[message.user_id]++;
+                    } else {
+                        this.unreadMap[message.user_id] = 1;
+                    }
+
+                    this.updateUnreadTotal();
+
+                    // Emituj ka nav-baru ako koristiš globalni badge (npr. crveni broj u headeru)
+                    emitter.emit("update-navbar-badge", this.unreadTotal);
+
+                    // BONUS: ako tab nije aktivan – prikaži broj u title-u (kao WhatsApp)
+                    if (!document.hasFocus()) {
+                        document.title = `(${this.unreadTotal}) Nova poruka - TvojApp`;
+                    }
                 }
             });
+
+        // Kada se tab vrati u fokus – resetuj title
+        window.addEventListener("focus", () => {
+            document.title = "TvojApp";
+        });
     },
 };
 </script>
@@ -375,7 +446,7 @@ export default {
 }
 
 .chat-message.received p {
-    background-color: #E4E6EF!important;
+    background-color: #e4e6ef !important;
     color: #000;
 }
 
@@ -385,11 +456,12 @@ export default {
     border-radius: 15px;
     max-width: 70%;
 }
-.message-info{
+
+.message-info {
     position: absolute;
     bottom: 90px;
     left: 21px;
-    background-color: #E4E6EF!important;
+    background-color: #e4e6ef !important;
     padding: 10px 15px;
     border-radius: 15px;
 }

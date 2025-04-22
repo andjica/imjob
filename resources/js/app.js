@@ -2,6 +2,7 @@ import setupNotifications from './notifications';
 import { createApp } from 'vue';
 import Chat from './components/Chat.vue';
 import ChatContributor from './components/Chat-contributor.vue';
+import Notification from './components/Notification.vue';
 import Echo from 'laravel-echo';
 
 window.Pusher = require('pusher-js');
@@ -27,9 +28,14 @@ window.Echo = new Echo({
 });
 
 const app = createApp({});
+
 app.component('chat-component', Chat);
 app.component('chat-component-contributor', ChatContributor);
 app.mount('#app');
+
+const notifApp = createApp({});
+notifApp.component('component-notification', Notification);
+notifApp.mount('#notificationUnreadMessages')
 
 // ✅ Pokrećemo notifikacije kada se stranica učita
 window.onload = function () {
