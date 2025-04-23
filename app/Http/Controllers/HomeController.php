@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Interfaces\CategoryInterface;
 use App\Interfaces\CompanyInterface;
 use App\Models\Company;
+use App\Services\CountryServices;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
@@ -12,16 +13,18 @@ class HomeController extends Controller
 {
     protected $categoryServices;
     protected $companyServices;
+    protected $countryServices;
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct(CategoryInterface $categoryServices, CompanyInterface $companyServices)
+    public function __construct(CategoryInterface $categoryServices, CompanyInterface $companyServices, CountryServices $countryServices)
     {
         $this->middleware(['auth','verified']);
         $this->categoryServices = $categoryServices;
         $this->companyServices = $companyServices;
+        $this->countryServices = $countryServices;
     }
 
     /**
@@ -165,9 +168,9 @@ class HomeController extends Controller
         //}
     
        // $company = $this->companyServices->get($companyId);
-
+       $countries = $this->countryServices->getCountries();
         $categories = $this->categoryServices->getAll();
         
-        return view('company.pages.freelancer.create', compact('categories'));
+        return view('company.pages.freelancer.create', compact('categories', 'countries'));
     }
 }

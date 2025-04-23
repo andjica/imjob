@@ -84,6 +84,41 @@
                                     </span>
                                 </div>
                             </div>
+                            @if(auth()->user()->role_id == 3)
+                                <!-- Country -->
+                                <div class="row mb-3">
+                                    <label for="countryId" class="col-lg-6 col-form-label text-end fw-bold required">
+                                        <i class="fas fa-globe text-primary me-2"></i> Country
+                                    </label>
+                                    <div class="col-lg-6">
+                                        <select name="countryId" id="countryId" data-control="select2" 
+                                            class="form-control @error('countryId') is-invalid @enderror">
+                                            <option value="">Select a country</option>
+                                            @foreach ($countries as $country)
+                                                <option value="{{ $country->id }}" {{ old('countryId') == $country->id ? 'selected' : '' }}>
+                                                    {{ $country->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    
+                                        <span class="text-danger" id="countryIdEmpty"> @error('countryId'){{ $message }} @enderror</span>
+                                    
+                                    </div>
+                                </div>
+                            <!-- City -->
+                                <div class="row mb-3" id="cityRow">
+                                    <label for="cityId" class="col-lg-6 col-form-label text-end fw-bold required">
+                                        <i class="fas fa-globe text-primary me-2"></i> City
+                                    </label>
+                                    <div class="col-lg-6">
+                                        <select name="cityId" id="cityId" data-control="select2"
+                                            class="form-control @error('cityId') is-invalid @enderror">
+                                            <option value="">Select a city</option>
+                                        </select>
+                                        <span class="text-danger" id="cityEmpty"></span>
+                                    </div>
+                                </div>
+                            @endif
 
                             <div class="row mb-3">
                                 <!-- Profile Image -->
@@ -197,4 +232,61 @@
 
 @section('js')
     <script src="{{ asset('/js/custom/create-freelancer-validation.js') }}"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#countryId").on("change", function () {
+            var countryId = $(this).val();
+            console.log("Selected Country ID:", countryId);
+
+            var cityRow = $("#cityRow");
+            var citySelect = $("#cityId");
+            var loading = $("#loading");
+            var currencyInfoRow = $("#currencyInfoRow");
+            var currencyLoading = $("#currencyLoading");
+
+            // Reset city dropdown
+            citySelect.html('<option value="">Select a city</option>');
+
+            // Reset other fields
+            $("#currencyName").text('N/A');
+            $("#currencySymbol").text('N/A');
+            if (currencyInfoRow.length) currencyInfoRow.addClass("d-none");
+            if (currencyLoading.length) currencyLoading.addClass("d-none");
+            if (loading.length) loading.removeClass("d-none");
+
+            // Don't hide cityRow here — wait for AJAX!
+            
+            if (countryId) {
+                $.ajax({
+                    url: '/cities/' + countryId,
+                    method: 'GET',
+                    success: function (response) {
+                        console.log('Cities Response:', response);
+                        if (response.cities && response.cities.length > 0) {
+                            response.cities.forEach(function (city) {
+                                citySelect.append('<option value="' + city.id + '">' + city.name + '</option>');
+                            });
+                            cityRow.removeClass("d-none"); // ✅ POKAŽI OVDE!
+                        } else {
+                            citySelect.append('<option value="">No cities found</option>');
+                            cityRow.addClass("d-none");
+                        }
+                    },
+                    error: function () {
+                        alert("Failed to fetch cities. Please try again.");
+                        cityRow.addClass("d-none");
+                    },
+                    complete: function () {
+                        if (loading.length) loading.addClass("d-none");
+                        if (currencyLoading.length) currencyLoading.addClass("d-none");
+                    }
+                });
+            } else {
+                cityRow.addClass("d-none"); // Ako ništa nije selektovano
+            }
+        });
+    });
+</script>
 @endsection
+

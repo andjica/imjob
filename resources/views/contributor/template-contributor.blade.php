@@ -52,6 +52,10 @@
 </div>
 
 
+<script>
+    window.authUserId = {{ auth()->id() }};
+</script>
+
 <script>var hostUrl = "assets/";</script>
 <!-- Global Javascript Bundle -->
 <script>

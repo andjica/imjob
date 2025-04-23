@@ -1,10 +1,14 @@
 <template>
     <div class="notification-wrapper">
-        <a href="/contributor/chats" class="nav-icon">
+        <a
+            href="/contributor/chats"
+            class="nav-icon"
+            @click="prepareForReset"
+        >
             <i class="fa-solid fa-message"></i>
-            <span v-if="unreadTotal > 0" class="badge badge-danger">{{
-                unreadTotal
-            }}</span>
+            <span v-if="unreadTotal > 0" class="badge badge-danger">
+                {{ unreadTotal }}
+            </span>
         </a>
     </div>
 </template>
@@ -20,18 +24,30 @@ export default {
         };
     },
     mounted() {
+        // Ako dolazimo sa badge resetom (klik sa ikonice)
+        if (localStorage.getItem("resetBadgeFromChat") === "1") {
+            this.unreadTotal = 0;
+            localStorage.removeItem("resetBadgeFromChat");
+            return;
+        }
+
         this.refreshUnreadTotal();
 
-        // Listen for emitted updates
+        // Slušaj emitove iz globalnog WebSocket listenera
+        emitter.on("increment-navbar-badge", this.incrementBadge);
         emitter.on("update-navbar-badge", this.updateUnreadTotal);
-        emitter.on("reset-navbar-badge", this.resetUnreadTotal); // <-- NOVO
+        emitter.on("reset-navbar-badge", this.resetUnreadTotal);
     },
     beforeUnmount() {
+        emitter.off("increment-navbar-badge", this.incrementBadge);
         emitter.off("update-navbar-badge", this.updateUnreadTotal);
-
-        emitter.off("reset-navbar-badge", this.resetUnreadTotal); // <-- NOVO
+        emitter.off("reset-navbar-badge", this.resetUnreadTotal);
     },
     methods: {
+        prepareForReset() {
+            // Kad kliknemo na ikoncu → postavi flag da se resetuje badge
+            localStorage.setItem("resetBadgeFromChat", "1");
+        },
         refreshUnreadTotal() {
             fetch("/api/messages/unread-total", {
                 method: "GET",
@@ -53,7 +69,9 @@ export default {
         },
         updateUnreadTotal(total) {
             this.unreadTotal = total;
-            console.log("Updated badge:", total);
+        },
+        incrementBadge() {
+            this.unreadTotal++;
         },
         resetUnreadTotal() {
             this.unreadTotal = 0;
@@ -62,15 +80,3 @@ export default {
 };
 </script>
 
-<style scoped>
-.nav-icon {
-    position: relative;
-    display: inline-block;
-}
-
-.badge {
-    position: absolute;
-    top: -5px;
-    right: -10px;
-}
-</style>

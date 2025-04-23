@@ -1,9 +1,10 @@
-import setupNotifications from './notifications';
+import setupNotifications from './notifications.js';
 import { createApp } from 'vue';
 import Chat from './components/Chat.vue';
 import ChatContributor from './components/Chat-contributor.vue';
 import Notification from './components/Notification.vue';
 import Echo from 'laravel-echo';
+import emitter from './eventBus'; // OBAVEZNO!
 
 window.Pusher = require('pusher-js');
 
@@ -41,4 +42,23 @@ notifApp.mount('#notificationUnreadMessages')
 window.onload = function () {
     setupNotifications();
 
+};
+
+
+// ✅ Direktno dodaj listener za sve poruke (bez zasebnog fajla)
+window.onload = function () {
+    const userId = window.authUserId;
+
+    if (userId) {
+        window.Echo.private(`chat.${userId}`)
+            .listen('.MessageSent', (payload) => {
+                const message = payload.message;
+                
+                // Ako nismo na chatu, pošalji badge event
+                if (!window.location.pathname.includes('/contributor/chats')) {
+                    console.log('📨 Nova poruka stigla dok nismo u chatu');
+                    emitter.emit('increment-navbar-badge');
+                }
+            });
+    }
 };
