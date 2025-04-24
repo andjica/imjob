@@ -198,6 +198,8 @@ Route::middleware(['auth', 'company.freelancer', 'verified'])->prefix('company/f
         //notifications and connections
         Route::get('/notifications', [CompanyFreelancerFrontController::class, 'notifications'])->name('notifications');
         Route::get('/connections', [CompanyFreelancerFrontController::class, 'connections'])->name('connections');
+
+        Route::get('/chats', [CompanyFreelancerFrontController::class, 'chats'])->name('chats');
     });
 });
 
@@ -248,7 +250,8 @@ Route::middleware(['auth', 'recruiter', 'verified'])->prefix('recruiter')->name(
         //notifications
         Route::get('/notifications', [RecruiterFrontController::class, 'notifications'])->name('notifications');
         Route::get('/connections', [RecruiterFrontController::class, 'connections'])->name('connections');
-
+        
+        Route::get('/chats', [RecruiterFrontController::class, 'chats'])->name('chats');
     });
 });
 

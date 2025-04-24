@@ -1,10 +1,6 @@
 <template>
     <div class="notification-wrapper">
-        <a
-            href="/contributor/chats"
-            class="nav-icon"
-            @click="prepareForReset"
-        >
+        <a href="/company/freelancer/chats" class="nav-icon" @click="prepareForReset">
             <i class="fa-solid fa-message"></i>
             <span v-if="unreadTotal > 0" class="badge badge-danger">
                 {{ unreadTotal }}
@@ -80,12 +76,15 @@ export default {
 };
 </script>
 
-<style scoped>
-.logo__notification {
-  display: flex;
-    flex-direction: column;
-    justify-content: center;
+<style>
+.notification-wrapper{
+    position: relative;
 }
 
-
+.notification-wrapper .nav-icon .badge{
+    position: absolute;
+    top: -10px;
+    right: -18px;
+}
 </style>
+

@@ -29,9 +29,54 @@
                         data-kt-scroll-dependencies="#kt_header, #kt_app_header, #kt_toolbar, #kt_app_toolbar, #kt_footer, #kt_app_footer, #kt_chat_contacts_header"
                         data-kt-scroll-wrappers="#kt_content, #kt_app_content, #kt_chat_contacts_body"
                         data-kt-scroll-offset="5px" style="max-height: 362px">
-                        <div class="d-flex d-flex__column py-4">
-                            <div>
-                                <div class="d-flex align-items-center" v-if="candidate && candidate.user">
+                        <!--end::User-->
+                        <!-- Add a condition to check in witch route, user is -->
+                        <div v-if="isFreelancerChatRoute">
+                            <div class="d-flex d-flex__column py-4">
+                                <div v-for="user in contributorData" class="d-flex flex-row align-items-center" :class="{
+                                    'user-active':
+                                        selectedContributor &&
+                                        selectedContributor.user.id ===
+                                        user.user.id || user.id,
+                                }">
+                                    <!--begin::Avatar-->
+                                    <div class="symbol symbol-45px symbol-circle">
+                                        <span class="symbol-label bg-light-danger text-danger fs-6 fw-bolder">{{
+                                            user.user.first_name
+                                                .charAt(0)
+                                                .toUpperCase()
+                                        }}</span>
+                                    </div>
+                                    <!--end::Avatar-->
+                                    <div class="ms-5">
+                                        <a @click.prevent="
+                                            selectContributor(user)
+                                            " href="#" :class="[
+                                                'fs-5 fw-bold text-gray-900 text-hover-primary mb-2',
+                                                selectedContributor?.user
+                                                    ?.id === user?.user?.id,
+                                            ]">
+                                            {{ user.user.first_name }}
+                                            {{ user.user.last_name }}
+                                        </a>
+
+                                        <p>{{ user.user.email }}</p>
+                                    </div>
+                                    <span v-if="unreadMap[user.user.id]" class="badge badge-danger">{{
+                                        unreadMap[user.user.id]
+                                    }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div v-else>
+                            <div class="d-flex d-flex__column py-4">
+                                <div class="d-flex align-items-center px-2 user-card" :class="[
+                                    selectedUser &&
+                                        selectedUser.id === candidate.user.id
+                                        ? 'user-active'
+                                        : '',
+                                ]" v-if="candidate && candidate.user">
                                     <div class="symbol symbol-45px symbol-circle">
                                         <span class="symbol-label bg-light-danger text-danger fs-6 fw-bolder">{{
                                             candidate.user.first_name
@@ -43,14 +88,7 @@
                                     <div class="ms-5">
                                         <a @click.prevent="
                                             selectUser(candidate.user)
-                                            " href="#" :class="[
-                                                'fs-5 fw-bold text-gray-900 text-hover-primary mb-2',
-                                                selectedUser &&
-                                                    selectedUser.id ===
-                                                    candidate.user.id
-                                                    ? 'active-user'
-                                                    : '',
-                                            ]">
+                                            " href="#" class="fs-5 fw-bold text-gray-900 text-hover-primary mb-2">
                                             {{ candidate.user.first_name }}
                                             {{ candidate.user.last_name }}
                                         </a>
@@ -58,46 +96,40 @@
                                         <p>{{ candidate.user.email }}</p>
                                     </div>
                                 </div>
-                            </div>
-                            <!--begin::Details-->
-                            <div class="d-flex align-items-center" v-for="user in sortedContributors"
-                                :key="user?.user?.id || user?.id">
-                                <!--begin::Avatar-->
-                                <div class="symbol symbol-45px symbol-circle">
-                                    <span class="symbol-label bg-light-danger text-danger fs-6 fw-bolder">{{
-                                        user.name.charAt(0).toUpperCase()
-                                    }}</span>
-                                </div>
-                                <!--end::Avatar-->
                                 <!--begin::Details-->
-                                <div class="ms-5">
-                                    <a @click.prevent="selectContributor(user)" href="#" :class="[
-                                        'fs-5 fw-bold text-gray-900 text-hover-primary mb-2',
-                                        selectedContributor?.user?.id === user?.user?.id
-                                        ,
-                                    ]">
-                                        {{ user.name }}
-                                    </a>
+                                <div class="d-flex align-items-center" v-for="user in sortedContributors"
+                                    :key="user?.user?.id || user?.id">
+                                    <!--begin::Avatar-->
+                                    <div class="symbol symbol-45px symbol-circle">
+                                        <span class="symbol-label bg-light-danger text-danger fs-6 fw-bolder">{{
+                                            user.name
+                                                .charAt(0)
+                                                .toUpperCase()
+                                        }}</span>
+                                    </div>
+                                    <!--end::Avatar-->
+                                    <!--begin::Details-->
+                                    <div class="ms-5">
+                                        <a @click.prevent="
+                                            selectContributor(user)
+                                            " href="#" :class="[
+                                                'fs-5 fw-bold text-gray-900 text-hover-primary mb-2',
+                                                selectedContributor?.user
+                                                    ?.id === user?.user?.id,
+                                            ]">
+                                            {{ user.name }}
+                                        </a>
 
-                                    <p>{{ user.email }}</p>
+                                        <p>{{ user.email }}</p>
+                                    </div>
+                                    <!--end::Details-->
                                 </div>
                                 <!--end::Details-->
-                                <!--begin::Lat seen-->
-                                <div class="d-flex flex-column align-items-end ms-5">
-                                    <span class="text-muted fs-7 mb-1">5 hrs</span>
-
-                                    <span class="badge badge-sm badge-circle badge-light-warning">9</span>
-                                </div>
-                                <!--end::Lat seen-->
                             </div>
-                            <!--end::Details-->
                         </div>
-                        <!--end::User-->
-
                         <!--begin::Separator-->
                         <div class="separator separator-dashed d-none"></div>
                         <!--end::Separator-->
-
                     </div>
                     <!--end::List-->
                 </div>
@@ -107,23 +139,60 @@
         <div class="col-lg-7">
             <div class="card h-100">
                 <div class="card-header">
-                    <h3 class="card-title">
-                        Chat with
-                        {{ selectedContributor?.name || selectedUser?.first_name || candidate?.user?.first_name + " " +
-                            candidate?.user?.last_name || 'Candidate?' }}
-                    </h3>
+                    <div v-if="isFreelancerChatRoute">
+                        <h3 class="card-title">
+                            Chat with
+                            {{
+                                chatTitle
+                            }}
+                        </h3>
+                    </div>
+                    <div v-else-if="isRecruiterChatRoute">
+                        <h3 class="card-title">
+                            Chat with
+                            {{
+                                selectedContributor?.name || "Candidate"
+                            }}
+                        </h3>
+                    </div>
+                    <div v-else>
+                        <h3 class="card-title">
+                            Chat with
+                            {{
+                                selectedContributor?.name ||
+                                candidate?.user?.first_name +
+                                " " +
+                                candidate?.user?.last_name ||
+                                "Candidate?"
+                            }}
+                        </h3>
+                    </div>
                 </div>
-                <div class="card-body chat-box" id="chatBox">
-                    <div v-for="msg in messages" :key="msg.id"
-                        :class="msg.user_id === currentUserId ? 'chat-message sent' : 'chat-message received'">
-                        <p>{{ msg.text }}</p><br>
-                        <small class="text-muted">{{ new Date(msg.created_at).toLocaleTimeString() }}</small>
+                <div class="card-body chat-box chat-box__contributor" id="chatBox">
+                    <div v-for="msg in messages" :key="msg.id" :class="msg.user_id === currentUserId
+                        ? 'chat-message sent'
+                        : 'chat-message received'
+                        ">
+                        <p>{{ msg.text }}</p>
+                        <br />
+                        <small class="text-muted">{{
+                            new Date(msg.created_at).toLocaleTimeString()
+                            }}</small>
                     </div>
                     <div v-if="messages.length === 0">
-                        <p class="message-info">Start a conversation with user {{ selectedContributor?.name ||
-                            selectedUser?.first_name || candidate?.user?.first_name + " " + candidate?.user?.last_name
-                            }} to begin your collaboration. Introduce yourself, share your ideas, or ask any questions
-                            to get things moving</p>
+                        <p class="message-info">
+                            Start a conversation with user
+                            {{
+                                selectedContributor?.user?.first_name + ' ' + selectedContributor?.user?.last_name ||
+                                selectedContributor?.name ||
+                                selectedUser?.first_name + ' ' + selectedUser?.last_name ||
+                                candidate?.user?.first_name + ' ' + candidate?.user?.last_name ||
+                                "Unknown User"
+                            }}
+                            to begin your collaboration. Introduce yourself,
+                            share your ideas, or ask any questions to get things
+                            moving
+                        </p>
                     </div>
                 </div>
                 <div class="card-footer">
@@ -147,7 +216,8 @@
 
 <script>
 import { EmojiButton } from "@joeattardi/emoji-button";
-import userImage from '../../../public/images/user-286.png';
+import userImage from "../../../public/images/user-286.png";
+import emitter from "../eventBus";
 
 export default {
     props: {
@@ -156,7 +226,7 @@ export default {
             type: Object,
             required: true,
         },
-        currentUserId: Number
+        currentUserId: Number,
     },
     data() {
         return {
@@ -165,11 +235,30 @@ export default {
             picker: null,
             message: "",
             messages: [],
+            unreadMap: {},
+            contributorData: [],
         };
     },
     computed: {
+        currentPath() {
+            return window.location.pathname;
+        },
+        isFreelancerChatRoute() {
+            return this.currentPath === '/company/freelancer/chats';
+        },
+        isRecruiterChatRoute() {
+            return this.currentPath === '/recruiter/chats';
+        },
         defaultImage() {
             return userImage;
+        },
+        chatTitle() {
+            if (this.selectedContributor?.user) {
+                return `${this.selectedContributor.user.first_name} ${this.selectedContributor.user.last_name}`;
+            } else if (this.selectedUser) {
+                return `${this.selectedUser.first_name} ${this.selectedUser.last_name}`;
+            }
+            return "Unknown";
         },
         sortedContributors() {
             const lastUser = localStorage.getItem("lastChatUser");
@@ -179,34 +268,107 @@ export default {
             const sorted = [...this.contributors];
 
             // Prvo nađi indeks poslednjeg
-            const index = sorted.findIndex(c => c.user?.id === parsed.id);
+            const index = sorted.findIndex((c) => c.user?.id === parsed.id);
             if (index > -1) {
                 const [last] = sorted.splice(index, 1);
                 sorted.unshift(last); // Stavi ga na početak
             }
 
             return sorted;
-        }
+        },
     },
     methods: {
+        prepareContributors() {
+            this.contributorData = this.contributors.map((c) => {
+                const user = c.user ?? {};
+                return {
+                    original: c,
+                    user: {
+                        id: user.id ?? c.id,
+                        first_name: user.first_name ?? c.name?.split(" ")[0] ?? "N/A",
+                        last_name: user.last_name ?? c.name?.split(" ")[1] ?? "",
+                        email: user.email ?? c.email,
+                        profile_image: user.profile_image ?? null,
+                    }
+                };
+            });
+        },
+        updateUnreadTotal() {
+            this.unreadTotal = Object.values(this.unreadMap).reduce(
+                (sum, count) => sum + count,
+                0
+            );
+
+            emitter.emit("update-navbar-badge", this.unreadTotal);
+        },
         selectContributor(user) {
+            console.log("selectContributor: ", user);
             this.selectedContributor = user;
             this.selectedUser = null;
-            this.fetchMessages(user.id);
+            const fetchContributorId = this.selectedContributor?.user?.id || this.selectedContributor?.id;
+            this.fetchMessages(fetchContributorId);
             localStorage.setItem("lastChatUser", JSON.stringify(user));
+            fetch(`/api/messages/mark-as-read/${fetchContributorId}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": window.csrfToken,
+                },
+            })
+                .then((res) => res.json())
+                .then(() => {
+                    // Set the unread count to 0 for this user
+                    if (this.unreadMap[this.selectedContributor.id]) {
+                        this.unreadMap[this.selectedContributor.id] = 0;
+                    }
+
+                    this.updateUnreadTotal();
+                })
+                .catch((err) => {
+                    console.error(
+                        "Greška pri označavanju poruka kao pročitanih CONTRIBUTOR:",
+                        err
+                    );
+                });
         },
         selectUser(user) {
             this.selectedUser = user;
             this.selectedContributor = null;
             this.fetchMessages(user.id);
             localStorage.setItem("lastChatUser", JSON.stringify(user));
+
+            // Koristimo selectedUser.id umesto selectedContributor.id
+            fetch(`/api/messages/mark-as-read/${this.selectedUser.id}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": window.csrfToken,
+                },
+            })
+                .then((res) => res.json())
+                .then(() => {
+                    // Set the unread count to 0 for this user
+                    if (this.unreadMap[this.selectedUser.id]) {
+                        this.unreadMap[this.selectedUser.id] = 0;
+                    }
+
+                    this.updateUnreadTotal();
+                })
+                .catch((err) => {
+                    console.error(
+                        "Greška pri označavanju poruka kao pročitanih USER:",
+                        err
+                    );
+                });
         },
         fetchMessages(receiverId) {
+            if (!receiverId) return;
+            console.log("Ko je primio poruke: ", receiverId);
             fetch(`/web/messages/${receiverId}`, {
                 method: "GET",
                 headers: {
                     "X-CSRF-TOKEN": window.csrfToken,
-                    "Accept": "application/json",
+                    Accept: "application/json",
                 },
             })
                 .then((res) => res.json())
@@ -239,7 +401,8 @@ export default {
                 return;
             }
 
-            const receiverId = this.selectedUser?.id || this.selectedContributor?.user?.id;
+            const receiverId =
+                this.selectedUser?.id || this.selectedContributor?.user?.id || this.selectedContributor?.id;
             if (!receiverId) {
                 alert("Nije odabran korisnik za slanje poruke.");
                 return;
@@ -249,8 +412,11 @@ export default {
                 user_id: this.currentUserId,
                 text: this.message,
                 receiver_id: receiverId,
-                candidate_id: this.candidate.candidate_id,
             };
+
+            if (this.candidate?.candidate_id) {
+                payload.candidate_id = this.candidate.candidate_id;
+            }
 
             fetch("/web/messages", {
                 method: "POST",
@@ -268,8 +434,65 @@ export default {
                     console.error("Greška pri slanju poruke:", error);
                 });
         },
+        selectFirstContributor() {
+        if (this.contributors && this.contributors.length > 0) {
+            const firstContributor = this.contributors[0];
+
+            // Ako kontributor ima user, selektuj usera, inače samo kontributer
+            if (firstContributor.user) {
+                this.selectedUser = firstContributor.user;
+            } else {
+                this.selectedUser = null; // Ako nema usera
+            }
+
+            // Uvek postavi firstContributor kao selectedContributor
+            this.selectedContributor = firstContributor;
+
+            // Pošaljemo zahtev za poruke (koristi user.id ako postoji)
+            this.fetchMessages(firstContributor.user?.id || firstContributor.id);
+
+            // Spremi korisnika u localStorage (ako postoji user, spasavaj tog user-a)
+            localStorage.setItem("lastChatUser", JSON.stringify(firstContributor.user || firstContributor));
+        } else {
+            console.warn("Nema dostupnih kontributera.");
+        }
+    },
     },
     mounted() {
+        console.log("Contributor: ", this.contributors);
+        console.log("Candidate: ", this.candidate);
+        console.log("Selected contributor: ", this.selectedContributor);
+        // da napravim upit da se proveri u contributeru da li postoji objekat user ako da prosledi se njegovi podaci ako ne onda se prosledi
+        if (this.contributors && this.contributors.length > 0) {
+            this.selectFirstContributor();
+        }
+        this.$nextTick(() => {
+            emitter.emit("reset-navbar-badge");
+        });
+
+        // Dohvati nepročitane poruke po korisniku
+        fetch("/api/messages/unread-count", {
+            method: "GET",
+            headers: {
+                "X-Requested-With": "XMLHttpRequest",
+                "X-CSRF-TOKEN": window.csrfToken,
+                Accept: "application/json",
+            },
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                data.forEach((item) => {
+                    this.unreadMap[item.user_id] = item.unread_count;
+                });
+                this.updateUnreadTotal();
+            })
+            .catch((err) => {
+                console.error(
+                    "Greška pri dohvatanju nepročitanih poruka:",
+                    err
+                );
+            });
+
         this.picker = new EmojiButton({ position: "top-end" });
         if (this.picker) {
             this.picker.on("emoji", (emoji) => {
@@ -289,45 +512,86 @@ export default {
             this.selectedUser = this.candidate.user;
             this.fetchMessages(this.candidate.user.id);
             localStorage.setItem("lastChatUser", JSON.stringify(this.candidate.user));
-        } else if (this.contributors.length > 0 && this.contributors[0].user) {
-            this.selectedUser = this.contributors[0].user;
-            this.fetchMessages(this.contributors[0].user.id);
-            localStorage.setItem("lastChatUser", JSON.stringify(this.contributors[0].user));
+        } else if (this.contributorData.length > 0) {
+            // automatski selektuj prvog iz contributorData
+            const firstContributor = this.contributorData[0];
+            console.log(first);
+            this.selectedContributor = firstContributor;
+            this.selectedUser = firstContributor.user;
+            this.fetchMessages(firstContributor.user.id);
+            localStorage.setItem("lastChatUser", JSON.stringify(first.user));
         }
+        this.prepareContributors();
 
-        Echo.private("chat." + this.currentUserId)
+        Echo.private(`chat.${this.currentUserId}`)
             .subscribed(() => {
                 console.log("✅ Subscribed na kanal: chat." + this.currentUserId);
             })
-            .listen('.MessageSent', (payload) => {
+            .listen(".MessageSent", (payload) => {
                 console.log("📡 WebSocket primio:", payload);
 
                 const activeReceiverId =
-                    this.selectedUser?.id || this.selectedContributor?.user?.id;
+                    this.selectedUser?.id || this.selectedContributor?.user?.id || this.selectedContributor?.id;
+                console.log("Active id: ", activeReceiverId);
 
+                // Proverite da li je poruka od korisnika sa selektovanim ID-jem
                 if (
                     payload.message &&
-                    (payload.message.user_id === activeReceiverId ||
-                        payload.message.receiver_id === activeReceiverId)
+                    (payload.message.user_id === activeReceiverId || payload.message.receiver_id === activeReceiverId)
                 ) {
                     this.messages.push(payload.message);
                     this.scrollToBottom();
+                    fetch(`/api/messages/mark-as-read/${activeReceiverId}`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRF-TOKEN": window.csrfToken,
+                        },
+                    })
+                        .then((res) => res.json())
+                        .then(() => {
+                            // Set the unread count to 0 for this user
+                            if (this.unreadMap[this.selectedUser?.id]) {
+                                this.unreadMap[this.selectedUser?.id] = 0;
+                            }
+
+                            this.updateUnreadTotal();
+                        })
+                        .catch((err) => {
+                            console.error("Greška pri označavanju poruka kao pročitanih:", err);
+                        });
+                } else {
+                    // Ako poruka nije za selektovanog korisnika, povećajte broj nepročitanih poruka
+                    if (this.unreadMap[payload.message.user_id]) {
+                        this.unreadMap[payload.message.user_id]++;
+                    } else {
+                        this.unreadMap[payload.message.user_id] = 1;
+                    }
+
+                    this.updateUnreadTotal();
+
+                    // Emituj ka nav-baru ako koristiš globalni badge (npr. crveni broj u headeru)
+                    emitter.emit("update-navbar-badge", this.unreadTotal);
                 }
             })
             .error((error) => {
                 console.error("❌ Greška:", error);
             });
     },
+    beforeUnmount() {
+        // Cleanup event listener
+        emitter.off("reset-navbar-badge", this.resetUnreadTotal);
+    },
 };
 </script>
 
 <style>
-.active-user {
-    color: #0d6efd !important;
+.user-active {
+    background: #f5f8fa !important;
 }
 
 .active-contributor {
-    color: #0d6efd !important;
+    background: #f5f8fa !important;
 }
 
 .btn-emojis {
@@ -343,7 +607,7 @@ export default {
     position: absolute;
     bottom: 90px;
     left: 21px;
-    background-color: #E4E6EF !important;
+    background-color: #e4e6ef !important;
     padding: 10px 15px;
     border-radius: 15px;
 }

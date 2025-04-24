@@ -52,13 +52,20 @@
                             </div>
 
                         </div>
-                        <li class="nav-item">
+                        <div class="d-flex flex-row align-items-center me-6">
+                        <div class="nav-item">
                             <a href="{{asset('/company/freelancer/notifications')}}" class="nav-link">
                             <i id="notification-icon" class="fas fa-bell"></i>
                                 <span id="notification-badge" class="badge bg-danger" style="display: none;">0</span>
 
                             </a>
-                        </li>
+                        </div>
+                        <div class="nav-item">
+                            <div class="logo__notification">
+                                @include('company-freelancer.components.notifications.notificationRecruiter')
+                            </div>
+                        </div>
+                    </div>
                         <div class="app-navbar-item ms-1 mt-2 ms-md-3" id="kt_header_user_menu_toggle">
                        
                         <!--begin::Menu wrapper-->

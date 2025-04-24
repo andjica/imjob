@@ -1,7 +1,7 @@
 <template>
     <div class="notification-wrapper">
         <a
-            href="/contributor/chats"
+            href="/recruiter/chats"
             class="nav-icon"
             @click="prepareForReset"
         >

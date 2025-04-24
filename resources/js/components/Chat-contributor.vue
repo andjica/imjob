@@ -30,8 +30,8 @@
                                     }">
                                     <div class="symbol symbol-45px symbol-circle">
                                         <img :src="recruiter.profile_image
-                                                ? recruiter.profile_image
-                                                : defaultImage
+                                            ? recruiter.profile_image
+                                            : defaultImage
                                             " alt="Profile Image" class="img-fluid rounded-circle shadow-sm"
                                             style="width: 60px; height: 60px" />
                                     </div>
@@ -45,11 +45,11 @@
                                             recruiter.is_freelancer === 0
                                                 ? "Freelancer"
                                                 : "Recruiter"
-                                        }}</i></small>
+                                                }}</i></small>
                                     </div>
                                     <span v-if="unreadMap[recruiter.user.id]" class="badge badge-danger">{{
                                         unreadMap[recruiter.user.id]
-                                    }}</span>
+                                        }}</span>
                                 </div>
                                 <div v-else>
                                     <p class="text-danger">
@@ -84,12 +84,12 @@
                         msg.user_id === currentUserId ? 'sent' : 'received',
                     ]">
                         <div :class="msg.user_id === currentUserId
-                                ? 'text-end'
-                                : 'text-start'
+                            ? 'text-end'
+                            : 'text-start'
                             ">
                             <p :class="msg.user_id === currentUserId
-                                    ? 'p-3 rounded bg-primary text-white d-inline-block'
-                                    : 'p-3 rounded bg-light text-dark d-inline-block'
+                                ? 'p-3 rounded bg-primary text-white d-inline-block'
+                                : 'p-3 rounded bg-light text-dark d-inline-block'
                                 ">
                                 {{ msg.text }}
                             </p>
@@ -185,6 +185,7 @@ export default {
         },
         selectUser(user) {
             this.selectedUser = user;
+            console.log("Selected user: ", this.selectedUser);
             this.selectedRecruiter = null;
             this.fetchMessages(user.id);
             localStorage.setItem("lastChatUser", JSON.stringify(user));
@@ -210,12 +211,6 @@ export default {
                         err
                     );
                 });
-        },
-        updateUnreadTotal() {
-            this.unreadTotal = Object.values(this.unreadMap).reduce(
-                (sum, count) => sum + count,
-                0
-            );
         },
         fetchMessages(receiverId) {
             if (!receiverId) return;
@@ -320,13 +315,19 @@ export default {
             });
         }
 
-        // Zapamti poslednjeg korisnika (ako postoji)
+        // Zapamti poslednjeg korisnika (ako postoji) ili selektuj prvog ako nema
         const lastUser = localStorage.getItem("lastChatUser");
+
         if (lastUser) {
             const parsed = JSON.parse(lastUser);
-            this.selectedUser = parsed;
-            this.fetchMessages(parsed.id);
+            this.selectUser(parsed);
+        } else if (this.uniqueRecruiters.length > 0) {
+            const firstRecruiter = this.uniqueRecruiters[0];
+            if (firstRecruiter && firstRecruiter.user) {
+                this.selectUser(firstRecruiter.user);
+            }
         }
+
 
         // WebSocket povezivanje
         Echo.private("chat." + this.currentUserId)
@@ -385,18 +386,20 @@ export default {
 
                     // Emituj ka nav-baru ako koristiš globalni badge (npr. crveni broj u headeru)
                     emitter.emit("update-navbar-badge", this.unreadTotal);
-
-                    // BONUS: ako tab nije aktivan – prikaži broj u title-u (kao WhatsApp)
-                    if (!document.hasFocus()) {
-                        document.title = `(${this.unreadTotal}) Nova poruka - TvojApp`;
-                    }
                 }
+            })
+            .error((error) => {
+                console.error("❌ Greška:", error);
             });
 
         // Kada se tab vrati u fokus – resetuj title
-        window.addEventListener("focus", () => {
-            document.title = "TvojApp";
-        });
+        // window.addEventListener("focus", () => {
+        //     document.title = "TvojApp";
+        // });
+    },
+    beforeUnmount() {
+        // Cleanup event listener
+        emitter.off("reset-navbar-badge", this.resetUnreadTotal);
     },
 };
 </script>

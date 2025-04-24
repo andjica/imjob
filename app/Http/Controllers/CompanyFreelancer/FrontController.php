@@ -381,10 +381,14 @@ class FrontController extends Controller
         return view('company-freelancer.pages.view', compact('recruiter'));
     }
 
-    public function chat()
+    public function chats(ContributorRecruiter $notificationsContributorRecruiter)
     {
-        $users = User::where('id', '!=', auth()->id())->get();
-
-        return view('chat', compact('users'));
+        $user = auth()->user();
+        $contributors = $user->recruiter->contributors()
+            ->with('user')
+            ->wherePivot('status', ContributorRecruiter::ACTIVE)
+            ->get();
+        // return dd($contributors);
+        return view('company-freelancer.pages.chat', compact('contributors'));
     }
 }

@@ -35,14 +35,12 @@ class ChatController extends Controller
         $data = $request->validate([
             'text' => 'nullable|string',
             'receiver_id' => 'required|exists:users,id',
-            'candidate_id' => 'required|int'
         ]);
     
         $filePath = null;
         $fileType = null;
     
         $message = new Message();
-        $message->candidate_id = $data['candidate_id'];
         $message->user_id = auth()->user()->id;
         $message->receiver_id = $data['receiver_id'];
         $message->text = $data['text'];

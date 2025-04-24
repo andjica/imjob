@@ -73,13 +73,19 @@
             </div>
 
         </div>
-    
-        <div class="nav-item mt-5">
+        <div class="d-flex flex-row align-items-center me-6">
+        <div class="nav-item">
             <a href="{{asset('/recruiter/notifications')}}" class="nav-link">
                 <i id="notification-icon" class="fas fa-bell"></i>
                 <span id="notification-badge" class="badge bg-danger" style="display: none;">0</span>
                     
             </a>
+        </div>
+        <div class="nav-item">
+            <div class="logo__notification">
+                @include('recruiter.components.notification.notificationRecruiter')
+            </div>
+        </div>
         </div>
 
         <div class="app-navbar-item ms-1 mt-5 ms-md-3" id="kt_header_user_menu_toggle">

@@ -3,6 +3,8 @@ import { createApp } from 'vue';
 import Chat from './components/Chat.vue';
 import ChatContributor from './components/Chat-contributor.vue';
 import Notification from './components/Notification.vue';
+import FreelancerNotification from './components/NotificationFreelancer.vue';
+import ReacruiterNorification from './components/NotificationRecruiter.vue';
 import Echo from 'laravel-echo';
 import emitter from './eventBus'; // OBAVEZNO!
 
@@ -38,6 +40,14 @@ const notifApp = createApp({});
 notifApp.component('component-notification', Notification);
 notifApp.mount('#notificationUnreadMessages')
 
+
+const notifFreelancerApp = createApp({});
+notifFreelancerApp.component('component-freelancer-notification', FreelancerNotification);
+notifFreelancerApp.mount('#notificationFreelancerUnreadMessages')
+
+const notifRecruiterApp = createApp({});
+notifRecruiterApp.component('component-recruiter-notification', ReacruiterNorification);
+notifRecruiterApp.mount('#notificationReacruiterUnreadMessages')
 // ✅ Pokrećemo notifikacije kada se stranica učita
 window.onload = function () {
     setupNotifications();

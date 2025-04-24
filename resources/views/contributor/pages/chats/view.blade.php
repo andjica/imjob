@@ -30,7 +30,6 @@
 
         @else
         <div class="row">
-        
             <div class="col-lg-12">
                 @include('contributor.components.chat')
             </div>
