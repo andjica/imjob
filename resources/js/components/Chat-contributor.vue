@@ -30,7 +30,7 @@
                                     }">
                                     <div class="symbol symbol-45px symbol-circle">
                                         <img :src="recruiter.profile_image
-                                            ? recruiter.profile_image
+                                            ? getImageUrl(recruiter.profile_image)
                                             : defaultImage
                                             " alt="Profile Image" class="img-fluid rounded-circle shadow-sm"
                                             style="width: 60px; height: 60px" />
@@ -169,6 +169,9 @@ export default {
         },
     },
     methods: {
+        getImageUrl(path) {
+            return `/storage/${path}`;
+        },
         updateUnreadTotal() {
             this.unreadTotal = Object.values(this.unreadMap).reduce(
                 (sum, count) => sum + count,
@@ -280,6 +283,7 @@ export default {
         },
     },
     mounted() {
+        console.log(this.recruiters);
         this.$nextTick(() => {
             emitter.emit("reset-navbar-badge");
         });

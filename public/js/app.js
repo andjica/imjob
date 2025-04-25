@@ -23028,6 +23028,9 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    getImageUrl: function getImageUrl(path) {
+      return "/storage/".concat(path);
+    },
     updateUnreadTotal: function updateUnreadTotal() {
       this.unreadTotal = Object.values(this.unreadMap).reduce(function (sum, count) {
         return sum + count;
@@ -23131,6 +23134,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     var _this4 = this;
+    console.log(this.recruiters);
     this.$nextTick(function () {
       _eventBus__WEBPACK_IMPORTED_MODULE_2__["default"].emit("reset-navbar-badge");
     });
@@ -23949,7 +23953,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         return $options.selectUser(recruiter.user);
       }, ["prevent"])
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
-      src: recruiter.profile_image ? recruiter.profile_image : $options.defaultImage,
+      src: recruiter.profile_image ? $options.getImageUrl(recruiter.profile_image) : $options.defaultImage,
       alt: "Profile Image",
       "class": "img-fluid rounded-circle shadow-sm",
       style: {
