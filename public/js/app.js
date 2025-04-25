@@ -23502,6 +23502,8 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
     console.log("Contributor: ", this.contributors);
     console.log("Candidate: ", this.candidate);
     console.log("Selected contributor: ", this.selectedContributor);
+    console.log("Selected user: ", this.selectedUser);
+    console.log("Message: ", this.unreadMap);
     // da napravim upit da se proveri u contributeru da li postoji objekat user ako da prosledi se njegovi podaci ako ne onda se prosledi
     if (this.contributors && this.contributors.length > 0) {
       this.selectFirstContributor();
@@ -23550,7 +23552,6 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
     } else if (this.contributorData.length > 0) {
       // automatski selektuj prvog iz contributorData
       var firstContributor = this.contributorData[0];
-      console.log(first);
       this.selectedContributor = firstContributor;
       this.selectedUser = firstContributor.user;
       this.fetchMessages(firstContributor.user.id);
@@ -24074,52 +24075,56 @@ var _hoisted_20 = {
 };
 var _hoisted_21 = ["onClick"];
 var _hoisted_22 = {
-  "class": "col-lg-7"
+  key: 0,
+  "class": "badge badge-danger"
 };
 var _hoisted_23 = {
-  "class": "card h-100"
+  "class": "col-lg-7"
 };
 var _hoisted_24 = {
-  "class": "card-header"
+  "class": "card h-100"
 };
 var _hoisted_25 = {
-  key: 0
+  "class": "card-header"
 };
 var _hoisted_26 = {
-  "class": "card-title"
+  key: 0
 };
 var _hoisted_27 = {
-  key: 1
+  "class": "card-title"
 };
 var _hoisted_28 = {
-  "class": "card-title"
+  key: 1
 };
 var _hoisted_29 = {
-  key: 2
-};
-var _hoisted_30 = {
   "class": "card-title"
 };
+var _hoisted_30 = {
+  key: 2
+};
 var _hoisted_31 = {
+  "class": "card-title"
+};
+var _hoisted_32 = {
   "class": "card-body chat-box chat-box__contributor",
   id: "chatBox"
 };
-var _hoisted_32 = {
+var _hoisted_33 = {
   "class": "text-muted"
 };
-var _hoisted_33 = {
+var _hoisted_34 = {
   key: 0
 };
-var _hoisted_34 = {
+var _hoisted_35 = {
   "class": "message-info"
 };
-var _hoisted_35 = {
+var _hoisted_36 = {
   "class": "card-footer"
 };
-var _hoisted_36 = {
+var _hoisted_37 = {
   id: "chatForm"
 };
-var _hoisted_37 = {
+var _hoisted_38 = {
   "class": "input-group"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -24157,15 +24162,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       }, ["prevent"]),
       href: "#",
       "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(['fs-5 fw-bold text-gray-900 text-hover-primary mb-2', ((_$data$selectedContri2 = $data.selectedContributor) === null || _$data$selectedContri2 === void 0 || (_$data$selectedContri2 = _$data$selectedContri2.user) === null || _$data$selectedContri2 === void 0 ? void 0 : _$data$selectedContri2.id) === (user === null || user === void 0 || (_user$user3 = user.user) === null || _user$user3 === void 0 ? void 0 : _user$user3.id)])
-    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.name), 11 /* TEXT, CLASS, PROPS */, _hoisted_21), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.email), 1 /* TEXT */)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Details")]);
+    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.name), 11 /* TEXT, CLASS, PROPS */, _hoisted_21), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.user.email), 1 /* TEXT */)]), $data.unreadMap[user.user.id] ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_22, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.unreadMap[user.user.id]), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Details")]);
   }), 128 /* KEYED_FRAGMENT */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Details")])])), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Separator"), _cache[4] || (_cache[4] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
     "class": "separator separator-dashed d-none"
-  }, null, -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Separator")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::List")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Card body")])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_22, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_23, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_24, [$options.isFreelancerChatRoute ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_25, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", _hoisted_26, " Chat with " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.chatTitle), 1 /* TEXT */)])) : $options.isRecruiterChatRoute ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_27, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", _hoisted_28, " Chat with " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(((_$data$selectedContri3 = $data.selectedContributor) === null || _$data$selectedContri3 === void 0 ? void 0 : _$data$selectedContri3.name) || "Candidate"), 1 /* TEXT */)])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_29, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", _hoisted_30, " Chat with " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(((_$data$selectedContri4 = $data.selectedContributor) === null || _$data$selectedContri4 === void 0 ? void 0 : _$data$selectedContri4.name) || ((_$props$candidate = $props.candidate) === null || _$props$candidate === void 0 || (_$props$candidate = _$props$candidate.user) === null || _$props$candidate === void 0 ? void 0 : _$props$candidate.first_name) + " " + ((_$props$candidate2 = $props.candidate) === null || _$props$candidate2 === void 0 || (_$props$candidate2 = _$props$candidate2.user) === null || _$props$candidate2 === void 0 ? void 0 : _$props$candidate2.last_name) || "Candidate?"), 1 /* TEXT */)]))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_31, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.messages, function (msg) {
+  }, null, -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Separator")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::List")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Card body")])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_23, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_24, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_25, [$options.isFreelancerChatRoute ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_26, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", _hoisted_27, " Chat with " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.chatTitle), 1 /* TEXT */)])) : $options.isRecruiterChatRoute ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_28, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", _hoisted_29, " Chat with " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(((_$data$selectedContri3 = $data.selectedContributor) === null || _$data$selectedContri3 === void 0 ? void 0 : _$data$selectedContri3.name) || "Candidate"), 1 /* TEXT */)])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_30, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", _hoisted_31, " Chat with " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(((_$data$selectedContri4 = $data.selectedContributor) === null || _$data$selectedContri4 === void 0 ? void 0 : _$data$selectedContri4.name) || ((_$props$candidate = $props.candidate) === null || _$props$candidate === void 0 || (_$props$candidate = _$props$candidate.user) === null || _$props$candidate === void 0 ? void 0 : _$props$candidate.first_name) + " " + ((_$props$candidate2 = $props.candidate) === null || _$props$candidate2 === void 0 || (_$props$candidate2 = _$props$candidate2.user) === null || _$props$candidate2 === void 0 ? void 0 : _$props$candidate2.last_name) || "Candidate?"), 1 /* TEXT */)]))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_32, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.messages, function (msg) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
       key: msg.id,
       "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(msg.user_id === $props.currentUserId ? 'chat-message sent' : 'chat-message received')
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(msg.text), 1 /* TEXT */), _cache[6] || (_cache[6] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("small", _hoisted_32, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(new Date(msg.created_at).toLocaleTimeString()), 1 /* TEXT */)], 2 /* CLASS */);
-  }), 128 /* KEYED_FRAGMENT */)), $data.messages.length === 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_33, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_34, " Start a conversation with user " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(((_$data$selectedContri5 = $data.selectedContributor) === null || _$data$selectedContri5 === void 0 || (_$data$selectedContri5 = _$data$selectedContri5.user) === null || _$data$selectedContri5 === void 0 ? void 0 : _$data$selectedContri5.first_name) + ' ' + ((_$data$selectedContri6 = $data.selectedContributor) === null || _$data$selectedContri6 === void 0 || (_$data$selectedContri6 = _$data$selectedContri6.user) === null || _$data$selectedContri6 === void 0 ? void 0 : _$data$selectedContri6.last_name) || ((_$data$selectedContri7 = $data.selectedContributor) === null || _$data$selectedContri7 === void 0 ? void 0 : _$data$selectedContri7.name) || ((_$data$selectedUser = $data.selectedUser) === null || _$data$selectedUser === void 0 ? void 0 : _$data$selectedUser.first_name) + ' ' + ((_$data$selectedUser2 = $data.selectedUser) === null || _$data$selectedUser2 === void 0 ? void 0 : _$data$selectedUser2.last_name) || ((_$props$candidate3 = $props.candidate) === null || _$props$candidate3 === void 0 || (_$props$candidate3 = _$props$candidate3.user) === null || _$props$candidate3 === void 0 ? void 0 : _$props$candidate3.first_name) + ' ' + ((_$props$candidate4 = $props.candidate) === null || _$props$candidate4 === void 0 || (_$props$candidate4 = _$props$candidate4.user) === null || _$props$candidate4 === void 0 ? void 0 : _$props$candidate4.last_name) || "Unknown User") + " to begin your collaboration. Introduce yourself, share your ideas, or ask any questions to get things moving ", 1 /* TEXT */)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_35, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", _hoisted_36, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_37, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(msg.text), 1 /* TEXT */), _cache[6] || (_cache[6] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("small", _hoisted_33, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(new Date(msg.created_at).toLocaleTimeString()), 1 /* TEXT */)], 2 /* CLASS */);
+  }), 128 /* KEYED_FRAGMENT */)), $data.messages.length === 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_34, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_35, " Start a conversation with user " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(((_$data$selectedContri5 = $data.selectedContributor) === null || _$data$selectedContri5 === void 0 || (_$data$selectedContri5 = _$data$selectedContri5.user) === null || _$data$selectedContri5 === void 0 ? void 0 : _$data$selectedContri5.first_name) + ' ' + ((_$data$selectedContri6 = $data.selectedContributor) === null || _$data$selectedContri6 === void 0 || (_$data$selectedContri6 = _$data$selectedContri6.user) === null || _$data$selectedContri6 === void 0 ? void 0 : _$data$selectedContri6.last_name) || ((_$data$selectedContri7 = $data.selectedContributor) === null || _$data$selectedContri7 === void 0 ? void 0 : _$data$selectedContri7.name) || ((_$data$selectedUser = $data.selectedUser) === null || _$data$selectedUser === void 0 ? void 0 : _$data$selectedUser.first_name) + ' ' + ((_$data$selectedUser2 = $data.selectedUser) === null || _$data$selectedUser2 === void 0 ? void 0 : _$data$selectedUser2.last_name) || ((_$props$candidate3 = $props.candidate) === null || _$props$candidate3 === void 0 || (_$props$candidate3 = _$props$candidate3.user) === null || _$props$candidate3 === void 0 ? void 0 : _$props$candidate3.first_name) + ' ' + ((_$props$candidate4 = $props.candidate) === null || _$props$candidate4 === void 0 || (_$props$candidate4 = _$props$candidate4.user) === null || _$props$candidate4 === void 0 ? void 0 : _$props$candidate4.last_name) || "Unknown User") + " to begin your collaboration. Introduce yourself, share your ideas, or ask any questions to get things moving ", 1 /* TEXT */)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_36, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", _hoisted_37, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_38, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     type: "text",
     "class": "form-control form-control-solid px-13",
     name: "input",
@@ -24366,7 +24371,7 @@ window.onload = function () {
       var message = payload.message;
 
       // Ako nismo na chatu, pošalji badge event
-      if (!window.location.pathname.includes('/contributor/chats')) {
+      if (!window.location.pathname.includes('/contributor/chats') || !window.location.pathname.includes('/recruiter/chats')) {
         console.log('📨 Nova poruka stigla dok nismo u chatu');
         _eventBus__WEBPACK_IMPORTED_MODULE_8__["default"].emit('increment-navbar-badge');
       }

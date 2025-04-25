@@ -250,6 +250,7 @@ class FrontController extends Controller
         $user = auth()->user();
         $contributors = $user->recruiter->contributors()
             ->wherePivot('status', ContributorRecruiter::ACTIVE)
+            ->with('user')
             ->get();
          
         return view(
@@ -374,8 +375,9 @@ class FrontController extends Controller
         $user = auth()->user();
         $contributors = $user->recruiter->contributors()
             ->wherePivot('status', ContributorRecruiter::ACTIVE)
+            ->with('user')
             ->get();
-
+    
         return view('recruiter.pages.chat', compact('contributors'));
     }
 

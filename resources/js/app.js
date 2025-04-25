@@ -65,7 +65,7 @@ window.onload = function () {
                 const message = payload.message;
                 
                 // Ako nismo na chatu, pošalji badge event
-                if (!window.location.pathname.includes('/contributor/chats')) {
+                if (!window.location.pathname.includes('/contributor/chats') || !window.location.pathname.includes('/recruiter/chats')) {
                     console.log('📨 Nova poruka stigla dok nismo u chatu');
                     emitter.emit('increment-navbar-badge');
                 }

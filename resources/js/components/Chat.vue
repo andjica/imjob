@@ -120,8 +120,11 @@
                                             {{ user.name }}
                                         </a>
 
-                                        <p>{{ user.email }}</p>
+                                        <p>{{ user.user.email }}</p>
                                     </div>
+                                    <span v-if="unreadMap[user.user.id]" class="badge badge-danger">{{
+                                        unreadMap[user.user.id]
+                                    }}</span>
                                     <!--end::Details-->
                                 </div>
                                 <!--end::Details-->
@@ -462,10 +465,13 @@ export default {
         console.log("Contributor: ", this.contributors);
         console.log("Candidate: ", this.candidate);
         console.log("Selected contributor: ", this.selectedContributor);
+        console.log("Selected user: ", this.selectedUser);
+        console.log("Message: ", this.unreadMap);
         // da napravim upit da se proveri u contributeru da li postoji objekat user ako da prosledi se njegovi podaci ako ne onda se prosledi
         if (this.contributors && this.contributors.length > 0) {
             this.selectFirstContributor();
         }
+
         this.$nextTick(() => {
             emitter.emit("reset-navbar-badge");
         });
@@ -515,7 +521,6 @@ export default {
         } else if (this.contributorData.length > 0) {
             // automatski selektuj prvog iz contributorData
             const firstContributor = this.contributorData[0];
-            console.log(first);
             this.selectedContributor = firstContributor;
             this.selectedUser = firstContributor.user;
             this.fetchMessages(firstContributor.user.id);

@@ -57,7 +57,9 @@
     </div>
     <!-- End Page -->
 </div>
-
+<script>
+    window.authUserId = {{ auth()->id() }};
+</script>
 <script>var hostUrl = "assets/";</script>
 <script>
     window.csrfToken = '{{ csrf_token() }}';
