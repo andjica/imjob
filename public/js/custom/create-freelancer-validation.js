@@ -38,6 +38,7 @@
 // Form submission and validation for Recruiter Information
 $('#recruiterForm').submit(function (event) {
 // Prevent form submission for validation
+console.log(event);
 event.preventDefault();
 
 // Get values from the form fields

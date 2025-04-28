@@ -128,7 +128,7 @@ $("#availability").change(function () {
 //     }
 // });
 
-$("#freelancerForm").submit(function (event) {
+$("#recruiterForm").submit(function (event) {
     // Prevent form submission for validation
     event.preventDefault();
 
@@ -199,18 +199,18 @@ $("#freelancerForm").submit(function (event) {
     }
 
     // Phone Number
-    // var phoneNumber = $('input[name="phone_number"]').val().trim();
-    // var phoneRegex =
-    //     /^\+?[0-9]{1,4}?[-.\s]?[(]?[0-9]{1,5}[)]?[-.\s]?[0-9]+([-.\s]?[0-9]+)*$/;
-    // if (phoneNumber === "") {
-    //     $("#phoneNumberEmpty").text("Phone number is required").show();
-    //     $('input[name="phone_number"]').addClass("border-danger");
-    //     isValid = false;
-    // } else if (!phoneRegex.test(phoneNumber)) {
-    //     $("#phoneNumberEmpty").text("Phone number must be valid").show();
-    //     $('input[name="phone_number"]').addClass("border-danger");
-    //     isValid = false;
-    // }
+    var phoneNumber = $('input[name="phone_number"]').val().trim();
+    var phoneRegex =
+        /^\+?[0-9]{1,4}?[-.\s]?[(]?[0-9]{1,5}[)]?[-.\s]?[0-9]+([-.\s]?[0-9]+)*$/;
+    if (phoneNumber === "") {
+        $("#phoneNumberEmpty").text("Phone number is required").show();
+        $('input[name="phone_number"]').addClass("border-danger");
+        isValid = false;
+    } else if (!phoneRegex.test(phoneNumber)) {
+        $("#phoneNumberEmpty").text("Phone number must be valid").show();
+        $('input[name="phone_number"]').addClass("border-danger");
+        isValid = false;
+    }
 
     // If validation passes, submit the form
     if (isValid) {

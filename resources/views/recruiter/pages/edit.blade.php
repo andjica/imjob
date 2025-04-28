@@ -31,5 +31,61 @@
 @section('js')
 <script src="{{asset('/js/custom/recruiter-education-validation.js')}}"></script>
 <script src="{{asset('/js/custom/recruiter-profile-validation.js')}}"></script>
+<script>
 
+$(document).ready(function () {
+    $("#countryId").on("change", function () {
+        var countryId = $(this).val();
+
+        // Reset city dropdown
+        $("#cityId").html('<option value="">Select a city</option>');
+
+        if (countryId) {
+            $.ajax({
+                url: "/country/" + countryId + "/phone-code",
+                method: "GET",
+                success: function (response) {
+                    if (response && response) {
+                        let code = response.toString().replace(/^\+/, ""); // uklanja eventualni višak "+"
+                        $("#phoneCodeDisplay").text("+" + code);
+                    } else {
+                        $("#phoneCodeDisplay").text("+");
+                    }
+                },
+                error: function () {
+                    $("#phoneCodeDisplay").text("+");
+                },
+            });
+            $.ajax({
+                url: "/cities/" + countryId,
+                method: "GET",
+                success: function (response) {
+                    console.log(response);
+                    if (response.cities && response.cities.length > 0) {
+                        response.cities.forEach(function (city) {
+                            $("#cityId").append(
+                                '<option value="' +
+                                    city.id +
+                                    '">' +
+                                    city.name +
+                                    "</option>"
+                            );
+                        });
+                    } else {
+                        $("#cityId").append(
+                            '<option value="">No cities found</option>'
+                        );
+                    }
+                },
+                error: function () {
+                    alert("Failed to fetch cities. Please try again.");
+                },
+            });
+        } else {
+            // Hide the city row if no country is selected
+            cityRow.addClass("d-none");
+        }
+    });
+});
+</script>
 @endsection

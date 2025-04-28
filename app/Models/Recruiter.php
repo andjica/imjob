@@ -26,6 +26,8 @@ class Recruiter extends Model
         'title_function',
         'experience_level',
         'availability',
+        'country_id', 
+        'city_id',
         'phone_number'
     ];
 

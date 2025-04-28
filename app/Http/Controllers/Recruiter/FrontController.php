@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Recruiter;
 
+use App\Interfaces\CityInterface;
 use App\Models\Job;
 use App\Models\City;
 use App\Models\Company;
@@ -46,6 +47,8 @@ class FrontController extends Controller
     protected $categoryServices;
     protected $jobTypesServices;
     protected $jobRep;
+    
+    protected $cityServices;
 
     public function __construct(
         ContributorInterface $contributorServices,
@@ -55,7 +58,8 @@ class FrontController extends Controller
         CountryInterface $countriesServices,
         CategoryInterface $categoryServices,
         JobRepository $jobRep,private CandidateService $candidateService,
-        private RecruitmentProcessWorkflow $recruitmentProcessWorkflow
+        private RecruitmentProcessWorkflow $recruitmentProcessWorkflow,
+        CityInterface  $cityServices
         
     ) {
         $this->contributorServices = $contributorServices;
@@ -65,6 +69,7 @@ class FrontController extends Controller
         $this->categoryServices = $categoryServices;
         $this->jobTypesServices = $jobTypesServices;
         $this->jobRep=$jobRep;
+        $this->cityServices = $cityServices;
     }
 
 
@@ -132,9 +137,10 @@ class FrontController extends Controller
 
         $recruiter = $this->recruiterServices->getOneByUserId($userId);
         $countries = $this->countriesServices->getCountries();
-
+        $countryId = $user->recruiter->country_id;
+        $cities = $this->cityServices->getCitiesByCountry($countryId);
         //prvo polje u blejdu treba da izgleda {{$recruiter->country->name}} {{$recruiter->city->name}}
-        return view("recruiter.pages.edit", compact("recruiter", 'countries'));
+        return view("recruiter.pages.edit", compact("recruiter", 'countries', 'cities'));
     }
     public function update(Request $request)
     {

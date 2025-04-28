@@ -132,12 +132,68 @@
                             </span>
                         </div>
                     </div>
+
+                    @php
+                        use Illuminate\Support\Str;
+
+                        $prefix = $recruiter->country && $recruiter->country->phone_code
+                            ? '+' . trim($recruiter->country->phone_code)
+                            : '+';
+
+                        $numberWithoutPrefix = Str::startsWith($recruiter->phone_number, $prefix)
+                            ? Str::replaceFirst($prefix, '', $recruiter->phone_number)
+                            : $recruiter->phone_number;
+                    @endphp
+                         <!-- Country -->
+                         <div class="row mb-5">
+                            <label class="col-lg-2 col-form-label fw-bold fs-6 required">Country:</label>
+                            <div class="col-lg-10">
+                                <select name="countryId" id="countryId" data-control="select2" 
+                                    class="form-control form-control-solid @error('countryId') is-invalid @enderror">
+                                    <option value="{{$recruiter->country_id}}">{{$recruiter->country->name}}</option>
+                                    @foreach ($countries as $country)
+                                        <option value="{{ $country->id }}" {{ old('countryId') == $country->id ? 'selected' : '' }}>
+                                            {{ $country->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                               
+                                <span class="text-danger" id="countryIdEmpty"> @error('countryId'){{ $message }} @enderror</span>
+                               
+                            </div>
+                        </div>
+
+                        <!-- City -->
+                        <div class="row mb-5">
+                            <label class="col-lg-2 col-form-label fw-bold fs-6 required">City:</label>
+                            <div class="col-lg-10">
+                                <select name="cityId" id="cityId" data-control="select2"
+                                    class="form-control form-control-solid @error('cityId') is-invalid @enderror">
+                                    <option value="{{$recruiter->city_id}}">{{$recruiter->city->name}}</option>
+                                    @foreach ($cities as $city)
+                                        <option value="{{ $city->id }}" {{ old('cityId') == $city->id ? 'selected' : '' }}>
+                                            {{ $city->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <span class="text-danger" id="cityEmpty">@error('cityId'){{ $message }}@enderror</span>
+                            </div>
+                        </div>
+                    <!-- Phone Number -->
                     <div class="row mb-5">
-                        <label class="col-lg-2 col-form-label required fw-bold fs-6">Phone Number</label>
+                        <label class="col-lg-2 col-form-label fw-bold fs-6 required">Phone Number:</label>
                         <div class="col-lg-10">
-                            <input type="text" class="form-control form-control-lg form-control-solid"
-                                name="phone_number" value="{{ $recruiter->phone_number }}" />
-                            <span class="text-danger invalid-feedback" id="phoneNumberEmpty"></span>
+                            <div class="input-group">
+                            <span class="input-group-text border-end border-2 border-gray-300" id="phoneCodeDisplay">{{ $prefix }}</span>
+                            <input type="text"
+                                    class="form-control form-control-solid"
+                                    id="phoneNumber"
+                                    name="phone_number"
+                                    value="{{ $numberWithoutPrefix }}"
+                                    required
+                                    aria-describedby="phoneCodeDisplay" />
+                            </div>
+                            <span class="text-danger" id="phoneNumberEmpty">@error('phoneNumber'){{ $message }}@enderror</span>
                         </div>
                     </div>
                     <!-- Form Actions -->

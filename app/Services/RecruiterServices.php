@@ -67,6 +67,7 @@ class RecruiterServices implements RecruiterInterface
     }
     public function updateRecruiter(Request $request)
     {
+        
         // Validate request
         $validatedData = $request->validate([
             'profile_image' => 'nullable|image|mimes:jpeg,png,jpg|max:4048',
@@ -77,6 +78,8 @@ class RecruiterServices implements RecruiterInterface
             'experience_level' => 'required|in:junior,mid,senior',
             'availability' => 'required|in:morning,afternoon,evening,full_day',
             'phone_number' => 'required|string|max:20',
+            'countryId' => 'required',
+            'cityId' => 'required'
         ]);
 
         // Find freelancer
@@ -108,6 +111,8 @@ class RecruiterServices implements RecruiterInterface
             'availability' => $validatedData['availability'],
             'phone_number' => $validatedData['phone_number'],
             'profile_image' => $validatedData['profile_image'] ?? $recruiter->profile_image,
+            'country_id' => $validatedData['countryId'],
+            'city_id' => $validatedData['cityId']
         ]);
 
         return redirect()->back()->with('success', 'Profile updated successfully!');
@@ -116,10 +121,9 @@ class RecruiterServices implements RecruiterInterface
      //store freelancer
      public function store(Request $request)
      {
+        
         $validatedData = $request->validate([
             'birthday' => 'required|date|before:today',
-            'countryId' => 'nullable|exists:countries,id',
-            'cityId' => 'nullable|exists:cities,id',
             'experienceLevel' => 'required|in:junior,mid,senior',
             'availability' => 'required|in:morning,afternoon,evening,full_day',
             //'phoneNumber' => 'nullable|string|max:255',
@@ -189,10 +193,11 @@ class RecruiterServices implements RecruiterInterface
          }
          else
          {
-            $freelancer->country_id = $request->get('country_id');
-            $freelancer->city_id = $request->get('city_id');
+            $freelancer->country_id = $request->get('countryId');
+            $freelancer->city_id = $request->get('cityId');
             $freelancer->title_function = null;
             $freelancer->is_freelancer = 0;
+           
             $freelancer->save();
             return redirect('/home')->with('success', 'Recruiter information saved successfully!');
          }
