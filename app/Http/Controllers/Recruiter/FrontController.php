@@ -131,7 +131,10 @@ class FrontController extends Controller
         $userId = $user->id;
 
         $recruiter = $this->recruiterServices->getOneByUserId($userId);
-        return view("recruiter.pages.edit", compact("recruiter"));
+        $countries = $this->countriesServices->getCountries();
+
+        //prvo polje u blejdu treba da izgleda {{$recruiter->country->name}} {{$recruiter->city->name}}
+        return view("recruiter.pages.edit", compact("recruiter", 'countries'));
     }
     public function update(Request $request)
     {

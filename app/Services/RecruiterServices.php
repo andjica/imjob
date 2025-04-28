@@ -116,35 +116,17 @@ class RecruiterServices implements RecruiterInterface
      //store freelancer
      public function store(Request $request)
      {
-         $validatedData = $request->validate([
-             //'recruiterInformation' => 'required|string|max:255',
-             'birthday' => 'required|date|before:today',
-             //'categoryId' => 'exists:categories,id',
-             //'subCategoryId' => 'exists:sub_categories,id',
-             // 'profileImage' => 'required|image|mimes:jpeg,png,jpg,gif|max:5048',
-             'experienceLevel' => 'required|in:junior,mid,senior',
-             'availability' => 'required|in:morning,afternoon,evening,full_day',
-             'phoneNumber' => 'nullable|string|max:255'
-             
-         ], [
-             // Custom error messages
-             'recruiterInformation.required' => 'Recruiter information is required.',
-             'birthday.required' => 'Birthday is required.',
-             'birthday.before' => 'The birthday must be a date before today.',
-             //'categoryId.required' => 'Category is required.',
-             //'categoryId.exists' => 'The selected category is invalid.',
-             //'subCategoryId.required' => 'Subcategory is required.',
-             //'subCategoryId.exists' => 'The selected subcategory is invalid.',
-             // 'profileImage.required' => 'Profile image is required.',
-             // 'profileImage.image' => 'The profile image must be an image file.',
-             // 'profileImage.mimes' => 'The profile image must be a file of type: jpeg, png, jpg, gif.',
-             // 'profileImage.max' => 'The profile image size must not exceed 5MB.',
-             'experienceLevel.required' => 'Experience level is required.',
-             'experienceLevel.in' => 'The selected experience level is invalid.',
-             'availability.required' => 'Availability is required.',
-             'availability.in' => 'The selected availability is invalid.',
-         ]);
+        $validatedData = $request->validate([
+            'birthday' => 'required|date|before:today',
+            'countryId' => 'nullable|exists:countries,id',
+            'cityId' => 'nullable|exists:cities,id',
+            'experienceLevel' => 'required|in:junior,mid,senior',
+            'availability' => 'required|in:morning,afternoon,evening,full_day',
+            //'phoneNumber' => 'nullable|string|max:255',
+            'profileImage' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5048'
+        ]);
          $freelancer = new Recruiter();
+         
          // Handle profile image upload
          if ($request->hasFile('profileImage')) {
              $fileName = time() . '.' . $request->file('profileImage')->getClientOriginalExtension();
@@ -153,21 +135,17 @@ class RecruiterServices implements RecruiterInterface
              $freelancer->profile_image = $filePath;
          }
          $user = auth()->user();
-         if (!$user->company) {
-            return redirect()->back()->with('error', 'You are not associated with any company.');
-        }
-         $company = $user->company;
-         if (!$company) {
-            return redirect()->back()->with('error', 'You must be associated with a company to perform this action.');
-        }
-        $country = Country::find($company->country_id);
+        //  if (!$user->company) {
+        //     return redirect()->back()->with('error', 'You are not associated with any company.');
+        // }
+        //  $company = $user->company;
+        //  if (!$company) {
+        //     return redirect()->back()->with('error', 'You must be associated with a company to perform this action.');
+        // }
+        // $country = Country::find($company->country_id);
 
-         //$freelancer->recruiter_information = $validatedData['recruiterInformation'];
          $freelancer->user_id = auth()->user()->id;
          $freelancer->birthday = $validatedData['birthday'];
-         //$freelancer->category_id = $validatedData['categoryId'];
-         //$freelancer->sub_category_id = $validatedData['subCategoryId'];
-         //$freelancer->profile_image = $validatedData['profileImage'];
          $freelancer->experience_level = $validatedData['experienceLevel'];
          $freelancer->availability = $validatedData['availability'];
          //$freelancer->phone_number = '+' . trim($country->phone_code) . trim($validatedData['phoneNumber']);
@@ -211,6 +189,8 @@ class RecruiterServices implements RecruiterInterface
          }
          else
          {
+            $freelancer->country_id = $request->get('country_id');
+            $freelancer->city_id = $request->get('city_id');
             $freelancer->title_function = null;
             $freelancer->is_freelancer = 0;
             $freelancer->save();

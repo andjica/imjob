@@ -99,7 +99,7 @@
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title">Chats with Candidate</span>
+                                <span class="menu-title">Chats with Contributors</span>
                             </a>
                         </div>
                     </div>

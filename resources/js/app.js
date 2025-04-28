@@ -47,16 +47,16 @@ notifFreelancerApp.mount('#notificationFreelancerUnreadMessages')
 
 const notifRecruiterApp = createApp({});
 notifRecruiterApp.component('component-recruiter-notification', ReacruiterNorification);
-notifRecruiterApp.mount('#notificationReacruiterUnreadMessages')
-// ✅ Pokrećemo notifikacije kada se stranica učita
-window.onload = function () {
-    setupNotifications();
+notifRecruiterApp.mount('#notificationReacruiterUnreadMessages');
 
-};
 
 
 // ✅ Direktno dodaj listener za sve poruke (bez zasebnog fajla)
 window.onload = function () {
+    // ✅ Pokrećemo notifikacije kada se stranica učita
+
+    setupNotifications();
+   
     const userId = window.authUserId;
 
     if (userId) {

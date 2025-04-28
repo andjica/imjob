@@ -208,7 +208,6 @@ Route::middleware(['auth', 'company.freelancer', 'verified'])->prefix('company/f
 Route::middleware(['auth', 'recruiter', 'verified'])->prefix('recruiter')->name('recruiter-')->group(function () {
     Route::middleware(['recruiter.finish.profile'])->group(function () {
         Route::get('/dashboard', [RecruiterFrontController::class, 'dashboard'])->name('dashboard');
-
         Route::get('/find/companies', [RecruiterFrontController::class, 'findCompanies'])->name('find-companies');
         Route::get('/find/contributors', [RecruiterFrontController::class, 'findContributors'])->name('find-contributors');
         // Jobs
@@ -274,6 +273,7 @@ Route::middleware(['auth', 'contributor', 'verified'])->prefix('contributor')->n
         Route::get('/find/companies', [ContributorFrontController::class, 'findCompanies'])->name('find-companies');
         Route::get('/find/recruiters', [ContributorFrontController::class, 'findRecruiters'])->name('find-recruiter');
         Route::get('/recruiter/{recruiterId}/view', [ContributorFrontController::class, 'getRecruiter'])->name('recruiter-view');
+        Route::get('/notifications', [ContributorFrontController::class, 'getNotifications'])->name('recruiter-notifications');
         Route::get('/company/{id}/details', [ContributorFrontController::class, 'detailsCompany'])->name('company-details');
         //posts
         Route::get('/posts', [ContributorFrontController::class, 'allPost'])->name('posts');
