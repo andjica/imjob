@@ -34,7 +34,7 @@
                         </div>
                   
             @else
-            @include('recruiter.components.recruitment.chat')
+            @include('recruiter.components.chat-all')
             @endif
         </div>
     </div>

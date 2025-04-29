@@ -6,7 +6,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 75vh;
             background-color: #f4f6f9;
             padding: 30px;
         }
@@ -63,7 +62,7 @@
 
 @section('content')
 <div class="full-height-center">
-    <div class="activation-container">
+    <div class="activation-container mb-10 ">
         <img src="{{ asset('/images/upgrade.svg') }}" alt="Awaiting Activation">
         <h1 class="text-primary">Your Company Account is Pending for Activation</h1>
         <p>

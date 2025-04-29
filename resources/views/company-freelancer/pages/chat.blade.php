@@ -9,7 +9,7 @@
 <div class="container m-0">
     <div class="row">
         <div class="col-lg-12">
-    @include('company-freelancer.components.recruitment.chat')
+    @include('company-freelancer.components.recruitment.chat-all')
         </div>
     </div>
 </div>

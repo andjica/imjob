@@ -23238,6 +23238,794 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/Chat-freelancerAll.vue?vue&type=script&lang=js":
+/*!************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/Chat-freelancerAll.vue?vue&type=script&lang=js ***!
+  \************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _joeattardi_emoji_button__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @joeattardi/emoji-button */ "./node_modules/@joeattardi/emoji-button/dist/index.js");
+/* harmony import */ var _public_images_user_286_png__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../public/images/user-286.png */ "./public/images/user-286.png");
+/* harmony import */ var _eventBus__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../eventBus */ "./resources/js/eventBus.js");
+function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
+function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
+function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
+function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
+function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: {
+    contributors: Array,
+    candidates: {
+      type: Object,
+      required: true
+    },
+    currentUserId: Number
+  },
+  data: function data() {
+    return {
+      selectedContributor: null,
+      selectedUser: null,
+      picker: null,
+      message: "",
+      messages: [],
+      unreadMap: {},
+      contributorData: []
+    };
+  },
+  computed: {
+    currentPath: function currentPath() {
+      return window.location.pathname;
+    },
+    isFreelancerChatRoute: function isFreelancerChatRoute() {
+      return this.currentPath === '/company/freelancer/chats';
+    },
+    isRecruiterChatRoute: function isRecruiterChatRoute() {
+      return this.currentPath === '/recruiter/chats';
+    },
+    defaultImage: function defaultImage() {
+      return _public_images_user_286_png__WEBPACK_IMPORTED_MODULE_1__["default"];
+    },
+    chatTitle: function chatTitle() {
+      var _this$selectedContrib;
+      if ((_this$selectedContrib = this.selectedContributor) !== null && _this$selectedContrib !== void 0 && _this$selectedContrib.user) {
+        return "".concat(this.selectedContributor.user.first_name, " ").concat(this.selectedContributor.user.last_name);
+      } else if (this.selectedUser) {
+        return "".concat(this.selectedUser.first_name, " ").concat(this.selectedUser.last_name);
+      }
+      return "Unknown";
+    },
+    chatPlaceholderName: function chatPlaceholderName() {
+      var _this$selectedContrib2, _this$selectedContrib3, _this$selectedContrib4, _this$selectedUser, _this$selectedUser2, _this$candidates, _this$candidates2;
+      if ((_this$selectedContrib2 = this.selectedContributor) !== null && _this$selectedContrib2 !== void 0 && (_this$selectedContrib2 = _this$selectedContrib2.user) !== null && _this$selectedContrib2 !== void 0 && _this$selectedContrib2.first_name || (_this$selectedContrib3 = this.selectedContributor) !== null && _this$selectedContrib3 !== void 0 && (_this$selectedContrib3 = _this$selectedContrib3.user) !== null && _this$selectedContrib3 !== void 0 && _this$selectedContrib3.last_name) {
+        return "".concat(this.selectedContributor.user.first_name || '', " ").concat(this.selectedContributor.user.last_name || '').trim();
+      }
+      if ((_this$selectedContrib4 = this.selectedContributor) !== null && _this$selectedContrib4 !== void 0 && _this$selectedContrib4.name) {
+        return this.selectedContributor.name;
+      }
+      if ((_this$selectedUser = this.selectedUser) !== null && _this$selectedUser !== void 0 && _this$selectedUser.first_name || (_this$selectedUser2 = this.selectedUser) !== null && _this$selectedUser2 !== void 0 && _this$selectedUser2.last_name) {
+        return "".concat(this.selectedUser.first_name || '', " ").concat(this.selectedUser.last_name || '').trim();
+      }
+      if ((_this$candidates = this.candidates) !== null && _this$candidates !== void 0 && (_this$candidates = _this$candidates.user) !== null && _this$candidates !== void 0 && _this$candidates.first_name || (_this$candidates2 = this.candidates) !== null && _this$candidates2 !== void 0 && (_this$candidates2 = _this$candidates2.user) !== null && _this$candidates2 !== void 0 && _this$candidates2.last_name) {
+        return "".concat(this.candidates.user.first_name || '', " ").concat(this.candidates.user.last_name || '').trim();
+      }
+      return "Unknown User";
+    },
+    sortedContributors: function sortedContributors() {
+      var lastUser = localStorage.getItem("lastChatUser");
+      if (!lastUser) return this.contributors;
+      var parsed = JSON.parse(lastUser);
+      var sorted = _toConsumableArray(this.contributors);
+
+      // Prvo nađi indeks poslednjeg
+      var index = sorted.findIndex(function (c) {
+        var _c$user;
+        return ((_c$user = c.user) === null || _c$user === void 0 ? void 0 : _c$user.id) === parsed.id;
+      });
+      if (index > -1) {
+        var _sorted$splice = sorted.splice(index, 1),
+          _sorted$splice2 = _slicedToArray(_sorted$splice, 1),
+          last = _sorted$splice2[0];
+        sorted.unshift(last); // Stavi ga na početak
+      }
+      return sorted;
+    }
+  },
+  methods: {
+    prepareContributors: function prepareContributors() {
+      this.contributorData = this.contributors.map(function (c) {
+        var _c$user2, _user$id, _ref, _user$first_name, _c$name, _ref2, _user$last_name, _c$name2, _user$email, _user$profile_image;
+        var user = (_c$user2 = c.user) !== null && _c$user2 !== void 0 ? _c$user2 : {};
+        return {
+          original: c,
+          user: {
+            id: (_user$id = user.id) !== null && _user$id !== void 0 ? _user$id : c.id,
+            first_name: (_ref = (_user$first_name = user.first_name) !== null && _user$first_name !== void 0 ? _user$first_name : (_c$name = c.name) === null || _c$name === void 0 ? void 0 : _c$name.split(" ")[0]) !== null && _ref !== void 0 ? _ref : "N/A",
+            last_name: (_ref2 = (_user$last_name = user.last_name) !== null && _user$last_name !== void 0 ? _user$last_name : (_c$name2 = c.name) === null || _c$name2 === void 0 ? void 0 : _c$name2.split(" ")[1]) !== null && _ref2 !== void 0 ? _ref2 : "",
+            email: (_user$email = user.email) !== null && _user$email !== void 0 ? _user$email : c.email,
+            profile_image: (_user$profile_image = user.profile_image) !== null && _user$profile_image !== void 0 ? _user$profile_image : null
+          }
+        };
+      });
+    },
+    updateUnreadTotal: function updateUnreadTotal() {
+      this.unreadTotal = Object.values(this.unreadMap).reduce(function (sum, count) {
+        return sum + count;
+      }, 0);
+      _eventBus__WEBPACK_IMPORTED_MODULE_2__["default"].emit("update-navbar-badge", this.unreadTotal);
+    },
+    selectContributor: function selectContributor(user) {
+      var _this$selectedContrib5,
+        _this$selectedContrib6,
+        _this = this;
+      console.log("selectContributor: ", user);
+      this.selectedContributor = user;
+      this.selectedUser = null;
+      var fetchContributorId = ((_this$selectedContrib5 = this.selectedContributor) === null || _this$selectedContrib5 === void 0 || (_this$selectedContrib5 = _this$selectedContrib5.user) === null || _this$selectedContrib5 === void 0 ? void 0 : _this$selectedContrib5.id) || ((_this$selectedContrib6 = this.selectedContributor) === null || _this$selectedContrib6 === void 0 ? void 0 : _this$selectedContrib6.id);
+      this.fetchMessages(fetchContributorId);
+      localStorage.setItem("lastChatUser", JSON.stringify(user));
+      fetch("/api/messages/mark-as-read/".concat(fetchContributorId), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-TOKEN": window.csrfToken
+        }
+      }).then(function (res) {
+        return res.json();
+      }).then(function () {
+        // Set the unread count to 0 for this user
+        if (_this.unreadMap[_this.selectedContributor.id]) {
+          _this.unreadMap[_this.selectedContributor.id] = 0;
+        }
+        _this.updateUnreadTotal();
+      })["catch"](function (err) {
+        console.error("Greška pri označavanju poruka kao pročitanih CONTRIBUTOR:", err);
+      });
+    },
+    selectUser: function selectUser(user) {
+      var _this2 = this;
+      this.selectedUser = user;
+      this.selectedContributor = null;
+      this.fetchMessages(user.id);
+      localStorage.setItem("lastChatUser", JSON.stringify(user));
+
+      // Koristimo selectedUser.id umesto selectedContributor.id
+      fetch("/api/messages/mark-as-read/".concat(this.selectedUser.id), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-TOKEN": window.csrfToken
+        }
+      }).then(function (res) {
+        return res.json();
+      }).then(function () {
+        // Set the unread count to 0 for this user
+        if (_this2.unreadMap[_this2.selectedUser.id]) {
+          _this2.unreadMap[_this2.selectedUser.id] = 0;
+        }
+        _this2.updateUnreadTotal();
+      })["catch"](function (err) {
+        console.error("Greška pri označavanju poruka kao pročitanih USER:", err);
+      });
+    },
+    fetchMessages: function fetchMessages(receiverId) {
+      var _this3 = this;
+      if (!receiverId) return;
+      console.log("Ko je primio poruke: ", receiverId);
+      fetch("/web/messages/".concat(receiverId), {
+        method: "GET",
+        headers: {
+          "X-CSRF-TOKEN": window.csrfToken,
+          Accept: "application/json"
+        }
+      }).then(function (res) {
+        return res.json();
+      }).then(function (data) {
+        console.log("Received: ", data);
+        _this3.messages = data;
+        _this3.scrollToBottom();
+      })["catch"](function (err) {
+        console.error("Greška pri dohvatanju poruka:", err);
+      });
+    },
+    scrollToBottom: function scrollToBottom() {
+      this.$nextTick(function () {
+        var chatBox = document.getElementById("chatBox");
+        if (chatBox) {
+          chatBox.scrollTop = chatBox.scrollHeight;
+        }
+      });
+    },
+    toggleEmojiPicker: function toggleEmojiPicker() {
+      if (this.picker && this.$refs.emojiBtn) {
+        this.picker.togglePicker(this.$refs.emojiBtn);
+      } else {
+        console.warn("Emoji picker nije inicijalizovan.");
+      }
+    },
+    handleSubmit: function handleSubmit() {
+      var _this$selectedUser3,
+        _this$selectedContrib7,
+        _this$selectedContrib8,
+        _this$candidates3,
+        _this4 = this;
+      if (this.message.trim() === "") {
+        alert("Unesi poruku!");
+        return;
+      }
+      var receiverId = ((_this$selectedUser3 = this.selectedUser) === null || _this$selectedUser3 === void 0 ? void 0 : _this$selectedUser3.id) || ((_this$selectedContrib7 = this.selectedContributor) === null || _this$selectedContrib7 === void 0 || (_this$selectedContrib7 = _this$selectedContrib7.user) === null || _this$selectedContrib7 === void 0 ? void 0 : _this$selectedContrib7.id) || ((_this$selectedContrib8 = this.selectedContributor) === null || _this$selectedContrib8 === void 0 ? void 0 : _this$selectedContrib8.id);
+      if (!receiverId) {
+        alert("Nije odabran korisnik za slanje poruke.");
+        return;
+      }
+      var payload = {
+        user_id: this.currentUserId,
+        text: this.message,
+        receiver_id: receiverId
+      };
+      if ((_this$candidates3 = this.candidates) !== null && _this$candidates3 !== void 0 && _this$candidates3.candidate_id) {
+        payload.candidate_id = this.candidates.candidate_id;
+      }
+      fetch("/web/messages", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-TOKEN": window.csrfToken
+        },
+        body: JSON.stringify(payload)
+      }).then(function (res) {
+        return res.json();
+      }).then(function (data) {
+        console.log("Fetch message: ", data);
+        _this4.message = "";
+      })["catch"](function (error) {
+        console.error("Greška pri slanju poruke:", error);
+      });
+    },
+    selectFirstContributor: function selectFirstContributor() {
+      if (this.contributors && this.contributors.length > 0) {
+        var _firstContributor$use;
+        var firstContributor = this.contributors[0];
+
+        // Ako kontributor ima user, selektuj usera, inače samo kontributer
+        if (firstContributor.user) {
+          this.selectedUser = firstContributor.user;
+        } else {
+          this.selectedUser = null; // Ako nema usera
+        }
+
+        // Uvek postavi firstContributor kao selectedContributor
+        this.selectedContributor = firstContributor;
+
+        // Pošaljemo zahtev za poruke (koristi user.id ako postoji)
+        this.fetchMessages(((_firstContributor$use = firstContributor.user) === null || _firstContributor$use === void 0 ? void 0 : _firstContributor$use.id) || firstContributor.id);
+
+        // Spremi korisnika u localStorage (ako postoji user, spasavaj tog user-a)
+        localStorage.setItem("lastChatUser", JSON.stringify(firstContributor.user || firstContributor));
+      } else {
+        console.warn("Nema dostupnih kontributera.");
+      }
+    }
+  },
+  mounted: function mounted() {
+    var _this5 = this;
+    console.log("Candidate: ", this.candidates);
+    console.log("Contributor: ", this.contributors);
+    // da napravim upit da se proveri u contributeru da li postoji objekat user ako da prosledi se njegovi podaci ako ne onda se prosledi
+    if (this.contributors && this.contributors.length > 0) {
+      this.selectFirstContributor();
+    }
+    this.$nextTick(function () {
+      _eventBus__WEBPACK_IMPORTED_MODULE_2__["default"].emit("reset-navbar-badge");
+    });
+
+    // Dohvati nepročitane poruke po korisniku
+    fetch("/api/messages/unread-count", {
+      method: "GET",
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+        "X-CSRF-TOKEN": window.csrfToken,
+        Accept: "application/json"
+      }
+    }).then(function (res) {
+      return res.json();
+    }).then(function (data) {
+      data.forEach(function (item) {
+        _this5.unreadMap[item.user_id] = item.unread_count;
+      });
+      _this5.updateUnreadTotal();
+    })["catch"](function (err) {
+      console.error("Greška pri dohvatanju nepročitanih poruka:", err);
+    });
+    this.picker = new _joeattardi_emoji_button__WEBPACK_IMPORTED_MODULE_0__.EmojiButton({
+      position: "top-end"
+    });
+    if (this.picker) {
+      this.picker.on("emoji", function (emoji) {
+        _this5.message += emoji.emoji;
+      });
+    } else {
+      console.warn("Emoji picker failed to initialize.");
+    }
+    var lastUser = localStorage.getItem("lastChatUser");
+    if (lastUser) {
+      var parsed = JSON.parse(lastUser);
+      this.selectedUser = parsed;
+      this.fetchMessages(parsed.id);
+    } else if (this.candidates && this.candidates.user) {
+      this.selectedUser = this.candidates.user;
+      this.fetchMessages(this.candidates.user.id);
+      localStorage.setItem("lastChatUser", JSON.stringify(this.candidates.user));
+    } else if (this.contributorData.length > 0) {
+      // automatski selektuj prvog iz contributorData
+      var firstContributor = this.contributorData[0];
+      this.selectedContributor = firstContributor;
+      this.selectedUser = firstContributor.user;
+      this.fetchMessages(firstContributor.user.id);
+      localStorage.setItem("lastChatUser", JSON.stringify(first.user));
+    }
+    this.prepareContributors();
+    Echo["private"]("chat.".concat(this.currentUserId)).subscribed(function () {
+      console.log("✅ Subscribed na kanal: chat." + _this5.currentUserId);
+    }).listen(".MessageSent", function (payload) {
+      var _this5$selectedUser, _this5$selectedContri, _this5$selectedContri2;
+      console.log("📡 WebSocket primio:", payload);
+      var activeReceiverId = ((_this5$selectedUser = _this5.selectedUser) === null || _this5$selectedUser === void 0 ? void 0 : _this5$selectedUser.id) || ((_this5$selectedContri = _this5.selectedContributor) === null || _this5$selectedContri === void 0 || (_this5$selectedContri = _this5$selectedContri.user) === null || _this5$selectedContri === void 0 ? void 0 : _this5$selectedContri.id) || ((_this5$selectedContri2 = _this5.selectedContributor) === null || _this5$selectedContri2 === void 0 ? void 0 : _this5$selectedContri2.id);
+      console.log("Active id: ", activeReceiverId);
+
+      // Proverite da li je poruka od korisnika sa selektovanim ID-jem
+      if (payload.message && (payload.message.user_id === activeReceiverId || payload.message.receiver_id === activeReceiverId)) {
+        _this5.messages.push(payload.message);
+        _this5.scrollToBottom();
+        fetch("/api/messages/mark-as-read/".concat(activeReceiverId), {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": window.csrfToken
+          }
+        }).then(function (res) {
+          return res.json();
+        }).then(function () {
+          var _this5$selectedUser2;
+          // Set the unread count to 0 for this user
+          if (_this5.unreadMap[(_this5$selectedUser2 = _this5.selectedUser) === null || _this5$selectedUser2 === void 0 ? void 0 : _this5$selectedUser2.id]) {
+            var _this5$selectedUser3;
+            _this5.unreadMap[(_this5$selectedUser3 = _this5.selectedUser) === null || _this5$selectedUser3 === void 0 ? void 0 : _this5$selectedUser3.id] = 0;
+          }
+          _this5.updateUnreadTotal();
+        })["catch"](function (err) {
+          console.error("Greška pri označavanju poruka kao pročitanih:", err);
+        });
+      } else {
+        // Ako poruka nije za selektovanog korisnika, povećajte broj nepročitanih poruka
+        if (_this5.unreadMap[payload.message.user_id]) {
+          _this5.unreadMap[payload.message.user_id]++;
+        } else {
+          _this5.unreadMap[payload.message.user_id] = 1;
+        }
+        _this5.updateUnreadTotal();
+
+        // Emituj ka nav-baru ako koristiš globalni badge (npr. crveni broj u headeru)
+        _eventBus__WEBPACK_IMPORTED_MODULE_2__["default"].emit("update-navbar-badge", _this5.unreadTotal);
+      }
+    }).error(function (error) {
+      console.error("❌ Greška:", error);
+    });
+  },
+  beforeUnmount: function beforeUnmount() {
+    // Cleanup event listener
+    _eventBus__WEBPACK_IMPORTED_MODULE_2__["default"].off("reset-navbar-badge", this.resetUnreadTotal);
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/Chat-recruiterAll.vue?vue&type=script&lang=js":
+/*!***********************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/Chat-recruiterAll.vue?vue&type=script&lang=js ***!
+  \***********************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _joeattardi_emoji_button__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @joeattardi/emoji-button */ "./node_modules/@joeattardi/emoji-button/dist/index.js");
+/* harmony import */ var _public_images_user_286_png__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../public/images/user-286.png */ "./public/images/user-286.png");
+/* harmony import */ var _eventBus__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../eventBus */ "./resources/js/eventBus.js");
+function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
+function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
+function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
+function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
+function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: {
+    contributors: Array,
+    candidates: {
+      type: Object,
+      required: true
+    },
+    currentUserId: Number
+  },
+  data: function data() {
+    return {
+      selectedContributor: null,
+      selectedUser: null,
+      picker: null,
+      message: "",
+      messages: [],
+      unreadMap: {},
+      contributorData: []
+    };
+  },
+  computed: {
+    currentPath: function currentPath() {
+      return window.location.pathname;
+    },
+    isFreelancerChatRoute: function isFreelancerChatRoute() {
+      return this.currentPath === '/company/freelancer/chats';
+    },
+    isRecruiterChatRoute: function isRecruiterChatRoute() {
+      return this.currentPath === '/recruiter/chats';
+    },
+    defaultImage: function defaultImage() {
+      return _public_images_user_286_png__WEBPACK_IMPORTED_MODULE_1__["default"];
+    },
+    chatTitle: function chatTitle() {
+      var _this$selectedContrib;
+      if ((_this$selectedContrib = this.selectedContributor) !== null && _this$selectedContrib !== void 0 && _this$selectedContrib.user) {
+        return "".concat(this.selectedContributor.user.first_name, " ").concat(this.selectedContributor.user.last_name);
+      } else if (this.selectedUser) {
+        return "".concat(this.selectedUser.first_name, " ").concat(this.selectedUser.last_name);
+      }
+      return "Unknown";
+    },
+    chatPlaceholderName: function chatPlaceholderName() {
+      var _this$selectedContrib2, _this$selectedContrib3, _this$selectedContrib4, _this$selectedUser, _this$selectedUser2, _this$candidates, _this$candidates2;
+      if ((_this$selectedContrib2 = this.selectedContributor) !== null && _this$selectedContrib2 !== void 0 && (_this$selectedContrib2 = _this$selectedContrib2.user) !== null && _this$selectedContrib2 !== void 0 && _this$selectedContrib2.first_name || (_this$selectedContrib3 = this.selectedContributor) !== null && _this$selectedContrib3 !== void 0 && (_this$selectedContrib3 = _this$selectedContrib3.user) !== null && _this$selectedContrib3 !== void 0 && _this$selectedContrib3.last_name) {
+        return "".concat(this.selectedContributor.user.first_name || '', " ").concat(this.selectedContributor.user.last_name || '').trim();
+      }
+      if ((_this$selectedContrib4 = this.selectedContributor) !== null && _this$selectedContrib4 !== void 0 && _this$selectedContrib4.name) {
+        return this.selectedContributor.name;
+      }
+      if ((_this$selectedUser = this.selectedUser) !== null && _this$selectedUser !== void 0 && _this$selectedUser.first_name || (_this$selectedUser2 = this.selectedUser) !== null && _this$selectedUser2 !== void 0 && _this$selectedUser2.last_name) {
+        return "".concat(this.selectedUser.first_name || '', " ").concat(this.selectedUser.last_name || '').trim();
+      }
+      if ((_this$candidates = this.candidates) !== null && _this$candidates !== void 0 && (_this$candidates = _this$candidates.user) !== null && _this$candidates !== void 0 && _this$candidates.first_name || (_this$candidates2 = this.candidates) !== null && _this$candidates2 !== void 0 && (_this$candidates2 = _this$candidates2.user) !== null && _this$candidates2 !== void 0 && _this$candidates2.last_name) {
+        return "".concat(this.candidates.user.first_name || '', " ").concat(this.candidates.user.last_name || '').trim();
+      }
+      return "Unknown User";
+    },
+    sortedContributors: function sortedContributors() {
+      var lastUser = localStorage.getItem("lastChatUser");
+      if (!lastUser) return this.contributors;
+      var parsed = JSON.parse(lastUser);
+      var sorted = _toConsumableArray(this.contributors);
+
+      // Prvo nađi indeks poslednjeg
+      var index = sorted.findIndex(function (c) {
+        var _c$user;
+        return ((_c$user = c.user) === null || _c$user === void 0 ? void 0 : _c$user.id) === parsed.id;
+      });
+      if (index > -1) {
+        var _sorted$splice = sorted.splice(index, 1),
+          _sorted$splice2 = _slicedToArray(_sorted$splice, 1),
+          last = _sorted$splice2[0];
+        sorted.unshift(last); // Stavi ga na početak
+      }
+      return sorted;
+    }
+  },
+  methods: {
+    prepareContributors: function prepareContributors() {
+      this.contributorData = this.contributors.map(function (c) {
+        var _c$user2, _user$id, _ref, _user$first_name, _c$name, _ref2, _user$last_name, _c$name2, _user$email, _user$profile_image;
+        var user = (_c$user2 = c.user) !== null && _c$user2 !== void 0 ? _c$user2 : {};
+        return {
+          original: c,
+          user: {
+            id: (_user$id = user.id) !== null && _user$id !== void 0 ? _user$id : c.id,
+            first_name: (_ref = (_user$first_name = user.first_name) !== null && _user$first_name !== void 0 ? _user$first_name : (_c$name = c.name) === null || _c$name === void 0 ? void 0 : _c$name.split(" ")[0]) !== null && _ref !== void 0 ? _ref : "N/A",
+            last_name: (_ref2 = (_user$last_name = user.last_name) !== null && _user$last_name !== void 0 ? _user$last_name : (_c$name2 = c.name) === null || _c$name2 === void 0 ? void 0 : _c$name2.split(" ")[1]) !== null && _ref2 !== void 0 ? _ref2 : "",
+            email: (_user$email = user.email) !== null && _user$email !== void 0 ? _user$email : c.email,
+            profile_image: (_user$profile_image = user.profile_image) !== null && _user$profile_image !== void 0 ? _user$profile_image : null
+          }
+        };
+      });
+    },
+    updateUnreadTotal: function updateUnreadTotal() {
+      this.unreadTotal = Object.values(this.unreadMap).reduce(function (sum, count) {
+        return sum + count;
+      }, 0);
+      _eventBus__WEBPACK_IMPORTED_MODULE_2__["default"].emit("update-navbar-badge", this.unreadTotal);
+    },
+    selectContributor: function selectContributor(user) {
+      var _this$selectedContrib5,
+        _this$selectedContrib6,
+        _this = this;
+      console.log("selectContributor: ", user);
+      this.selectedContributor = user;
+      this.selectedUser = null;
+      var fetchContributorId = ((_this$selectedContrib5 = this.selectedContributor) === null || _this$selectedContrib5 === void 0 || (_this$selectedContrib5 = _this$selectedContrib5.user) === null || _this$selectedContrib5 === void 0 ? void 0 : _this$selectedContrib5.id) || ((_this$selectedContrib6 = this.selectedContributor) === null || _this$selectedContrib6 === void 0 ? void 0 : _this$selectedContrib6.id);
+      this.fetchMessages(fetchContributorId);
+      localStorage.setItem("lastChatUser", JSON.stringify(user));
+      fetch("/api/messages/mark-as-read/".concat(fetchContributorId), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-TOKEN": window.csrfToken
+        }
+      }).then(function (res) {
+        return res.json();
+      }).then(function () {
+        // Set the unread count to 0 for this user
+        if (_this.unreadMap[_this.selectedContributor.id]) {
+          _this.unreadMap[_this.selectedContributor.id] = 0;
+        }
+        _this.updateUnreadTotal();
+      })["catch"](function (err) {
+        console.error("Greška pri označavanju poruka kao pročitanih CONTRIBUTOR:", err);
+      });
+    },
+    selectUser: function selectUser(user) {
+      var _this2 = this;
+      this.selectedUser = user;
+      this.selectedContributor = null;
+      this.fetchMessages(user.id);
+      localStorage.setItem("lastChatUser", JSON.stringify(user));
+
+      // Koristimo selectedUser.id umesto selectedContributor.id
+      fetch("/api/messages/mark-as-read/".concat(this.selectedUser.id), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-TOKEN": window.csrfToken
+        }
+      }).then(function (res) {
+        return res.json();
+      }).then(function () {
+        // Set the unread count to 0 for this user
+        if (_this2.unreadMap[_this2.selectedUser.id]) {
+          _this2.unreadMap[_this2.selectedUser.id] = 0;
+        }
+        _this2.updateUnreadTotal();
+      })["catch"](function (err) {
+        console.error("Greška pri označavanju poruka kao pročitanih USER:", err);
+      });
+    },
+    fetchMessages: function fetchMessages(receiverId) {
+      var _this3 = this;
+      if (!receiverId) return;
+      console.log("Ko je primio poruke: ", receiverId);
+      fetch("/web/messages/".concat(receiverId), {
+        method: "GET",
+        headers: {
+          "X-CSRF-TOKEN": window.csrfToken,
+          Accept: "application/json"
+        }
+      }).then(function (res) {
+        return res.json();
+      }).then(function (data) {
+        console.log("Received: ", data);
+        _this3.messages = data;
+        _this3.scrollToBottom();
+      })["catch"](function (err) {
+        console.error("Greška pri dohvatanju poruka:", err);
+      });
+    },
+    scrollToBottom: function scrollToBottom() {
+      this.$nextTick(function () {
+        var chatBox = document.getElementById("chatBox");
+        if (chatBox) {
+          chatBox.scrollTop = chatBox.scrollHeight;
+        }
+      });
+    },
+    toggleEmojiPicker: function toggleEmojiPicker() {
+      if (this.picker && this.$refs.emojiBtn) {
+        this.picker.togglePicker(this.$refs.emojiBtn);
+      } else {
+        console.warn("Emoji picker nije inicijalizovan.");
+      }
+    },
+    handleSubmit: function handleSubmit() {
+      var _this$selectedUser3,
+        _this$selectedContrib7,
+        _this$selectedContrib8,
+        _this$candidates3,
+        _this4 = this;
+      if (this.message.trim() === "") {
+        alert("Unesi poruku!");
+        return;
+      }
+      var receiverId = ((_this$selectedUser3 = this.selectedUser) === null || _this$selectedUser3 === void 0 ? void 0 : _this$selectedUser3.id) || ((_this$selectedContrib7 = this.selectedContributor) === null || _this$selectedContrib7 === void 0 || (_this$selectedContrib7 = _this$selectedContrib7.user) === null || _this$selectedContrib7 === void 0 ? void 0 : _this$selectedContrib7.id) || ((_this$selectedContrib8 = this.selectedContributor) === null || _this$selectedContrib8 === void 0 ? void 0 : _this$selectedContrib8.id);
+      if (!receiverId) {
+        alert("Nije odabran korisnik za slanje poruke.");
+        return;
+      }
+      var payload = {
+        user_id: this.currentUserId,
+        text: this.message,
+        receiver_id: receiverId
+      };
+      if ((_this$candidates3 = this.candidates) !== null && _this$candidates3 !== void 0 && _this$candidates3.candidate_id) {
+        payload.candidate_id = this.candidates.candidate_id;
+      }
+      fetch("/web/messages", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-TOKEN": window.csrfToken
+        },
+        body: JSON.stringify(payload)
+      }).then(function (res) {
+        return res.json();
+      }).then(function (data) {
+        console.log("Fetch message: ", data);
+        _this4.message = "";
+      })["catch"](function (error) {
+        console.error("Greška pri slanju poruke:", error);
+      });
+    },
+    selectFirstContributor: function selectFirstContributor() {
+      if (this.contributors && this.contributors.length > 0) {
+        var _firstContributor$use;
+        var firstContributor = this.contributors[0];
+
+        // Ako kontributor ima user, selektuj usera, inače samo kontributer
+        if (firstContributor.user) {
+          this.selectedUser = firstContributor.user;
+        } else {
+          this.selectedUser = null; // Ako nema usera
+        }
+
+        // Uvek postavi firstContributor kao selectedContributor
+        this.selectedContributor = firstContributor;
+
+        // Pošaljemo zahtev za poruke (koristi user.id ako postoji)
+        this.fetchMessages(((_firstContributor$use = firstContributor.user) === null || _firstContributor$use === void 0 ? void 0 : _firstContributor$use.id) || firstContributor.id);
+
+        // Spremi korisnika u localStorage (ako postoji user, spasavaj tog user-a)
+        localStorage.setItem("lastChatUser", JSON.stringify(firstContributor.user || firstContributor));
+      } else {
+        console.warn("Nema dostupnih kontributera.");
+      }
+    }
+  },
+  mounted: function mounted() {
+    var _this5 = this;
+    console.log("Candidate: ", this.candidates);
+    console.log("Contributor: ", this.contributors);
+    // da napravim upit da se proveri u contributeru da li postoji objekat user ako da prosledi se njegovi podaci ako ne onda se prosledi
+    if (this.contributors && this.contributors.length > 0) {
+      this.selectFirstContributor();
+    }
+    this.$nextTick(function () {
+      _eventBus__WEBPACK_IMPORTED_MODULE_2__["default"].emit("reset-navbar-badge");
+    });
+
+    // Dohvati nepročitane poruke po korisniku
+    fetch("/api/messages/unread-count", {
+      method: "GET",
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+        "X-CSRF-TOKEN": window.csrfToken,
+        Accept: "application/json"
+      }
+    }).then(function (res) {
+      return res.json();
+    }).then(function (data) {
+      data.forEach(function (item) {
+        _this5.unreadMap[item.user_id] = item.unread_count;
+      });
+      _this5.updateUnreadTotal();
+    })["catch"](function (err) {
+      console.error("Greška pri dohvatanju nepročitanih poruka:", err);
+    });
+    this.picker = new _joeattardi_emoji_button__WEBPACK_IMPORTED_MODULE_0__.EmojiButton({
+      position: "top-end"
+    });
+    if (this.picker) {
+      this.picker.on("emoji", function (emoji) {
+        _this5.message += emoji.emoji;
+      });
+    } else {
+      console.warn("Emoji picker failed to initialize.");
+    }
+    var lastUser = localStorage.getItem("lastChatUser");
+    if (lastUser) {
+      var parsed = JSON.parse(lastUser);
+      this.selectedUser = parsed;
+      this.fetchMessages(parsed.id);
+    } else if (this.candidates && this.candidates.user) {
+      this.selectedUser = this.candidates.user;
+      this.fetchMessages(this.candidates.user.id);
+      localStorage.setItem("lastChatUser", JSON.stringify(this.candidates.user));
+    } else if (this.contributorData.length > 0) {
+      // automatski selektuj prvog iz contributorData
+      var firstContributor = this.contributorData[0];
+      this.selectedContributor = firstContributor;
+      this.selectedUser = firstContributor.user;
+      this.fetchMessages(firstContributor.user.id);
+      localStorage.setItem("lastChatUser", JSON.stringify(first.user));
+    }
+    this.prepareContributors();
+    Echo["private"]("chat.".concat(this.currentUserId)).subscribed(function () {
+      console.log("✅ Subscribed na kanal: chat." + _this5.currentUserId);
+    }).listen(".MessageSent", function (payload) {
+      var _this5$selectedUser, _this5$selectedContri, _this5$selectedContri2;
+      console.log("📡 WebSocket primio:", payload);
+      var activeReceiverId = ((_this5$selectedUser = _this5.selectedUser) === null || _this5$selectedUser === void 0 ? void 0 : _this5$selectedUser.id) || ((_this5$selectedContri = _this5.selectedContributor) === null || _this5$selectedContri === void 0 || (_this5$selectedContri = _this5$selectedContri.user) === null || _this5$selectedContri === void 0 ? void 0 : _this5$selectedContri.id) || ((_this5$selectedContri2 = _this5.selectedContributor) === null || _this5$selectedContri2 === void 0 ? void 0 : _this5$selectedContri2.id);
+      console.log("Active id: ", activeReceiverId);
+
+      // Proverite da li je poruka od korisnika sa selektovanim ID-jem
+      if (payload.message && (payload.message.user_id === activeReceiverId || payload.message.receiver_id === activeReceiverId)) {
+        _this5.messages.push(payload.message);
+        _this5.scrollToBottom();
+        fetch("/api/messages/mark-as-read/".concat(activeReceiverId), {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": window.csrfToken
+          }
+        }).then(function (res) {
+          return res.json();
+        }).then(function () {
+          var _this5$selectedUser2;
+          // Set the unread count to 0 for this user
+          if (_this5.unreadMap[(_this5$selectedUser2 = _this5.selectedUser) === null || _this5$selectedUser2 === void 0 ? void 0 : _this5$selectedUser2.id]) {
+            var _this5$selectedUser3;
+            _this5.unreadMap[(_this5$selectedUser3 = _this5.selectedUser) === null || _this5$selectedUser3 === void 0 ? void 0 : _this5$selectedUser3.id] = 0;
+          }
+          _this5.updateUnreadTotal();
+        })["catch"](function (err) {
+          console.error("Greška pri označavanju poruka kao pročitanih:", err);
+        });
+      } else {
+        // Ako poruka nije za selektovanog korisnika, povećajte broj nepročitanih poruka
+        if (_this5.unreadMap[payload.message.user_id]) {
+          _this5.unreadMap[payload.message.user_id]++;
+        } else {
+          _this5.unreadMap[payload.message.user_id] = 1;
+        }
+        _this5.updateUnreadTotal();
+
+        // Emituj ka nav-baru ako koristiš globalni badge (npr. crveni broj u headeru)
+        _eventBus__WEBPACK_IMPORTED_MODULE_2__["default"].emit("update-navbar-badge", _this5.unreadTotal);
+      }
+    }).error(function (error) {
+      console.error("❌ Greška:", error);
+    });
+  },
+  beforeUnmount: function beforeUnmount() {
+    // Cleanup event listener
+    _eventBus__WEBPACK_IMPORTED_MODULE_2__["default"].off("reset-navbar-badge", this.resetUnreadTotal);
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/Chat.vue?vue&type=script&lang=js":
 /*!**********************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/Chat.vue?vue&type=script&lang=js ***!
@@ -23307,6 +24095,22 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       }
       return "Unknown";
     },
+    chatPlaceholderName: function chatPlaceholderName() {
+      var _this$selectedContrib2, _this$selectedContrib3, _this$selectedContrib4, _this$selectedUser, _this$selectedUser2, _this$candidate, _this$candidate2;
+      if ((_this$selectedContrib2 = this.selectedContributor) !== null && _this$selectedContrib2 !== void 0 && (_this$selectedContrib2 = _this$selectedContrib2.user) !== null && _this$selectedContrib2 !== void 0 && _this$selectedContrib2.first_name || (_this$selectedContrib3 = this.selectedContributor) !== null && _this$selectedContrib3 !== void 0 && (_this$selectedContrib3 = _this$selectedContrib3.user) !== null && _this$selectedContrib3 !== void 0 && _this$selectedContrib3.last_name) {
+        return "".concat(this.selectedContributor.user.first_name || '', " ").concat(this.selectedContributor.user.last_name || '').trim();
+      }
+      if ((_this$selectedContrib4 = this.selectedContributor) !== null && _this$selectedContrib4 !== void 0 && _this$selectedContrib4.name) {
+        return this.selectedContributor.name;
+      }
+      if ((_this$selectedUser = this.selectedUser) !== null && _this$selectedUser !== void 0 && _this$selectedUser.first_name || (_this$selectedUser2 = this.selectedUser) !== null && _this$selectedUser2 !== void 0 && _this$selectedUser2.last_name) {
+        return "".concat(this.selectedUser.first_name || '', " ").concat(this.selectedUser.last_name || '').trim();
+      }
+      if ((_this$candidate = this.candidate) !== null && _this$candidate !== void 0 && (_this$candidate = _this$candidate.user) !== null && _this$candidate !== void 0 && _this$candidate.first_name || (_this$candidate2 = this.candidate) !== null && _this$candidate2 !== void 0 && (_this$candidate2 = _this$candidate2.user) !== null && _this$candidate2 !== void 0 && _this$candidate2.last_name) {
+        return "".concat(this.candidate.user.first_name || '', " ").concat(this.candidate.user.last_name || '').trim();
+      }
+      return "Unknown User";
+    },
     sortedContributors: function sortedContributors() {
       var lastUser = localStorage.getItem("lastChatUser");
       if (!lastUser) return this.contributors;
@@ -23351,13 +24155,13 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       _eventBus__WEBPACK_IMPORTED_MODULE_2__["default"].emit("update-navbar-badge", this.unreadTotal);
     },
     selectContributor: function selectContributor(user) {
-      var _this$selectedContrib2,
-        _this$selectedContrib3,
+      var _this$selectedContrib5,
+        _this$selectedContrib6,
         _this = this;
       console.log("selectContributor: ", user);
       this.selectedContributor = user;
       this.selectedUser = null;
-      var fetchContributorId = ((_this$selectedContrib2 = this.selectedContributor) === null || _this$selectedContrib2 === void 0 || (_this$selectedContrib2 = _this$selectedContrib2.user) === null || _this$selectedContrib2 === void 0 ? void 0 : _this$selectedContrib2.id) || ((_this$selectedContrib3 = this.selectedContributor) === null || _this$selectedContrib3 === void 0 ? void 0 : _this$selectedContrib3.id);
+      var fetchContributorId = ((_this$selectedContrib5 = this.selectedContributor) === null || _this$selectedContrib5 === void 0 || (_this$selectedContrib5 = _this$selectedContrib5.user) === null || _this$selectedContrib5 === void 0 ? void 0 : _this$selectedContrib5.id) || ((_this$selectedContrib6 = this.selectedContributor) === null || _this$selectedContrib6 === void 0 ? void 0 : _this$selectedContrib6.id);
       this.fetchMessages(fetchContributorId);
       localStorage.setItem("lastChatUser", JSON.stringify(user));
       fetch("/api/messages/mark-as-read/".concat(fetchContributorId), {
@@ -23417,6 +24221,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       }).then(function (res) {
         return res.json();
       }).then(function (data) {
+        console.log("Received: ", data);
         _this3.messages = data;
         _this3.scrollToBottom();
       })["catch"](function (err) {
@@ -23439,16 +24244,16 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       }
     },
     handleSubmit: function handleSubmit() {
-      var _this$selectedUser,
-        _this$selectedContrib4,
-        _this$selectedContrib5,
-        _this$candidate,
+      var _this$selectedUser3,
+        _this$selectedContrib7,
+        _this$selectedContrib8,
+        _this$candidate3,
         _this4 = this;
       if (this.message.trim() === "") {
         alert("Unesi poruku!");
         return;
       }
-      var receiverId = ((_this$selectedUser = this.selectedUser) === null || _this$selectedUser === void 0 ? void 0 : _this$selectedUser.id) || ((_this$selectedContrib4 = this.selectedContributor) === null || _this$selectedContrib4 === void 0 || (_this$selectedContrib4 = _this$selectedContrib4.user) === null || _this$selectedContrib4 === void 0 ? void 0 : _this$selectedContrib4.id) || ((_this$selectedContrib5 = this.selectedContributor) === null || _this$selectedContrib5 === void 0 ? void 0 : _this$selectedContrib5.id);
+      var receiverId = ((_this$selectedUser3 = this.selectedUser) === null || _this$selectedUser3 === void 0 ? void 0 : _this$selectedUser3.id) || ((_this$selectedContrib7 = this.selectedContributor) === null || _this$selectedContrib7 === void 0 || (_this$selectedContrib7 = _this$selectedContrib7.user) === null || _this$selectedContrib7 === void 0 ? void 0 : _this$selectedContrib7.id) || ((_this$selectedContrib8 = this.selectedContributor) === null || _this$selectedContrib8 === void 0 ? void 0 : _this$selectedContrib8.id);
       if (!receiverId) {
         alert("Nije odabran korisnik za slanje poruke.");
         return;
@@ -23458,7 +24263,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
         text: this.message,
         receiver_id: receiverId
       };
-      if ((_this$candidate = this.candidate) !== null && _this$candidate !== void 0 && _this$candidate.candidate_id) {
+      if ((_this$candidate3 = this.candidate) !== null && _this$candidate3 !== void 0 && _this$candidate3.candidate_id) {
         payload.candidate_id = this.candidate.candidate_id;
       }
       fetch("/web/messages", {
@@ -23471,6 +24276,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       }).then(function (res) {
         return res.json();
       }).then(function (data) {
+        console.log("Fetch message: ", data);
         _this4.message = "";
       })["catch"](function (error) {
         console.error("Greška pri slanju poruke:", error);
@@ -23503,11 +24309,8 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
   },
   mounted: function mounted() {
     var _this5 = this;
-    console.log("Contributor: ", this.contributors);
     console.log("Candidate: ", this.candidate);
-    console.log("Selected contributor: ", this.selectedContributor);
-    console.log("Selected user: ", this.selectedUser);
-    console.log("Message: ", this.unreadMap);
+    console.log("Contributor: ", this.contributors);
     // da napravim upit da se proveri u contributeru da li postoji objekat user ako da prosledi se njegovi podaci ako ne onda se prosledi
     if (this.contributors && this.contributors.length > 0) {
       this.selectFirstContributor();
@@ -23995,6 +24798,356 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/Chat-freelancerAll.vue?vue&type=template&id=4738e494":
+/*!****************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/Chat-freelancerAll.vue?vue&type=template&id=4738e494 ***!
+  \****************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   render: () => (/* binding */ render)
+/* harmony export */ });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+
+var _hoisted_1 = {
+  "class": "row"
+};
+var _hoisted_2 = {
+  "class": "col-lg-5 mb-5"
+};
+var _hoisted_3 = {
+  "class": "card card-flush"
+};
+var _hoisted_4 = {
+  "class": "card-body pt-5",
+  id: "kt_chat_contacts_body"
+};
+var _hoisted_5 = {
+  "class": "scroll-y me-n5 pe-5 h-lg-auto",
+  "data-kt-scroll": "true",
+  "data-kt-scroll-activate": "{default: false, lg: true}",
+  "data-kt-scroll-max-height": "auto",
+  "data-kt-scroll-dependencies": "#kt_header, #kt_app_header, #kt_toolbar, #kt_app_toolbar, #kt_footer, #kt_app_footer, #kt_chat_contacts_header",
+  "data-kt-scroll-wrappers": "#kt_content, #kt_app_content, #kt_chat_contacts_body",
+  "data-kt-scroll-offset": "5px",
+  style: {
+    "max-height": "362px"
+  }
+};
+var _hoisted_6 = {
+  "class": "d-flex d-flex__column py-4"
+};
+var _hoisted_7 = {
+  "class": "symbol symbol-45px symbol-circle"
+};
+var _hoisted_8 = {
+  "class": "symbol-label bg-light-danger text-danger fs-6 fw-bolder"
+};
+var _hoisted_9 = {
+  "class": "ms-5"
+};
+var _hoisted_10 = ["onClick"];
+var _hoisted_11 = {
+  key: 0,
+  "class": "badge badge-danger"
+};
+var _hoisted_12 = {
+  "class": "d-flex d-flex__column py-4"
+};
+var _hoisted_13 = {
+  "class": "symbol symbol-45px symbol-circle"
+};
+var _hoisted_14 = {
+  "class": "symbol-label bg-light-danger text-danger fs-6 fw-bolder"
+};
+var _hoisted_15 = {
+  "class": "ms-5"
+};
+var _hoisted_16 = ["onClick"];
+var _hoisted_17 = {
+  "class": "col-lg-7"
+};
+var _hoisted_18 = {
+  "class": "card h-100"
+};
+var _hoisted_19 = {
+  "class": "card-header"
+};
+var _hoisted_20 = {
+  key: 0
+};
+var _hoisted_21 = {
+  "class": "card-title"
+};
+var _hoisted_22 = {
+  key: 1
+};
+var _hoisted_23 = {
+  "class": "card-title"
+};
+var _hoisted_24 = {
+  key: 2
+};
+var _hoisted_25 = {
+  "class": "card-title"
+};
+var _hoisted_26 = {
+  "class": "card-body chat-box chat-box__contributor",
+  id: "chatBox"
+};
+var _hoisted_27 = {
+  "class": "text-muted"
+};
+var _hoisted_28 = {
+  key: 0
+};
+var _hoisted_29 = {
+  "class": "message-info"
+};
+var _hoisted_30 = {
+  "class": "card-footer"
+};
+var _hoisted_31 = {
+  id: "chatForm"
+};
+var _hoisted_32 = {
+  "class": "input-group"
+};
+function render(_ctx, _cache, $props, $setup, $data, $options) {
+  var _$data$selectedContri2, _$data$selectedContri3, _$props$candidates, _$props$candidates2;
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Card header"), _cache[6] || (_cache[6] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"card-header pt-7\" id=\"kt_chat_contacts_header\"><!--begin::Form--><form class=\"w-100 position-relative\" autocomplete=\"off\"><!--begin::Icon--><i class=\"ki-duotone ki-magnifier fs-3 text-gray-500 position-absolute top-50 ms-5 translate-middle-y\"><span class=\"path1\"></span><span class=\"path2\"></span></i><!--end::Icon--><!--begin::Input--><input type=\"text\" class=\"form-control form-control-solid px-13\" name=\"search\" value=\"\" placeholder=\"Search by username or email...\"><!--end::Input--></form><!--end::Form--></div>", 1)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Card header"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Card body"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::List"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::User"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Add a condition to check in witch route, user is "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.contributorData, function (user) {
+    var _$data$selectedContri, _user$user;
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
+      "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["d-flex flex-row align-items-center", {
+        'user-active': $data.selectedContributor && $data.selectedContributor.user.id === user.user.id || user.id
+      }])
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Avatar"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_8, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.user.first_name.charAt(0).toUpperCase()), 1 /* TEXT */)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Avatar"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+      onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
+        return $options.selectContributor(user);
+      }, ["prevent"]),
+      href: "#",
+      "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(['fs-5 fw-bold text-gray-900 text-hover-primary mb-2', ((_$data$selectedContri = $data.selectedContributor) === null || _$data$selectedContri === void 0 || (_$data$selectedContri = _$data$selectedContri.user) === null || _$data$selectedContri === void 0 ? void 0 : _$data$selectedContri.id) === (user === null || user === void 0 || (_user$user = user.user) === null || _user$user === void 0 ? void 0 : _user$user.id)])
+    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.user.first_name) + " " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.user.last_name), 11 /* TEXT, CLASS, PROPS */, _hoisted_10), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.user.email), 1 /* TEXT */), _cache[3] || (_cache[3] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("small", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", null, "Contributor")], -1 /* HOISTED */))]), $data.unreadMap[user.user.id] ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_11, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.unreadMap[user.user.id]), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 2 /* CLASS */);
+  }), 256 /* UNKEYED_FRAGMENT */))])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.candidates, function (candidate) {
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
+      "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["d-flex align-items-center px-2 user-card", [$data.selectedUser && $data.selectedUser.id === candidate.user.id ? 'user-active' : '']])
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_13, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_14, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(candidate.user.first_name.charAt(0).toUpperCase()), 1 /* TEXT */)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_15, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+      onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
+        return $options.selectUser(candidate.user);
+      }, ["prevent"]),
+      href: "#",
+      "class": "fs-5 fw-bold text-gray-900 text-hover-primary mb-2"
+    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(candidate.user.first_name) + " " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(candidate.user.last_name), 9 /* TEXT, PROPS */, _hoisted_16), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(candidate.user.email), 1 /* TEXT */), _cache[4] || (_cache[4] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("small", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", null, "Candidate")], -1 /* HOISTED */))])], 2 /* CLASS */);
+  }), 256 /* UNKEYED_FRAGMENT */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Details"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Separator"), _cache[5] || (_cache[5] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+    "class": "separator separator-dashed d-none"
+  }, null, -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Separator")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::List")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Card body")])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_17, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_18, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_19, [$options.isFreelancerChatRoute ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_20, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", _hoisted_21, " Chat with " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.chatTitle), 1 /* TEXT */)])) : $options.isRecruiterChatRoute ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_22, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", _hoisted_23, " Chat with " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(((_$data$selectedContri2 = $data.selectedContributor) === null || _$data$selectedContri2 === void 0 ? void 0 : _$data$selectedContri2.name) || "Candidate"), 1 /* TEXT */)])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_24, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", _hoisted_25, " Chat with " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(((_$data$selectedContri3 = $data.selectedContributor) === null || _$data$selectedContri3 === void 0 ? void 0 : _$data$selectedContri3.name) || ((_$props$candidates = $props.candidates) === null || _$props$candidates === void 0 || (_$props$candidates = _$props$candidates.user) === null || _$props$candidates === void 0 ? void 0 : _$props$candidates.first_name) + " " + ((_$props$candidates2 = $props.candidates) === null || _$props$candidates2 === void 0 || (_$props$candidates2 = _$props$candidates2.user) === null || _$props$candidates2 === void 0 ? void 0 : _$props$candidates2.last_name) || "Candidate?"), 1 /* TEXT */)]))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_26, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.messages, function (msg) {
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
+      key: msg.id,
+      "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(msg.user_id === $props.currentUserId ? 'chat-message sent' : 'chat-message received')
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(msg.text), 1 /* TEXT */), _cache[7] || (_cache[7] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("small", _hoisted_27, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(new Date(msg.created_at).toLocaleTimeString()), 1 /* TEXT */)], 2 /* CLASS */);
+  }), 128 /* KEYED_FRAGMENT */)), $data.messages.length === 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_28, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_29, " Start a conversation with user " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.chatPlaceholderName) + " to begin your collaboration. Introduce yourself, share your ideas, or ask any questions to get things moving ", 1 /* TEXT */)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_30, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", _hoisted_31, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_32, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    type: "text",
+    "class": "form-control form-control-solid px-13",
+    name: "input",
+    value: "",
+    placeholder: "Type your message...",
+    "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
+      return $data.message = $event;
+    })
+  }, null, 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.message]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    "class": "btn-emojis",
+    ref: "emojiBtn",
+    onClick: _cache[1] || (_cache[1] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {
+      return $options.toggleEmojiPicker && $options.toggleEmojiPicker.apply($options, arguments);
+    }, ["prevent"]))
+  }, " 😀 ", 512 /* NEED_PATCH */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    "class": "btn btn-primary",
+    type: "submit",
+    onClick: _cache[2] || (_cache[2] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {
+      return $options.handleSubmit && $options.handleSubmit.apply($options, arguments);
+    }, ["prevent"]))
+  }, " Send ")])])])])])]);
+}
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/Chat-recruiterAll.vue?vue&type=template&id=960d8da0":
+/*!***************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/Chat-recruiterAll.vue?vue&type=template&id=960d8da0 ***!
+  \***************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   render: () => (/* binding */ render)
+/* harmony export */ });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+
+var _hoisted_1 = {
+  "class": "row"
+};
+var _hoisted_2 = {
+  "class": "col-lg-5 mb-5"
+};
+var _hoisted_3 = {
+  "class": "card card-flush"
+};
+var _hoisted_4 = {
+  "class": "card-body pt-5",
+  id: "kt_chat_contacts_body"
+};
+var _hoisted_5 = {
+  "class": "scroll-y me-n5 pe-5 h-lg-auto",
+  "data-kt-scroll": "true",
+  "data-kt-scroll-activate": "{default: false, lg: true}",
+  "data-kt-scroll-max-height": "auto",
+  "data-kt-scroll-dependencies": "#kt_header, #kt_app_header, #kt_toolbar, #kt_app_toolbar, #kt_footer, #kt_app_footer, #kt_chat_contacts_header",
+  "data-kt-scroll-wrappers": "#kt_content, #kt_app_content, #kt_chat_contacts_body",
+  "data-kt-scroll-offset": "5px",
+  style: {
+    "max-height": "362px"
+  }
+};
+var _hoisted_6 = {
+  "class": "d-flex d-flex__column py-4"
+};
+var _hoisted_7 = {
+  "class": "symbol symbol-45px symbol-circle"
+};
+var _hoisted_8 = {
+  "class": "symbol-label bg-light-danger text-danger fs-6 fw-bolder"
+};
+var _hoisted_9 = {
+  "class": "ms-5"
+};
+var _hoisted_10 = ["onClick"];
+var _hoisted_11 = {
+  key: 0,
+  "class": "badge badge-danger"
+};
+var _hoisted_12 = {
+  "class": "d-flex d-flex__column py-4"
+};
+var _hoisted_13 = {
+  "class": "symbol symbol-45px symbol-circle"
+};
+var _hoisted_14 = {
+  "class": "symbol-label bg-light-danger text-danger fs-6 fw-bolder"
+};
+var _hoisted_15 = {
+  "class": "ms-5"
+};
+var _hoisted_16 = ["onClick"];
+var _hoisted_17 = {
+  "class": "col-lg-7"
+};
+var _hoisted_18 = {
+  "class": "card h-100"
+};
+var _hoisted_19 = {
+  "class": "card-header"
+};
+var _hoisted_20 = {
+  key: 0
+};
+var _hoisted_21 = {
+  "class": "card-title"
+};
+var _hoisted_22 = {
+  key: 1
+};
+var _hoisted_23 = {
+  "class": "card-title"
+};
+var _hoisted_24 = {
+  key: 2
+};
+var _hoisted_25 = {
+  "class": "card-title"
+};
+var _hoisted_26 = {
+  "class": "card-body chat-box chat-box__contributor",
+  id: "chatBox"
+};
+var _hoisted_27 = {
+  "class": "text-muted"
+};
+var _hoisted_28 = {
+  key: 0
+};
+var _hoisted_29 = {
+  "class": "message-info"
+};
+var _hoisted_30 = {
+  "class": "card-footer"
+};
+var _hoisted_31 = {
+  id: "chatForm"
+};
+var _hoisted_32 = {
+  "class": "input-group"
+};
+function render(_ctx, _cache, $props, $setup, $data, $options) {
+  var _$data$selectedContri2, _$data$selectedContri3, _$props$candidates, _$props$candidates2;
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Card header"), _cache[6] || (_cache[6] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"card-header pt-7\" id=\"kt_chat_contacts_header\"><!--begin::Form--><form class=\"w-100 position-relative\" autocomplete=\"off\"><!--begin::Icon--><i class=\"ki-duotone ki-magnifier fs-3 text-gray-500 position-absolute top-50 ms-5 translate-middle-y\"><span class=\"path1\"></span><span class=\"path2\"></span></i><!--end::Icon--><!--begin::Input--><input type=\"text\" class=\"form-control form-control-solid px-13\" name=\"search\" value=\"\" placeholder=\"Search by username or email...\"><!--end::Input--></form><!--end::Form--></div>", 1)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Card header"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Card body"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::List"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::User"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Add a condition to check in witch route, user is "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.contributorData, function (user) {
+    var _$data$selectedContri, _user$user;
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
+      "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["d-flex flex-row align-items-center", {
+        'user-active': $data.selectedContributor && $data.selectedContributor.user.id === user.user.id || user.id
+      }])
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Avatar"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_8, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.user.first_name.charAt(0).toUpperCase()), 1 /* TEXT */)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Avatar"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+      onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
+        return $options.selectContributor(user);
+      }, ["prevent"]),
+      href: "#",
+      "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(['fs-5 fw-bold text-gray-900 text-hover-primary mb-2', ((_$data$selectedContri = $data.selectedContributor) === null || _$data$selectedContri === void 0 || (_$data$selectedContri = _$data$selectedContri.user) === null || _$data$selectedContri === void 0 ? void 0 : _$data$selectedContri.id) === (user === null || user === void 0 || (_user$user = user.user) === null || _user$user === void 0 ? void 0 : _user$user.id)])
+    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.user.first_name) + " " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.user.last_name), 11 /* TEXT, CLASS, PROPS */, _hoisted_10), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.user.email), 1 /* TEXT */), _cache[3] || (_cache[3] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("small", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", null, "Contributor")], -1 /* HOISTED */))]), $data.unreadMap[user.user.id] ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_11, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.unreadMap[user.user.id]), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 2 /* CLASS */);
+  }), 256 /* UNKEYED_FRAGMENT */))])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.candidates, function (candidate) {
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
+      "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["d-flex align-items-center px-2 user-card", [$data.selectedUser && $data.selectedUser.id === candidate.user.id ? 'user-active' : '']])
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_13, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_14, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(candidate.user.first_name.charAt(0).toUpperCase()), 1 /* TEXT */)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_15, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+      onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
+        return $options.selectUser(candidate.user);
+      }, ["prevent"]),
+      href: "#",
+      "class": "fs-5 fw-bold text-gray-900 text-hover-primary mb-2"
+    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(candidate.user.first_name) + " " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(candidate.user.last_name), 9 /* TEXT, PROPS */, _hoisted_16), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(candidate.user.email), 1 /* TEXT */), _cache[4] || (_cache[4] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("small", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", null, "Candidate")], -1 /* HOISTED */))])], 2 /* CLASS */);
+  }), 256 /* UNKEYED_FRAGMENT */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Details"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Separator"), _cache[5] || (_cache[5] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+    "class": "separator separator-dashed d-none"
+  }, null, -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Separator")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::List")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Card body")])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_17, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_18, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_19, [$options.isFreelancerChatRoute ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_20, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", _hoisted_21, " Chat with " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.chatTitle), 1 /* TEXT */)])) : $options.isRecruiterChatRoute ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_22, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", _hoisted_23, " Chat with " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(((_$data$selectedContri2 = $data.selectedContributor) === null || _$data$selectedContri2 === void 0 ? void 0 : _$data$selectedContri2.name) || "Candidate"), 1 /* TEXT */)])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_24, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", _hoisted_25, " Chat with " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(((_$data$selectedContri3 = $data.selectedContributor) === null || _$data$selectedContri3 === void 0 ? void 0 : _$data$selectedContri3.name) || ((_$props$candidates = $props.candidates) === null || _$props$candidates === void 0 || (_$props$candidates = _$props$candidates.user) === null || _$props$candidates === void 0 ? void 0 : _$props$candidates.first_name) + " " + ((_$props$candidates2 = $props.candidates) === null || _$props$candidates2 === void 0 || (_$props$candidates2 = _$props$candidates2.user) === null || _$props$candidates2 === void 0 ? void 0 : _$props$candidates2.last_name) || "Candidate?"), 1 /* TEXT */)]))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_26, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.messages, function (msg) {
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
+      key: msg.id,
+      "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(msg.user_id === $props.currentUserId ? 'chat-message sent' : 'chat-message received')
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(msg.text), 1 /* TEXT */), _cache[7] || (_cache[7] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("small", _hoisted_27, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(new Date(msg.created_at).toLocaleTimeString()), 1 /* TEXT */)], 2 /* CLASS */);
+  }), 128 /* KEYED_FRAGMENT */)), $data.messages.length === 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_28, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_29, " Start a conversation with user " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.chatPlaceholderName) + " to begin your collaboration. Introduce yourself, share your ideas, or ask any questions to get things moving ", 1 /* TEXT */)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_30, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", _hoisted_31, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_32, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    type: "text",
+    "class": "form-control form-control-solid px-13",
+    name: "input",
+    value: "",
+    placeholder: "Type your message...",
+    "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
+      return $data.message = $event;
+    })
+  }, null, 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.message]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    "class": "btn-emojis",
+    ref: "emojiBtn",
+    onClick: _cache[1] || (_cache[1] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {
+      return $options.toggleEmojiPicker && $options.toggleEmojiPicker.apply($options, arguments);
+    }, ["prevent"]))
+  }, " 😀 ", 512 /* NEED_PATCH */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    "class": "btn btn-primary",
+    type: "submit",
+    onClick: _cache[2] || (_cache[2] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {
+      return $options.handleSubmit && $options.handleSubmit.apply($options, arguments);
+    }, ["prevent"]))
+  }, " Send ")])])])])])]);
+}
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/Chat.vue?vue&type=template&id=0d66c37a":
 /*!**************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/Chat.vue?vue&type=template&id=0d66c37a ***!
@@ -24132,8 +25285,8 @@ var _hoisted_38 = {
   "class": "input-group"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  var _$data$selectedContri3, _$data$selectedContri4, _$props$candidate, _$props$candidate2, _$data$selectedContri5, _$data$selectedContri6, _$data$selectedContri7, _$data$selectedUser, _$data$selectedUser2, _$props$candidate3, _$props$candidate4;
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Card header"), _cache[5] || (_cache[5] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"card-header pt-7\" id=\"kt_chat_contacts_header\"><!--begin::Form--><form class=\"w-100 position-relative\" autocomplete=\"off\"><!--begin::Icon--><i class=\"ki-duotone ki-magnifier fs-3 text-gray-500 position-absolute top-50 ms-5 translate-middle-y\"><span class=\"path1\"></span><span class=\"path2\"></span></i><!--end::Icon--><!--begin::Input--><input type=\"text\" class=\"form-control form-control-solid px-13\" name=\"search\" value=\"\" placeholder=\"Search by username or email...\"><!--end::Input--></form><!--end::Form--></div>", 1)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Card header"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Card body"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::List"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::User"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Add a condition to check in witch route, user is "), $options.isFreelancerChatRoute ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.contributorData, function (user) {
+  var _$data$selectedContri3, _$data$selectedContri4, _$props$candidate, _$props$candidate2;
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Card header"), _cache[8] || (_cache[8] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"card-header pt-7\" id=\"kt_chat_contacts_header\"><!--begin::Form--><form class=\"w-100 position-relative\" autocomplete=\"off\"><!--begin::Icon--><i class=\"ki-duotone ki-magnifier fs-3 text-gray-500 position-absolute top-50 ms-5 translate-middle-y\"><span class=\"path1\"></span><span class=\"path2\"></span></i><!--end::Icon--><!--begin::Input--><input type=\"text\" class=\"form-control form-control-solid px-13\" name=\"search\" value=\"\" placeholder=\"Search by username or email...\"><!--end::Input--></form><!--end::Form--></div>", 1)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Card header"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Card body"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::List"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::User"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Add a condition to check in witch route, user is "), $options.isFreelancerChatRoute ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.contributorData, function (user) {
     var _$data$selectedContri, _user$user;
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
       "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["d-flex flex-row align-items-center", {
@@ -24145,7 +25298,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       }, ["prevent"]),
       href: "#",
       "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(['fs-5 fw-bold text-gray-900 text-hover-primary mb-2', ((_$data$selectedContri = $data.selectedContributor) === null || _$data$selectedContri === void 0 || (_$data$selectedContri = _$data$selectedContri.user) === null || _$data$selectedContri === void 0 ? void 0 : _$data$selectedContri.id) === (user === null || user === void 0 || (_user$user = user.user) === null || _user$user === void 0 ? void 0 : _user$user.id)])
-    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.user.first_name) + " " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.user.last_name), 11 /* TEXT, CLASS, PROPS */, _hoisted_11), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.user.email), 1 /* TEXT */)]), $data.unreadMap[user.user.id] ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_12, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.unreadMap[user.user.id]), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 2 /* CLASS */);
+    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.user.first_name) + " " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.user.last_name), 11 /* TEXT, CLASS, PROPS */, _hoisted_11), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.user.email), 1 /* TEXT */), _cache[4] || (_cache[4] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("small", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", null, "Contributor")], -1 /* HOISTED */))]), $data.unreadMap[user.user.id] ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_12, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.unreadMap[user.user.id]), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 2 /* CLASS */);
   }), 256 /* UNKEYED_FRAGMENT */))])])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_13, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_14, [$props.candidate && $props.candidate.user ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
     key: 0,
     "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["d-flex align-items-center px-2 user-card", [$data.selectedUser && $data.selectedUser.id === $props.candidate.user.id ? 'user-active' : '']])
@@ -24155,7 +25308,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }, ["prevent"])),
     href: "#",
     "class": "fs-5 fw-bold text-gray-900 text-hover-primary mb-2"
-  }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.candidate.user.first_name) + " " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.candidate.user.last_name), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.candidate.user.email), 1 /* TEXT */)])], 2 /* CLASS */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Details"), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.sortedContributors, function (user) {
+  }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.candidate.user.first_name) + " " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.candidate.user.last_name), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.candidate.user.email), 1 /* TEXT */), _cache[5] || (_cache[5] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("small", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", null, "Candidate")], -1 /* HOISTED */))])], 2 /* CLASS */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Details"), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.sortedContributors, function (user) {
     var _user$user2, _$data$selectedContri2, _user$user3;
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
       "class": "d-flex align-items-center",
@@ -24166,15 +25319,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       }, ["prevent"]),
       href: "#",
       "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(['fs-5 fw-bold text-gray-900 text-hover-primary mb-2', ((_$data$selectedContri2 = $data.selectedContributor) === null || _$data$selectedContri2 === void 0 || (_$data$selectedContri2 = _$data$selectedContri2.user) === null || _$data$selectedContri2 === void 0 ? void 0 : _$data$selectedContri2.id) === (user === null || user === void 0 || (_user$user3 = user.user) === null || _user$user3 === void 0 ? void 0 : _user$user3.id)])
-    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.name), 11 /* TEXT, CLASS, PROPS */, _hoisted_21), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.user.email), 1 /* TEXT */)]), $data.unreadMap[user.user.id] ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_22, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.unreadMap[user.user.id]), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Details")]);
-  }), 128 /* KEYED_FRAGMENT */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Details")])])), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Separator"), _cache[4] || (_cache[4] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.name), 11 /* TEXT, CLASS, PROPS */, _hoisted_21), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.user.email), 1 /* TEXT */), _cache[6] || (_cache[6] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("small", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", null, "Contributor")], -1 /* HOISTED */))]), $data.unreadMap[user.user.id] ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_22, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.unreadMap[user.user.id]), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Details")]);
+  }), 128 /* KEYED_FRAGMENT */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Details")])])), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Separator"), _cache[7] || (_cache[7] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
     "class": "separator separator-dashed d-none"
   }, null, -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Separator")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::List")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Card body")])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_23, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_24, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_25, [$options.isFreelancerChatRoute ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_26, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", _hoisted_27, " Chat with " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.chatTitle), 1 /* TEXT */)])) : $options.isRecruiterChatRoute ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_28, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", _hoisted_29, " Chat with " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(((_$data$selectedContri3 = $data.selectedContributor) === null || _$data$selectedContri3 === void 0 ? void 0 : _$data$selectedContri3.name) || "Candidate"), 1 /* TEXT */)])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_30, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", _hoisted_31, " Chat with " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(((_$data$selectedContri4 = $data.selectedContributor) === null || _$data$selectedContri4 === void 0 ? void 0 : _$data$selectedContri4.name) || ((_$props$candidate = $props.candidate) === null || _$props$candidate === void 0 || (_$props$candidate = _$props$candidate.user) === null || _$props$candidate === void 0 ? void 0 : _$props$candidate.first_name) + " " + ((_$props$candidate2 = $props.candidate) === null || _$props$candidate2 === void 0 || (_$props$candidate2 = _$props$candidate2.user) === null || _$props$candidate2 === void 0 ? void 0 : _$props$candidate2.last_name) || "Candidate?"), 1 /* TEXT */)]))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_32, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.messages, function (msg) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
       key: msg.id,
       "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(msg.user_id === $props.currentUserId ? 'chat-message sent' : 'chat-message received')
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(msg.text), 1 /* TEXT */), _cache[6] || (_cache[6] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("small", _hoisted_33, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(new Date(msg.created_at).toLocaleTimeString()), 1 /* TEXT */)], 2 /* CLASS */);
-  }), 128 /* KEYED_FRAGMENT */)), $data.messages.length === 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_34, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_35, " Start a conversation with user " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(((_$data$selectedContri5 = $data.selectedContributor) === null || _$data$selectedContri5 === void 0 || (_$data$selectedContri5 = _$data$selectedContri5.user) === null || _$data$selectedContri5 === void 0 ? void 0 : _$data$selectedContri5.first_name) + ' ' + ((_$data$selectedContri6 = $data.selectedContributor) === null || _$data$selectedContri6 === void 0 || (_$data$selectedContri6 = _$data$selectedContri6.user) === null || _$data$selectedContri6 === void 0 ? void 0 : _$data$selectedContri6.last_name) || ((_$data$selectedContri7 = $data.selectedContributor) === null || _$data$selectedContri7 === void 0 ? void 0 : _$data$selectedContri7.name) || ((_$data$selectedUser = $data.selectedUser) === null || _$data$selectedUser === void 0 ? void 0 : _$data$selectedUser.first_name) + ' ' + ((_$data$selectedUser2 = $data.selectedUser) === null || _$data$selectedUser2 === void 0 ? void 0 : _$data$selectedUser2.last_name) || ((_$props$candidate3 = $props.candidate) === null || _$props$candidate3 === void 0 || (_$props$candidate3 = _$props$candidate3.user) === null || _$props$candidate3 === void 0 ? void 0 : _$props$candidate3.first_name) + ' ' + ((_$props$candidate4 = $props.candidate) === null || _$props$candidate4 === void 0 || (_$props$candidate4 = _$props$candidate4.user) === null || _$props$candidate4 === void 0 ? void 0 : _$props$candidate4.last_name) || "Unknown User") + " to begin your collaboration. Introduce yourself, share your ideas, or ask any questions to get things moving ", 1 /* TEXT */)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_36, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", _hoisted_37, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_38, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(msg.text), 1 /* TEXT */), _cache[9] || (_cache[9] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("small", _hoisted_33, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(new Date(msg.created_at).toLocaleTimeString()), 1 /* TEXT */)], 2 /* CLASS */);
+  }), 128 /* KEYED_FRAGMENT */)), $data.messages.length === 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_34, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_35, " Start a conversation with user " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.chatPlaceholderName) + " to begin your collaboration. Introduce yourself, share your ideas, or ask any questions to get things moving ", 1 /* TEXT */)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_36, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", _hoisted_37, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_38, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     type: "text",
     "class": "form-control form-control-solid px-13",
     name: "input",
@@ -24317,9 +25470,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Notification_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/Notification.vue */ "./resources/js/components/Notification.vue");
 /* harmony import */ var _components_NotificationFreelancer_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/NotificationFreelancer.vue */ "./resources/js/components/NotificationFreelancer.vue");
 /* harmony import */ var _components_NotificationRecruiter_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/NotificationRecruiter.vue */ "./resources/js/components/NotificationRecruiter.vue");
-/* harmony import */ var laravel_echo__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! laravel-echo */ "./node_modules/laravel-echo/dist/echo.js");
-/* harmony import */ var _eventBus__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./eventBus */ "./resources/js/eventBus.js");
+/* harmony import */ var _components_Chat_freelancerAll_vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/Chat-freelancerAll.vue */ "./resources/js/components/Chat-freelancerAll.vue");
+/* harmony import */ var _components_Chat_recruiterAll_vue__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/Chat-recruiterAll.vue */ "./resources/js/components/Chat-recruiterAll.vue");
+/* harmony import */ var laravel_echo__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! laravel-echo */ "./node_modules/laravel-echo/dist/echo.js");
+/* harmony import */ var _eventBus__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./eventBus */ "./resources/js/eventBus.js");
 /* provided dependency */ var process = __webpack_require__(/*! process/browser.js */ "./node_modules/process/browser.js");
+
+
 
 
 
@@ -24331,7 +25488,7 @@ __webpack_require__.r(__webpack_exports__);
  // OBAVEZNO!
 
 window.Pusher = __webpack_require__(/*! pusher-js */ "./node_modules/pusher-js/dist/web/pusher.js");
-window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_7__["default"]({
+window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_9__["default"]({
   broadcaster: 'pusher',
   key: process.env.MIX_PUSHER_APP_KEY || 'localkey',
   wsHost: window.location.hostname,
@@ -24353,6 +25510,8 @@ window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_7__["default"]({
 var app = (0,vue__WEBPACK_IMPORTED_MODULE_1__.createApp)({});
 app.component('chat-component', _components_Chat_vue__WEBPACK_IMPORTED_MODULE_2__["default"]);
 app.component('chat-component-contributor', _components_Chat_contributor_vue__WEBPACK_IMPORTED_MODULE_3__["default"]);
+app.component('chat-component-freelancer-all', _components_Chat_freelancerAll_vue__WEBPACK_IMPORTED_MODULE_7__["default"]);
+app.component('chat-component-recruiter-all', _components_Chat_recruiterAll_vue__WEBPACK_IMPORTED_MODULE_8__["default"]);
 app.mount('#app');
 var notifApp = (0,vue__WEBPACK_IMPORTED_MODULE_1__.createApp)({});
 notifApp.component('component-notification', _components_Notification_vue__WEBPACK_IMPORTED_MODULE_4__["default"]);
@@ -24377,7 +25536,7 @@ window.onload = function () {
       // Ako nismo na chatu, pošalji badge event
       if (!window.location.pathname.includes('/contributor/chats') || !window.location.pathname.includes('/recruiter/chats')) {
         console.log('📨 Nova poruka stigla dok nismo u chatu');
-        _eventBus__WEBPACK_IMPORTED_MODULE_8__["default"].emit('increment-navbar-badge');
+        _eventBus__WEBPACK_IMPORTED_MODULE_10__["default"].emit('increment-navbar-badge');
       }
     });
   }
@@ -31028,7 +32187,55 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.chat-box__contributor {\n    background: #f5f8fa !important;\n    height: 400px;\n    overflow-y: auto;\n    border: 1px solid #e4e6ef;\n}\n.user-card {\n    background-color: transparent;\n}\n.user-card:hover {\n    background-color: #f5f5f5;\n    cursor: pointer;\n    transition: background-color 0.2s ease;\n}\n.user-active {\n    background: #f5f8fa !important;\n}\n.btn-emojis {\n    background: transparent;\n    border: none;\n    position: absolute;\n    right: 80px;\n    top: 11px;\n    z-index: 9999 !important;\n}\n.chat-message.sent {\n    text-align: right;\n}\n.chat-message.sent p {\n    background-color: #0d6efd;\n    color: #fff;\n}\n.chat-message.received {\n    text-align: left;\n}\n.chat-message.received p {\n    background-color: #e4e6ef !important;\n    color: #000;\n}\n.chat-message p {\n    display: inline-block;\n    padding: 10px 15px;\n    border-radius: 15px;\n    max-width: 70%;\n}\n.message-info {\n    position: absolute;\n    bottom: 90px;\n    left: 21px;\n    background-color: #e4e6ef !important;\n    padding: 10px 15px;\n    border-radius: 15px;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.chat-box__contributor {\r\n    background: #f5f8fa !important;\r\n    height: 400px;\r\n    overflow-y: auto;\r\n    border: 1px solid #e4e6ef;\n}\n.user-card {\r\n    background-color: transparent;\n}\n.user-card:hover {\r\n    background-color: #f5f5f5;\r\n    cursor: pointer;\r\n    transition: background-color 0.2s ease;\n}\n.user-active {\r\n    background: #f5f8fa !important;\n}\n.btn-emojis {\r\n    background: transparent;\r\n    border: none;\r\n    position: absolute;\r\n    right: 80px;\r\n    top: 11px;\r\n    z-index: 9999 !important;\n}\n.chat-message.sent {\r\n    text-align: right;\n}\n.chat-message.sent p {\r\n    background-color: #0d6efd;\r\n    color: #fff;\n}\n.chat-message.received {\r\n    text-align: left;\n}\n.chat-message.received p {\r\n    background-color: #e4e6ef !important;\r\n    color: #000;\n}\n.chat-message p {\r\n    display: inline-block;\r\n    padding: 10px 15px;\r\n    border-radius: 15px;\r\n    max-width: 70%;\n}\n.message-info {\r\n    position: absolute;\r\n    bottom: 90px;\r\n    left: 21px;\r\n    background-color: #e4e6ef !important;\r\n    padding: 10px 15px;\r\n    border-radius: 15px;\n}\r\n", ""]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/Chat-freelancerAll.vue?vue&type=style&index=0&id=4738e494&lang=css":
+/*!*************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/Chat-freelancerAll.vue?vue&type=style&index=0&id=4738e494&lang=css ***!
+  \*************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__);
+// Imports
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, "\n.user-active {\r\n    background: #f5f8fa !important;\n}\n.active-contributor {\r\n    background: #f5f8fa !important;\n}\n.btn-emojis {\r\n    background: transparent;\r\n    border: none;\r\n    position: absolute;\r\n    right: 80px;\r\n    top: 11px;\r\n    z-index: 9999 !important;\n}\n.message-info {\r\n    position: absolute;\r\n    bottom: 90px;\r\n    left: 21px;\r\n    background-color: #e4e6ef !important;\r\n    padding: 10px 15px;\r\n    border-radius: 15px;\n}\r\n", ""]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/Chat-recruiterAll.vue?vue&type=style&index=0&id=960d8da0&lang=css":
+/*!************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/Chat-recruiterAll.vue?vue&type=style&index=0&id=960d8da0&lang=css ***!
+  \************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__);
+// Imports
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, "\n.user-active {\r\n    background: #f5f8fa !important;\n}\n.active-contributor {\r\n    background: #f5f8fa !important;\n}\n.btn-emojis {\r\n    background: transparent;\r\n    border: none;\r\n    position: absolute;\r\n    right: 80px;\r\n    top: 11px;\r\n    z-index: 9999 !important;\n}\n.message-info {\r\n    position: absolute;\r\n    bottom: 90px;\r\n    left: 21px;\r\n    background-color: #e4e6ef !important;\r\n    padding: 10px 15px;\r\n    border-radius: 15px;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -31052,7 +32259,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.user-active {\n    background: #f5f8fa !important;\n}\n.active-contributor {\n    background: #f5f8fa !important;\n}\n.btn-emojis {\n    background: transparent;\n    border: none;\n    position: absolute;\n    right: 80px;\n    top: 11px;\n    z-index: 9999 !important;\n}\n.message-info {\n    position: absolute;\n    bottom: 90px;\n    left: 21px;\n    background-color: #e4e6ef !important;\n    padding: 10px 15px;\n    border-radius: 15px;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.user-active {\r\n    background: #f5f8fa !important;\n}\n.active-contributor {\r\n    background: #f5f8fa !important;\n}\n.btn-emojis {\r\n    background: transparent;\r\n    border: none;\r\n    position: absolute;\r\n    right: 80px;\r\n    top: 11px;\r\n    z-index: 9999 !important;\n}\n.message-info {\r\n    position: absolute;\r\n    bottom: 90px;\r\n    left: 21px;\r\n    background-color: #e4e6ef !important;\r\n    padding: 10px 15px;\r\n    border-radius: 15px;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -31076,7 +32283,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.logo__notification[data-v-6a4ce154] {\n  display: flex;\n    flex-direction: column;\n    justify-content: center;\n}\n\n\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.logo__notification[data-v-6a4ce154] {\r\n  display: flex;\r\n    flex-direction: column;\r\n    justify-content: center;\n}\r\n\r\n\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -31100,7 +32307,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.notification-wrapper{\n    position: relative;\n}\n.notification-wrapper .nav-icon .badge{\n    position: absolute;\n    top: -10px;\n    right: -18px;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.notification-wrapper{\r\n    position: relative;\n}\n.notification-wrapper .nav-icon .badge{\r\n    position: absolute;\r\n    top: -10px;\r\n    right: -18px;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -31124,7 +32331,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.logo__notification[data-v-71160a65] {\n  display: flex;\n    flex-direction: column;\n    justify-content: center;\n}\n\n\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.logo__notification[data-v-71160a65] {\r\n  display: flex;\r\n    flex-direction: column;\r\n    justify-content: center;\n}\r\n\r\n\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -53605,6 +54812,66 @@ var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js
 
 /***/ }),
 
+/***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/Chat-freelancerAll.vue?vue&type=style&index=0&id=4738e494&lang=css":
+/*!*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/Chat-freelancerAll.vue?vue&type=style&index=0&id=4738e494&lang=css ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_dist_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Chat_freelancerAll_vue_vue_type_style_index_0_id_4738e494_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../node_modules/vue-loader/dist/stylePostLoader.js!../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./Chat-freelancerAll.vue?vue&type=style&index=0&id=4738e494&lang=css */ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/Chat-freelancerAll.vue?vue&type=style&index=0&id=4738e494&lang=css");
+
+            
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_dist_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Chat_freelancerAll_vue_vue_type_style_index_0_id_4738e494_lang_css__WEBPACK_IMPORTED_MODULE_1__["default"], options);
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_dist_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Chat_freelancerAll_vue_vue_type_style_index_0_id_4738e494_lang_css__WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
+
+/***/ }),
+
+/***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/Chat-recruiterAll.vue?vue&type=style&index=0&id=960d8da0&lang=css":
+/*!****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/Chat-recruiterAll.vue?vue&type=style&index=0&id=960d8da0&lang=css ***!
+  \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_dist_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Chat_recruiterAll_vue_vue_type_style_index_0_id_960d8da0_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../node_modules/vue-loader/dist/stylePostLoader.js!../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./Chat-recruiterAll.vue?vue&type=style&index=0&id=960d8da0&lang=css */ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/Chat-recruiterAll.vue?vue&type=style&index=0&id=960d8da0&lang=css");
+
+            
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_dist_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Chat_recruiterAll_vue_vue_type_style_index_0_id_960d8da0_lang_css__WEBPACK_IMPORTED_MODULE_1__["default"], options);
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_dist_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Chat_recruiterAll_vue_vue_type_style_index_0_id_960d8da0_lang_css__WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
+
+/***/ }),
+
 /***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/Chat.vue?vue&type=style&index=0&id=0d66c37a&lang=css":
 /*!***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/Chat.vue?vue&type=style&index=0&id=0d66c37a&lang=css ***!
@@ -54057,6 +55324,68 @@ if (false) {}
 
 /***/ }),
 
+/***/ "./resources/js/components/Chat-freelancerAll.vue":
+/*!********************************************************!*\
+  !*** ./resources/js/components/Chat-freelancerAll.vue ***!
+  \********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _Chat_freelancerAll_vue_vue_type_template_id_4738e494__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Chat-freelancerAll.vue?vue&type=template&id=4738e494 */ "./resources/js/components/Chat-freelancerAll.vue?vue&type=template&id=4738e494");
+/* harmony import */ var _Chat_freelancerAll_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Chat-freelancerAll.vue?vue&type=script&lang=js */ "./resources/js/components/Chat-freelancerAll.vue?vue&type=script&lang=js");
+/* harmony import */ var _Chat_freelancerAll_vue_vue_type_style_index_0_id_4738e494_lang_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Chat-freelancerAll.vue?vue&type=style&index=0&id=4738e494&lang=css */ "./resources/js/components/Chat-freelancerAll.vue?vue&type=style&index=0&id=4738e494&lang=css");
+/* harmony import */ var _node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+
+
+
+
+;
+
+
+const __exports__ = /*#__PURE__*/(0,_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(_Chat_freelancerAll_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Chat_freelancerAll_vue_vue_type_template_id_4738e494__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/js/components/Chat-freelancerAll.vue"]])
+/* hot reload */
+if (false) {}
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__exports__);
+
+/***/ }),
+
+/***/ "./resources/js/components/Chat-recruiterAll.vue":
+/*!*******************************************************!*\
+  !*** ./resources/js/components/Chat-recruiterAll.vue ***!
+  \*******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _Chat_recruiterAll_vue_vue_type_template_id_960d8da0__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Chat-recruiterAll.vue?vue&type=template&id=960d8da0 */ "./resources/js/components/Chat-recruiterAll.vue?vue&type=template&id=960d8da0");
+/* harmony import */ var _Chat_recruiterAll_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Chat-recruiterAll.vue?vue&type=script&lang=js */ "./resources/js/components/Chat-recruiterAll.vue?vue&type=script&lang=js");
+/* harmony import */ var _Chat_recruiterAll_vue_vue_type_style_index_0_id_960d8da0_lang_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Chat-recruiterAll.vue?vue&type=style&index=0&id=960d8da0&lang=css */ "./resources/js/components/Chat-recruiterAll.vue?vue&type=style&index=0&id=960d8da0&lang=css");
+/* harmony import */ var _node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+
+
+
+
+;
+
+
+const __exports__ = /*#__PURE__*/(0,_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(_Chat_recruiterAll_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Chat_recruiterAll_vue_vue_type_template_id_960d8da0__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/js/components/Chat-recruiterAll.vue"]])
+/* hot reload */
+if (false) {}
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__exports__);
+
+/***/ }),
+
 /***/ "./resources/js/components/Chat.vue":
 /*!******************************************!*\
   !*** ./resources/js/components/Chat.vue ***!
@@ -54197,6 +55526,38 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/Chat-freelancerAll.vue?vue&type=script&lang=js":
+/*!********************************************************************************!*\
+  !*** ./resources/js/components/Chat-freelancerAll.vue?vue&type=script&lang=js ***!
+  \********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Chat_freelancerAll_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Chat_freelancerAll_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./Chat-freelancerAll.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/Chat-freelancerAll.vue?vue&type=script&lang=js");
+ 
+
+/***/ }),
+
+/***/ "./resources/js/components/Chat-recruiterAll.vue?vue&type=script&lang=js":
+/*!*******************************************************************************!*\
+  !*** ./resources/js/components/Chat-recruiterAll.vue?vue&type=script&lang=js ***!
+  \*******************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Chat_recruiterAll_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Chat_recruiterAll_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./Chat-recruiterAll.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/Chat-recruiterAll.vue?vue&type=script&lang=js");
+ 
+
+/***/ }),
+
 /***/ "./resources/js/components/Chat.vue?vue&type=script&lang=js":
 /*!******************************************************************!*\
   !*** ./resources/js/components/Chat.vue?vue&type=script&lang=js ***!
@@ -54277,6 +55638,38 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/Chat-freelancerAll.vue?vue&type=template&id=4738e494":
+/*!**************************************************************************************!*\
+  !*** ./resources/js/components/Chat-freelancerAll.vue?vue&type=template&id=4738e494 ***!
+  \**************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   render: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Chat_freelancerAll_vue_vue_type_template_id_4738e494__WEBPACK_IMPORTED_MODULE_0__.render)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Chat_freelancerAll_vue_vue_type_template_id_4738e494__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./Chat-freelancerAll.vue?vue&type=template&id=4738e494 */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/Chat-freelancerAll.vue?vue&type=template&id=4738e494");
+
+
+/***/ }),
+
+/***/ "./resources/js/components/Chat-recruiterAll.vue?vue&type=template&id=960d8da0":
+/*!*************************************************************************************!*\
+  !*** ./resources/js/components/Chat-recruiterAll.vue?vue&type=template&id=960d8da0 ***!
+  \*************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   render: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Chat_recruiterAll_vue_vue_type_template_id_960d8da0__WEBPACK_IMPORTED_MODULE_0__.render)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Chat_recruiterAll_vue_vue_type_template_id_960d8da0__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./Chat-recruiterAll.vue?vue&type=template&id=960d8da0 */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/Chat-recruiterAll.vue?vue&type=template&id=960d8da0");
+
+
+/***/ }),
+
 /***/ "./resources/js/components/Chat.vue?vue&type=template&id=0d66c37a":
 /*!************************************************************************!*\
   !*** ./resources/js/components/Chat.vue?vue&type=template&id=0d66c37a ***!
@@ -54350,6 +55743,32 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_cjs_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_dist_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Chat_contributor_vue_vue_type_style_index_0_id_30d3f151_lang_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/style-loader/dist/cjs.js!../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../node_modules/vue-loader/dist/stylePostLoader.js!../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./Chat-contributor.vue?vue&type=style&index=0&id=30d3f151&lang=css */ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/Chat-contributor.vue?vue&type=style&index=0&id=30d3f151&lang=css");
+
+
+/***/ }),
+
+/***/ "./resources/js/components/Chat-freelancerAll.vue?vue&type=style&index=0&id=4738e494&lang=css":
+/*!****************************************************************************************************!*\
+  !*** ./resources/js/components/Chat-freelancerAll.vue?vue&type=style&index=0&id=4738e494&lang=css ***!
+  \****************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_dist_cjs_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_dist_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Chat_freelancerAll_vue_vue_type_style_index_0_id_4738e494_lang_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/style-loader/dist/cjs.js!../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../node_modules/vue-loader/dist/stylePostLoader.js!../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./Chat-freelancerAll.vue?vue&type=style&index=0&id=4738e494&lang=css */ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/Chat-freelancerAll.vue?vue&type=style&index=0&id=4738e494&lang=css");
+
+
+/***/ }),
+
+/***/ "./resources/js/components/Chat-recruiterAll.vue?vue&type=style&index=0&id=960d8da0&lang=css":
+/*!***************************************************************************************************!*\
+  !*** ./resources/js/components/Chat-recruiterAll.vue?vue&type=style&index=0&id=960d8da0&lang=css ***!
+  \***************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_dist_cjs_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_dist_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Chat_recruiterAll_vue_vue_type_style_index_0_id_960d8da0_lang_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/style-loader/dist/cjs.js!../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../node_modules/vue-loader/dist/stylePostLoader.js!../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./Chat-recruiterAll.vue?vue&type=style&index=0&id=960d8da0&lang=css */ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/Chat-recruiterAll.vue?vue&type=style&index=0&id=960d8da0&lang=css");
 
 
 /***/ }),
@@ -54673,7 +56092,7 @@ ${codeFrame}` : message);
 "use strict";
 /* provided dependency */ var process = __webpack_require__(/*! process/browser.js */ "./node_modules/process/browser.js");
 /* provided dependency */ var Buffer = __webpack_require__(/*! buffer */ "./node_modules/buffer/index.js")["Buffer"];
-/*! Axios v1.8.1 Copyright (c) 2025 Matt Zabriskie and contributors */
+/*! Axios v1.9.0 Copyright (c) 2025 Matt Zabriskie and contributors */
 
 
 function bind(fn, thisArg) {
@@ -54686,6 +56105,7 @@ function bind(fn, thisArg) {
 
 const {toString} = Object.prototype;
 const {getPrototypeOf} = Object;
+const {iterator, toStringTag} = Symbol;
 
 const kindOf = (cache => thing => {
     const str = toString.call(thing);
@@ -54812,7 +56232,7 @@ const isPlainObject = (val) => {
   }
 
   const prototype = getPrototypeOf(val);
-  return (prototype === null || prototype === Object.prototype || Object.getPrototypeOf(prototype) === null) && !(Symbol.toStringTag in val) && !(Symbol.iterator in val);
+  return (prototype === null || prototype === Object.prototype || Object.getPrototypeOf(prototype) === null) && !(toStringTag in val) && !(iterator in val);
 };
 
 /**
@@ -55163,13 +56583,13 @@ const isTypedArray = (TypedArray => {
  * @returns {void}
  */
 const forEachEntry = (obj, fn) => {
-  const generator = obj && obj[Symbol.iterator];
+  const generator = obj && obj[iterator];
 
-  const iterator = generator.call(obj);
+  const _iterator = generator.call(obj);
 
   let result;
 
-  while ((result = iterator.next()) && !result.done) {
+  while ((result = _iterator.next()) && !result.done) {
     const pair = result.value;
     fn.call(obj, pair[0], pair[1]);
   }
@@ -55290,7 +56710,7 @@ const toFiniteNumber = (value, defaultValue) => {
  * @returns {boolean}
  */
 function isSpecCompliantForm(thing) {
-  return !!(thing && isFunction(thing.append) && thing[Symbol.toStringTag] === 'FormData' && thing[Symbol.iterator]);
+  return !!(thing && isFunction(thing.append) && thing[toStringTag] === 'FormData' && thing[iterator]);
 }
 
 const toJSONObject = (obj) => {
@@ -55359,6 +56779,10 @@ const asap = typeof queueMicrotask !== 'undefined' ?
 
 // *********************
 
+
+const isIterable = (thing) => thing != null && isFunction(thing[iterator]);
+
+
 var utils$1 = {
   isArray,
   isArrayBuffer,
@@ -55414,7 +56838,8 @@ var utils$1 = {
   isAsyncFn,
   isThenable,
   setImmediate: _setImmediate,
-  asap
+  asap,
+  isIterable
 };
 
 /**
@@ -56399,10 +57824,18 @@ class AxiosHeaders {
       setHeaders(header, valueOrRewrite);
     } else if(utils$1.isString(header) && (header = header.trim()) && !isValidHeaderName(header)) {
       setHeaders(parseHeaders(header), valueOrRewrite);
-    } else if (utils$1.isHeaders(header)) {
-      for (const [key, value] of header.entries()) {
-        setHeader(value, key, rewrite);
+    } else if (utils$1.isObject(header) && utils$1.isIterable(header)) {
+      let obj = {}, dest, key;
+      for (const entry of header) {
+        if (!utils$1.isArray(entry)) {
+          throw TypeError('Object iterator must return a key-value pair');
+        }
+
+        obj[key = entry[0]] = (dest = obj[key]) ?
+          (utils$1.isArray(dest) ? [...dest, entry[1]] : [dest, entry[1]]) : entry[1];
       }
+
+      setHeaders(obj, valueOrRewrite);
     } else {
       header != null && setHeader(valueOrRewrite, header, rewrite);
     }
@@ -56542,6 +57975,10 @@ class AxiosHeaders {
 
   toString() {
     return Object.entries(this.toJSON()).map(([header, value]) => header + ': ' + value).join('\n');
+  }
+
+  getSetCookie() {
+    return this.get("set-cookie") || [];
   }
 
   get [Symbol.toStringTag]() {
@@ -56903,7 +58340,7 @@ function combineURLs(baseURL, relativeURL) {
  */
 function buildFullPath(baseURL, requestedURL, allowAbsoluteUrls) {
   let isRelativeUrl = !isAbsoluteURL(requestedURL);
-  if (baseURL && isRelativeUrl || allowAbsoluteUrls == false) {
+  if (baseURL && (isRelativeUrl || allowAbsoluteUrls == false)) {
     return combineURLs(baseURL, requestedURL);
   }
   return requestedURL;
@@ -57018,7 +58455,7 @@ var resolveConfig = (config) => {
 
   newConfig.headers = headers = AxiosHeaders$1.from(headers);
 
-  newConfig.url = buildURL(buildFullPath(newConfig.baseURL, newConfig.url), config.params, config.paramsSerializer);
+  newConfig.url = buildURL(buildFullPath(newConfig.baseURL, newConfig.url, newConfig.allowAbsoluteUrls), config.params, config.paramsSerializer);
 
   // HTTP basic authentication
   if (auth) {
@@ -57583,7 +59020,7 @@ var fetchAdapter = isFetchSupported && (async (config) => {
   } catch (err) {
     unsubscribe && unsubscribe();
 
-    if (err && err.name === 'TypeError' && /fetch/i.test(err.message)) {
+    if (err && err.name === 'TypeError' && /Load failed|fetch/i.test(err.message)) {
       throw Object.assign(
         new AxiosError('Network Error', AxiosError.ERR_NETWORK, config, request),
         {
@@ -57743,7 +59180,7 @@ function dispatchRequest(config) {
   });
 }
 
-const VERSION = "1.8.1";
+const VERSION = "1.9.0";
 
 const validators$1 = {};
 
@@ -57851,7 +59288,7 @@ const validators = validator.validators;
  */
 class Axios {
   constructor(instanceConfig) {
-    this.defaults = instanceConfig;
+    this.defaults = instanceConfig || {};
     this.interceptors = {
       request: new InterceptorManager$1(),
       response: new InterceptorManager$1()

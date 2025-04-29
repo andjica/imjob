@@ -24,14 +24,13 @@
                 <!--begin::Card body-->
                 <div class="card-body pt-5" id="kt_chat_contacts_body">
                     <!--begin::List-->
-                    <div class="scroll-y me-n5 pe-5 h-200px h-lg-auto" data-kt-scroll="true"
+                    <div class="scroll-y me-n5 pe-5 h-lg-auto" data-kt-scroll="true"
                         data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto"
                         data-kt-scroll-dependencies="#kt_header, #kt_app_header, #kt_toolbar, #kt_app_toolbar, #kt_footer, #kt_app_footer, #kt_chat_contacts_header"
                         data-kt-scroll-wrappers="#kt_content, #kt_app_content, #kt_chat_contacts_body"
                         data-kt-scroll-offset="5px" style="max-height: 362px">
                         <!--end::User-->
                         <!-- Add a condition to check in witch route, user is -->
-                        <div v-if="isFreelancerChatRoute">
                             <div class="d-flex d-flex__column py-4">
                                 <div v-for="user in contributorData" class="d-flex flex-row align-items-center" :class="{
                                     'user-active':
@@ -70,14 +69,13 @@
                             </div>
                         </div>
 
-                        <div v-else>
                             <div class="d-flex d-flex__column py-4">
-                                <div class="d-flex align-items-center px-2 user-card" :class="[
+                                <div v-for="candidate in candidates" class="d-flex align-items-center px-2 user-card" :class="[
                                     selectedUser &&
                                         selectedUser.id === candidate.user.id
                                         ? 'user-active'
                                         : '',
-                                ]" v-if="candidate && candidate.user">
+                                ]">
                                     <div class="symbol symbol-45px symbol-circle">
                                         <span class="symbol-label bg-light-danger text-danger fs-6 fw-bolder">{{
                                             candidate.user.first_name
@@ -98,40 +96,6 @@
                                     </div>
                                 </div>
                                 <!--begin::Details-->
-                                <div class="d-flex align-items-center" v-for="user in sortedContributors"
-                                    :key="user?.user?.id || user?.id">
-                                    <!--begin::Avatar-->
-                                    <div class="symbol symbol-45px symbol-circle">
-                                        <span class="symbol-label bg-light-danger text-danger fs-6 fw-bolder">{{
-                                            user.name
-                                                .charAt(0)
-                                                .toUpperCase()
-                                        }}</span>
-                                    </div>
-                                    <!--end::Avatar-->
-                                    <!--begin::Details-->
-                                    <div class="ms-5">
-                                        <a @click.prevent="
-                                            selectContributor(user)
-                                            " href="#" :class="[
-                                                'fs-5 fw-bold text-gray-900 text-hover-primary mb-2',
-                                                selectedContributor?.user
-                                                    ?.id === user?.user?.id,
-                                            ]">
-                                            {{ user.name }}
-                                        </a>
-
-                                        <p>{{ user.user.email }}</p>
-                                        <small><i>Contributor</i></small>
-                                    </div>
-                                    <span v-if="unreadMap[user.user.id]" class="badge badge-danger">{{
-                                        unreadMap[user.user.id]
-                                        }}</span>
-                                    <!--end::Details-->
-                                </div>
-                                <!--end::Details-->
-                            </div>
-                        </div>
                         <!--begin::Separator-->
                         <div class="separator separator-dashed d-none"></div>
                         <!--end::Separator-->
@@ -165,9 +129,9 @@
                             Chat with
                             {{
                                 selectedContributor?.name ||
-                                candidate?.user?.first_name +
+                                candidates?.user?.first_name +
                                 " " +
-                                candidate?.user?.last_name ||
+                                candidates?.user?.last_name ||
                                 "Candidate?"
                             }}
                         </h3>
@@ -223,7 +187,7 @@ import emitter from "../eventBus";
 export default {
     props: {
         contributors: Array,
-        candidate: {
+        candidates: {
             type: Object,
             required: true,
         },
@@ -271,8 +235,8 @@ export default {
             if (this.selectedUser?.first_name || this.selectedUser?.last_name) {
                 return `${this.selectedUser.first_name || ''} ${this.selectedUser.last_name || ''}`.trim();
             }
-            if (this.candidate?.user?.first_name || this.candidate?.user?.last_name) {
-                return `${this.candidate.user.first_name || ''} ${this.candidate.user.last_name || ''}`.trim();
+            if (this.candidates?.user?.first_name || this.candidates?.user?.last_name) {
+                return `${this.candidates.user.first_name || ''} ${this.candidates.user.last_name || ''}`.trim();
             }
             return "Unknown User";
         },
@@ -431,8 +395,8 @@ export default {
                 receiver_id: receiverId,
             };
 
-            if (this.candidate?.candidate_id) {
-                payload.candidate_id = this.candidate.candidate_id;
+            if (this.candidates?.candidate_id) {
+                payload.candidate_id = this.candidates.candidate_id;
             }
 
             fetch("/web/messages", {
@@ -477,7 +441,7 @@ export default {
         },
     },
     mounted() {
-        console.log("Candidate: ",this.candidate);
+        console.log("Candidate: ",this.candidates);
         console.log("Contributor: ",this.contributors);
         // da napravim upit da se proveri u contributeru da li postoji objekat user ako da prosledi se njegovi podaci ako ne onda se prosledi
         if (this.contributors && this.contributors.length > 0) {
@@ -526,10 +490,10 @@ export default {
             const parsed = JSON.parse(lastUser);
             this.selectedUser = parsed;
             this.fetchMessages(parsed.id);
-        } else if (this.candidate && this.candidate.user) {
-            this.selectedUser = this.candidate.user;
-            this.fetchMessages(this.candidate.user.id);
-            localStorage.setItem("lastChatUser", JSON.stringify(this.candidate.user));
+        } else if (this.candidates && this.candidates.user) {
+            this.selectedUser = this.candidates.user;
+            this.fetchMessages(this.candidates.user.id);
+            localStorage.setItem("lastChatUser", JSON.stringify(this.candidates.user));
         } else if (this.contributorData.length > 0) {
             // automatski selektuj prvog iz contributorData
             const firstContributor = this.contributorData[0];

@@ -221,7 +221,7 @@ class RecruiterServices implements RecruiterInterface
                       ->where('candidate_job.status', 'accept');
             })
             ->get();
-        return dd($candidates);
+        return $candidates;
     }
         
 }

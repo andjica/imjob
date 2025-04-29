@@ -14,7 +14,7 @@
             </a>
 
             <!-- Search Recruiters Button -->
-            <a href="" class="btn btn-lg btn-outline-primary fw-bold px-5">
+            <a href="{{asset('contributor/find/recruiters')}}" class="btn btn-lg btn-outline-primary fw-bold px-5">
                 <i class="fas fa-search me-2"></i> Search Recruiters
             </a>
         </div>

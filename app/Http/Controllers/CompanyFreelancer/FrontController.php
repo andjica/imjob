@@ -390,10 +390,9 @@ class FrontController extends Controller
             ->with('user')
             ->wherePivot('status', ContributorRecruiter::ACTIVE)
             ->get();
-    
-        
-        return dd($this->recruiterServices->getAcceptedCandidate());
-        // return dd($contributors);
-        return view('company-freelancer.pages.chat', compact('contributors'));
+
+        $candidates = $this->recruiterServices->getAcceptedCandidate();
+
+        return view('company-freelancer.pages.chat', compact('contributors', 'candidates'));
     }
 }

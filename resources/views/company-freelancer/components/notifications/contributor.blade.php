@@ -53,11 +53,11 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header bg-light-success">
-                                <h5 class="modal-title" id="acceptModalLabel{{ $not->contributor->id }}">Accept Company</h5>
+                                <h5 class="modal-title" id="acceptModalLabel{{ $not->contributor->id }}">Accept Contributor {{$not->contributor->name}}</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <p>Accept connection with this company?</p>
+                                <p>Accept connection with this contributor?</p>
                                 <ul>
                                     <li><strong>Name:</strong> {{ $not->contributor->name }}</li>
                                     <li><strong>Email:</strong> {{ $not->contributor->user->email }}</li>

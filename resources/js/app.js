@@ -5,6 +5,8 @@ import ChatContributor from './components/Chat-contributor.vue';
 import Notification from './components/Notification.vue';
 import FreelancerNotification from './components/NotificationFreelancer.vue';
 import ReacruiterNorification from './components/NotificationRecruiter.vue';
+import ChatFreelancerAll from './components/Chat-freelancerAll.vue';
+import ChatRecruiterAll from './components/Chat-recruiterAll.vue';
 import Echo from 'laravel-echo';
 import emitter from './eventBus'; // OBAVEZNO!
 
@@ -34,6 +36,8 @@ const app = createApp({});
 
 app.component('chat-component', Chat);
 app.component('chat-component-contributor', ChatContributor);
+app.component('chat-component-freelancer-all', ChatFreelancerAll);
+app.component('chat-component-recruiter-all', ChatRecruiterAll);
 app.mount('#app');
 
 const notifApp = createApp({});
