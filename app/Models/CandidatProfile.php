@@ -57,7 +57,7 @@ class CandidatProfile extends Model
      */
     public function applications(): HasMany
     {
-        return $this->hasMany(Candidate::class, 'candidat_id');
+        return $this->hasMany(Candidate::class, 'candidate_id');
     }
 
     /**
@@ -65,7 +65,7 @@ class CandidatProfile extends Model
      */
     public function jobs(): BelongsToMany
     {
-        return $this->belongsToMany(Job::class, 'candidate_job', 'candidat_id', 'job_id')
+        return $this->belongsToMany(Job::class, 'candidate_job', 'candidate_id', 'job_id')
                     ->withPivot('status', 'applied_at')
                     ->withTimestamps();
     }

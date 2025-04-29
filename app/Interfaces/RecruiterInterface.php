@@ -17,5 +17,6 @@ interface RecruiterInterface
     public function getActiveRecruitersByCompany(int $companyId);
     public function updateRecruiter(Request $request);
     public function store(Request $request);
+    public function getAcceptedCandidate();
     
 }

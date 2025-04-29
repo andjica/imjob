@@ -20,6 +20,7 @@ use App\Interfaces\ContributorInterface;
 use App\Interfaces\CountryInterface;
 use App\Interfaces\FreelancerInterface;
 use App\Interfaces\JobTypeInterface;
+use App\Interfaces\RecruiterInterface;
 use App\Interfaces\SubCategoryInterface;
 use App\Models\AvailableRecruitmentSubphases;
 use App\Models\Candidate;
@@ -58,7 +59,8 @@ class FrontController extends Controller
         private JobRepository $jobRep,
         private CandidateService $candidateService,
         private RecruitmentProcessWorkflow $recruitmentProcessWorkflow,
-        private ContributorInterface $contributorServices
+        private ContributorInterface $contributorServices,
+        private RecruiterInterface $recruiterServices
     ) {}
 
     public function dashboard(): Factory|View|Application
@@ -388,6 +390,9 @@ class FrontController extends Controller
             ->with('user')
             ->wherePivot('status', ContributorRecruiter::ACTIVE)
             ->get();
+    
+        
+        return dd($this->recruiterServices->getAcceptedCandidate());
         // return dd($contributors);
         return view('company-freelancer.pages.chat', compact('contributors'));
     }

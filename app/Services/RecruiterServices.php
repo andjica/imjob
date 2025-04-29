@@ -3,11 +3,13 @@
 namespace App\Services;
 
 use App\Models\Company;
-use App\Models\Country;
 use App\Models\Recruiter;
 use Illuminate\Http\Request;
+use App\Models\CandidatProfile;
 use App\Models\FreelancerCompany;
+use Illuminate\Support\Facades\Auth;
 use App\Interfaces\RecruiterInterface;
+use App\Models\Candidate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -202,4 +204,24 @@ class RecruiterServices implements RecruiterInterface
             return redirect('/home')->with('success', 'Recruiter information saved successfully!');
          }
      }
+
+     public function getAcceptedCandidate()
+     {
+        $recruiter = Auth::user()->recruiter;
+
+        if (!$recruiter) {
+            return collect(); // Prazna kolekcija ako recruiter ne postoji
+        }
+
+        $jobIds = $recruiter->jobs()->pluck('id');
+
+        $candidates = CandidatProfile::with('user') // Učitaj odmah user podatke
+            ->whereHas('jobs', function ($query) use ($jobIds) {
+                $query->whereIn('jobs.id', $jobIds)
+                      ->where('candidate_job.status', 'accept');
+            })
+            ->get();
+        return dd($candidates);
+    }
+        
 }
