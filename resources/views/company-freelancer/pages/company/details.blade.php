@@ -97,31 +97,33 @@
         <!-- Buttons Column -->
         <div class="col-lg-1 d-none d-lg-flex flex-column align-items-left justify-content-start">
             @if (!$isOwnCompany)
-                @if ($isConnected)
-                    <!-- Ako postoji zajednicka saradnja mora se prikazu dva buttons, jedan samo info da su konektovani drugi dole broj jobova ako ih ima da je recruter okacio -->
-                    <button type="button" class="btn btn-primary btn-sm mb-2" data-bs-toggle="tooltip" data-bs-placement="left" title="You are connected with this company">
-                        <i class="fas fa-link"></i>
-                    </button>
-                     <!-- Broj jobova -->
-                     <button type="button" class="btn btn-primary btn-sm mb-2" data-bs-toggle="tooltip" data-bs-placement="left" title="Number of job is ">
-                        0 <i class="fas fa-briefcase"></i>
-                    </button>
+                    @if ($isConnected === "Active")
+                        <!-- Ako postoji zajednicka saradnja mora se prikazu dva buttons, jedan samo info da su konektovani drugi dole broj jobova ako ih ima da je recruter okacio -->
+                        <button type="button" class="btn btn-primary btn-sm mb-2" data-bs-toggle="tooltip"
+                            data-bs-placement="left" title="You are connected with this company">
+                            <i class="fas fa-link"></i>
+                        </button>
+                        <!-- Broj jobova -->
+                        <button type="button" class="btn btn-primary btn-sm mb-2" data-bs-toggle="tooltip"
+                            data-bs-placement="left" title="Number of job is ">
+                            0 <i class="fas fa-briefcase"></i>
+                        </button>
+                        @elseif($isConnected === "Pending")
+                              <!-- PENDING: Reminder or Info -->
+                            <button type="button" class="btn btn-warning btn-sm mb-2" data-bs-toggle="tooltip"
+                                data-bs-placement="left" title="Connection request is pending approval">
+                                <i class="fas fa-hourglass-half"></i> Pending
+                            </button>
+                            @elseif(empty($isConnected) || $isConnected === "None" || $isConnected === "0")
 
-                @else
-                    <!-- Button 2 ako vidis kompaniju i nisi jos uvek konektovan sa njom izlazi ovo dugme -->
-                    <button
-                        type="button"
-                        class="btn btn-success btn-sm mb-2 follow-button"
-                        data-company-id="{{ $company->id }}"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="left"
-                        title="Make connection, send request to this company"
-                        aria-label="Connect with Company {{ $company->name }}"
-                        >
-                        <i class="fas fa-handshake"></i>
-                    </button>
+                        <button type="button" class="btn btn-success btn-sm mb-2 follow-button"
+                            data-company-id="{{ $company->id }}" data-bs-toggle="tooltip" data-bs-placement="left"
+                            title="Make connection, send request to this company"
+                            aria-label="Connect with Company {{ $company->name }}">
+                            <i class="fas fa-handshake"></i>
+                        </button>
+                    @endif
                 @endif
-            @endif
         </div>
     </div>
     <div class="row mt-5">
@@ -204,56 +206,42 @@
     });
   </script>
   <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Select all follow buttons
-            const followButtons = document.querySelectorAll('.follow-button');
+          document.addEventListener('DOMContentLoaded', function () {
+    const followButtons = document.querySelectorAll('.follow-button');
 
-            followButtons.forEach(button => {
-                button.addEventListener('click', function(event) {
-                    event.preventDefault();
+    followButtons.forEach(button => {
+        button.addEventListener('click', function (event) {
+            event.preventDefault();
 
-                    const companyId = this.dataset.companyId;
-                    const indicatorLabel = this.querySelector('.indicator-label');
-                    const indicatorProgress = this.querySelector('.indicator-progress');
-                    const icon = this.querySelector('i.ki-check');
+            const companyId = this.dataset.companyId;
 
-                    // Show loading state
-                    indicatorLabel.classList.add('d-none');
-                    indicatorProgress.classList.remove('d-none');
-
-                    // Send AJAX request using Fetch API
-                    fetch('{{ route("company-freelancer-make-request") }}', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        },
-                        body: JSON.stringify({ company_id: companyId })
-                    })
-                        .then(response => response.json())
-                        .then(data => {
-                            if(data.success){
-                                // Update button to indicate success
-                                indicatorLabel.textContent = 'Request Sent';
-                                indicatorLabel.classList.remove('d-none');
-                                indicatorProgress.classList.add('d-none');
-                                icon.classList.remove('d-none');
-                                this.classList.remove('btn-light');
-                                this.classList.add('btn-success');
-                                this.removeEventListener('click', arguments.callee);
-                            } else {
-                                throw new Error(data.message || 'Something went wrong.');
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                            // Revert loading state
-                            indicatorLabel.classList.remove('d-none');
-                            indicatorProgress.classList.add('d-none');
-                            alert(error.message || 'Failed to send request. Please try again.');
-                        });
-                });
+            fetch("{{ route('recruiter-make-request-company') }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ company_id: companyId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    this.classList.remove('btn-success');
+                    this.classList.add('btn-secondary');
+                    this.setAttribute('disabled', true);
+                    this.setAttribute('title', 'Request sent');
+                    this.innerHTML = '<i class="fas fa-check"></i>';
+                } else {
+                    alert(data.message || 'Something went wrong.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to send request. Please try again.');
             });
         });
+    });
+});
+
     </script>
 @endsection

@@ -14,7 +14,7 @@
             </a>
 
             <!-- Find Contributors Button -->
-            <a href="{{asset('recruiter/find/contributor')}}" class="btn btn-lg btn-outiline-primary fw-bold px-5">
+            <a href="{{asset('recruiter/find/contributors')}}" class="btn btn-lg btn-outiline-primary fw-bold px-5">
                 <i class="fas fa-search me-2"></i> Search Contributors
             </a>
         </div>

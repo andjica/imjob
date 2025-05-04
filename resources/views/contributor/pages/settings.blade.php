@@ -1,5 +1,5 @@
 @extends('contributor.template-contributor')
-@section('main-title', 'Setting')
+@section('main-title', 'Settings')
 
 @section('title-dash', 'Settings')
 

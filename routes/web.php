@@ -249,7 +249,6 @@ Route::middleware(['auth', 'recruiter', 'verified'])->prefix('recruiter')->name(
         //notifications
         Route::get('/notifications', [RecruiterFrontController::class, 'notifications'])->name('notifications');
         Route::get('/connections', [RecruiterFrontController::class, 'connections'])->name('connections');
-        
         Route::get('/chats', [RecruiterFrontController::class, 'chats'])->name('chats');
     });
 });
@@ -287,10 +286,16 @@ Route::middleware(['auth', 'contributor', 'verified'])->prefix('contributor')->n
 
         //connection
         Route::get('/connections', [ContributorFrontController::class, 'getActiveConnections'])->name('connections');
+        Route::get('/notifications', [ContributorFrontController::class, 'getNotifications'])->name('notifications');
+        Route::post('/change-status', [FollowContributorController::class, 'changeStatus'])->name('follow-change-status');
 
         Route::get('/settings', [ContributorFrontController::class, 'settings'])->name('settings');
 
         Route::get('/chats', [ContributorFrontController::class, 'chats'])->name('chats');
+
+        Route::get('/my-subphases', [ContributorFrontController::class, 'getMyAssignedSubphases'])->name('subphases');
+
+        
     });
 });
 //Landing routes

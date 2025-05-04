@@ -101,4 +101,9 @@ class Job extends Model
             $query->where('job_id', $this->id);
         })->where('status', 'hired')->count();
     }
+
+    public function numberOfCandidates()
+    {
+        return $this->candidates()->count();
+    }
 }

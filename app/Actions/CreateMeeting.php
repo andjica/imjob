@@ -33,6 +33,7 @@ class CreateMeeting
                 'scheduled_at' => $data['scheduled_at'],
                 'description' => $data['description'],
                 'meeting_title' => $data['meeting_title'],
+                'meeting_link' => $data['meeting_link'],
             ]);
 
             if ($subphase && !empty($data['contributors'])) {

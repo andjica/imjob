@@ -53,25 +53,71 @@
 
                         </div>
                         <div class="d-flex flex-row align-items-center me-6">
-                        <div class="nav-item">
-                            <a href="{{asset('/company/freelancer/notifications')}}" class="nav-link">
-                            <i id="notification-icon" class="fas fa-bell"></i>
-                                <span id="notification-badge" class="badge bg-danger" style="display: none;">0</span>
+                        @php
+                                $recruiter = auth()->user()->recruiter;
 
+                                $candidateCount = 0;
+
+                                if ($recruiter && $recruiter->jobs && $recruiter->jobs->count() > 0) {
+                                    $candidateCount = $recruiter->jobs->sum(function($job) {
+                                        return $job->candidates()->count();
+                                    });
+                                }
+                            @endphp
+
+                            <div class="nav-item">
+                                <a class="btn btn-sm bg-gradient-purple" {{ $candidateCount === 0 ? 'disabled' : '' }} href="{{asset('/company/freelancer/active/jobs ')}}">
+                                    Candidate in recruitment process
+                                    <span class="badge {{ $candidateCount > 0 ? 'badge-success' : 'badge-secondary' }}">
+                                        {{ $candidateCount }}
+                                    </span>
                             </a>
-                        </div>
-                        <div class="nav-item">
-                            <div class="logo__notification">
-                                @include('company-freelancer.components.notifications.notificationRecruiter')
                             </div>
-                        </div>
+                            @php
+                                use Illuminate\Support\Facades\Auth;
+
+                                $pendingContributorRequestsCount = 0;
+
+                                if (Auth::check() && Auth::user()->recruiter) {
+                                    $pendingContributorRequestsCount = Auth::user()->recruiter
+                                        ->contributors()
+                                        ->wherePivot('status', 'pending')
+                                        ->wherePivot('invite_type', 'Contributor')
+                                        ->count();
+                                }
+                            @endphp
+                            <div class="nav-item">
+                                <a href="{{ asset('/recruiter/notifications') }}"
+                                class="nav-link {{ request()->is('recruiter/notifications') ? 'active' : '' }}">
+                                    <span class="nav-icon">
+                                        <i class="fa fa-user-plus"></i>
+                                    </span>
+                                    <span class="nav-text">Contributor Requests</span>
+
+                                    @if ($pendingContributorRequestsCount > 0)
+                                        <span class="badge bg-danger ms-2">{{ $pendingContributorRequestsCount }}</span>
+                                    @endif
+                                </a>
+                            </div>
+                            <div class="nav-item">
+                                <a href="{{asset('/company/freelancer/notifications')}}" class="nav-link">
+                                <i id="notification-icon" class="fas fa-bell"></i>
+                                    <span id="notification-badge" class="badge bg-danger" style="display: none;">0</span>
+
+                                </a>
+                            </div>
+                            <div class="nav-item">
+                                <div class="logo__notification">
+                                    @include('company-freelancer.components.notifications.notificationRecruiter')
+                                </div>
+                            </div>
                     </div>
                         <div class="app-navbar-item ms-1 mt-2 ms-md-3" id="kt_header_user_menu_toggle">
                        
-                        <!--begin::Menu wrapper-->
-                            <div class="cursor-pointer" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">
-                                <img src="{{asset('/images/logo1.png')}}" width="70px" class="img-fluid my-5">  
-                            </div>
+                <!--begin::Menu wrapper-->
+                    <div class="cursor-pointer" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">
+                        <img src="{{asset('/images/logo1.png')}}" width="70px" class="img-fluid my-5">  
+                    </div>
 
                     <!--begin::User account menu-->
                     <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg menu-state-color fw-semibold py-4 fs-6 w-275px" data-kt-menu="true" style="">

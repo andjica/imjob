@@ -27,9 +27,9 @@ class EnsureRecruiterExists
                
                 if(Auth::user()->role_id == 2)
                 {
-                    return redirect()->route('company-freelancer-create')->with('error', 'Please complete your freelancer profile to proceed. 1');
+                    return redirect()->route('company-freelancer-create')->with('error', 'Please complete your freelancer profile to proceed. ');
                 }
-                return redirect()->route('recruiter-create')->with('error', 'Please complete your freelancer profile to proceed. 2');
+                return redirect()->route('recruiter-create')->with('error', 'Please complete your freelancer profile to proceed. ');
                 
             }
         }

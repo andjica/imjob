@@ -3,7 +3,7 @@ import './bootstrap';
 function setupNotifications() {
     const companyId = document.querySelector('meta[name="company-id"]')?.content;
     const recruiterId = document.querySelector('meta[name="recruiter-id"]')?.content;
-   
+
     const isCompanyLoggedIn = Boolean(companyId);
     const isRecruiterLoggedIn = Boolean(recruiterId);
 

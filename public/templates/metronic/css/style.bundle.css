@@ -48546,3 +48546,8 @@ div#kt_aside_menu_wrapper {
 .d-flex__row {
   flex-direction: row;
 }
+
+.notification-alert {
+  color: #e83e8c !important; /* Bootstrap pink/red */
+  font-weight: bold;
+}

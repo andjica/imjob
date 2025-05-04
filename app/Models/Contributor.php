@@ -57,4 +57,22 @@ class Contributor extends Model
     {
         return $this->hasMany(\App\Models\Message::class, 'user_id');
     }
+
+    public function pendingRecruiters(): BelongsToMany
+    {
+        return $this->belongsToMany(Recruiter::class, 'contributor_recruiter', 'contributor_id', 'recruiter_id')
+                    ->withPivot('status', 'from_date', 'until_date')
+                    ->wherePivot('status', 'pending')
+                    ->wherePivot('invite_type', 'Recruiter')
+                    ->using(ContributorRecruiter::class)
+                    ->withTimestamps();
+    }
+
+    public function recruitmentSubphases(): BelongsToMany
+    {
+        return $this->belongsToMany(RecruitmentSubphase::class, 'recruitment_subphase_contributor')
+                    ->withTimestamps()
+                    ->with('availableSubphase', 'recruitmentProcess.candidate.user');
+    }
+   
 }

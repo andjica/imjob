@@ -74,6 +74,54 @@
 
         </div>
         <div class="d-flex flex-row align-items-center me-6">
+        @php
+            $recruiter = auth()->user()->recruiter;
+
+            $candidateCount = 0;
+
+            if ($recruiter && $recruiter->jobs && $recruiter->jobs->count() > 0) {
+                $candidateCount = $recruiter->jobs->sum(function($job) {
+                    return $job->candidates()->count();
+                });
+            }
+        @endphp
+
+        <div class="nav-item">
+            <a class="btn btn-sm bg-gradient-purple" {{ $candidateCount === 0 ? 'disabled' : '' }} href="{{asset('/recruiter/active/jobs ')}}">
+                Candidate in recruitment process
+                <span class="badge {{ $candidateCount > 0 ? 'badge-success' : 'badge-secondary' }}">
+                    {{ $candidateCount }}
+                </span>
+        </a>
+        </div>
+        @php
+            use Illuminate\Support\Facades\Auth;
+
+            $pendingContributorRequestsCount = 0;
+
+            if (Auth::check() && Auth::user()->recruiter) {
+                $pendingContributorRequestsCount = Auth::user()->recruiter
+                    ->contributors()
+                    ->wherePivot('status', 'pending')
+                    ->wherePivot('invite_type', 'Contributor')
+                    ->count();
+            }
+        @endphp
+
+        <div class="nav-item">
+            <a href="{{ asset('/recruiter/notifications') }}"
+            class="nav-link {{ request()->is('recruiter/notifications') ? 'active' : '' }}">
+                <span class="nav-icon">
+                    <i class="fa fa-user-plus"></i>
+                </span>
+                <span class="nav-text">Contributor Requests</span>
+
+                @if ($pendingContributorRequestsCount > 0)
+                    <span class="badge bg-danger ms-2">{{ $pendingContributorRequestsCount }}</span>
+                @endif
+            </a>
+        </div>
+
         <div class="nav-item">
             <a href="{{asset('/recruiter/notifications')}}" class="nav-link">
                 <i id="notification-icon" class="fas fa-bell"></i>

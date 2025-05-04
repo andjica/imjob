@@ -151,10 +151,22 @@ class FrontController extends Controller
     {
         /** @var User $user */
         $user = auth()->user();
-        $isConnected = $user->recruiter->companies->contains($company);
+        //$isConnected = $user->recruiter->companies->contains($company);
+        
         $isOwnCompany = $user->recruiter->company?->id === $company->id;
         $similarCompanies = $this->companyServices->getCompaniesByCategory($company->category->id);
-        
+
+        $connection = $user->recruiter
+            ->companies()
+            ->where('companies.id', $company->id)
+            ->first();
+
+        $isConnected = null;
+
+        if ($connection) {
+            $isConnected = $connection->pivot->status; // Može biti: Active, Pending, Rejected
+        }
+        //return dd($isConnected);
         return view(
             'recruiter.pages.company.details',
             compact(
@@ -250,7 +262,11 @@ class FrontController extends Controller
         $availablePhases = AvailableRecruitmentSubphases::where('phase', $candidate->recruitmentProcess->current_phase)->get();
     
         $candidateId = $candidate->id;
-        $candidateSubphases = Candidate::with('recruitmentSubPhases')->find($candidateId);
+        $candidateSubphases = Candidate::with([
+            'recruitmentSubPhases.contributors.user',
+            'recruitmentSubPhases.availableSubphase'
+        ])->find($candidateId);
+
         //return dd($candidateSubphases);
         $meetings = $candidateSubphases->recruitmentSubPhases->toArray();
         $jobId = $candidate->job->id;

@@ -140,23 +140,25 @@
                             </a>
                         </li>
                         @if ($recruiter->companies->count() > 0)
-                            <li class="nav-item mb-3">
-                                Your connections
-                                <div class="symbol-group symbol-hover mb-3">
-                                    @foreach ($recruiter->companies as $cm)
-                                        {{ $cm->name }}
-                                        <div class="symbol symbol-35px symbol-circle" data-bs-toggle="tooltip"
-                                            data-bs-original-title="Alan Warden" data-kt-initialized="1">
-                                            @if ($cm->logo != null)
-                                                <img alt="Pic" src="{{ Storage::url($cm->logo) }}">
-                                            @else
-                                                <span class="symbol-label bg-warning text-inverse-warning fw-bold">A</span>
-                                            @endif
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </li>
-                        @endif
+                                        <li class="nav-item mb-3">
+                                            Your connections
+                                            <div class="symbol-group symbol-hover mb-3">
+                                                @foreach ($recruiter->companies as $cm)
+                                                    <div class="symbol symbol-35px symbol-circle" data-bs-toggle="tooltip"
+                                                        data-bs-original-title="" data-kt-initialized="1">
+                                                        <a href="{{asset('/recruiter/company/'.$cm->id.'/details')}}">
+                                                        @if ($cm->logo != null)
+                                                            <img alt="Pic" src="{{ Storage::url($cm->logo) }}" width="30" class="img-fluid symbol-label">
+                                                        @else
+                                                            <span
+                                                                class="symbol-label bg-warning text-inverse-warning fw-bold">{{$firstLetter = substr($cm->name, 0, 1)}}</span>
+                                                        @endif
+                                                        </a>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </li>
+                                    @endif
                     </ul>
                     <!--end::Nav Tabs-->
                 </div>

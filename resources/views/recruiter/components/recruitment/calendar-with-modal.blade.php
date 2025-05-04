@@ -10,10 +10,11 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content shadow-lg">
                     <div class="modal-header bg-muted text-white">
-                        <h5 class="modal-title">
-                        <i class="fas fa-calendar-alt"></i><span id="phaseName"></span> 
-
-                        </h5>
+                    <h5 class="modal-title">
+                        <small id="phaseName" class="text-muted"></small><br/>
+                        <span id="subphaseName"></span> 
+                    </h5>
+                       
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -35,7 +36,9 @@
                             <a id="meetingLink" href="#" target="_blank" class="text-decoration-none text-danger fw-bold"></a>
                         </p>
                     </div>
-
+                    <h6>Contributors Involved:</h6>
+                    <ul id="meetingContributors" class="ps-3"></ul>
+                    </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-light" data-bs-dismiss="modal">

@@ -52,4 +52,9 @@ class RecruitmentSubphase extends Model
         return $this->belongsToMany(Contributor::class, 'recruitment_subphase_contributor')
             ->withTimestamps();
     }
+
+    public function recruitmentProcess(): BelongsTo
+    {
+        return $this->belongsTo(RecruitmentProcess::class, 'recruitment_process_id');
+    }
 }

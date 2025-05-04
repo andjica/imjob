@@ -10,3 +10,8 @@
     top: 10px;
     right: -8px;
 }
+
+.notification-alert {
+    color: #e83e8c !important; /* Bootstrap pink/red */
+    font-weight: bold;
+}

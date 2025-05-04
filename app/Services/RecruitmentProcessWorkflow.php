@@ -24,7 +24,7 @@ class RecruitmentProcessWorkflow
             
             return RecruitmentProcess::create([
                 'candidate_id' => $candidate->id,
-                'current_phase' => 'application_received',
+                'current_phase' => 'selection',
             ]);
         });
     }

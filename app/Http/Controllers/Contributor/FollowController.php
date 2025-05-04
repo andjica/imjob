@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Contributor;
 
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Models\ContributorRecruiter;
@@ -116,4 +117,29 @@ class FollowController extends Controller
            return redirect()->back()->with('error', 'An error occurred: ' . $e->getMessage());
        }
    }
+
+   public function changeStatus(Request $request)
+    {
+       
+        $validated = $request->validate([
+            'contributor_id' => 'required|exists:contributors,id',
+            'recruiter_id' => 'required|exists:recruiters,id',
+            'status' => 'required|in:Active,Rejected',
+        ]);
+
+        $record = ContributorRecruiter::where('contributor_id', $validated['contributor_id'])
+            ->where('recruiter_id', $validated['recruiter_id'])
+            ->first();
+
+
+        if (!$record) {
+            return back()->with('error', 'Connection not found.');
+        }
+
+        // Update statusa
+        $record->status = $validated['status'];
+        $record->save();
+
+        return back()->with('success', 'Status updated to ' . $validated['status']);
+    }
 }

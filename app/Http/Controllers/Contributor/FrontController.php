@@ -147,6 +147,15 @@ class FrontController extends Controller
             return view('contributor.pages.connection',compact('activeConnections'));
         }
 
+        public function getNotifications()
+        {
+            $user = auth()->user();
+            $newRecruiters = $user->contributor->pendingRecruiters()->with(['user', 'country', 'city'])->get();
+
+          
+            return view('contributor.pages.notifications', compact('newRecruiters'));
+        }
+
         public function findCompanies(Request $request): Factory|View|Application  
         {
             /** @var User $user */
@@ -182,5 +191,34 @@ class FrontController extends Controller
             $activeConnections = $contributor->recruiters()->with('user')->wherePivot('status', 'Active')->get();
             // return dd($activeConnections);
             return view('contributor.pages.chats.view', compact('activeConnections'));
+        }
+
+        public function getMyAssignedSubphases()
+        {
+            $user = auth()->user();
+        
+            if (!$user->contributor) {
+                return response()->json(['error' => 'Not a contributor.'], 403);
+            }
+        
+            $subphases = auth()->user()->contributor->recruitmentSubphases()
+            ->with(['availableSubphase', 'recruitmentProcess.candidate.user'])
+            ->get()
+            ->map(function ($subphase) {
+                return [
+                    'candidate_name' => optional($subphase->recruitmentProcess->candidate->user)->first_name 
+                                        . ' ' . optional($subphase->recruitmentProcess->candidate->user)->last_name ?? 'N/A',
+                    'phase' => $subphase->phase,
+                    'subphase' => $subphase->availableSubphase->subphase ?? $subphase->subphase ?? 'No Subphase',
+                    'meeting_title' => $subphase->meeting_title,
+                    'meeting_link' => $subphase->meeting_link,
+                    'scheduled_at' => $subphase->scheduled_at,
+                    'description' => $subphase->description,
+                    'feedback' => $subphase->feedback, // ← OVO DODAJ
+                ];
+            });
+
+            
+            return view('contributor.pages.my-subphases', compact('subphases'));
         }
 }

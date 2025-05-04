@@ -4,7 +4,19 @@
 
 
 @section('content')
-    <div class="container">
+    <div class="container m-0">
+    <div class="row">
+            <div class="col-lg-10">
+            @include('alerts.success')
+            @include('alerts.errors')
+            </div>
+    </div>
+    <div class="row">
+            <div class="btn-back">
+                <button onclick="window.history.back()" class="btn btn-sm bg-linear-pink text-white p-2 mb-5"> <i
+                        class="fa fa-chevron-left text-white"></i> Back</button>
+            </div>
+    </div>
         @if ($activeConnections->count() == 0)
             <div class="row">
                 <div class="col-lg-7">
@@ -35,9 +47,13 @@
             </div>
         @else
             <div class="card shadow-sm">
+            <div class="card-header">
+                    <h4 class="card-title">Your recruiters active connections list</h4>
+                </div>
                 <div class="card-body">
                     <div class="row g-3">
                         @foreach ($activeConnections as $ac)
+                        <a href="{{asset('/contributor/recruiter/'.$ac->id.'/view')}}">
                             <div class="d-flex flex-stack pt-2 border-bottom">
                                 <!--begin::Image-->
                                 <div class="symbol symbol-40px me-5">
@@ -63,7 +79,7 @@
                                     <!-- This button is shown if the recruiter is connected and the status is active -->
                                     <div class="card-toolbar">
                                         <button type="button" class="btn btn-primary btn-sm mt-4" data-bs-toggle="tooltip"
-                                            data-bs-placement="left" title="You are connected with this company">
+                                            data-bs-placement="left" title="You are connected with this recruiter">
                                             <i class="fas fa-link"></i>
                                         </button>
                                     </div>
@@ -71,6 +87,7 @@
                                 </div>
                                 <!--end::Section-->
                             </div>
+                            </a>
                         @endforeach
                     </div>
                 </div>
