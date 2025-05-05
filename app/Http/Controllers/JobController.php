@@ -2,16 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Job;
 use App\Models\City;
 use App\Models\Country;
 use App\Models\JobType;
 use App\Models\Category;
+use App\Models\JobSkill;
+use App\Models\Candidate;
 use App\Actions\CreateJob;
 use App\Actions\UpdateJob;
 use Illuminate\Http\Request;
 use App\Repositories\JobRepository;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\StoreJobRequest;
+use App\Models\RecruitmentProcess;
 
 class JobController extends Controller
 {
@@ -85,6 +89,29 @@ class JobController extends Controller
         } else {
             return redirect()->route('company-dashboard-active-jobs')->with('success', 'Job updated successfully.');
         }
+    }
+    
+
+    public function delete($id)
+    {
+        $job = Job::findOrFail($id);
+    
+        // 1. Obriši sve povezane JobSkills
+        JobSkill::where('job_id', $job->id)->delete();
+    
+        // 2. Pronađi sve kandidate povezane sa ovim poslom
+        $candidates = Candidate::where('job_id', $job->id)->get();
+    
+        // 3. Za svakog kandidata obrisi sve njegove procese
+        foreach ($candidates as $candidate) {
+            RecruitmentProcess::where('candidate_id', $candidate->id)->delete();
+            $candidate->delete();
+        }
+    
+        // 4. Na kraju obriši sam posao
+        $job->delete();
+    
+        return redirect()->back()->with('sucess', 'Job is deleted successfully');
     }
     
 }

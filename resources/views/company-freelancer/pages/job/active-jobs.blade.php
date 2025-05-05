@@ -109,9 +109,9 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                    <form action="" method="POST">
+                                    <form action="{{asset('/company/freelancer/job/'.$job->id.'/delete')}}" method="POST">
                                         @csrf
-                                        @method('DELETE')
+                                        @method('POST')
                                         <button type="submit" class="btn btn-danger">Delete</button>
                                     </form>
                                 </div>

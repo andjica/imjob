@@ -179,6 +179,7 @@ Route::middleware(['auth', 'company.freelancer', 'verified'])->prefix('company/f
         Route::post('/job/store', [JobController::class, 'store'])->name('store-job');
         Route::get('/job/{id}/edit', [JobController::class, 'edit'])->name('edit-job');
         Route::put('/job/{id}/update', [JobController::class, 'update'])->name('update-job');
+        Route::post('/job/{id}/delete', [JobController::class, 'delete'])->name('delete-job');
         Route::get('/active/jobs', [CompanyFreelancerFrontController::class, 'getActiveJobs'])->name('active-jobs');
         Route::get('/inactive/jobs', [CompanyFreelancerFrontController::class, 'getInactiveJobs'])->name('inactive-jobs');
 
@@ -215,6 +216,8 @@ Route::middleware(['auth', 'recruiter', 'verified'])->prefix('recruiter')->name(
         Route::get('/active/jobs', [RecruiterFrontController::class, 'getActiveJobs'])->name('active-jobs');
         Route::get('/inactive/jobs', [RecruiterFrontController::class, 'getInactiveJobs'])->name('inactive-jobs');
         Route::get('/job/{id}/edit', [RecruiterFrontController::class, 'editJob'])->name('edit-job');
+        Route::post('/job/{id}/delete', [JobController::class, 'delete'])->name('delete-job');
+
         //recruitment process
         Route::get('/{job}/recruitment-process', [RecruiterFrontController::class, 'recruitmentProcess'])->name('recruitment-process');
         Route::get('/job/candidate/{candidate}/recruitment-process', [RecruiterFrontController::class, 'candidateRecruitmentProcess'])->name('candidat-recruitment-process');
