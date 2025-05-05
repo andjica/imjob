@@ -139,11 +139,11 @@
                                 <i class="fas fa-briefcase me-2" aria-hidden="true"></i> Your Posted Jobs
                             </a>
                         </li>
-                        @if ($recruiter->companies->count() > 0)
+                        @if ($recruiter->activeCompanies->count() > 0)
                                         <li class="nav-item mb-3">
                                             Your connections
                                             <div class="symbol-group symbol-hover mb-3">
-                                                @foreach ($recruiter->companies as $cm)
+                                                @foreach ($recruiter->activeCompanies as $cm)
                                                     <div class="symbol symbol-35px symbol-circle" data-bs-toggle="tooltip"
                                                         data-bs-original-title="" data-kt-initialized="1">
                                                         <a href="{{asset('/recruiter/company/'.$cm->id.'/details')}}">

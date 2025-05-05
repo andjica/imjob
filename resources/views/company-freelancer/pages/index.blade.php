@@ -206,11 +206,11 @@
                                             <i class="fas fa-briefcase me-2" aria-hidden="true"></i> Your Posted Jobs
                                         </a>
                                     </li>
-                                    @if ($freelancer->companies->count() > 0)
+                                    @if ($freelancer->activeCompanies->count() > 0)
                                         <li class="nav-item mb-3">
                                             Your connections
                                             <div class="symbol-group symbol-hover mb-3">
-                                                @foreach ($freelancer->companies as $cm)
+                                                @foreach ($freelancer->activeCompanies as $cm)
                                                     <div class="symbol symbol-35px symbol-circle" data-bs-toggle="tooltip"
                                                         data-bs-original-title="" data-kt-initialized="1">
                                                         <a href="{{asset('company/freelancer/company/'.$cm->id.'/details')}}">
