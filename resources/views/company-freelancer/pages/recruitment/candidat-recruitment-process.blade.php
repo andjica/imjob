@@ -100,93 +100,93 @@
 
     <!-- Calendar overview with START  data -->
     <script>
-document.addEventListener('DOMContentLoaded', function () {
-    const calendarEl = document.getElementById('meetingCalendar');
+        document.addEventListener('DOMContentLoaded', function () {
+            const calendarEl = document.getElementById('meetingCalendar');
 
-    if (!calendarEl) {
-        console.error("Calendar element #meetingCalendar not found!");
-        return;
-    }
-
-    let candidateSubphases = @json($meetings);
-
-    if (!Array.isArray(candidateSubphases)) {
-        candidateSubphases = Object.values(candidateSubphases);
-    }
-
-    const events = candidateSubphases.map(phase => {
-        const subphaseName = phase.available_subphase?.subphase ?? 'No Subphase';
-        const phaseSlug = phase.phase ?? '';
-        const contributors = phase.contributors?.map(c => {
-            return `${c.name ?? ''} (${c.user?.email ?? ''})`;
-        }) ?? [];
-
-        return {
-            id: phase.id,
-            title: subphaseName,
-            subphase: subphaseName,
-            phase: phaseSlug,
-            start: new Date(phase.scheduled_at),
-            description: phase.description ?? '',
-            meetingLink: phase.meeting_link ?? '',
-            contributors: contributors
-        };
-    });
-
-    const calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridMonth',
-        headerToolbar: {
-            left: 'prev,next today',
-            center: 'title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay'
-        },
-        events: events,
-        eventClick: function (info) {
-            showMeetingPopup(info.event);
-        }
-    });
-
-    calendar.render();
-
-    function showMeetingPopup(event) {
-        document.getElementById('meetingTitle').innerText = event.title;
-        document.getElementById('meetingDate').innerText = new Date(event.start).toLocaleString();
-        document.getElementById('meetingDescription').innerText = event.extendedProps.description;
-
-        const subphaseNameEl = document.getElementById('subphaseName');
-        if (subphaseNameEl) {
-            subphaseNameEl.innerText = event.extendedProps.subphase;
-        }
-
-        const phaseNameEl = document.getElementById('phaseName');
-        if (phaseNameEl) {
-            phaseNameEl.innerText = `Phase: ${event.extendedProps.phase ?? ''}`;
-        }
-
-        const linkEl = document.getElementById('meetingLink');
-        if (linkEl) {
-            if (event.extendedProps.meetingLink) {
-                linkEl.href = event.extendedProps.meetingLink;
-                linkEl.innerText = event.extendedProps.meetingLink;
-                linkEl.style.display = 'inline';
-            } else {
-                linkEl.innerText = 'No link available';
-                linkEl.style.display = 'none';
+            if (!calendarEl) {
+                console.error("Calendar element #meetingCalendar not found!");
+                return;
             }
-        }
 
-        const contributorsEl = document.getElementById('meetingContributors');
-        if (contributorsEl) {
-            const contributors = event.extendedProps.contributors ?? [];
-            contributorsEl.innerHTML = contributors.length > 0
-                ? contributors.map(name => `<li>${name}</li>`).join('')
-                : '<li>No contributors assigned</li>';
-        }
+            let candidateSubphases = @json($meetings);
 
-        const modal = new bootstrap.Modal(document.getElementById('meetingModal'));
-        modal.show();
-    }
-});
+            if (!Array.isArray(candidateSubphases)) {
+                candidateSubphases = Object.values(candidateSubphases);
+            }
+
+            const events = candidateSubphases.map(phase => {
+                const subphaseName = phase.available_subphase?.subphase ?? 'No Subphase';
+                const phaseSlug = phase.phase ?? '';
+                const contributors = phase.contributors?.map(c => {
+                    return `${c.name ?? ''} (${c.user?.email ?? ''})`;
+                }) ?? [];
+
+                return {
+                    id: phase.id,
+                    title: subphaseName,
+                    subphase: subphaseName,
+                    phase: phaseSlug,
+                    start: new Date(phase.scheduled_at),
+                    description: phase.description ?? '',
+                    meetingLink: phase.meeting_link ?? '',
+                    contributors: contributors
+                };
+            });
+
+            const calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                events: events,
+                eventClick: function (info) {
+                    showMeetingPopup(info.event);
+                }
+            });
+
+            calendar.render();
+
+            function showMeetingPopup(event) {
+                document.getElementById('meetingTitle').innerText = event.title;
+                document.getElementById('meetingDate').innerText = new Date(event.start).toLocaleString();
+                document.getElementById('meetingDescription').innerText = event.extendedProps.description;
+
+                const subphaseNameEl = document.getElementById('subphaseName');
+                if (subphaseNameEl) {
+                    subphaseNameEl.innerText = event.extendedProps.subphase;
+                }
+
+                const phaseNameEl = document.getElementById('phaseName');
+                if (phaseNameEl) {
+                    phaseNameEl.innerText = `Phase: ${event.extendedProps.phase ?? ''}`;
+                }
+
+                const linkEl = document.getElementById('meetingLink');
+                if (linkEl) {
+                    if (event.extendedProps.meetingLink) {
+                        linkEl.href = event.extendedProps.meetingLink;
+                        linkEl.innerText = event.extendedProps.meetingLink;
+                        linkEl.style.display = 'inline';
+                    } else {
+                        linkEl.innerText = 'No link available';
+                        linkEl.style.display = 'none';
+                    }
+                }
+
+                const contributorsEl = document.getElementById('meetingContributors');
+                if (contributorsEl) {
+                    const contributors = event.extendedProps.contributors ?? [];
+                    contributorsEl.innerHTML = contributors.length > 0
+                        ? contributors.map(name => `<li>${name}</li>`).join('')
+                        : '<li>No contributors assigned</li>';
+                }
+
+                const modal = new bootstrap.Modal(document.getElementById('meetingModal'));
+                modal.show();
+            }
+        });
 
 
 

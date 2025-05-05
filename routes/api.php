@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ChatController;
@@ -52,4 +51,3 @@ Route::middleware(['auth:sanctum'])->prefix('messages')->group(function () {
     Route::get('/unread-count', [ChatController::class, 'unreadCount']);
     Route::get('/unread-total', [ChatController::class, 'unreadTotal']);
 });
-
