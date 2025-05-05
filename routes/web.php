@@ -231,7 +231,7 @@ Route::middleware(['auth', 'recruiter', 'verified'])->prefix('recruiter')->name(
         //download pdf
         Route::get('/recruitment/download-pdf/{recruitment_process_id}', [RecruitmentController::class, 'downloadPDF'])->name('recruitment-download.pdf');
 
-        Route::get('/edit', [RecruiterFrontController::class, 'editRecruiter'])->name('recruiteredit');
+        Route::get('/edit', [RecruiterFrontController::class, 'editRecruiter'])->name('edit-recruiter');
         Route::post('/update', [RecruiterFrontController::class, 'update'])->name('update');
 
         // Education Routes

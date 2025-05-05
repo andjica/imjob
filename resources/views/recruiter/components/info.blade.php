@@ -135,7 +135,7 @@
                             </a>
                         </li>
                         <li class="nav-item mb-3">
-                            <a class="nav-link" href="{{ asset('/company/recruiter/active/jobs') }}">
+                            <a class="nav-link" href="{{ asset('/recruiter/active/jobs') }}">
                                 <i class="fas fa-briefcase me-2" aria-hidden="true"></i> Your Posted Jobs
                             </a>
                         </li>
