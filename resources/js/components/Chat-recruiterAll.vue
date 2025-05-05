@@ -293,6 +293,7 @@ export default {
                 headers: {
                     "Content-Type": "application/json",
                     "X-CSRF-TOKEN": window.csrfToken,
+                    "Accept": "application/json"
                 },
             })
                 .then((res) => res.json())
@@ -323,6 +324,7 @@ export default {
                 headers: {
                     "Content-Type": "application/json",
                     "X-CSRF-TOKEN": window.csrfToken,
+                    "Accept": "application/json"
                 },
             })
                 .then((res) => res.json())
@@ -527,6 +529,7 @@ export default {
                         headers: {
                             "Content-Type": "application/json",
                             "X-CSRF-TOKEN": window.csrfToken,
+                            "Accept": "application/json"
                         },
                     })
                         .then((res) => res.json())
