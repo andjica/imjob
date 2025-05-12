@@ -36,8 +36,8 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/messages', [ChatController::class, 'index']); // prikaz poruka
     Route::post('/messages', [ChatController::class, 'store']); // slanje poruka
     //store Candidat Profile
-    Route::post('/candidat/profile/create', [CandidateProfileController::class, 'store']);
-    Route::put('/candidat/profile/update/{userId}', [CandidateProfileController::class, 'update']); // Ažuriranje profila
+    // Route::post('/candidat/profile/create', [CandidateProfileController::class, 'store']);
+    Route::post('/candidat/profile/update/{userId}', [CandidateProfileController::class, 'update']); // Ažuriranje profila
  
     //jobs
     Route::get('/jobs/active/', [FrontController::class, 'activeJobs']); // Prikaz aktivnih poslova

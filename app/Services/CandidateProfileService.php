@@ -59,15 +59,23 @@ class CandidateProfileService implements CandidateProfileInterface
 
      public function update(Request $request, $userId)
     {
-        
-    
-        $profile = CandidatProfile::find($userId);
-        // $profile->user_id = $request->user_id;
         $user = User::find($userId);
+        if(!$user)
+        {
+            return response()->json(['message'=>'Not found user'], 404);
+        }
+        $profile = CandidatProfile::where('user_id', $user->id)->first();
+
+        if(!$profile)
+        {
+            return response()->json(['message'=>'Not found canditate profile'], 404);
+        }
+        // $profile->user_id = $request->user_id;
+       
         if ($user) {
             $user->first_name = $request->first_name;
             $user->last_name = $request->last_name;
-            $user->email = $request->email;
+            //$user->email = $request->email;
             $user->save();
         }
         $profile->country_id = $request->country_id;

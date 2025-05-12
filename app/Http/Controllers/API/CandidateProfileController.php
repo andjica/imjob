@@ -24,4 +24,15 @@ class CandidateProfileController extends Controller
             'data' => $candidateProfile
         ], 200);
     }
+
+
+    public function update(Request $request, $userId)
+    {
+        $candidateProfileUpdate = $this->candidateProfileService->update($request, $userId);
+
+        return response()->json([
+            'candidateProfile' => $candidateProfileUpdate,
+            'message' => 'Updated successfully!'
+        ], 201);
+    }
 }
