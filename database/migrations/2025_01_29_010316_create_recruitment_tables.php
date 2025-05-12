@@ -26,16 +26,16 @@ class CreateRecruitmentTables extends Migration
         Schema::create('candidates', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('country_id')->constrained('countries')->onDelete('cascade');
-            $table->foreignId('city_id')->constrained('cities')->onDelete('cascade');
-            $table->string('phone');
+            $table->foreignId('country_id')->nullable()->constrained('countries')->onDelete('cascade');
+            $table->foreignId('city_id')->nullable()->constrained('cities')->onDelete('cascade');
+            $table->string('phone')->nullable();
             $table->string('profile_image')->nullable();
             $table->date('birthday')->nullable();
             $table->string('current_company')->nullable();
             $table->string('current_title_job')->nullable();
             $table->integer('years_of_experience')->nullable();
-            $table->string('cv');
-            $table->string('school_name');
+            $table->string('cv')->nullable();
+            $table->string('school_name')->nullable();
             $table->string('school_degree')->nullable();
             $table->year('school_year_start')->nullable();
             $table->year('school_year_end')->nullable();

@@ -7,4 +7,5 @@ use Illuminate\Http\Request;
 interface CandidateProfileInterface 
 {
     public function store(Request $request);
+    public function update(Request $request, $userId);
 }

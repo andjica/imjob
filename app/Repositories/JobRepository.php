@@ -207,4 +207,15 @@ class JobRepository
             ->paginate(6);
         return $jobs;
     }
+
+    public function randomActiveJobs()
+    {
+        
+        $jobs = Job::where('valid_until', '>', Carbon::now())
+        ->inRandomOrder()
+        ->take(5)
+        ->get();
+
+        return $jobs;
+    }
 }

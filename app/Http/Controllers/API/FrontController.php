@@ -3,17 +3,19 @@ namespace App\Http\Controllers\API;
 use App\Interfaces\CityInterface;
 use App\Http\Controllers\Controller;
 use App\Interfaces\CountryInterface;
+use App\Repositories\JobRepository;
 
 class FrontController extends Controller
 {
     protected $countryServices;
     protected $cityServices;
+    protected $jobServices;
 
-    public function __construct(CountryInterface $countryServices, CityInterface $cityServices)
+    public function __construct(CountryInterface $countryServices, CityInterface $cityServices, JobRepository $jobServices)
     {
         $this->countryServices = $countryServices;
         $this->cityServices = $cityServices;
-
+        $this->jobServices = $jobServices;
 
     }
 
@@ -42,5 +44,15 @@ class FrontController extends Controller
         return response()->json([
             'cities' => $cities,
         ]);
+    }
+
+    public function activeJobs()
+    {
+        $jobsRandomFive = $this->jobServices->randomActiveJobs();
+
+        return response()->json([
+            'randomFiveJobs' => $jobsRandomFive
+        ]);
+
     }
 }
