@@ -39,7 +39,8 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
         'google_id',
         'role_id',
         'verification_code',
-        'verification_expires_at'
+        'verification_expires_at',
+        'is_mobile_verified'
     ];
 
     /**

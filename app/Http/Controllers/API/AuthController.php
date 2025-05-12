@@ -65,7 +65,12 @@ class AuthController extends Controller
         }
     
         $user = auth()->user();
-    
+
+        if (!$user->is_mobile_verified)
+        {
+            return response()->json(['error' => 'Mobile number not verified.'], 403);
+        }
+        
         return response()->json([
             'jwt_token' => $token,
             'token_type' => 'Bearer',
@@ -111,6 +116,7 @@ class AuthController extends Controller
 
        
         $user->email_verified_at = now();
+        $user->is_mobile_verified = 1;
         $user->save();
 
         $candidateProfile = new CandidatProfile();
@@ -119,6 +125,7 @@ class AuthController extends Controller
 
         return response()->json([
             'message' => 'Verification successful.',
+            'candidateProfile' => $candidateProfile
         ], 200);
     }
 
