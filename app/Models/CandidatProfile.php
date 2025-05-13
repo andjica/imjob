@@ -26,6 +26,7 @@ class CandidatProfile extends Model
         'school_degree',
         'school_year_start',
         'school_year_end',
+        'is_finished_profile'
     ];
 
     /**

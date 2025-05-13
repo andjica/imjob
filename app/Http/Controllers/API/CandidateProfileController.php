@@ -35,4 +35,18 @@ class CandidateProfileController extends Controller
             'message' => 'Updated successfully!'
         ], 201);
     }
+
+    public function getCandidat($userId)
+    {
+        $candidaProfile = $this->candidateProfileService->get($userId);
+
+        if(!$candidaProfile)
+        {
+            return response()->json(['message'=>'Not found candidate profile'], 404);
+        }
+        
+        return response()->json(['message' => 'Ok',
+         'candidateProfile'=>$candidaProfile], 
+         200);
+    }
 }

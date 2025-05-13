@@ -8,4 +8,6 @@ interface CandidateProfileInterface
 {
     public function store(Request $request);
     public function update(Request $request, $userId);
+
+    public function get($userId);
 }

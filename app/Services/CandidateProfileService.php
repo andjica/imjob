@@ -89,7 +89,7 @@ class CandidateProfileService implements CandidateProfileInterface
         $profile->school_degree = $request->school_degree;
         $profile->school_year_start = $request->school_year_start;
         $profile->school_year_end = $request->school_year_end;
-    
+        $profile->is_finished_profile = 1;
         // Upload profile image ako postoji
         if ($request->hasFile('profile_image')) {
             $profile->profile_image = $request->file('profile_image')
@@ -108,5 +108,12 @@ class CandidateProfileService implements CandidateProfileInterface
             'message' => 'Candidate profile created successfully',
             'data' => $profile->load('country', 'city', 'user'),
         ]);
+    }
+
+    public function get($userId)
+    {
+        $candidateProfile = CandidatProfile::where('user_id', $userId)->first();
+
+        return $candidateProfile->load('country', 'city', 'user');
     }
 }

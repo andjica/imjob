@@ -5,6 +5,8 @@ use App\Http\Controllers\ChatController;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\FrontController;
 use App\Http\Controllers\API\CandidateProfileController;
+use App\Models\CandidatProfile;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -38,7 +40,7 @@ Route::middleware('auth:api')->group(function () {
     //store Candidat Profile
     // Route::post('/candidat/profile/create', [CandidateProfileController::class, 'store']);
     Route::post('/candidat/profile/update/{userId}', [CandidateProfileController::class, 'update']); // Ažuriranje profila
- 
+    Route::get('/candidat/{id}', [CandidateProfileController::class, 'getCandidat']);
     //jobs
     Route::get('/jobs/active/', [FrontController::class, 'activeJobs']); // Prikaz aktivnih poslova
     Route::get('/job/{id}', [FrontController::class, 'showJob']); // Detalji o poslu
