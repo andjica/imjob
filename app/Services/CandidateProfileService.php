@@ -110,10 +110,16 @@ class CandidateProfileService implements CandidateProfileInterface
         ]);
     }
 
+    public function getById($id)
+    {
+        $candidaProfile = CandidatProfile::find($id);
+        return $candidaProfile;
+    }
     public function get($userId)
     {
         $candidateProfile = CandidatProfile::where('user_id', $userId)->first();
 
         return $candidateProfile->load('country', 'city', 'user');
     }
+
 }

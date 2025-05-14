@@ -214,6 +214,7 @@ class JobRepository
         $jobs = Job::where('valid_until', '>', Carbon::now())
         ->inRandomOrder()
         ->take(5)
+        ->with("country","city","company","category","subCategory")
         ->get();
 
         return $jobs;
