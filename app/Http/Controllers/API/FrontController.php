@@ -110,4 +110,18 @@ class FrontController extends Controller
             return response()->json(['message'=> 'Created successfully.', 201]);
         }
     }
+
+    public function alreadyApplyJob($jobId, $candidateId)
+    {
+        $candidateJob = Candidate::where('job_id', $jobId)->where('candidate_id',$candidateId)->first();
+    
+        if($candidateJob)
+        {
+            return response()->json(['message' => 'Already exist'],409);
+        }
+        else
+        {
+            return response()->json(['message' => 'Can apply to job'], 200);
+        }
+    }
 }

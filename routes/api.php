@@ -47,6 +47,7 @@ Route::middleware('auth:api')->group(function () {
 
     //kroz bodi neka dodje user id 
     Route::post('/job/{jobId}/candidat/{candidatId}/apply', [FrontController::class, 'applyJob']);
+    Route::get('/job/{jobId}/candidat/{candidatId}/apply', [FrontController::class, 'alreadyApplyJob']);
 });
 
 Route::middleware('auth:api')->get('/me', function (Request $request) {
