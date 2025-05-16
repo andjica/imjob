@@ -27,13 +27,18 @@
                                 <div class="d-flex flex-column justify-content-center">
                                     <h4 class="mb-1">No contributor found</h4>
                                     <p>Please follow contributor for makeing connections, on page <a
-                                            href="{{ asset('/company/freelancer/find/contributors') }}">find contributors</a></p>
+                                            href="{{ asset('/company/freelancer/find/contributors') }}">find
+                                            contributors</a></p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 @else
-                    @include('recruiter.components.chat-all')
+                    <div id="app">
+                        <chat-component-recruiter-all :contributors='@json($contributors ?? [])'
+                            :candidates='@json($candidates ?? [])' :current-user-id='@json(auth()->check() ? auth()->user()->id : null)'>
+                        </chat-component-recruiter-all>
+                    </div>
                 @endif
             </div>
         </div>

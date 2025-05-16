@@ -1,5 +1,5 @@
 @extends('company-freelancer.template-company-freelancer')
-@section('main-title', 'Chat wit Contributors')
+@section('main-title', 'Chat with Contributors')
 
 @section('title-dash', 'Chat')
 @section('css')
@@ -33,7 +33,11 @@
                         </div>
                     </div>
                 @else
-                    @include('company-freelancer.components.recruitment.chat')
+                <div id="app">
+                    <chat-component-freelancer-all :contributors='@json($contributors)'
+                        :candidates='@json($candidates)' :current-user-id='@json(auth()->check() ? auth()->user()->id : null)'>
+                    </chat-component-freelancer-all>
+                </div>
                 @endif
             </div>
         </div>

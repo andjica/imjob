@@ -286,6 +286,7 @@ export default {
             this.selectedContributor = user;
             this.selectedUser = null;
             const fetchContributorId = this.selectedContributor?.user?.id || this.selectedContributor?.id;
+            console.log("Select: ",fetchContributorId);
             this.fetchMessages(fetchContributorId);
             localStorage.setItem("lastChatUser", JSON.stringify(user));
             fetch(`/api/messages/mark-as-read/${fetchContributorId}`, {
@@ -441,8 +442,8 @@ export default {
         },
     },
     mounted() {
-        console.log("Candidate: ",this.candidates);
-        console.log("Contributor: ",this.contributors);
+        console.log("Candidates: ",this.candidates);
+        console.log("Contributors: ",this.contributors);
         // da napravim upit da se proveri u contributeru da li postoji objekat user ako da prosledi se njegovi podaci ako ne onda se prosledi
         if (this.contributors && this.contributors.length > 0) {
             this.selectFirstContributor();

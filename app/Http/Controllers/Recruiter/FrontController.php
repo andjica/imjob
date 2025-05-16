@@ -77,7 +77,6 @@ class FrontController extends Controller
     {
         $user   = auth()->user();
         $userId = $user->id;
-
         $recruiter = $this->recruiterServices->getOneByUserId($userId);
         return view("recruiter.pages.index", compact("recruiter"));
     }
