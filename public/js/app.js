@@ -23779,8 +23779,8 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
         return res.json();
       }).then(function () {
         // Set the unread count to 0 for this user
-        if (_this.unreadMap[_this.selectedContributor.id]) {
-          _this.unreadMap[_this.selectedContributor.id] = 0;
+        if (_this.unreadMap[_this.selectedContributor.user.id]) {
+          _this.unreadMap[_this.selectedContributor.user.id] = 0;
         }
         _this.updateUnreadTotal();
       })["catch"](function (err) {

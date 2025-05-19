@@ -298,8 +298,8 @@ export default {
                 .then((res) => res.json())
                 .then(() => {
                     // Set the unread count to 0 for this user
-                    if (this.unreadMap[this.selectedContributor.id]) {
-                        this.unreadMap[this.selectedContributor.id] = 0;
+                    if (this.unreadMap[this.selectedContributor.user.id]) {
+                        this.unreadMap[this.selectedContributor.user.id] = 0;
                     }
 
                     this.updateUnreadTotal();
