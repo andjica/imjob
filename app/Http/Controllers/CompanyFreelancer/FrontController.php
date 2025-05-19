@@ -408,7 +408,7 @@ class FrontController extends Controller
             ->get();
 
         $candidates = $this->recruiterServices->getAcceptedCandidate();
-
+        // return dd($candidates);
         return view('company-freelancer.pages.chat', compact('contributors', 'candidates'));
     }
 }

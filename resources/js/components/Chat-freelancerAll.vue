@@ -282,12 +282,15 @@ export default {
             emitter.emit("update-navbar-badge", this.unreadTotal);
         },
         selectContributor(user) {
-            console.log("selectContributor: ", user);
+          
             this.selectedContributor = user;
             this.selectedUser = null;
+
             const fetchContributorId = this.selectedContributor?.user?.id || this.selectedContributor?.id;
-            console.log("Select: ",fetchContributorId);
+
+
             this.fetchMessages(fetchContributorId);
+         
             localStorage.setItem("lastChatUser", JSON.stringify(user));
             fetch(`/api/messages/mark-as-read/${fetchContributorId}`, {
                 method: "POST",
@@ -297,10 +300,10 @@ export default {
                 },
             })
                 .then((res) => res.json())
-                .then(() => {
-                    // Set the unread count to 0 for this user
-                    if (this.unreadMap[this.selectedContributor.id]) {
-                        this.unreadMap[this.selectedContributor.id] = 0;
+                .then((data) => {
+                    console.log(data.upit);                    // Set the unread count to 0 for this user
+                    if (this.unreadMap[this.selectedContributor.user.id]) {
+                        this.unreadMap[this.selectedContributor.user.id] = 0;
                     }
 
                     this.updateUnreadTotal();

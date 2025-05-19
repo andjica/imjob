@@ -14,7 +14,8 @@ class Message extends Model
         'candidate_id',
         'text',
         'file_path',
-        'file_type'
+        'file_type',
+        'is_read'
     ];
     public function sender()
     {

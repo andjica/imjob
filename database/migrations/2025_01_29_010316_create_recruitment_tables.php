@@ -39,6 +39,7 @@ class CreateRecruitmentTables extends Migration
             $table->string('school_degree')->nullable();
             $table->year('school_year_start')->nullable();
             $table->year('school_year_end')->nullable();
+            $table->boolean('is_finished_profile')->default(0);
             $table->timestamps();
         });
 
