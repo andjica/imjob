@@ -75,7 +75,9 @@
                                         selectedUser.id === candidate.user.id
                                         ? 'user-active'
                                         : '',
-                                ]">
+                                ]" @click.prevent="
+                                            selectUser(candidate.user)
+                                            ">
                                     <div class="symbol symbol-45px symbol-circle">
                                         <span class="symbol-label bg-light-danger text-danger fs-6 fw-bolder">{{
                                             candidate.user.first_name
@@ -84,9 +86,7 @@
                                         }}</span>
                                     </div>
                                     <div class="ms-5">
-                                        <a @click.prevent="
-                                            selectUser(candidate.user)
-                                            " href="#" class="fs-5 fw-bold text-gray-900 text-hover-primary mb-2">
+                                        <a  href="#" class="fs-5 fw-bold text-gray-900 text-hover-primary mb-2">
                                             {{ candidate.user.first_name }}
                                             {{ candidate.user.last_name }}
                                         </a>
@@ -138,6 +138,7 @@
                     </div>
                 </div>
                 <div class="card-body chat-box chat-box__contributor" id="chatBox">
+                   
                     <div v-for="msg in messages" :key="msg.id" :class="msg.user_id === currentUserId
                         ? 'chat-message sent'
                         : 'chat-message received'
@@ -161,14 +162,26 @@
                     </div>
                 </div>
                 <div class="card-footer">
-                    <form id="chatForm">
-                        <div class="input-group">
-                            <input type="text" class="form-control form-control-solid px-13" name="input" value=""
-                                placeholder="Type your message..." v-model="message" />
+                    <form id="chatForm" @submit.prevent="handleSubmit" enctype="multipart/form-data">
+                        <div class="d-flex align-items-center gap-2" >
+                                <input type="text" class="form-control form-control-solid px-13" name="input"
+                                placeholder="Type your message..." v-model="message" @keydown.enter.prevent="handleSubmit" />
+                                <button type="button" class="btn btn-light position-relative p-22" @click="triggerFileInput">
+                                <i class="fa-solid fa-image icon-img"></i>
+                                <i class="fa-solid fa-file icon-file"></i>
+                            </button>
+                            <input
+                                type="file"
+                                id="fileUpload-recruiter"
+                                ref="fileInput"
+                                @change="handleFileChange"
+                                 accept="image/*,.pdf,.doc,.docx"
+                                class="d-none"
+                            />    
                             <button class="btn-emojis" ref="emojiBtn" @click.prevent="toggleEmojiPicker">
                                 😀
                             </button>
-                            <button class="btn btn-primary" type="submit" @click.prevent="handleSubmit">
+                            <button class="btn btn-primary" type="submit">
                                 Send
                             </button>
                         </div>
@@ -199,6 +212,7 @@ export default {
             selectedUser: null,
             picker: null,
             message: "",
+            file: "",
             messages: [],
             unreadMap: {},
             contributorData: [],
@@ -341,6 +355,19 @@ export default {
                     );
                 });
         },
+        triggerFileInput() {
+            this.$refs.fileInput.click();
+        },
+        handleFileChange(event) {
+            const file = event.target.files[0];
+            if (file && file.size > 5 * 1024 * 1024) {
+                alert("File must be less than 5MB.");
+                this.$refs.fileInput.value = "";
+                this.file = null;
+                return;
+            }
+            this.file = file;
+        },
         fetchMessages(receiverId) {
             if (!receiverId) return;
             console.log("Ko je primio poruke: ", receiverId);
@@ -378,39 +405,48 @@ export default {
         },
         handleSubmit() {
             if (this.message.trim() === "") {
-                alert("Unesi poruku!");
+                alert("Please enter a text!");
                 return;
             }
 
             const receiverId =
                 this.selectedUser?.id || this.selectedContributor?.user?.id || this.selectedContributor?.id;
             if (!receiverId) {
-                alert("Nije odabran korisnik za slanje poruke.");
+                alert("The user is not selected.");
                 return;
             }
 
-            const payload = {
-                user_id: this.currentUserId,
-                text: this.message,
-                receiver_id: receiverId,
-            };
+            const formData = new FormData();
 
-            if (this.candidates?.candidate_id) {
-                payload.candidate_id = this.candidates.candidate_id;
+            formData.append("user_id", this.currentUserId);
+            formData.append("text", this.message);
+            formData.append("receiver_id", receiverId);
+            if (this.file) {
+                formData.append("file", this.file);
             }
+
+            console.log("Form data sadrži:");
+            for (let [key, value] of formData.entries()) {
+                console.log(`${key}:`, value);
+            }    
 
             fetch("/web/messages", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json",
                     "X-CSRF-TOKEN": window.csrfToken,
                 },
-                body: JSON.stringify(payload),
+                body: formData,
             })
                 .then((res) => res.json())
                 .then((data) => {
-                    console.log("Fetch message: ", data);
                     this.message = "";
+                    this.file = null;
+                    this.messages.push(data.message);
+                    if (this.$refs.fileInput) {
+                        this.$refs.fileInput.value = "";
+                    }
+
+                    this.scrollToBottom();
                 })
                 .catch((error) => {
                     console.error("Greška pri slanju poruke:", error);
@@ -441,8 +477,6 @@ export default {
         },
     },
     mounted() {
-        console.log("Candidate: ",this.candidates);
-        console.log("Contributor: ",this.contributors);
         // da napravim upit da se proveri u contributeru da li postoji objekat user ako da prosledi se njegovi podaci ako ne onda se prosledi
         if (this.contributors && this.contributors.length > 0) {
             this.selectFirstContributor();
@@ -575,13 +609,26 @@ export default {
     background: #f5f8fa !important;
 }
 
+.p-22 {
+    padding: 22px!important;
+}
 .btn-emojis {
     background: transparent;
     border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    background: #F5F8FA;
+    padding: 8px;
+    border-radius: 10%;
+}
+
+.icon-img{
     position: absolute;
-    right: 80px;
-    top: 11px;
-    z-index: 9999 !important;
+    left: 6px;
+}
+.icon-file{
+    position: absolute;
+    right: 3px;
 }
 
 .message-info {

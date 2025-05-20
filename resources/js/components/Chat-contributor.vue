@@ -18,7 +18,7 @@
                         data-kt-scroll-dependencies="#kt_header, #kt_app_header, #kt_toolbar, #kt_app_toolbar, #kt_footer, #kt_app_footer, #kt_chat_contacts_header"
                         data-kt-scroll-wrappers="#kt_content, #kt_app_content, #kt_chat_contacts_body"
                         data-kt-scroll-offset="5px" style="max-height: 362px">
-                        <div class="d-flex d-flex__column py-4">
+                        <div class="d-flex d-flex__column">
                             <div v-for="recruiter in uniqueRecruiters" :key="recruiter.user_id">
                                 <div v-if="recruiter && recruiter.user_id"
                                     class="d-flex align-items-center px-2 user-card"
@@ -117,14 +117,27 @@
                     </div>
                 </div>
                 <div class="card-footer border-top pt-4">
-                    <form id="chatForm">
-                        <div class="input-group">
+                    <form id="chatForm" @submit.prevent="handleSubmit" enctype="multipart/form-data">
+                        <div class="d-flex align-items-center gap-2">
                             <input type="text" class="form-control form-control-solid px-13" name="input"
-                                placeholder="Type your message..." v-model="message" />
+                                placeholder="Type your message..." v-model="message" @keydown.enter.prevent="handleSubmit" />
+                                <button type="button" class="btn btn-light position-relative p-22" @click="triggerFileInput">
+                                <i class="fa-solid fa-image icon-img"></i>
+                                <i class="fa-solid fa-file icon-file"></i>
+                            </button>
+                            <input
+                                type="file"
+                                id="fileUpload-contributor"
+                                ref="fileInput"
+                                @change="handleFileChange"
+                                 accept="image/*,.pdf,.doc,.docx"
+                                class="d-none"
+                            />            
                             <button class="btn-emojis" ref="emojiBtn" @click.prevent="toggleEmojiPicker">
                                 😀
                             </button>
-                            <button class="btn btn-primary" type="submit" @click.prevent="handleSubmit">
+
+                            <button class="btn btn-primary" type="submit">
                                 Send
                             </button>
                         </div>
@@ -151,6 +164,7 @@ export default {
             selectedUser: null,
             picker: null,
             message: "",
+            file: "",
             messages: [],
             unreadMap: {},
         };
@@ -215,6 +229,19 @@ export default {
                     );
                 });
         },
+        triggerFileInput() {
+            this.$refs.fileInput.click();
+        },
+        handleFileChange(event) {
+            const file = event.target.files[0];
+            if (file && file.size > 5 * 1024 * 1024) {
+                alert("File must be less than 5MB.");
+                this.$refs.fileInput.value = "";
+                this.file = null;
+                return;
+            }
+            this.file = file;
+        },
         fetchMessages(receiverId) {
             if (!receiverId) return;
 
@@ -250,40 +277,51 @@ export default {
             }
         },
         handleSubmit() {
-            if (this.message.trim() === "") return alert("Unesi poruku!");
+            if (this.message.trim() === "") return alert("Please enter a text!");
 
             const receiverId =
                 this.selectedUser?.id || this.selectedRecruiter?.user?.id;
             if (!receiverId)
-                return alert("Nije odabran korisnik za slanje poruke.");
+                return alert("The user is not selected.");
 
-            const payload = {
-                user_id: this.currentUserId,
-                text: this.message,
-                receiver_id: receiverId,
-                candidate_id: this.selectedUser?.id || 0,
-            };
+            const formData = new FormData();
 
+            formData.append("user_id", this.currentUserId);
+            formData.append("text", this.message);
+            formData.append("receiver_id", receiverId);
+            formData.append("candidate_id", this.selectedUser?.id || 0);
+            if (this.file) {
+                formData.append("file", this.file);
+            }
+            
+            console.log("Form data sadrži:");
+            for (let [key, value] of formData.entries()) {
+                console.log(`${key}:`, value);
+            }       
             fetch("/web/messages", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json",
                     "X-CSRF-TOKEN": window.csrfToken,
                 },
-                body: JSON.stringify(payload),
+                body: formData,
             })
                 .then((res) => res.json())
                 .then((data) => {
                     this.message = "";
+                    this.file = null;
+                    this.messages.push(data.message);
+                    if (this.$refs.fileInput) {
+                        this.$refs.fileInput.value = "";
+                    }
+
+                    this.scrollToBottom();
                 })
                 .catch((error) => {
                     console.error("Greška pri slanju poruke:", error);
                 });
-            console.log(window.csrfToken);
         },
     },
     mounted() {
-        console.log(this.recruiters);
         this.$nextTick(() => {
             emitter.emit("reset-navbar-badge");
         });
@@ -429,14 +467,30 @@ export default {
 .user-active {
     background: #f5f8fa !important;
 }
-
+.p-22 {
+    padding: 22px!important;
+}
 .btn-emojis {
     background: transparent;
     border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    background: #F5F8FA;
+    padding: 8px;
+    border-radius: 10%;
+}
+
+.icon-img{
     position: absolute;
-    right: 80px;
-    top: 11px;
-    z-index: 9999 !important;
+    left: 6px;
+}
+.icon-file{
+    position: absolute;
+    right: 3px;
+}
+
+.form-control-file {
+    max-width: 150px;
 }
 
 .chat-message.sent {
