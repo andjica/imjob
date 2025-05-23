@@ -5,6 +5,7 @@ use App\Http\Controllers\ChatController;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\FrontController;
 use App\Http\Controllers\API\CandidateProfileController;
+use App\Http\Controllers\API\RecruitmentController;
 use App\Models\CandidatProfile;
 
 /*
@@ -48,6 +49,8 @@ Route::middleware('auth:api')->group(function () {
     //kroz bodi neka dodje user id 
     Route::post('/job/{jobId}/candidat/{candidatId}/apply', [FrontController::class, 'applyJob']);
     Route::get('/job/{jobId}/candidat/{candidatId}/apply', [FrontController::class, 'alreadyApplyJob']);
+
+    Route::get('/applied-jobs/', [RecruitmentController::class, 'getAppliedJobsByCandidate']);
 });
 
 Route::middleware('auth:api')->get('/me', function (Request $request) {
