@@ -8,20 +8,13 @@
                     <form class="w-100 position-relative" autocomplete="off">
                         <!--begin::Icon-->
                         <i
-                            class="ki-duotone ki-magnifier fs-3 text-gray-500 position-absolute top-50 ms-5 translate-middle-y"
-                            ><span class="path1"></span
-                            ><span class="path2"></span
-                        ></i>
+                            class="ki-duotone ki-magnifier fs-3 text-gray-500 position-absolute top-50 ms-5 translate-middle-y"><span
+                                class="path1"></span><span class="path2"></span></i>
                         <!--end::Icon-->
 
                         <!--begin::Input-->
-                        <input
-                            type="text"
-                            class="form-control form-control-solid px-13"
-                            name="search"
-                            value=""
-                            placeholder="Search by username or email..."
-                        />
+                        <input type="text" class="form-control form-control-solid px-13" name="search" value=""
+                            placeholder="Search by username or email..." />
                         <!--end::Input-->
                     </form>
                     <!--end::Form-->
@@ -30,42 +23,25 @@
 
                 <!--begin::Card body-->
                 <div class="card-body pt-5" id="kt_chat_contacts_body">
-                    <div
-                        class="scroll-y me-n5 pe-5 h-lg-auto"
-                        data-kt-scroll="true"
-                        data-kt-scroll-activate="{default: false, lg: true}"
-                        data-kt-scroll-max-height="auto"
+                    <div class="scroll-y me-n5 pe-5 h-lg-auto" data-kt-scroll="true"
+                        data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto"
                         data-kt-scroll-dependencies="#kt_header, #kt_app_header, #kt_toolbar, #kt_app_toolbar, #kt_footer, #kt_app_footer, #kt_chat_contacts_header"
                         data-kt-scroll-wrappers="#kt_content, #kt_app_content, #kt_chat_contacts_body"
-                        data-kt-scroll-offset="5px"
-                        style="max-height: 362px"
-                    >
+                        data-kt-scroll-offset="5px" style="max-height: 362px">
                         <!--begin::List of Users-->
                         <div class="d-flex d-flex__column py-1">
                             <!-- Kandidati -->
-                            <div
-                                class="scroll-container candidates-scroll scroll-section"
-                            >
-                                <div
-                                    v-for="user in candidatesList"
-                                    :key="user.user?.id || user.id"
+                            <div class="scroll-container candidates-scroll scroll-section">
+                                <div v-for="user in candidatesList" :key="user.user?.id || user.user_id"
                                     class="d-flex flex-column align-items-center"
-                                    @click.prevent="selectUser(user.user)"
-                                >
-                                    <div
-                                        class="user__details"
-                                        :class="{
-                                            'user-active':
-                                                selectedUser?.id ===
-                                                user.user?.id,
-                                        }"
-                                    >
-                                        <div
-                                            class="symbol symbol-45px symbol-circle"
-                                        >
-                                            <span
-                                                class="symbol-label bg-light-danger text-danger fs-6 fw-bolder"
-                                            >
+                                    @click.prevent="selectUser(user.user)">
+                                    <div class="user__details" :class="{
+                                        'user-active':
+                                            selectedUser?.id ===
+                                            user.user?.id,
+                                    }">
+                                        <div class="symbol symbol-45px symbol-circle">
+                                            <span class="symbol-label bg-light-danger text-danger fs-6 fw-bolder">
                                                 {{
                                                     user.user?.first_name
                                                         ?.charAt(0)
@@ -75,10 +51,7 @@
                                         </div>
 
                                         <div class="ms-5">
-                                            <a
-                                                href="#"
-                                                class="fs-5 fw-bold text-gray-900 text-hover-primary mb-2"
-                                            >
+                                            <a href="#" class="fs-5 fw-bold text-gray-900 text-hover-primary mb-2">
                                                 {{ user.user?.first_name }}
                                                 {{ user.user?.last_name }}
                                             </a>
@@ -86,40 +59,25 @@
                                             <small><i>Candidate</i></small>
                                         </div>
 
-                                        <span
-                                            v-if="unreadMap[user.user?.id]"
-                                            class="badge badge-danger"
-                                        >
+                                        <span v-if="unreadMap[user.user?.id]" class="badge badge-danger">
                                             {{ unreadMap[user.user.id] }}
                                         </span>
                                     </div>
                                 </div>
                             </div>
-                            <hr class="hr_custome" />
+                            <hr class="my-4" />
                             <!-- Kontributeri -->
-                            <div
-                                class="scroll-container contributors-scroll scroll-section"
-                            >
-                                <div
-                                    v-for="user in contributorsList"
-                                    :key="user.user?.id || user.id"
+                            <div class="scroll-container contributors-scroll scroll-section">
+                                <div v-for="user in contributorsList" :key="user.user?.id || user.user_id"
                                     class="d-flex flex-column align-items-center"
-                                    @click.prevent="selectContributor(user)"
-                                >
-                                    <div
-                                        class="user__details"
-                                        :class="{
-                                            'user-active':
-                                                selectedContributor?.user
-                                                    ?.id === user.user?.id,
-                                        }"
-                                    >
-                                        <div
-                                            class="symbol symbol-45px symbol-circle"
-                                        >
-                                            <span
-                                                class="symbol-label bg-light-danger text-danger fs-6 fw-bolder"
-                                            >
+                                    @click.prevent="selectContributor(user)">
+                                    <div class="user__details" :class="{
+                                        'user-active':
+                                            selectedContributor?.user
+                                                ?.id === user.user?.id,
+                                    }">
+                                        <div class="symbol symbol-45px symbol-circle">
+                                            <span class="symbol-label bg-light-danger text-danger fs-6 fw-bolder">
                                                 {{
                                                     user.user?.first_name
                                                         ?.charAt(0)
@@ -129,10 +87,7 @@
                                         </div>
 
                                         <div class="ms-5">
-                                            <a
-                                                href="#"
-                                                class="fs-5 fw-bold text-gray-900 text-hover-primary mb-2"
-                                            >
+                                            <a href="#" class="fs-5 fw-bold text-gray-900 text-hover-primary mb-2">
                                                 {{ user.user?.first_name }}
                                                 {{ user.user?.last_name }}
                                             </a>
@@ -140,10 +95,7 @@
                                             <small><i>Contributor</i></small>
                                         </div>
 
-                                        <span
-                                            v-if="unreadMap[user.user?.id]"
-                                            class="badge badge-danger"
-                                        >
+                                        <span v-if="unreadMap[user.user?.id]" class="badge badge-danger">
                                             {{ unreadMap[user.user.id] }}
                                         </span>
                                     </div>
@@ -177,26 +129,18 @@
                             {{
                                 selectedContributor?.name ||
                                 candidates?.user?.first_name +
-                                    " " +
-                                    candidates?.user?.last_name ||
+                                " " +
+                                candidates?.user?.last_name ||
                                 "Candidate?"
                             }}
                         </h3>
                     </div>
                 </div>
-                <div
-                    class="card-body chat-box chat-box__contributor"
-                    id="chatBox-freelancerAll"
-                >
-                    <div
-                        v-for="msg in messages"
-                        :key="msg.id"
-                        :class="
-                            msg.user_id === currentUserId
-                                ? 'chat-message sent'
-                                : 'chat-message received'
-                        "
-                    >
+                <div class="card-body chat-box chat-box__contributor" id="chatBox-freelancerAll">
+                    <div v-for="msg in messages" :key="msg.id" :class="msg.user_id === currentUserId
+                        ? 'chat-message sent'
+                        : 'chat-message received'
+                        ">
                         <p>{{ msg.text }}</p>
                         <br />
                         <small class="text-muted">{{
@@ -214,41 +158,19 @@
                     </div>
                 </div>
                 <div class="card-footer">
-                    <form
-                        id="chatForm"
-                        @submit.prevent="handleSubmit"
-                        enctype="multipart/form-data"
-                    >
+                    <form id="chatForm" @submit.prevent="handleSubmit" enctype="multipart/form-data">
                         <div class="d-flex align-items-center gap-2">
-                            <input
-                                type="text"
-                                class="form-control form-control-solid px-13"
-                                name="input"
-                                placeholder="Type your message..."
-                                v-model="message"
-                                @keydown.enter.prevent="handleSubmit"
-                            />
-                            <button
-                                type="button"
-                                class="btn btn-light position-relative p-22"
-                                @click="triggerFileInput"
-                            >
+                            <input type="text" class="form-control form-control-solid px-13" name="input"
+                                placeholder="Type your message..." v-model="message"
+                                @keydown.enter.prevent="handleSubmit" />
+                            <button type="button" class="btn btn-light position-relative p-22"
+                                @click="triggerFileInput">
                                 <i class="fa-solid fa-image icon-img"></i>
                                 <i class="fa-solid fa-file icon-file"></i>
                             </button>
-                            <input
-                                type="file"
-                                id="fileUpload-freelancer"
-                                ref="fileInput"
-                                @change="handleFileChange"
-                                accept="image/*,.pdf,.doc,.docx"
-                                class="d-none"
-                            />
-                            <button
-                                class="btn-emojis"
-                                ref="emojiBtn"
-                                @click.prevent="toggleEmojiPicker"
-                            >
+                            <input type="file" id="fileUpload-freelancer" ref="fileInput" @change="handleFileChange"
+                                accept="image/*,.pdf,.doc,.docx" class="d-none" />
+                            <button class="btn-emojis" ref="emojiBtn" @click.prevent="toggleEmojiPicker">
                                 😀
                             </button>
 
@@ -271,10 +193,7 @@ import emitter from "../eventBus";
 export default {
     props: {
         contributors: Array,
-        candidates: {
-            type: Object,
-            required: true,
-        },
+        candidates: Array,
         currentUserId: Number,
     },
     data() {
@@ -287,6 +206,7 @@ export default {
             messages: [],
             unreadMap: {},
             contributorData: [],
+            candidateData: [],
         };
     },
     computed: {
@@ -315,27 +235,44 @@ export default {
                 this.selectedContributor?.user?.first_name ||
                 this.selectedContributor?.user?.last_name
             ) {
-                return `${this.selectedContributor.user.first_name || ""} ${
-                    this.selectedContributor.user.last_name || ""
-                }`.trim();
+                return `${this.selectedContributor.user.first_name || ""} ${this.selectedContributor.user.last_name || ""
+                    }`.trim();
             }
             if (this.selectedContributor?.name) {
                 return this.selectedContributor.name;
             }
             if (this.selectedUser?.first_name || this.selectedUser?.last_name) {
-                return `${this.selectedUser.first_name || ""} ${
-                    this.selectedUser.last_name || ""
-                }`.trim();
+                return `${this.selectedUser.first_name || ""} ${this.selectedUser.last_name || ""
+                    }`.trim();
             }
             if (
                 this.candidates?.user?.first_name ||
                 this.candidates?.user?.last_name
             ) {
-                return `${this.candidates.user.first_name || ""} ${
-                    this.candidates.user.last_name || ""
-                }`.trim();
+                return `${this.candidates.user.first_name || ""} ${this.candidates.user.last_name || ""
+                    }`.trim();
             }
             return "Unknown User";
+        },
+        sortedCandidates() {
+            const lastUser = localStorage.getItem("lastChatUser");
+            if (!lastUser) return this.candidates;
+
+            const parsed = JSON.parse(lastUser);
+            const sorted = [...this.candidates];
+
+            // Nađi indeks kandidata sa istim ID-em
+            const index = sorted.findIndex((c) => {
+                const id = c.user?.id ?? c.id;
+                return id === parsed.id;
+            });
+
+            if (index > -1) {
+                const [last] = sorted.splice(index, 1);
+                sorted.unshift(last);
+            }
+
+            return sorted;
         },
         sortedContributors() {
             const lastUser = localStorage.getItem("lastChatUser");
@@ -354,9 +291,10 @@ export default {
             return sorted;
         },
         candidatesList() {
-            return (Array.isArray(this.candidates) ? this.candidates : [])
+            return (Array.isArray(this.candidateData) ? this.candidateData : [])
                 .map((c) => ({
                     ...c,
+                    id: c.user?.id ?? c.id,
                     userType: "candidate",
                 }))
                 .sort((a, b) => {
@@ -383,16 +321,6 @@ export default {
         },
     },
     methods: {
-        isLastCandidate(user) {
-            if (user.userType !== "candidate") return false;
-
-            // Pronađi poslednjeg kandidata u listi
-            const lastCandidate = [...this.candidatesList]
-                .reverse()
-                .find((u) => u.userType === "candidate");
-
-            return lastCandidate && lastCandidate.user?.id === user.user?.id;
-        },
         updateLastMessageTime(userId, timestamp) {
             const updateUser = (arr) => {
                 const index = arr.findIndex((u) => {
@@ -404,8 +332,8 @@ export default {
                 }
             };
 
-            if (Array.isArray(this.candidates)) {
-                updateUser(this.candidates);
+            if (Array.isArray(this.candidateData)) {
+                updateUser(this.candidateData);
             }
 
             if (Array.isArray(this.contributorData)) {
@@ -552,9 +480,8 @@ export default {
             }
         },
         handleSubmit() {
-            if (this.message.trim() === "") {
-                alert("Please enter a text!");
-                return;
+            if (!this.message.trim() && !this.file) {
+                return alert("Please enter a text or select a file!");
             }
 
             const receiverId =
@@ -604,25 +531,27 @@ export default {
                 });
         },
         selectFirstCandidat() {
-    if (this.candidatesList.length > 0) {
-        const firstCandidate = this.candidatesList[0];
+            if (this.candidatesList.length > 0) {
+                const firstCandidate = this.candidatesList[0];
 
-        this.selectedUser = firstCandidate;
-        this.selectedContributor = null;
+                this.selectedUser = firstCandidate;
+                this.selectedContributor = null;
 
-        this.fetchMessages(firstCandidate.id);
+                this.fetchMessages(firstCandidate.id);
 
-        localStorage.setItem(
-            "lastChatUser",
-            JSON.stringify(firstCandidate)
-        );
-    } else {
-        console.warn("Nema dostupnih kandidata.");
-    }
-},
+                localStorage.setItem(
+                    "lastChatUser",
+                    JSON.stringify(firstCandidate)
+                );
+            } else {
+                console.warn("Nema dostupnih kandidata.");
+            }
+        },
 
     },
     mounted() {
+        console.log("Kontributeri: ", this.contributors);
+        console.log("Kandidati: ", this.candidates);
         this.$nextTick(() => {
             emitter.emit("reset-navbar-badge");
         });
@@ -665,8 +594,8 @@ export default {
             const parsed = JSON.parse(lastUser);
             this.selectedUser = parsed;
             this.fetchMessages(parsed.id);
-        } else if (this.candidatesList.length > 0) {
-            const firstCandidate = this.candidatesList[0];
+        } else if (this.candidateData.length > 0) {
+            const firstCandidate = this.candidateData[0];
             this.selectedUser = firstCandidate;
             this.fetchMessages(firstCandidate.id);
             localStorage.setItem(
@@ -684,6 +613,11 @@ export default {
             );
         }
         this.prepareContributors();
+
+        this.candidateData = Array.isArray(this.candidates)
+            ? this.candidates.map(c => ({ ...c }))
+            : [];
+
 
         Echo.private(`chat.${this.currentUserId}`)
             .subscribed(() => {
@@ -713,14 +647,18 @@ export default {
                     }
 
                     // Ako candidates je niz, traži tamo
-                    if (Array.isArray(this.candidates)) {
-                        const candidate = this.candidates.find(
-                            (c) => c.id === userId
+                    // Ako candidates je niz, traži tamo
+                    const candidateIndex = this.candidateData.findIndex((c) => c.id === userId);
+                    if (candidateIndex !== -1) {
+                        this.$set(
+                            this.candidateData[candidateIndex],
+                            'last_message_at',
+                            payload.message.created_at
                         );
-                        if (candidate) {
-                            candidate.last_message_at =
-                                payload.message.created_at;
-                        }
+
+                        // Move the updated candidate to the top
+                        const updatedCandidate = this.candidateData.splice(candidateIndex, 1)[0];
+                        this.candidateData.unshift(updatedCandidate);
                     }
                 };
 
@@ -809,11 +747,6 @@ export default {
     border-radius: 10%;
 }
 
-.hr_custome {
-    height: 5px !important;
-    width: 100%;
-}
-
 .message-info {
     position: absolute;
     bottom: 90px;
@@ -824,7 +757,7 @@ export default {
 }
 
 .scroll-section {
-    max-height: 300px; /* ili koliko god želiš */
+    max-height: 300px;
     overflow-y: auto;
     border: 1px solid #eee;
     margin-bottom: 1rem;

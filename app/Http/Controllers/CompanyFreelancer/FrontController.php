@@ -183,7 +183,7 @@ class FrontController extends Controller
         /** @var User $user */
         $user = auth()->user();
         //$isConnected = $user->recruiter->companies->contains($company);
-        
+
         $isOwnCompany = $user->recruiter->company?->id === $company->id;
         $similarCompanies = $this->companyServices->getCompaniesByCategory($company->category->id);
 
@@ -232,7 +232,7 @@ class FrontController extends Controller
     public function recruitmentProcess(Job $job): Factory|View|Application
     {
         $candidates = $job->candidates()->with('user', 'candidate')->get();
-        
+
         return view('company-freelancer.pages.recruitment.job-recruitment', compact('job', 'candidates'));
     }
 
@@ -244,7 +244,7 @@ class FrontController extends Controller
         if ($candidate->status !== 'accept' || !$candidate->recruitmentProcess) {
             abort(404);
         }
-           
+
         $recruitmentProcess = $candidate->recruitmentProcess()->with('subphases')->first();
 
         $availablePhases = AvailableRecruitmentSubphases::where('phase', $candidate->recruitmentProcess->current_phase)->get();
@@ -264,7 +264,7 @@ class FrontController extends Controller
             ->with('user')
             ->wherePivot('status', ContributorRecruiter::ACTIVE)
             ->get();
-        
+
         return view(
             'company-freelancer.pages.recruitment.candidat-recruitment-process',
             compact(
@@ -284,7 +284,7 @@ class FrontController extends Controller
      */
     public function createMeeting(StoreMeetingRequest $request, Candidate $candidate, CreateMeeting $createMeeting): RedirectResponse
     {
-        
+
         $createMeeting->execute($candidate, $request->all());
 
         return redirect()->back()->with('success', 'Meeting created succssfully');
@@ -403,7 +403,7 @@ class FrontController extends Controller
     public function chats(ContributorRecruiter $notificationsContributorRecruiter)
     {
         $user = auth()->user();
-       $contributors = $user->recruiter->contributors()
+        $contributors = $user->recruiter->contributors()
             ->with('user')
             ->wherePivot('status', ContributorRecruiter::ACTIVE)
             ->get()
@@ -411,9 +411,9 @@ class FrontController extends Controller
                 $userId = $contributor->user->id ?? $contributor->id;
 
                 $lastMessage = Message::where(function ($q) use ($userId) {
-                        $q->where('user_id', $userId)
+                    $q->where('user_id', $userId)
                         ->orWhere('receiver_id', $userId);
-                    })
+                })
                     ->latest('created_at')
                     ->first();
 
@@ -423,7 +423,7 @@ class FrontController extends Controller
             })
             ->sortByDesc('last_message_at') // sortiraj po najnovijoj poruci
             ->values();
-            
+
         $candidates = $this->recruiterServices->getAcceptedCandidate();
         // return dd($candidates);
         return view('company-freelancer.pages.chat', compact('contributors', 'candidates'));

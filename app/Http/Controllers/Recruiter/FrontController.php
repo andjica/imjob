@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Recruiter;
 
-use App\Interfaces\CityInterface;
 use App\Models\Job;
 use App\Models\City;
 use App\Models\Company;
 use App\Models\Country;
 use App\Models\JobType;
+use App\Models\Message;
 use App\Models\Category;
 use App\Models\Candidate;
 use App\Models\Recruiter;
@@ -16,6 +16,7 @@ use FontLib\Table\Type\fpgm;
 use Illuminate\Http\Request;
 use App\Actions\CreateMeeting;
 use App\Models\CompanyRecruiter;
+use App\Interfaces\CityInterface;
 use App\Models\RecruitmentProcess;
 use App\Services\CandidateService;
 use App\Models\RecruitmentSubphase;
@@ -401,7 +402,23 @@ class FrontController extends Controller
         $contributors = $user->recruiter->contributors()
             ->wherePivot('status', ContributorRecruiter::ACTIVE)
             ->with('user')
-            ->get();
+            ->get()
+            ->map(function ($contributor) {
+                $userId = $contributor->user->id ?? $contributor->id;
+
+                $lastMessage = Message::where(function ($q) use ($userId) {
+                    $q->where('user_id', $userId)
+                        ->orWhere('receiver_id', $userId);
+                })
+                    ->latest('created_at')
+                    ->first();
+
+                $contributor->last_message_at = $lastMessage?->created_at;
+
+                return $contributor;
+            })
+            ->sortByDesc('last_message_at') // sortiraj po najnovijoj poruci
+            ->values();
 
         $candidates = $this->recruiterServices->getAcceptedCandidate();
     

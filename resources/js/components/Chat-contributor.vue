@@ -19,43 +19,57 @@
                         data-kt-scroll-wrappers="#kt_content, #kt_app_content, #kt_chat_contacts_body"
                         data-kt-scroll-offset="5px" style="max-height: 362px">
                         <div class="d-flex d-flex__column">
-                            <div v-for="recruiter in uniqueRecruiters" :key="recruiter.user_id">
-                                <div v-if="recruiter && recruiter.user_id"
-                                    class="d-flex align-items-center px-2 user-card"
-                                    @click.prevent="selectUser(recruiter.user)" :class="{
-                                        'user-active':
-                                            selectedUser &&
-                                            selectedUser.id ===
-                                            recruiter.user_id,
-                                    }">
-                                    <div class="symbol symbol-45px symbol-circle">
-                                        <img :src="recruiter.profile_image
-                                            ? getImageUrl(recruiter.profile_image)
-                                            : defaultImage
-                                            " alt="Profile Image" class="img-fluid rounded-circle shadow-sm"
-                                            style="width: 60px; height: 60px" />
+                            <!-- Freelancers Section -->
+                            <div class="gap-4 user-card__scroll">
+                                <div v-for="recruiter in uniqueRecruiters.filter(r => r.is_freelancer === 0)"
+                                    :key="'freelancer-' + recruiter.user_id">
+                                    <div v-if="recruiter && recruiter.user_id"
+                                        class="d-flex align-items-center px-2 user-card"
+                                        @click.prevent="selectUser(recruiter.user)"
+                                        :class="{ 'user-active': selectedUser && selectedUser.id === recruiter.user_id }">
+                                        <div class="symbol symbol-45px symbol-circle">
+                                            <img :src="recruiter.profile_image ? getImageUrl(recruiter.profile_image) : defaultImage"
+                                                alt="Profile Image" class="img-fluid rounded-circle shadow-sm"
+                                                style="width: 60px; height: 60px" />
+                                        </div>
+                                        <div class="ms-5">
+                                            <a href="#" class="fs-5 fw-bold text-gray-900 text-hover-primary mb-2">
+                                                {{ recruiter.user.first_name }} {{ recruiter.user.last_name }}
+                                            </a>
+                                            <p>{{ recruiter.user.email }}</p>
+                                            <small><i>Freelancer</i></small>
+                                        </div>
+                                        <span v-if="unreadMap[recruiter.user.id]" class="badge badge-danger">
+                                            {{ unreadMap[recruiter.user.id] }}
+                                        </span>
                                     </div>
-                                    <div class="ms-5">
-                                        <a href="#" class="fs-5 fw-bold text-gray-900 text-hover-primary mb-2">
-                                            {{ recruiter.user.first_name }}
-                                            {{ recruiter.user.last_name }}
-                                        </a>
-                                        <p>{{ recruiter.user.email }}</p>
-                                        <small><i>{{
-                                            recruiter.is_freelancer === 0
-                                                ? "Freelancer"
-                                                : "Recruiter"
-                                                }}</i></small>
-                                    </div>
-                                    <span v-if="unreadMap[recruiter.user.id]" class="badge badge-danger">{{
-                                        unreadMap[recruiter.user.id]
-                                        }}</span>
                                 </div>
-                                <div v-else>
-                                    <p class="text-danger">
-                                        Missing user for recruiter ID:
-                                        {{ recruiter.user_id }}
-                                    </p>
+                            </div>
+                            <hr class="my-4" />
+                            <!-- Recruiters Section -->
+                            <div class="gap-4 user-card__scroll">
+                                <div v-for="recruiter in uniqueRecruiters.filter(r => r.is_freelancer !== 0)"
+                                    :key="'recruiter-' + recruiter.user_id">
+                                    <div v-if="recruiter && recruiter.user_id"
+                                        class="d-flex align-items-center px-2 user-card"
+                                        @click.prevent="selectUser(recruiter.user)"
+                                        :class="{ 'user-active': selectedUser && selectedUser.id === recruiter.user_id }">
+                                        <div class="symbol symbol-45px symbol-circle">
+                                            <img :src="recruiter.profile_image ? getImageUrl(recruiter.profile_image) : defaultImage"
+                                                alt="Profile Image" class="img-fluid rounded-circle shadow-sm"
+                                                style="width: 60px; height: 60px" />
+                                        </div>
+                                        <div class="ms-5">
+                                            <a href="#" class="fs-5 fw-bold text-gray-900 text-hover-primary mb-2">
+                                                {{ recruiter.user.first_name }} {{ recruiter.user.last_name }}
+                                            </a>
+                                            <p>{{ recruiter.user.email }}</p>
+                                            <small><i>Recruiter</i></small>
+                                        </div>
+                                        <span v-if="unreadMap[recruiter.user.id]" class="badge badge-danger">
+                                            {{ unreadMap[recruiter.user.id] }}
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -63,20 +77,17 @@
                 </div>
             </div>
         </div>
-
         <div class="col-lg-7">
             <div class="card card-flush h-100">
-                <div class="card-header">
-                    <h3 class="card-title">
-                        Chat with
-                        {{
-                            selectedUser
-                                ? selectedUser.first_name +
-                                " " +
-                                selectedUser.last_name
-                                : "Select a user"
-                        }}
-                    </h3>
+                <div v-if="selectedUser" class="d-flex align-items-center">
+                    <div class="card-header">
+                        <h3 class="card-title mb-0">
+                            Chat with {{ selectedUser.first_name }} {{ selectedUser.last_name }}
+                        </h3>
+                    </div>
+                </div>
+                <div v-else>
+                    <h3 class="card-title">Select a user</h3>
                 </div>
                 <div class="card-body chat-box chat-box__contributor" id="chatBox__contributor">
                     <div v-for="msg in messages" :key="msg.id" :class="[
@@ -120,19 +131,15 @@
                     <form id="chatForm" @submit.prevent="handleSubmit" enctype="multipart/form-data">
                         <div class="d-flex align-items-center gap-2">
                             <input type="text" class="form-control form-control-solid px-13" name="input"
-                                placeholder="Type your message..." v-model="message" @keydown.enter.prevent="handleSubmit" />
-                                <button type="button" class="btn btn-light position-relative p-22" @click="triggerFileInput">
+                                placeholder="Type your message..." v-model="message"
+                                @keydown.enter.prevent="handleSubmit" />
+                            <button type="button" class="btn btn-light position-relative p-22"
+                                @click="triggerFileInput">
                                 <i class="fa-solid fa-image icon-img"></i>
                                 <i class="fa-solid fa-file icon-file"></i>
                             </button>
-                            <input
-                                type="file"
-                                id="fileUpload-contributor"
-                                ref="fileInput"
-                                @change="handleFileChange"
-                                 accept="image/*,.pdf,.doc,.docx"
-                                class="d-none"
-                            />            
+                            <input type="file" id="fileUpload-contributor" ref="fileInput" @change="handleFileChange"
+                                accept="image/*,.pdf,.doc,.docx" class="d-none" />
                             <button class="btn-emojis" ref="emojiBtn" @click.prevent="toggleEmojiPicker">
                                 😀
                             </button>
@@ -140,6 +147,9 @@
                             <button class="btn btn-primary" type="submit">
                                 Send
                             </button>
+                        </div>
+                        <div class="message-error">
+                            
                         </div>
                     </form>
                 </div>
@@ -175,12 +185,24 @@ export default {
         },
         uniqueRecruiters() {
             const seen = new Set();
-            return this.recruiters.filter((r) => {
+            const unique = this.recruiters.filter((r) => {
                 if (seen.has(r.user_id)) return false;
                 seen.add(r.user_id);
                 return true;
             });
-        },
+
+            return unique.sort((a, b) => {
+                const aHasMessages = this.unreadMap.hasOwnProperty(a.user_id);
+                const bHasMessages = this.unreadMap.hasOwnProperty(b.user_id);
+
+                if (aHasMessages !== bHasMessages) {
+                    return bHasMessages - aHasMessages; // Put those with messages first
+                }
+
+                // Then sort by freelancer status: freelancers (is_freelancer === 0) first
+                return a.is_freelancer - b.is_freelancer;
+            });
+        }
     },
     methods: {
         getImageUrl(path) {
@@ -277,7 +299,9 @@ export default {
             }
         },
         handleSubmit() {
-            if (this.message.trim() === "") return alert("Please enter a text!");
+            if (!this.message.trim() && !this.file) {
+                return alert("Please enter a text or select a file!");
+            }
 
             const receiverId =
                 this.selectedUser?.id || this.selectedRecruiter?.user?.id;
@@ -293,11 +317,11 @@ export default {
             if (this.file) {
                 formData.append("file", this.file);
             }
-            
+
             console.log("Form data sadrži:");
             for (let [key, value] of formData.entries()) {
                 console.log(`${key}:`, value);
-            }       
+            }
             fetch("/web/messages", {
                 method: "POST",
                 headers: {
@@ -364,9 +388,14 @@ export default {
             const parsed = JSON.parse(lastUser);
             this.selectUser(parsed);
         } else if (this.uniqueRecruiters.length > 0) {
-            const firstRecruiter = this.uniqueRecruiters[0];
-            if (firstRecruiter && firstRecruiter.user) {
-                this.selectUser(firstRecruiter.user);
+            const firstFreelancer = this.uniqueRecruiters.find(r => r.is_freelancer === 0);
+            if (firstFreelancer && firstFreelancer.user) {
+                this.selectUser(firstFreelancer.user);
+            } else {
+                const firstRecruiter = this.uniqueRecruiters[0];
+                if (firstRecruiter && firstRecruiter.user) {
+                    this.selectUser(firstRecruiter.user);
+                }
             }
         }
 
@@ -467,9 +496,16 @@ export default {
 .user-active {
     background: #f5f8fa !important;
 }
-.p-22 {
-    padding: 22px!important;
+
+.user-card__scroll {
+    max-height: 300px;
+    overflow-y: auto;
 }
+
+.p-22 {
+    padding: 22px !important;
+}
+
 .btn-emojis {
     background: transparent;
     border: none;
@@ -480,11 +516,12 @@ export default {
     border-radius: 10%;
 }
 
-.icon-img{
+.icon-img {
     position: absolute;
     left: 6px;
 }
-.icon-file{
+
+.icon-file {
     position: absolute;
     right: 3px;
 }

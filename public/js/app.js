@@ -23027,11 +23027,22 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       return _public_images_user_286_png__WEBPACK_IMPORTED_MODULE_1__["default"];
     },
     uniqueRecruiters: function uniqueRecruiters() {
+      var _this = this;
       var seen = new Set();
-      return this.recruiters.filter(function (r) {
+      var unique = this.recruiters.filter(function (r) {
         if (seen.has(r.user_id)) return false;
         seen.add(r.user_id);
         return true;
+      });
+      return unique.sort(function (a, b) {
+        var aHasMessages = _this.unreadMap.hasOwnProperty(a.user_id);
+        var bHasMessages = _this.unreadMap.hasOwnProperty(b.user_id);
+        if (aHasMessages !== bHasMessages) {
+          return bHasMessages - aHasMessages; // Put those with messages first
+        }
+
+        // Then sort by freelancer status: freelancers (is_freelancer === 0) first
+        return a.is_freelancer - b.is_freelancer;
       });
     }
   },
@@ -23052,7 +23063,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       localStorage.setItem("lastChatUser", JSON.stringify(user));
     },
     selectUser: function selectUser(user) {
-      var _this = this;
+      var _this2 = this;
       this.selectedUser = user;
       console.log("Selected user: ", this.selectedUser);
       this.selectedRecruiter = null;
@@ -23068,10 +23079,10 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
         return res.json();
       }).then(function () {
         // Set the unread count to 0 for this user
-        if (_this.unreadMap[_this.selectedUser.id]) {
-          _this.unreadMap[_this.selectedUser.id] = 0;
+        if (_this2.unreadMap[_this2.selectedUser.id]) {
+          _this2.unreadMap[_this2.selectedUser.id] = 0;
         }
-        _this.updateUnreadTotal();
+        _this2.updateUnreadTotal();
       })["catch"](function (err) {
         console.error("Greška pri označavanju poruka kao pročitanih:", err);
       });
@@ -23090,7 +23101,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       this.file = file;
     },
     fetchMessages: function fetchMessages(receiverId) {
-      var _this2 = this;
+      var _this3 = this;
       if (!receiverId) return;
       fetch("/web/messages/".concat(receiverId), {
         method: "GET",
@@ -23101,8 +23112,8 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       }).then(function (res) {
         return res.json();
       }).then(function (data) {
-        _this2.messages = data;
-        _this2.scrollToBottom();
+        _this3.messages = data;
+        _this3.scrollToBottom();
       })["catch"](function (err) {
         console.error("Greška pri dohvatanju poruka:", err);
       });
@@ -23126,8 +23137,10 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       var _this$selectedUser,
         _this$selectedRecruit,
         _this$selectedUser2,
-        _this3 = this;
-      if (this.message.trim() === "") return alert("Please enter a text!");
+        _this4 = this;
+      if (!this.message.trim() && !this.file) {
+        return alert("Please enter a text or select a file!");
+      }
       var receiverId = ((_this$selectedUser = this.selectedUser) === null || _this$selectedUser === void 0 ? void 0 : _this$selectedUser.id) || ((_this$selectedRecruit = this.selectedRecruiter) === null || _this$selectedRecruit === void 0 || (_this$selectedRecruit = _this$selectedRecruit.user) === null || _this$selectedRecruit === void 0 ? void 0 : _this$selectedRecruit.id);
       if (!receiverId) return alert("The user is not selected.");
       var formData = new FormData();
@@ -23162,20 +23175,20 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       }).then(function (res) {
         return res.json();
       }).then(function (data) {
-        _this3.message = "";
-        _this3.file = null;
-        _this3.messages.push(data.message);
-        if (_this3.$refs.fileInput) {
-          _this3.$refs.fileInput.value = "";
+        _this4.message = "";
+        _this4.file = null;
+        _this4.messages.push(data.message);
+        if (_this4.$refs.fileInput) {
+          _this4.$refs.fileInput.value = "";
         }
-        _this3.scrollToBottom();
+        _this4.scrollToBottom();
       })["catch"](function (error) {
         console.error("Greška pri slanju poruke:", error);
       });
     }
   },
   mounted: function mounted() {
-    var _this4 = this;
+    var _this5 = this;
     this.$nextTick(function () {
       _eventBus__WEBPACK_IMPORTED_MODULE_2__["default"].emit("reset-navbar-badge");
     });
@@ -23192,9 +23205,9 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       return res.json();
     }).then(function (data) {
       data.forEach(function (item) {
-        _this4.unreadMap[item.user_id] = item.unread_count;
+        _this5.unreadMap[item.user_id] = item.unread_count;
       });
-      _this4.updateUnreadTotal();
+      _this5.updateUnreadTotal();
     })["catch"](function (err) {
       console.error("Greška pri dohvatanju nepročitanih poruka:", err);
     });
@@ -23205,7 +23218,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
     });
     if (this.picker) {
       this.picker.on("emoji", function (emoji) {
-        _this4.message += emoji.emoji;
+        _this5.message += emoji.emoji;
       });
     }
 
@@ -23215,25 +23228,32 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       var parsed = JSON.parse(lastUser);
       this.selectUser(parsed);
     } else if (this.uniqueRecruiters.length > 0) {
-      var firstRecruiter = this.uniqueRecruiters[0];
-      if (firstRecruiter && firstRecruiter.user) {
-        this.selectUser(firstRecruiter.user);
+      var firstFreelancer = this.uniqueRecruiters.find(function (r) {
+        return r.is_freelancer === 0;
+      });
+      if (firstFreelancer && firstFreelancer.user) {
+        this.selectUser(firstFreelancer.user);
+      } else {
+        var firstRecruiter = this.uniqueRecruiters[0];
+        if (firstRecruiter && firstRecruiter.user) {
+          this.selectUser(firstRecruiter.user);
+        }
       }
     }
 
     // WebSocket povezivanje
     Echo["private"]("chat." + this.currentUserId).subscribed(function () {
-      console.log("✅ Subscribed na kanal: chat." + _this4.currentUserId);
+      console.log("✅ Subscribed na kanal: chat." + _this5.currentUserId);
     }).listen(".MessageSent", function (payload) {
-      var _this4$selectedUser, _this4$selectedRecrui;
+      var _this5$selectedUser, _this5$selectedRecrui;
       var message = payload.message;
-      var activeReceiverId = ((_this4$selectedUser = _this4.selectedUser) === null || _this4$selectedUser === void 0 ? void 0 : _this4$selectedUser.id) || ((_this4$selectedRecrui = _this4.selectedRecruiter) === null || _this4$selectedRecrui === void 0 || (_this4$selectedRecrui = _this4$selectedRecrui.user) === null || _this4$selectedRecrui === void 0 ? void 0 : _this4$selectedRecrui.id);
+      var activeReceiverId = ((_this5$selectedUser = _this5.selectedUser) === null || _this5$selectedUser === void 0 ? void 0 : _this5$selectedUser.id) || ((_this5$selectedRecrui = _this5.selectedRecruiter) === null || _this5$selectedRecrui === void 0 || (_this5$selectedRecrui = _this5$selectedRecrui.user) === null || _this5$selectedRecrui === void 0 ? void 0 : _this5$selectedRecrui.id);
 
       // Ako je poruka za aktivnog korisnika – dodaj direktno u chat
       if (message.user_id === activeReceiverId || message.receiver_id === activeReceiverId) {
-        _this4.messages.push(message);
-        _this4.scrollToBottom();
-        fetch("/api/messages/mark-as-read/".concat(_this4.selectedUser.id), {
+        _this5.messages.push(message);
+        _this5.scrollToBottom();
+        fetch("/api/messages/mark-as-read/".concat(_this5.selectedUser.id), {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -23243,24 +23263,24 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
           return res.json();
         }).then(function () {
           // Set the unread count to 0 for this user
-          if (_this4.unreadMap[_this4.selectedUser.id]) {
-            _this4.unreadMap[_this4.selectedUser.id] = 0;
+          if (_this5.unreadMap[_this5.selectedUser.id]) {
+            _this5.unreadMap[_this5.selectedUser.id] = 0;
           }
-          _this4.updateUnreadTotal();
+          _this5.updateUnreadTotal();
         })["catch"](function (err) {
           console.error("Greška pri označavanju poruka kao pročitanih:", err);
         });
       } else {
         // Inače, povećaj broj nepročitanih i pokaži badge
-        if (_this4.unreadMap[message.user_id]) {
-          _this4.unreadMap[message.user_id]++;
+        if (_this5.unreadMap[message.user_id]) {
+          _this5.unreadMap[message.user_id]++;
         } else {
-          _this4.unreadMap[message.user_id] = 1;
+          _this5.unreadMap[message.user_id] = 1;
         }
-        _this4.updateUnreadTotal();
+        _this5.updateUnreadTotal();
 
         // Emituj ka nav-baru ako koristiš globalni badge (npr. crveni broj u headeru)
-        _eventBus__WEBPACK_IMPORTED_MODULE_2__["default"].emit("update-navbar-badge", _this4.unreadTotal);
+        _eventBus__WEBPACK_IMPORTED_MODULE_2__["default"].emit("update-navbar-badge", _this5.unreadTotal);
       }
     }).error(function (error) {
       console.error("❌ Greška:", error);
@@ -23316,10 +23336,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     contributors: Array,
-    candidates: {
-      type: Object,
-      required: true
-    },
+    candidates: Array,
     currentUserId: Number
   },
   data: function data() {
@@ -23331,7 +23348,8 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       file: "",
       messages: [],
       unreadMap: {},
-      contributorData: []
+      contributorData: [],
+      candidateData: []
     };
   },
   computed: {
@@ -23372,6 +23390,26 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       }
       return "Unknown User";
     },
+    sortedCandidates: function sortedCandidates() {
+      var lastUser = localStorage.getItem("lastChatUser");
+      if (!lastUser) return this.candidates;
+      var parsed = JSON.parse(lastUser);
+      var sorted = _toConsumableArray(this.candidates);
+
+      // Nađi indeks kandidata sa istim ID-em
+      var index = sorted.findIndex(function (c) {
+        var _c$user$id, _c$user;
+        var id = (_c$user$id = (_c$user = c.user) === null || _c$user === void 0 ? void 0 : _c$user.id) !== null && _c$user$id !== void 0 ? _c$user$id : c.id;
+        return id === parsed.id;
+      });
+      if (index > -1) {
+        var _sorted$splice = sorted.splice(index, 1),
+          _sorted$splice2 = _slicedToArray(_sorted$splice, 1),
+          last = _sorted$splice2[0];
+        sorted.unshift(last);
+      }
+      return sorted;
+    },
     sortedContributors: function sortedContributors() {
       var lastUser = localStorage.getItem("lastChatUser");
       if (!lastUser) return this.contributors;
@@ -23380,20 +23418,22 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
 
       // Prvo nađi indeks poslednjeg
       var index = sorted.findIndex(function (c) {
-        var _c$user;
-        return ((_c$user = c.user) === null || _c$user === void 0 ? void 0 : _c$user.id) === parsed.id;
+        var _c$user2;
+        return ((_c$user2 = c.user) === null || _c$user2 === void 0 ? void 0 : _c$user2.id) === parsed.id;
       });
       if (index > -1) {
-        var _sorted$splice = sorted.splice(index, 1),
-          _sorted$splice2 = _slicedToArray(_sorted$splice, 1),
-          last = _sorted$splice2[0];
+        var _sorted$splice3 = sorted.splice(index, 1),
+          _sorted$splice4 = _slicedToArray(_sorted$splice3, 1),
+          last = _sorted$splice4[0];
         sorted.unshift(last); // Stavi ga na početak
       }
       return sorted;
     },
     candidatesList: function candidatesList() {
-      return (Array.isArray(this.candidates) ? this.candidates : []).map(function (c) {
+      return (Array.isArray(this.candidateData) ? this.candidateData : []).map(function (c) {
+        var _c$user$id2, _c$user3;
         return _objectSpread(_objectSpread({}, c), {}, {
+          id: (_c$user$id2 = (_c$user3 = c.user) === null || _c$user3 === void 0 ? void 0 : _c$user3.id) !== null && _c$user$id2 !== void 0 ? _c$user$id2 : c.id,
           userType: "candidate"
         });
       }).sort(function (a, b) {
@@ -23416,16 +23456,6 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
     }
   },
   methods: {
-    isLastCandidate: function isLastCandidate(user) {
-      var _lastCandidate$user, _user$user;
-      if (user.userType !== "candidate") return false;
-
-      // Pronađi poslednjeg kandidata u listi
-      var lastCandidate = _toConsumableArray(this.candidatesList).reverse().find(function (u) {
-        return u.userType === "candidate";
-      });
-      return lastCandidate && ((_lastCandidate$user = lastCandidate.user) === null || _lastCandidate$user === void 0 ? void 0 : _lastCandidate$user.id) === ((_user$user = user.user) === null || _user$user === void 0 ? void 0 : _user$user.id);
-    },
     updateLastMessageTime: function updateLastMessageTime(userId, timestamp) {
       var updateUser = function updateUser(arr) {
         var index = arr.findIndex(function (u) {
@@ -23437,8 +23467,8 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
           arr[index].last_message_at = timestamp;
         }
       };
-      if (Array.isArray(this.candidates)) {
-        updateUser(this.candidates);
+      if (Array.isArray(this.candidateData)) {
+        updateUser(this.candidateData);
       }
       if (Array.isArray(this.contributorData)) {
         updateUser(this.contributorData);
@@ -23446,8 +23476,8 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
     },
     prepareContributors: function prepareContributors() {
       this.contributorData = this.contributors.map(function (c) {
-        var _c$user2, _user$id, _ref, _user$first_name, _c$name, _ref2, _user$last_name, _c$name2, _user$email, _user$profile_image;
-        var user = (_c$user2 = c.user) !== null && _c$user2 !== void 0 ? _c$user2 : {};
+        var _c$user4, _user$id, _ref, _user$first_name, _c$name, _ref2, _user$last_name, _c$name2, _user$email, _user$profile_image;
+        var user = (_c$user4 = c.user) !== null && _c$user4 !== void 0 ? _c$user4 : {};
         return {
           original: c,
           user: {
@@ -23572,9 +23602,8 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
         _this$selectedContrib7,
         _this$selectedContrib8,
         _this4 = this;
-      if (this.message.trim() === "") {
-        alert("Please enter a text!");
-        return;
+      if (!this.message.trim() && !this.file) {
+        return alert("Please enter a text or select a file!");
       }
       var receiverId = ((_this$selectedUser3 = this.selectedUser) === null || _this$selectedUser3 === void 0 ? void 0 : _this$selectedUser3.id) || ((_this$selectedContrib7 = this.selectedContributor) === null || _this$selectedContrib7 === void 0 || (_this$selectedContrib7 = _this$selectedContrib7.user) === null || _this$selectedContrib7 === void 0 ? void 0 : _this$selectedContrib7.id) || ((_this$selectedContrib8 = this.selectedContributor) === null || _this$selectedContrib8 === void 0 ? void 0 : _this$selectedContrib8.id);
       if (!receiverId) {
@@ -23638,6 +23667,8 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
   },
   mounted: function mounted() {
     var _this5 = this;
+    console.log("Kontributeri: ", this.contributors);
+    console.log("Kandidati: ", this.candidates);
     this.$nextTick(function () {
       _eventBus__WEBPACK_IMPORTED_MODULE_2__["default"].emit("reset-navbar-badge");
     });
@@ -23675,8 +23706,8 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       var parsed = JSON.parse(lastUser);
       this.selectedUser = parsed;
       this.fetchMessages(parsed.id);
-    } else if (this.candidatesList.length > 0) {
-      var firstCandidate = this.candidatesList[0];
+    } else if (this.candidateData.length > 0) {
+      var firstCandidate = this.candidateData[0];
       this.selectedUser = firstCandidate;
       this.fetchMessages(firstCandidate.id);
       localStorage.setItem("lastChatUser", JSON.stringify(firstCandidate));
@@ -23688,6 +23719,9 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       localStorage.setItem("lastChatUser", JSON.stringify(firstContributor.user));
     }
     this.prepareContributors();
+    this.candidateData = Array.isArray(this.candidates) ? this.candidates.map(function (c) {
+      return _objectSpread({}, c);
+    }) : [];
     Echo["private"]("chat.".concat(this.currentUserId)).subscribed(function () {
       console.log("✅ Subscribed na kanal: chat." + _this5.currentUserId);
     }).listen(".MessageSent", function (payload) {
@@ -23708,13 +23742,16 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
         }
 
         // Ako candidates je niz, traži tamo
-        if (Array.isArray(_this5.candidates)) {
-          var candidate = _this5.candidates.find(function (c) {
-            return c.id === userId;
-          });
-          if (candidate) {
-            candidate.last_message_at = payload.message.created_at;
-          }
+        // Ako candidates je niz, traži tamo
+        var candidateIndex = _this5.candidateData.findIndex(function (c) {
+          return c.id === userId;
+        });
+        if (candidateIndex !== -1) {
+          _this5.$set(_this5.candidateData[candidateIndex], 'last_message_at', payload.message.created_at);
+
+          // Move the updated candidate to the top
+          var updatedCandidate = _this5.candidateData.splice(candidateIndex, 1)[0];
+          _this5.candidateData.unshift(updatedCandidate);
         }
       };
 
@@ -23783,11 +23820,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _joeattardi_emoji_button__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @joeattardi/emoji-button */ "./node_modules/@joeattardi/emoji-button/dist/index.js");
 /* harmony import */ var _public_images_user_286_png__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../public/images/user-286.png */ "./public/images/user-286.png");
 /* harmony import */ var _eventBus__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../eventBus */ "./resources/js/eventBus.js");
-function _createForOfIteratorHelper(r, e) { var t = "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (!t) { if (Array.isArray(r) || (t = _unsupportedIterableToArray(r)) || e && r && "number" == typeof r.length) { t && (r = t); var _n = 0, F = function F() {}; return { s: F, n: function n() { return _n >= r.length ? { done: !0 } : { done: !1, value: r[_n++] }; }, e: function e(r) { throw r; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var o, a = !0, u = !1; return { s: function s() { t = t.call(r); }, n: function n() { var r = t.next(); return a = r.done, r; }, e: function e(r) { u = !0, o = r; }, f: function f() { try { a || null == t["return"] || t["return"](); } finally { if (u) throw o; } } }; }
-function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
-function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == _typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator["return"] && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, "catch": function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
 function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
@@ -23799,12 +23835,18 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
-    contributors: Array,
-    candidates: {
-      type: Object,
+    contributors: {
+      type: Array,
       required: true
     },
-    currentUserId: Number
+    candidates: {
+      type: Array,
+      required: true
+    },
+    currentUserId: {
+      type: Number,
+      required: true
+    }
   },
   data: function data() {
     return {
@@ -23812,83 +23854,70 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       selectedUser: null,
       picker: null,
       message: "",
-      file: "",
+      file: null,
       messages: [],
       unreadMap: {},
-      contributorData: []
+      contributorData: [],
+      unreadTotal: 0
     };
   },
   computed: {
     currentPath: function currentPath() {
       return window.location.pathname;
     },
-    isFreelancerChatRoute: function isFreelancerChatRoute() {
-      return this.currentPath === '/company/freelancer/chats';
-    },
     isRecruiterChatRoute: function isRecruiterChatRoute() {
-      return this.currentPath === '/recruiter/chats';
+      return this.currentPath === "/recruiter/chats";
     },
     defaultImage: function defaultImage() {
       return _public_images_user_286_png__WEBPACK_IMPORTED_MODULE_1__["default"];
     },
-    chatTitle: function chatTitle() {
-      var _this$selectedContrib;
+    chatHeaderName: function chatHeaderName() {
+      var _this$selectedContrib, _this$candidates;
       if ((_this$selectedContrib = this.selectedContributor) !== null && _this$selectedContrib !== void 0 && _this$selectedContrib.user) {
         return "".concat(this.selectedContributor.user.first_name, " ").concat(this.selectedContributor.user.last_name);
       } else if (this.selectedUser) {
         return "".concat(this.selectedUser.first_name, " ").concat(this.selectedUser.last_name);
+      } else if ((_this$candidates = this.candidates) !== null && _this$candidates !== void 0 && _this$candidates.length && this.candidates[0].user) {
+        return "".concat(this.candidates[0].user.first_name, " ").concat(this.candidates[0].user.last_name);
       }
-      return "Unknown";
+      return "Candidate?";
     },
     chatPlaceholderName: function chatPlaceholderName() {
-      var _this$selectedContrib2, _this$selectedContrib3, _this$selectedContrib4, _this$selectedUser, _this$selectedUser2, _this$candidates, _this$candidates2;
-      if ((_this$selectedContrib2 = this.selectedContributor) !== null && _this$selectedContrib2 !== void 0 && (_this$selectedContrib2 = _this$selectedContrib2.user) !== null && _this$selectedContrib2 !== void 0 && _this$selectedContrib2.first_name || (_this$selectedContrib3 = this.selectedContributor) !== null && _this$selectedContrib3 !== void 0 && (_this$selectedContrib3 = _this$selectedContrib3.user) !== null && _this$selectedContrib3 !== void 0 && _this$selectedContrib3.last_name) {
-        return "".concat(this.selectedContributor.user.first_name || '', " ").concat(this.selectedContributor.user.last_name || '').trim();
-      }
-      if ((_this$selectedContrib4 = this.selectedContributor) !== null && _this$selectedContrib4 !== void 0 && _this$selectedContrib4.name) {
-        return this.selectedContributor.name;
-      }
-      if ((_this$selectedUser = this.selectedUser) !== null && _this$selectedUser !== void 0 && _this$selectedUser.first_name || (_this$selectedUser2 = this.selectedUser) !== null && _this$selectedUser2 !== void 0 && _this$selectedUser2.last_name) {
-        return "".concat(this.selectedUser.first_name || '', " ").concat(this.selectedUser.last_name || '').trim();
-      }
-      if ((_this$candidates = this.candidates) !== null && _this$candidates !== void 0 && (_this$candidates = _this$candidates.user) !== null && _this$candidates !== void 0 && _this$candidates.first_name || (_this$candidates2 = this.candidates) !== null && _this$candidates2 !== void 0 && (_this$candidates2 = _this$candidates2.user) !== null && _this$candidates2 !== void 0 && _this$candidates2.last_name) {
-        return "".concat(this.candidates.user.first_name || '', " ").concat(this.candidates.user.last_name || '').trim();
-      }
-      return "Unknown User";
+      var _this$selectedContrib2, _this$candidates$;
+      var user = ((_this$selectedContrib2 = this.selectedContributor) === null || _this$selectedContrib2 === void 0 ? void 0 : _this$selectedContrib2.user) || this.selectedContributor || this.selectedUser || ((_this$candidates$ = this.candidates[0]) === null || _this$candidates$ === void 0 ? void 0 : _this$candidates$.user);
+      if (!user) return "Unknown User";
+      return "".concat(user.first_name || "", " ").concat(user.last_name || "").trim() || "Unknown User";
     },
     sortedContributors: function sortedContributors() {
-      var lastUser = localStorage.getItem("lastChatUser");
-      if (!lastUser) return this.contributors;
-      var parsed = JSON.parse(lastUser);
-      var sorted = _toConsumableArray(this.contributors);
-
-      // Prvo nađi indeks poslednjeg
-      var index = sorted.findIndex(function (c) {
-        var _c$user;
-        return ((_c$user = c.user) === null || _c$user === void 0 ? void 0 : _c$user.id) === parsed.id;
+      var _this = this;
+      return _toConsumableArray(this.contributorData).sort(function (a, b) {
+        var unreadA = _this.unreadMap[a.user.id] || 0;
+        var unreadB = _this.unreadMap[b.user.id] || 0;
+        return unreadB - unreadA;
       });
-      if (index > -1) {
-        var _sorted$splice = sorted.splice(index, 1),
-          _sorted$splice2 = _slicedToArray(_sorted$splice, 1),
-          last = _sorted$splice2[0];
-        sorted.unshift(last); // Stavi ga na početak
-      }
-      return sorted;
+    },
+    sortedCandidates: function sortedCandidates() {
+      var _this2 = this;
+      return _toConsumableArray(this.candidates).sort(function (a, b) {
+        var unreadA = _this2.unreadMap[a.user.id] || 0;
+        var unreadB = _this2.unreadMap[b.user.id] || 0;
+        return unreadB - unreadA;
+      });
     }
   },
   methods: {
     prepareContributors: function prepareContributors() {
-      this.contributorData = this.contributors.map(function (c) {
-        var _c$user2, _user$id, _ref, _user$first_name, _c$name, _ref2, _user$last_name, _c$name2, _user$email, _user$profile_image;
-        var user = (_c$user2 = c.user) !== null && _c$user2 !== void 0 ? _c$user2 : {};
+      this.contributorData = this.contributors.map(function (contributor) {
+        var user = contributor.user || {};
+        var names = (contributor.name || "").split(" ");
         return {
-          original: c,
+          original: contributor,
           user: {
-            id: (_user$id = user.id) !== null && _user$id !== void 0 ? _user$id : c.id,
-            first_name: (_ref = (_user$first_name = user.first_name) !== null && _user$first_name !== void 0 ? _user$first_name : (_c$name = c.name) === null || _c$name === void 0 ? void 0 : _c$name.split(" ")[0]) !== null && _ref !== void 0 ? _ref : "N/A",
-            last_name: (_ref2 = (_user$last_name = user.last_name) !== null && _user$last_name !== void 0 ? _user$last_name : (_c$name2 = c.name) === null || _c$name2 === void 0 ? void 0 : _c$name2.split(" ")[1]) !== null && _ref2 !== void 0 ? _ref2 : "",
-            email: (_user$email = user.email) !== null && _user$email !== void 0 ? _user$email : c.email,
-            profile_image: (_user$profile_image = user.profile_image) !== null && _user$profile_image !== void 0 ? _user$profile_image : null
+            id: user.id || contributor.id,
+            first_name: user.first_name || names[0] || "N/A",
+            last_name: user.last_name || names[1] || "",
+            email: user.email || contributor.email || "",
+            profile_image: user.profile_image || null
           }
         };
       });
@@ -23899,92 +23928,85 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       }, 0);
       _eventBus__WEBPACK_IMPORTED_MODULE_2__["default"].emit("update-navbar-badge", this.unreadTotal);
     },
-    selectContributor: function selectContributor(user) {
-      var _this$selectedContrib5,
-        _this$selectedContrib6,
-        _this = this;
-      console.log("selectContributor: ", user);
-      this.selectedContributor = user;
-      this.selectedUser = null;
-      var fetchContributorId = ((_this$selectedContrib5 = this.selectedContributor) === null || _this$selectedContrib5 === void 0 || (_this$selectedContrib5 = _this$selectedContrib5.user) === null || _this$selectedContrib5 === void 0 ? void 0 : _this$selectedContrib5.id) || ((_this$selectedContrib6 = this.selectedContributor) === null || _this$selectedContrib6 === void 0 ? void 0 : _this$selectedContrib6.id);
-      this.fetchMessages(fetchContributorId);
-      localStorage.setItem("lastChatUser", JSON.stringify(user));
-      fetch("/api/messages/mark-as-read/".concat(fetchContributorId), {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRF-TOKEN": window.csrfToken
-        }
-      }).then(function (res) {
-        return res.json();
-      }).then(function () {
-        // Set the unread count to 0 for this user
-        if (_this.unreadMap[_this.selectedContributor.user.id]) {
-          _this.unreadMap[_this.selectedContributor.user.id] = 0;
-        }
-        _this.updateUnreadTotal();
-      })["catch"](function (err) {
-        console.error("Greška pri označavanju poruka kao pročitanih CONTRIBUTOR:", err);
-      });
-    },
-    selectUser: function selectUser(user) {
-      var _this2 = this;
-      this.selectedUser = user;
-      this.selectedContributor = null;
-      this.fetchMessages(user.id);
-      localStorage.setItem("lastChatUser", JSON.stringify(user));
-
-      // Koristimo selectedUser.id umesto selectedContributor.id
-      fetch("/api/messages/mark-as-read/".concat(this.selectedUser.id), {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRF-TOKEN": window.csrfToken
-        }
-      }).then(function (res) {
-        return res.json();
-      }).then(function () {
-        // Set the unread count to 0 for this user
-        if (_this2.unreadMap[_this2.selectedUser.id]) {
-          _this2.unreadMap[_this2.selectedUser.id] = 0;
-        }
-        _this2.updateUnreadTotal();
-      })["catch"](function (err) {
-        console.error("Greška pri označavanju poruka kao pročitanih USER:", err);
-      });
-    },
-    triggerFileInput: function triggerFileInput() {
-      this.$refs.fileInput.click();
-    },
-    handleFileChange: function handleFileChange(event) {
-      var file = event.target.files[0];
-      if (file && file.size > 5 * 1024 * 1024) {
-        alert("File must be less than 5MB.");
-        this.$refs.fileInput.value = "";
-        this.file = null;
-        return;
-      }
-      this.file = file;
-    },
-    fetchMessages: function fetchMessages(receiverId) {
+    markMessagesAsRead: function markMessagesAsRead(userId) {
       var _this3 = this;
-      if (!receiverId) return;
-      console.log("Ko je primio poruke: ", receiverId);
-      fetch("/web/messages/".concat(receiverId), {
-        method: "GET",
-        headers: {
-          "X-CSRF-TOKEN": window.csrfToken,
-          Accept: "application/json"
-        }
-      }).then(function (res) {
-        return res.json();
-      }).then(function (data) {
-        console.log("Received: ", data);
-        _this3.messages = data;
-        _this3.scrollToBottom();
-      })["catch"](function (err) {
-        console.error("Greška pri dohvatanju poruka:", err);
-      });
+      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+        return _regeneratorRuntime().wrap(function _callee$(_context) {
+          while (1) switch (_context.prev = _context.next) {
+            case 0:
+              if (userId) {
+                _context.next = 2;
+                break;
+              }
+              return _context.abrupt("return");
+            case 2:
+              _context.prev = 2;
+              _context.next = 5;
+              return fetch("/api/messages/mark-as-read/".concat(userId), {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  "X-CSRF-TOKEN": window.csrfToken
+                }
+              });
+            case 5:
+              _this3.unreadMap[userId] = 0;
+              _this3.updateUnreadTotal();
+              _context.next = 12;
+              break;
+            case 9:
+              _context.prev = 9;
+              _context.t0 = _context["catch"](2);
+              console.error("Error marking messages as read for user ".concat(userId, ":"), _context.t0);
+            case 12:
+            case "end":
+              return _context.stop();
+          }
+        }, _callee, null, [[2, 9]]);
+      }))();
+    },
+    fetchMessages: function fetchMessages(userId) {
+      var _this4 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+        var res, data;
+        return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+          while (1) switch (_context2.prev = _context2.next) {
+            case 0:
+              if (userId) {
+                _context2.next = 2;
+                break;
+              }
+              return _context2.abrupt("return");
+            case 2:
+              _context2.prev = 2;
+              _context2.next = 5;
+              return fetch("/web/messages/".concat(userId), {
+                method: "GET",
+                headers: {
+                  "X-CSRF-TOKEN": window.csrfToken,
+                  Accept: "application/json"
+                }
+              });
+            case 5:
+              res = _context2.sent;
+              _context2.next = 8;
+              return res.json();
+            case 8:
+              data = _context2.sent;
+              _this4.messages = data || [];
+              _this4.scrollToBottom();
+              _context2.next = 16;
+              break;
+            case 13:
+              _context2.prev = 13;
+              _context2.t0 = _context2["catch"](2);
+              console.error("Error fetching messages:", _context2.t0);
+            case 16:
+            case "end":
+              return _context2.stop();
+          }
+        }, _callee2, null, [[2, 13]]);
+      }))();
     },
     scrollToBottom: function scrollToBottom() {
       this.$nextTick(function () {
@@ -23998,196 +24020,234 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       if (this.picker && this.$refs.emojiBtn) {
         this.picker.togglePicker(this.$refs.emojiBtn);
       } else {
-        console.warn("Emoji picker nije inicijalizovan.");
+        console.warn("Emoji picker not initialized.");
       }
+    },
+    handleFileChange: function handleFileChange(event) {
+      var file = event.target.files[0];
+      if (file && file.size > 5 * 1024 * 1024) {
+        alert("File must be less than 5MB.");
+        this.clearFileInput();
+        return;
+      }
+      this.file = file;
+    },
+    clearFileInput: function clearFileInput() {
+      if (this.$refs.fileInput) {
+        this.$refs.fileInput.value = "";
+      }
+      this.file = null;
+    },
+    triggerFileInput: function triggerFileInput() {
+      var _this$$refs$fileInput;
+      (_this$$refs$fileInput = this.$refs.fileInput) === null || _this$$refs$fileInput === void 0 || _this$$refs$fileInput.click();
     },
     handleSubmit: function handleSubmit() {
-      var _this$selectedUser3,
-        _this$selectedContrib7,
-        _this$selectedContrib8,
-        _this4 = this;
-      if (this.message.trim() === "") {
-        alert("Please enter a text!");
-        return;
-      }
-      var receiverId = ((_this$selectedUser3 = this.selectedUser) === null || _this$selectedUser3 === void 0 ? void 0 : _this$selectedUser3.id) || ((_this$selectedContrib7 = this.selectedContributor) === null || _this$selectedContrib7 === void 0 || (_this$selectedContrib7 = _this$selectedContrib7.user) === null || _this$selectedContrib7 === void 0 ? void 0 : _this$selectedContrib7.id) || ((_this$selectedContrib8 = this.selectedContributor) === null || _this$selectedContrib8 === void 0 ? void 0 : _this$selectedContrib8.id);
-      if (!receiverId) {
-        alert("The user is not selected.");
-        return;
-      }
-      var formData = new FormData();
-      formData.append("user_id", this.currentUserId);
-      formData.append("text", this.message);
-      formData.append("receiver_id", receiverId);
-      if (this.file) {
-        formData.append("file", this.file);
-      }
-      console.log("Form data sadrži:");
-      var _iterator = _createForOfIteratorHelper(formData.entries()),
-        _step;
-      try {
-        for (_iterator.s(); !(_step = _iterator.n()).done;) {
-          var _step$value = _slicedToArray(_step.value, 2),
-            key = _step$value[0],
-            value = _step$value[1];
-          console.log("".concat(key, ":"), value);
-        }
-      } catch (err) {
-        _iterator.e(err);
-      } finally {
-        _iterator.f();
-      }
-      fetch("/web/messages", {
-        method: "POST",
-        headers: {
-          "X-CSRF-TOKEN": window.csrfToken
-        },
-        body: formData
-      }).then(function (res) {
-        return res.json();
-      }).then(function (data) {
-        _this4.message = "";
-        _this4.file = null;
-        _this4.messages.push(data.message);
-        if (_this4.$refs.fileInput) {
-          _this4.$refs.fileInput.value = "";
-        }
-        _this4.scrollToBottom();
-      })["catch"](function (error) {
-        console.error("Greška pri slanju poruke:", error);
-      });
+      var _this5 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+        var _this5$selectedUser, _this5$selectedContri, _this5$selectedContri2;
+        var receiverId, formData, res, data;
+        return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+          while (1) switch (_context3.prev = _context3.next) {
+            case 0:
+              if (!(!_this5.message.trim() && !_this5.file)) {
+                _context3.next = 2;
+                break;
+              }
+              return _context3.abrupt("return", alert("Please enter a text or select a file!"));
+            case 2:
+              receiverId = ((_this5$selectedUser = _this5.selectedUser) === null || _this5$selectedUser === void 0 ? void 0 : _this5$selectedUser.id) || ((_this5$selectedContri = _this5.selectedContributor) === null || _this5$selectedContri === void 0 || (_this5$selectedContri = _this5$selectedContri.user) === null || _this5$selectedContri === void 0 ? void 0 : _this5$selectedContri.id) || ((_this5$selectedContri2 = _this5.selectedContributor) === null || _this5$selectedContri2 === void 0 ? void 0 : _this5$selectedContri2.id);
+              if (receiverId) {
+                _context3.next = 6;
+                break;
+              }
+              alert("The user is not selected.");
+              return _context3.abrupt("return");
+            case 6:
+              formData = new FormData();
+              formData.append("user_id", _this5.currentUserId);
+              formData.append("text", _this5.message);
+              formData.append("receiver_id", receiverId);
+              if (_this5.file) {
+                formData.append("file", _this5.file);
+              }
+              _context3.prev = 11;
+              _context3.next = 14;
+              return fetch("/web/messages", {
+                method: "POST",
+                headers: {
+                  "X-CSRF-TOKEN": window.csrfToken
+                },
+                body: formData
+              });
+            case 14:
+              res = _context3.sent;
+              _context3.next = 17;
+              return res.json();
+            case 17:
+              data = _context3.sent;
+              _this5.message = "";
+              _this5.clearFileInput();
+              if (data.message) {
+                _this5.messages.push(data.message);
+                _this5.scrollToBottom();
+              }
+              _context3.next = 26;
+              break;
+            case 23:
+              _context3.prev = 23;
+              _context3.t0 = _context3["catch"](11);
+              console.error("Error sending message:", _context3.t0);
+            case 26:
+            case "end":
+              return _context3.stop();
+          }
+        }, _callee3, null, [[11, 23]]);
+      }))();
+    },
+    selectContributor: function selectContributor(contributor) {
+      var _this$selectedUser;
+      this.selectedContributor = contributor;
+      this.selectedUser = contributor.user || null;
+      var id = ((_this$selectedUser = this.selectedUser) === null || _this$selectedUser === void 0 ? void 0 : _this$selectedUser.id) || contributor.id;
+      this.fetchMessages(id);
+      localStorage.setItem("lastChatUser", JSON.stringify(this.selectedUser || contributor));
+      this.markMessagesAsRead(id);
+    },
+    selectUser: function selectUser(user) {
+      this.selectedUser = user;
+      this.selectedContributor = null;
+      this.fetchMessages(user.id);
+      localStorage.setItem("lastChatUser", JSON.stringify(user));
+      this.markMessagesAsRead(user.id);
     },
     selectFirstContributor: function selectFirstContributor() {
-      if (this.contributors && this.contributors.length > 0) {
-        var _firstContributor$use;
-        var firstContributor = this.contributors[0];
-
-        // Ako kontributor ima user, selektuj usera, inače samo kontributer
-        if (firstContributor.user) {
-          this.selectedUser = firstContributor.user;
-        } else {
-          this.selectedUser = null; // Ako nema usera
-        }
-
-        // Uvek postavi firstContributor kao selectedContributor
-        this.selectedContributor = firstContributor;
-
-        // Pošaljemo zahtev za poruke (koristi user.id ako postoji)
-        this.fetchMessages(((_firstContributor$use = firstContributor.user) === null || _firstContributor$use === void 0 ? void 0 : _firstContributor$use.id) || firstContributor.id);
-
-        // Spremi korisnika u localStorage (ako postoji user, spasavaj tog user-a)
-        localStorage.setItem("lastChatUser", JSON.stringify(firstContributor.user || firstContributor));
+      if (!this.contributorData.length) return;
+      var firstContributor = this.contributorData[0];
+      this.selectContributor(firstContributor);
+    },
+    loadUnreadCounts: function loadUnreadCounts() {
+      var _this6 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+        var res, data;
+        return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+          while (1) switch (_context4.prev = _context4.next) {
+            case 0:
+              _context4.prev = 0;
+              _context4.next = 3;
+              return fetch("/api/messages/unread-count", {
+                method: "GET",
+                headers: {
+                  "X-Requested-With": "XMLHttpRequest",
+                  "X-CSRF-TOKEN": window.csrfToken,
+                  Accept: "application/json"
+                }
+              });
+            case 3:
+              res = _context4.sent;
+              _context4.next = 6;
+              return res.json();
+            case 6:
+              data = _context4.sent;
+              data.forEach(function (_ref) {
+                var user_id = _ref.user_id,
+                  unread_count = _ref.unread_count;
+                _this6.unreadMap[user_id] = unread_count;
+              });
+              _this6.updateUnreadTotal();
+              _context4.next = 14;
+              break;
+            case 11:
+              _context4.prev = 11;
+              _context4.t0 = _context4["catch"](0);
+              console.error("Error loading unread counts:", _context4.t0);
+            case 14:
+            case "end":
+              return _context4.stop();
+          }
+        }, _callee4, null, [[0, 11]]);
+      }))();
+    },
+    initializeEmojiPicker: function initializeEmojiPicker() {
+      var _this7 = this;
+      this.picker = new _joeattardi_emoji_button__WEBPACK_IMPORTED_MODULE_0__.EmojiButton({
+        position: "top-end"
+      });
+      this.picker.on("emoji", function (emoji) {
+        _this7.message += emoji.emoji;
+      });
+    },
+    restoreLastSelectedUser: function restoreLastSelectedUser() {
+      var lastUser = localStorage.getItem("lastChatUser");
+      if (!lastUser) return false;
+      var parsed = JSON.parse(lastUser);
+      var contributor = this.contributorData.find(function (c) {
+        return c.user.id === parsed.id;
+      });
+      if (contributor) {
+        this.selectedContributor = contributor;
+        this.selectedUser = contributor.user;
+        this.fetchMessages(parsed.id);
       } else {
-        console.warn("Nema dostupnih kontributera.");
+        this.selectedContributor = null;
+        this.selectedUser = parsed;
+        this.fetchMessages(parsed.id);
       }
+      return true;
     }
   },
   mounted: function mounted() {
-    var _this5 = this;
-    // da napravim upit da se proveri u contributeru da li postoji objekat user ako da prosledi se njegovi podaci ako ne onda se prosledi
-    if (this.contributors && this.contributors.length > 0) {
-      this.selectFirstContributor();
-    }
-    this.$nextTick(function () {
-      _eventBus__WEBPACK_IMPORTED_MODULE_2__["default"].emit("reset-navbar-badge");
-    });
+    var _this8 = this;
+    return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+      var restored;
+      return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+        while (1) switch (_context5.prev = _context5.next) {
+          case 0:
+            _this8.prepareContributors();
+            _this8.initializeEmojiPicker();
+            _context5.next = 4;
+            return _this8.loadUnreadCounts();
+          case 4:
+            // Try restore last selected user first
+            restored = _this8.restoreLastSelectedUser();
+            if (!restored) {
+              if (_this8.contributorData.length) {
+                _this8.selectFirstContributor();
+              } else if (_this8.candidates.length) {
+                _this8.selectUser(_this8.candidates[0].user);
+              }
+            }
+            _eventBus__WEBPACK_IMPORTED_MODULE_2__["default"].emit("reset-navbar-badge");
 
-    // Dohvati nepročitane poruke po korisniku
-    fetch("/api/messages/unread-count", {
-      method: "GET",
-      headers: {
-        "X-Requested-With": "XMLHttpRequest",
-        "X-CSRF-TOKEN": window.csrfToken,
-        Accept: "application/json"
-      }
-    }).then(function (res) {
-      return res.json();
-    }).then(function (data) {
-      data.forEach(function (item) {
-        _this5.unreadMap[item.user_id] = item.unread_count;
-      });
-      _this5.updateUnreadTotal();
-    })["catch"](function (err) {
-      console.error("Greška pri dohvatanju nepročitanih poruka:", err);
-    });
-    this.picker = new _joeattardi_emoji_button__WEBPACK_IMPORTED_MODULE_0__.EmojiButton({
-      position: "top-end"
-    });
-    if (this.picker) {
-      this.picker.on("emoji", function (emoji) {
-        _this5.message += emoji.emoji;
-      });
-    } else {
-      console.warn("Emoji picker failed to initialize.");
-    }
-    var lastUser = localStorage.getItem("lastChatUser");
-    if (lastUser) {
-      var parsed = JSON.parse(lastUser);
-      this.selectedUser = parsed;
-      this.fetchMessages(parsed.id);
-    } else if (this.candidates && this.candidates.user) {
-      this.selectedUser = this.candidates.user;
-      this.fetchMessages(this.candidates.user.id);
-      localStorage.setItem("lastChatUser", JSON.stringify(this.candidates.user));
-    } else if (this.contributorData.length > 0) {
-      // automatski selektuj prvog iz contributorData
-      var firstContributor = this.contributorData[0];
-      this.selectedContributor = firstContributor;
-      this.selectedUser = firstContributor.user;
-      this.fetchMessages(firstContributor.user.id);
-      localStorage.setItem("lastChatUser", JSON.stringify(first.user));
-    }
-    this.prepareContributors();
-    Echo["private"]("chat.".concat(this.currentUserId)).subscribed(function () {
-      console.log("✅ Subscribed na kanal: chat." + _this5.currentUserId);
-    }).listen(".MessageSent", function (payload) {
-      var _this5$selectedUser, _this5$selectedContri, _this5$selectedContri2;
-      console.log("📡 WebSocket primio:", payload);
-      var activeReceiverId = ((_this5$selectedUser = _this5.selectedUser) === null || _this5$selectedUser === void 0 ? void 0 : _this5$selectedUser.id) || ((_this5$selectedContri = _this5.selectedContributor) === null || _this5$selectedContri === void 0 || (_this5$selectedContri = _this5$selectedContri.user) === null || _this5$selectedContri === void 0 ? void 0 : _this5$selectedContri.id) || ((_this5$selectedContri2 = _this5.selectedContributor) === null || _this5$selectedContri2 === void 0 ? void 0 : _this5$selectedContri2.id);
-      console.log("Active id: ", activeReceiverId);
-
-      // Proverite da li je poruka od korisnika sa selektovanim ID-jem
-      if (payload.message && (payload.message.user_id === activeReceiverId || payload.message.receiver_id === activeReceiverId)) {
-        _this5.messages.push(payload.message);
-        _this5.scrollToBottom();
-        fetch("/api/messages/mark-as-read/".concat(activeReceiverId), {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRF-TOKEN": window.csrfToken
-          }
-        }).then(function (res) {
-          return res.json();
-        }).then(function () {
-          var _this5$selectedUser2;
-          // Set the unread count to 0 for this user
-          if (_this5.unreadMap[(_this5$selectedUser2 = _this5.selectedUser) === null || _this5$selectedUser2 === void 0 ? void 0 : _this5$selectedUser2.id]) {
-            var _this5$selectedUser3;
-            _this5.unreadMap[(_this5$selectedUser3 = _this5.selectedUser) === null || _this5$selectedUser3 === void 0 ? void 0 : _this5$selectedUser3.id] = 0;
-          }
-          _this5.updateUnreadTotal();
-        })["catch"](function (err) {
-          console.error("Greška pri označavanju poruka kao pročitanih:", err);
-        });
-      } else {
-        // Ako poruka nije za selektovanog korisnika, povećajte broj nepročitanih poruka
-        if (_this5.unreadMap[payload.message.user_id]) {
-          _this5.unreadMap[payload.message.user_id]++;
-        } else {
-          _this5.unreadMap[payload.message.user_id] = 1;
+            // Setup Laravel Echo listener for incoming messages
+            Echo["private"]("chat.".concat(_this8.currentUserId)).subscribed(function () {
+              console.log("\u2705 Subscribed to chat.".concat(_this8.currentUserId));
+            }).listen(".MessageSent", function (payload) {
+              var _this8$selectedUser, _this8$selectedContri, _this8$selectedContri2;
+              var activeUserId = ((_this8$selectedUser = _this8.selectedUser) === null || _this8$selectedUser === void 0 ? void 0 : _this8$selectedUser.id) || ((_this8$selectedContri = _this8.selectedContributor) === null || _this8$selectedContri === void 0 || (_this8$selectedContri = _this8$selectedContri.user) === null || _this8$selectedContri === void 0 ? void 0 : _this8$selectedContri.id) || ((_this8$selectedContri2 = _this8.selectedContributor) === null || _this8$selectedContri2 === void 0 ? void 0 : _this8$selectedContri2.id);
+              var message = payload.message;
+              if (!message) return;
+              var isRelevant = message.user_id === activeUserId || message.receiver_id === activeUserId;
+              if (isRelevant) {
+                _this8.messages.push(message);
+                _this8.scrollToBottom();
+                _this8.markMessagesAsRead(activeUserId);
+              } else {
+                _this8.unreadMap[message.user_id] = (_this8.unreadMap[message.user_id] || 0) + 1;
+                _this8.updateUnreadTotal();
+              }
+            }).error(function (error) {
+              console.error("Echo subscription error:", error);
+            });
+          case 8:
+          case "end":
+            return _context5.stop();
         }
-        _this5.updateUnreadTotal();
-
-        // Emituj ka nav-baru ako koristiš globalni badge (npr. crveni broj u headeru)
-        _eventBus__WEBPACK_IMPORTED_MODULE_2__["default"].emit("update-navbar-badge", _this5.unreadTotal);
-      }
-    }).error(function (error) {
-      console.error("❌ Greška:", error);
-    });
+      }, _callee5);
+    }))();
   },
   beforeUnmount: function beforeUnmount() {
-    // Cleanup event listener
-    _eventBus__WEBPACK_IMPORTED_MODULE_2__["default"].off("reset-navbar-badge", this.resetUnreadTotal);
+    _eventBus__WEBPACK_IMPORTED_MODULE_2__["default"].off("reset-navbar-badge");
   }
 });
 
@@ -24207,7 +24267,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _joeattardi_emoji_button__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @joeattardi/emoji-button */ "./node_modules/@joeattardi/emoji-button/dist/index.js");
 /* harmony import */ var _public_images_user_286_png__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../public/images/user-286.png */ "./public/images/user-286.png");
 /* harmony import */ var _eventBus__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../eventBus */ "./resources/js/eventBus.js");
-function _createForOfIteratorHelper(r, e) { var t = "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (!t) { if (Array.isArray(r) || (t = _unsupportedIterableToArray(r)) || e && r && "number" == typeof r.length) { t && (r = t); var _n = 0, F = function F() {}; return { s: F, n: function n() { return _n >= r.length ? { done: !0 } : { done: !1, value: r[_n++] }; }, e: function e(r) { throw r; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var o, a = !0, u = !1; return { s: function s() { t = t.call(r); }, n: function n() { var r = t.next(); return a = r.done, r; }, e: function e(r) { u = !0, o = r; }, f: function f() { try { a || null == t["return"] || t["return"](); } finally { if (u) throw o; } } }; }
 function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
@@ -24247,46 +24306,27 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       return window.location.pathname;
     },
     isFreelancerChatRoute: function isFreelancerChatRoute() {
-      return this.currentPath === '/company/freelancer/chats';
+      return this.currentPath === "/company/freelancer/chats";
     },
     isRecruiterChatRoute: function isRecruiterChatRoute() {
-      return this.currentPath === '/recruiter/chats';
+      return this.currentPath === "/recruiter/chats";
     },
     defaultImage: function defaultImage() {
       return _public_images_user_286_png__WEBPACK_IMPORTED_MODULE_1__["default"];
     },
     chatTitle: function chatTitle() {
       var _this$selectedContrib;
-      if ((_this$selectedContrib = this.selectedContributor) !== null && _this$selectedContrib !== void 0 && _this$selectedContrib.user) {
-        return "".concat(this.selectedContributor.user.first_name, " ").concat(this.selectedContributor.user.last_name);
-      } else if (this.selectedUser) {
-        return "".concat(this.selectedUser.first_name, " ").concat(this.selectedUser.last_name);
-      }
-      return "Unknown";
+      return this.getUserFullName((_this$selectedContrib = this.selectedContributor) === null || _this$selectedContrib === void 0 ? void 0 : _this$selectedContrib.user) || this.getUserFullName(this.selectedUser) || "Unknown";
     },
     chatPlaceholderName: function chatPlaceholderName() {
-      var _this$selectedContrib2, _this$selectedContrib3, _this$selectedContrib4, _this$selectedUser, _this$selectedUser2, _this$candidate, _this$candidate2;
-      if ((_this$selectedContrib2 = this.selectedContributor) !== null && _this$selectedContrib2 !== void 0 && (_this$selectedContrib2 = _this$selectedContrib2.user) !== null && _this$selectedContrib2 !== void 0 && _this$selectedContrib2.first_name || (_this$selectedContrib3 = this.selectedContributor) !== null && _this$selectedContrib3 !== void 0 && (_this$selectedContrib3 = _this$selectedContrib3.user) !== null && _this$selectedContrib3 !== void 0 && _this$selectedContrib3.last_name) {
-        return "".concat(this.selectedContributor.user.first_name || '', " ").concat(this.selectedContributor.user.last_name || '').trim();
-      }
-      if ((_this$selectedContrib4 = this.selectedContributor) !== null && _this$selectedContrib4 !== void 0 && _this$selectedContrib4.name) {
-        return this.selectedContributor.name;
-      }
-      if ((_this$selectedUser = this.selectedUser) !== null && _this$selectedUser !== void 0 && _this$selectedUser.first_name || (_this$selectedUser2 = this.selectedUser) !== null && _this$selectedUser2 !== void 0 && _this$selectedUser2.last_name) {
-        return "".concat(this.selectedUser.first_name || '', " ").concat(this.selectedUser.last_name || '').trim();
-      }
-      if ((_this$candidate = this.candidate) !== null && _this$candidate !== void 0 && (_this$candidate = _this$candidate.user) !== null && _this$candidate !== void 0 && _this$candidate.first_name || (_this$candidate2 = this.candidate) !== null && _this$candidate2 !== void 0 && (_this$candidate2 = _this$candidate2.user) !== null && _this$candidate2 !== void 0 && _this$candidate2.last_name) {
-        return "".concat(this.candidate.user.first_name || '', " ").concat(this.candidate.user.last_name || '').trim();
-      }
-      return "Unknown User";
+      var _this$selectedContrib2, _this$selectedContrib3, _this$candidate;
+      return this.getUserFullName((_this$selectedContrib2 = this.selectedContributor) === null || _this$selectedContrib2 === void 0 ? void 0 : _this$selectedContrib2.user) || ((_this$selectedContrib3 = this.selectedContributor) === null || _this$selectedContrib3 === void 0 ? void 0 : _this$selectedContrib3.name) || this.getUserFullName(this.selectedUser) || this.getUserFullName((_this$candidate = this.candidate) === null || _this$candidate === void 0 ? void 0 : _this$candidate.user) || "Unknown User";
     },
     sortedContributors: function sortedContributors() {
       var lastUser = localStorage.getItem("lastChatUser");
       if (!lastUser) return this.contributors;
       var parsed = JSON.parse(lastUser);
       var sorted = _toConsumableArray(this.contributors);
-
-      // Prvo nađi indeks poslednjeg
       var index = sorted.findIndex(function (c) {
         var _c$user;
         return ((_c$user = c.user) === null || _c$user === void 0 ? void 0 : _c$user.id) === parsed.id;
@@ -24295,12 +24335,15 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
         var _sorted$splice = sorted.splice(index, 1),
           _sorted$splice2 = _slicedToArray(_sorted$splice, 1),
           last = _sorted$splice2[0];
-        sorted.unshift(last); // Stavi ga na početak
+        sorted.unshift(last);
       }
       return sorted;
     }
   },
   methods: {
+    getUserFullName: function getUserFullName(user) {
+      return user ? "".concat(user.first_name || "", " ").concat(user.last_name || "").trim() : "";
+    },
     prepareContributors: function prepareContributors() {
       this.contributorData = this.contributors.map(function (c) {
         var _c$user2, _user$id, _ref, _user$first_name, _c$name, _ref2, _user$last_name, _c$name2, _user$email, _user$profile_image;
@@ -24323,16 +24366,9 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       }, 0);
       _eventBus__WEBPACK_IMPORTED_MODULE_2__["default"].emit("update-navbar-badge", this.unreadTotal);
     },
-    selectContributor: function selectContributor(user) {
-      var _this$selectedContrib5,
-        _this$selectedContrib6,
-        _this = this;
-      this.selectedContributor = user;
-      this.selectedUser = null;
-      var fetchContributorId = ((_this$selectedContrib5 = this.selectedContributor) === null || _this$selectedContrib5 === void 0 || (_this$selectedContrib5 = _this$selectedContrib5.user) === null || _this$selectedContrib5 === void 0 ? void 0 : _this$selectedContrib5.id) || ((_this$selectedContrib6 = this.selectedContributor) === null || _this$selectedContrib6 === void 0 ? void 0 : _this$selectedContrib6.id);
-      this.fetchMessages(fetchContributorId);
-      localStorage.setItem("lastChatUser", JSON.stringify(user));
-      fetch("/api/messages/mark-as-read/".concat(fetchContributorId), {
+    markMessagesAsRead: function markMessagesAsRead(userId) {
+      var _this = this;
+      fetch("/api/messages/mark-as-read/".concat(userId), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -24341,40 +24377,27 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       }).then(function (res) {
         return res.json();
       }).then(function () {
-        // Set the unread count to 0 for this user
-        if (_this.unreadMap[_this.selectedContributor.id]) {
-          _this.unreadMap[_this.selectedContributor.id] = 0;
-        }
+        _this.$set(_this.unreadMap, userId, 0);
         _this.updateUnreadTotal();
       })["catch"](function (err) {
-        console.error("Greška pri označavanju poruka kao pročitanih CONTRIBUTOR:", err);
+        return console.error("Error marking messages as read:", err);
       });
     },
+    selectContributor: function selectContributor(user) {
+      var _user$user;
+      this.selectedContributor = user;
+      this.selectedUser = null;
+      var id = (user === null || user === void 0 || (_user$user = user.user) === null || _user$user === void 0 ? void 0 : _user$user.id) || (user === null || user === void 0 ? void 0 : user.id);
+      this.fetchMessages(id);
+      localStorage.setItem("lastChatUser", JSON.stringify(user));
+      this.markMessagesAsRead(id);
+    },
     selectUser: function selectUser(user) {
-      var _this2 = this;
       this.selectedUser = user;
       this.selectedContributor = null;
       this.fetchMessages(user.id);
       localStorage.setItem("lastChatUser", JSON.stringify(user));
-
-      // Koristimo selectedUser.id umesto selectedContributor.id
-      fetch("/api/messages/mark-as-read/".concat(this.selectedUser.id), {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRF-TOKEN": window.csrfToken
-        }
-      }).then(function (res) {
-        return res.json();
-      }).then(function () {
-        // Set the unread count to 0 for this user
-        if (_this2.unreadMap[_this2.selectedUser.id]) {
-          _this2.unreadMap[_this2.selectedUser.id] = 0;
-        }
-        _this2.updateUnreadTotal();
-      })["catch"](function (err) {
-        console.error("Greška pri označavanju poruka kao pročitanih USER:", err);
-      });
+      this.markMessagesAsRead(user.id);
     },
     triggerFileInput: function triggerFileInput() {
       this.$refs.fileInput.click();
@@ -24383,18 +24406,15 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       var file = event.target.files[0];
       if (file && file.size > 5 * 1024 * 1024) {
         alert("File must be less than 5MB.");
-        this.$refs.fileInput.value = "";
         this.file = null;
         return;
       }
       this.file = file;
     },
     fetchMessages: function fetchMessages(receiverId) {
-      var _this3 = this;
+      var _this2 = this;
       if (!receiverId) return;
-      console.log("Ko je primio poruke: ", receiverId);
       fetch("/web/messages/".concat(receiverId), {
-        method: "GET",
         headers: {
           "X-CSRF-TOKEN": window.csrfToken,
           Accept: "application/json"
@@ -24402,11 +24422,10 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       }).then(function (res) {
         return res.json();
       }).then(function (data) {
-        console.log("Received: ", data);
-        _this3.messages = data;
-        _this3.scrollToBottom();
+        _this2.messages = data;
+        _this2.scrollToBottom();
       })["catch"](function (err) {
-        console.error("Greška pri dohvatanju poruka:", err);
+        return console.error("Error fetching messages:", err);
       });
     },
     scrollToBottom: function scrollToBottom() {
@@ -24420,46 +24439,23 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
     toggleEmojiPicker: function toggleEmojiPicker() {
       if (this.picker && this.$refs.emojiBtn) {
         this.picker.togglePicker(this.$refs.emojiBtn);
-      } else {
-        console.warn("Emoji picker nije inicijalizovan.");
       }
     },
     handleSubmit: function handleSubmit() {
-      var _this$selectedUser3,
-        _this$selectedContrib7,
-        _this$selectedContrib8,
-        _this4 = this;
-      if (this.message.trim() === "") {
-        alert("Please enter a text!");
-        return;
+      var _this$selectedUser,
+        _this$selectedContrib4,
+        _this$selectedContrib5,
+        _this3 = this;
+      if (!this.message.trim() && !this.file) {
+        return alert("Please enter a text or select a file!");
       }
-      var receiverId = ((_this$selectedUser3 = this.selectedUser) === null || _this$selectedUser3 === void 0 ? void 0 : _this$selectedUser3.id) || ((_this$selectedContrib7 = this.selectedContributor) === null || _this$selectedContrib7 === void 0 || (_this$selectedContrib7 = _this$selectedContrib7.user) === null || _this$selectedContrib7 === void 0 ? void 0 : _this$selectedContrib7.id) || ((_this$selectedContrib8 = this.selectedContributor) === null || _this$selectedContrib8 === void 0 ? void 0 : _this$selectedContrib8.id);
-      if (!receiverId) {
-        alert("The user is not selected.");
-        return;
-      }
+      var receiverId = ((_this$selectedUser = this.selectedUser) === null || _this$selectedUser === void 0 ? void 0 : _this$selectedUser.id) || ((_this$selectedContrib4 = this.selectedContributor) === null || _this$selectedContrib4 === void 0 || (_this$selectedContrib4 = _this$selectedContrib4.user) === null || _this$selectedContrib4 === void 0 ? void 0 : _this$selectedContrib4.id) || ((_this$selectedContrib5 = this.selectedContributor) === null || _this$selectedContrib5 === void 0 ? void 0 : _this$selectedContrib5.id);
+      if (!receiverId) return alert("The user is not selected.");
       var formData = new FormData();
       formData.append("user_id", this.currentUserId);
       formData.append("text", this.message);
       formData.append("receiver_id", receiverId);
-      if (this.file) {
-        formData.append("file", this.file);
-      }
-      console.log("Form data sadrži:");
-      var _iterator = _createForOfIteratorHelper(formData.entries()),
-        _step;
-      try {
-        for (_iterator.s(); !(_step = _iterator.n()).done;) {
-          var _step$value = _slicedToArray(_step.value, 2),
-            key = _step$value[0],
-            value = _step$value[1];
-          console.log("".concat(key, ":"), value);
-        }
-      } catch (err) {
-        _iterator.e(err);
-      } finally {
-        _iterator.f();
-      }
+      if (this.file) formData.append("file", this.file);
       fetch("/web/messages", {
         method: "POST",
         headers: {
@@ -24469,58 +24465,57 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       }).then(function (res) {
         return res.json();
       }).then(function (data) {
-        console.log("Jone: ", data);
-        _this4.message = "";
-        _this4.file = null;
-        _this4.messages.push(data.message);
-        if (_this4.$refs.fileInput) {
-          _this4.$refs.fileInput.value = "";
-        }
-        _this4.scrollToBottom();
+        _this3.message = "";
+        _this3.file = null;
+        _this3.messages.push(data.message);
+        if (_this3.$refs.fileInput) _this3.$refs.fileInput.value = "";
+        _this3.scrollToBottom();
       })["catch"](function (error) {
-        console.error("Greška pri slanju poruke:", error);
+        return console.error("Error sending message:", error);
       });
     },
-    selectFirstContributor: function selectFirstContributor() {
-      if (this.contributors && this.contributors.length > 0) {
-        var _firstContributor$use;
-        var firstContributor = this.contributors[0];
-
-        // Ako kontributor ima user, selektuj usera, inače samo kontributer
-        if (firstContributor.user) {
-          this.selectedUser = firstContributor.user;
+    subscribeToWebSocket: function subscribeToWebSocket() {
+      var _this4 = this;
+      Echo["private"]("chat.".concat(this.currentUserId)).subscribed(function () {
+        return console.log("Subscribed to chat.".concat(_this4.currentUserId));
+      }).listen(".MessageSent", function (payload) {
+        var _this4$selectedUser, _this4$selectedContri, _this4$selectedContri2;
+        var activeId = ((_this4$selectedUser = _this4.selectedUser) === null || _this4$selectedUser === void 0 ? void 0 : _this4$selectedUser.id) || ((_this4$selectedContri = _this4.selectedContributor) === null || _this4$selectedContri === void 0 || (_this4$selectedContri = _this4$selectedContri.user) === null || _this4$selectedContri === void 0 ? void 0 : _this4$selectedContri.id) || ((_this4$selectedContri2 = _this4.selectedContributor) === null || _this4$selectedContri2 === void 0 ? void 0 : _this4$selectedContri2.id);
+        if (payload.message && (payload.message.user_id === activeId || payload.message.receiver_id === activeId)) {
+          _this4.messages.push(payload.message);
+          _this4.scrollToBottom();
+          _this4.markMessagesAsRead(activeId);
         } else {
-          this.selectedUser = null; // Ako nema usera
+          _this4.unreadMap[payload.message.user_id] = (_this4.unreadMap[payload.message.user_id] || 0) + 1;
+          _this4.updateUnreadTotal();
+          _eventBus__WEBPACK_IMPORTED_MODULE_2__["default"].emit("update-navbar-badge", _this4.unreadTotal);
         }
-
-        // Uvek postavi firstContributor kao selectedContributor
-        this.selectedContributor = firstContributor;
-
-        // Pošaljemo zahtev za poruke (koristi user.id ako postoji)
-        this.fetchMessages(((_firstContributor$use = firstContributor.user) === null || _firstContributor$use === void 0 ? void 0 : _firstContributor$use.id) || firstContributor.id);
-
-        // Spremi korisnika u localStorage (ako postoji user, spasavaj tog user-a)
-        localStorage.setItem("lastChatUser", JSON.stringify(firstContributor.user || firstContributor));
-      } else {
-        console.warn("Nema dostupnih kontributera.");
-      }
+      }).error(function (error) {
+        return console.error("WebSocket error:", error);
+      });
     }
   },
   mounted: function mounted() {
-    var _this5 = this;
-    console.log("Candidate: ", this.candidate);
-    console.log("Contributor: ", this.contributors);
-    // da napravim upit da se proveri u contributeru da li postoji objekat user ako da prosledi se njegovi podaci ako ne onda se prosledi
-    if (this.contributors && this.contributors.length > 0) {
-      this.selectFirstContributor();
+    var _this$candidate2,
+      _this5 = this;
+    this.prepareContributors();
+    var lastUser = localStorage.getItem("lastChatUser");
+    if (lastUser) {
+      var parsed = JSON.parse(lastUser);
+      this.selectedUser = parsed;
+      this.fetchMessages(parsed.id);
+    } else if ((_this$candidate2 = this.candidate) !== null && _this$candidate2 !== void 0 && _this$candidate2.user) {
+      this.selectedUser = this.candidate.user;
+      this.fetchMessages(this.candidate.user.id);
+      localStorage.setItem("lastChatUser", JSON.stringify(this.candidate.user));
+    } else if (this.contributorData.length > 0) {
+      var first = this.contributorData[0];
+      this.selectedContributor = first;
+      this.selectedUser = first.user;
+      this.fetchMessages(first.user.id);
+      localStorage.setItem("lastChatUser", JSON.stringify(first.user));
     }
-    this.$nextTick(function () {
-      _eventBus__WEBPACK_IMPORTED_MODULE_2__["default"].emit("reset-navbar-badge");
-    });
-
-    // Dohvati nepročitane poruke po korisniku
     fetch("/api/messages/unread-count", {
-      method: "GET",
       headers: {
         "X-Requested-With": "XMLHttpRequest",
         "X-CSRF-TOKEN": window.csrfToken,
@@ -24534,85 +24529,17 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       });
       _this5.updateUnreadTotal();
     })["catch"](function (err) {
-      console.error("Greška pri dohvatanju nepročitanih poruka:", err);
+      return console.error("Error fetching unread counts:", err);
     });
     this.picker = new _joeattardi_emoji_button__WEBPACK_IMPORTED_MODULE_0__.EmojiButton({
       position: "top-end"
     });
-    if (this.picker) {
-      this.picker.on("emoji", function (emoji) {
-        _this5.message += emoji.emoji;
-      });
-    } else {
-      console.warn("Emoji picker failed to initialize.");
-    }
-    var lastUser = localStorage.getItem("lastChatUser");
-    if (lastUser) {
-      var parsed = JSON.parse(lastUser);
-      this.selectedUser = parsed;
-      this.fetchMessages(parsed.id);
-    } else if (this.candidate && this.candidate.user) {
-      this.selectedUser = this.candidate.user;
-      this.fetchMessages(this.candidate.user.id);
-      localStorage.setItem("lastChatUser", JSON.stringify(this.candidate.user));
-    } else if (this.contributorData.length > 0) {
-      // automatski selektuj prvog iz contributorData
-      var firstContributor = this.contributorData[0];
-      this.selectedContributor = firstContributor;
-      this.selectedUser = firstContributor.user;
-      this.fetchMessages(firstContributor.user.id);
-      localStorage.setItem("lastChatUser", JSON.stringify(first.user));
-    }
-    this.prepareContributors();
-    Echo["private"]("chat.".concat(this.currentUserId)).subscribed(function () {
-      console.log("✅ Subscribed na kanal: chat." + _this5.currentUserId);
-    }).listen(".MessageSent", function (payload) {
-      var _this5$selectedUser, _this5$selectedContri, _this5$selectedContri2;
-      console.log("📡 WebSocket primio:", payload);
-      var activeReceiverId = ((_this5$selectedUser = _this5.selectedUser) === null || _this5$selectedUser === void 0 ? void 0 : _this5$selectedUser.id) || ((_this5$selectedContri = _this5.selectedContributor) === null || _this5$selectedContri === void 0 || (_this5$selectedContri = _this5$selectedContri.user) === null || _this5$selectedContri === void 0 ? void 0 : _this5$selectedContri.id) || ((_this5$selectedContri2 = _this5.selectedContributor) === null || _this5$selectedContri2 === void 0 ? void 0 : _this5$selectedContri2.id);
-      console.log("Active id: ", activeReceiverId);
-
-      // Proverite da li je poruka od korisnika sa selektovanim ID-jem
-      if (payload.message && (payload.message.user_id === activeReceiverId || payload.message.receiver_id === activeReceiverId)) {
-        _this5.messages.push(payload.message);
-        _this5.scrollToBottom();
-        fetch("/api/messages/mark-as-read/".concat(activeReceiverId), {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRF-TOKEN": window.csrfToken
-          }
-        }).then(function (res) {
-          return res.json();
-        }).then(function () {
-          var _this5$selectedUser2;
-          // Set the unread count to 0 for this user
-          if (_this5.unreadMap[(_this5$selectedUser2 = _this5.selectedUser) === null || _this5$selectedUser2 === void 0 ? void 0 : _this5$selectedUser2.id]) {
-            var _this5$selectedUser3;
-            _this5.unreadMap[(_this5$selectedUser3 = _this5.selectedUser) === null || _this5$selectedUser3 === void 0 ? void 0 : _this5$selectedUser3.id] = 0;
-          }
-          _this5.updateUnreadTotal();
-        })["catch"](function (err) {
-          console.error("Greška pri označavanju poruka kao pročitanih:", err);
-        });
-      } else {
-        // Ako poruka nije za selektovanog korisnika, povećajte broj nepročitanih poruka
-        if (_this5.unreadMap[payload.message.user_id]) {
-          _this5.unreadMap[payload.message.user_id]++;
-        } else {
-          _this5.unreadMap[payload.message.user_id] = 1;
-        }
-        _this5.updateUnreadTotal();
-
-        // Emituj ka nav-baru ako koristiš globalni badge (npr. crveni broj u headeru)
-        _eventBus__WEBPACK_IMPORTED_MODULE_2__["default"].emit("update-navbar-badge", _this5.unreadTotal);
-      }
-    }).error(function (error) {
-      console.error("❌ Greška:", error);
+    this.picker.on("emoji", function (emoji) {
+      _this5.message += emoji.emoji;
     });
+    this.subscribeToWebSocket();
   },
   beforeUnmount: function beforeUnmount() {
-    // Cleanup event listener
     _eventBus__WEBPACK_IMPORTED_MODULE_2__["default"].off("reset-navbar-badge", this.resetUnreadTotal);
   }
 });
@@ -24882,67 +24809,92 @@ var _hoisted_5 = {
 var _hoisted_6 = {
   "class": "d-flex d-flex__column"
 };
-var _hoisted_7 = ["onClick"];
-var _hoisted_8 = {
+var _hoisted_7 = {
+  "class": "gap-4 user-card__scroll"
+};
+var _hoisted_8 = ["onClick"];
+var _hoisted_9 = {
   "class": "symbol symbol-45px symbol-circle"
 };
-var _hoisted_9 = ["src"];
-var _hoisted_10 = {
+var _hoisted_10 = ["src"];
+var _hoisted_11 = {
   "class": "ms-5"
 };
-var _hoisted_11 = {
+var _hoisted_12 = {
   href: "#",
   "class": "fs-5 fw-bold text-gray-900 text-hover-primary mb-2"
 };
-var _hoisted_12 = {
+var _hoisted_13 = {
   key: 0,
   "class": "badge badge-danger"
 };
-var _hoisted_13 = {
-  key: 1
-};
 var _hoisted_14 = {
-  "class": "text-danger"
+  "class": "gap-4 user-card__scroll"
 };
-var _hoisted_15 = {
-  "class": "col-lg-7"
-};
+var _hoisted_15 = ["onClick"];
 var _hoisted_16 = {
-  "class": "card card-flush h-100"
+  "class": "symbol symbol-45px symbol-circle"
 };
-var _hoisted_17 = {
-  "class": "card-header"
-};
+var _hoisted_17 = ["src"];
 var _hoisted_18 = {
-  "class": "card-title"
+  "class": "ms-5"
 };
 var _hoisted_19 = {
+  href: "#",
+  "class": "fs-5 fw-bold text-gray-900 text-hover-primary mb-2"
+};
+var _hoisted_20 = {
+  key: 0,
+  "class": "badge badge-danger"
+};
+var _hoisted_21 = {
+  "class": "col-lg-7"
+};
+var _hoisted_22 = {
+  "class": "card card-flush h-100"
+};
+var _hoisted_23 = {
+  key: 0,
+  "class": "d-flex align-items-center"
+};
+var _hoisted_24 = {
+  "class": "card-header"
+};
+var _hoisted_25 = {
+  "class": "card-title mb-0"
+};
+var _hoisted_26 = {
+  key: 1
+};
+var _hoisted_27 = {
   "class": "card-body chat-box chat-box__contributor",
   id: "chatBox__contributor"
 };
-var _hoisted_20 = {
+var _hoisted_28 = {
   "class": "mt-1"
 };
-var _hoisted_21 = {
+var _hoisted_29 = {
   "class": "text-muted"
 };
-var _hoisted_22 = {
+var _hoisted_30 = {
   key: 0
 };
-var _hoisted_23 = {
+var _hoisted_31 = {
   "class": "message-info"
 };
-var _hoisted_24 = {
+var _hoisted_32 = {
   "class": "card-footer border-top pt-4"
 };
-var _hoisted_25 = {
+var _hoisted_33 = {
   "class": "d-flex align-items-center gap-2"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _$data$selectedUser, _$data$selectedUser2;
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [_cache[6] || (_cache[6] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"card-header pt-7\" id=\"kt_chat_contacts_header\"><form class=\"w-100 position-relative\" autocomplete=\"off\"><i class=\"ki-duotone ki-magnifier fs-3 text-gray-500 position-absolute top-50 ms-5 translate-middle-y\"><span class=\"path1\"></span><span class=\"path2\"></span></i><input type=\"text\" class=\"form-control form-control-solid px-13\" name=\"search\" value=\"\" placeholder=\"Search by username or email...\"></form></div>", 1)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.uniqueRecruiters, function (recruiter) {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [_cache[9] || (_cache[9] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"card-header pt-7\" id=\"kt_chat_contacts_header\"><form class=\"w-100 position-relative\" autocomplete=\"off\"><i class=\"ki-duotone ki-magnifier fs-3 text-gray-500 position-absolute top-50 ms-5 translate-middle-y\"><span class=\"path1\"></span><span class=\"path2\"></span></i><input type=\"text\" class=\"form-control form-control-solid px-13\" name=\"search\" value=\"\" placeholder=\"Search by username or email...\"></form></div>", 1)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Freelancers Section "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.uniqueRecruiters.filter(function (r) {
+    return r.is_freelancer === 0;
+  }), function (recruiter) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
-      key: recruiter.user_id
+      key: 'freelancer-' + recruiter.user_id
     }, [recruiter && recruiter.user_id ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
       key: 0,
       "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["d-flex align-items-center px-2 user-card", {
@@ -24951,7 +24903,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
         return $options.selectUser(recruiter.user);
       }, ["prevent"])
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
       src: recruiter.profile_image ? $options.getImageUrl(recruiter.profile_image) : $options.defaultImage,
       alt: "Profile Image",
       "class": "img-fluid rounded-circle shadow-sm",
@@ -24959,8 +24911,34 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         "width": "60px",
         "height": "60px"
       }
-    }, null, 8 /* PROPS */, _hoisted_9)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", _hoisted_11, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(recruiter.user.first_name) + " " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(recruiter.user.last_name), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(recruiter.user.email), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("small", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(recruiter.is_freelancer === 0 ? "Freelancer" : "Recruiter"), 1 /* TEXT */)])]), $data.unreadMap[recruiter.user.id] ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_12, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.unreadMap[recruiter.user.id]), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 10 /* CLASS, PROPS */, _hoisted_7)) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_13, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_14, " Missing user for recruiter ID: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(recruiter.user_id), 1 /* TEXT */)]))]);
-  }), 128 /* KEYED_FRAGMENT */))])])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_15, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_16, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_17, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", _hoisted_18, " Chat with " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.selectedUser ? $data.selectedUser.first_name + " " + $data.selectedUser.last_name : "Select a user"), 1 /* TEXT */)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_19, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.messages, function (msg) {
+    }, null, 8 /* PROPS */, _hoisted_10)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", _hoisted_12, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(recruiter.user.first_name) + " " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(recruiter.user.last_name), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(recruiter.user.email), 1 /* TEXT */), _cache[6] || (_cache[6] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("small", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", null, "Freelancer")], -1 /* HOISTED */))]), $data.unreadMap[recruiter.user.id] ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_13, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.unreadMap[recruiter.user.id]), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 10 /* CLASS, PROPS */, _hoisted_8)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]);
+  }), 128 /* KEYED_FRAGMENT */))]), _cache[8] || (_cache[8] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("hr", {
+    "class": "my-4"
+  }, null, -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Recruiters Section "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_14, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.uniqueRecruiters.filter(function (r) {
+    return r.is_freelancer !== 0;
+  }), function (recruiter) {
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
+      key: 'recruiter-' + recruiter.user_id
+    }, [recruiter && recruiter.user_id ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
+      key: 0,
+      "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["d-flex align-items-center px-2 user-card", {
+        'user-active': $data.selectedUser && $data.selectedUser.id === recruiter.user_id
+      }]),
+      onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
+        return $options.selectUser(recruiter.user);
+      }, ["prevent"])
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_16, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
+      src: recruiter.profile_image ? $options.getImageUrl(recruiter.profile_image) : $options.defaultImage,
+      alt: "Profile Image",
+      "class": "img-fluid rounded-circle shadow-sm",
+      style: {
+        "width": "60px",
+        "height": "60px"
+      }
+    }, null, 8 /* PROPS */, _hoisted_17)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_18, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", _hoisted_19, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(recruiter.user.first_name) + " " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(recruiter.user.last_name), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(recruiter.user.email), 1 /* TEXT */), _cache[7] || (_cache[7] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("small", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", null, "Recruiter")], -1 /* HOISTED */))]), $data.unreadMap[recruiter.user.id] ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_20, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.unreadMap[recruiter.user.id]), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 10 /* CLASS, PROPS */, _hoisted_15)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]);
+  }), 128 /* KEYED_FRAGMENT */))])])])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_21, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_22, [$data.selectedUser ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_23, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_24, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", _hoisted_25, " Chat with " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.selectedUser.first_name) + " " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.selectedUser.last_name), 1 /* TEXT */)])])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_26, _cache[10] || (_cache[10] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", {
+    "class": "card-title"
+  }, "Select a user", -1 /* HOISTED */)]))), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_27, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.messages, function (msg) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
       key: msg.id,
       "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(['chat-message', msg.user_id === $props.currentUserId ? 'sent' : 'received'])
@@ -24968,14 +24946,14 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(msg.user_id === $props.currentUserId ? 'text-end' : 'text-start')
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
       "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(msg.user_id === $props.currentUserId ? 'p-3 rounded bg-primary text-white d-inline-block' : 'p-3 rounded bg-light text-dark d-inline-block')
-    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(msg.text), 3 /* TEXT, CLASS */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_20, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("small", _hoisted_21, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(new Date(msg.created_at).toLocaleTimeString()), 1 /* TEXT */)])], 2 /* CLASS */)], 2 /* CLASS */);
-  }), 128 /* KEYED_FRAGMENT */)), $data.messages.length === 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_22, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_23, " Start a conversation with user " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(((_$data$selectedUser = $data.selectedUser) === null || _$data$selectedUser === void 0 ? void 0 : _$data$selectedUser.first_name) + " " + ((_$data$selectedUser2 = $data.selectedUser) === null || _$data$selectedUser2 === void 0 ? void 0 : _$data$selectedUser2.last_name)) + " to begin your collaboration. Introduce yourself, share your ideas, or ask any questions to get things moving ", 1 /* TEXT */)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_24, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
+    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(msg.text), 3 /* TEXT, CLASS */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_28, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("small", _hoisted_29, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(new Date(msg.created_at).toLocaleTimeString()), 1 /* TEXT */)])], 2 /* CLASS */)], 2 /* CLASS */);
+  }), 128 /* KEYED_FRAGMENT */)), $data.messages.length === 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_30, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_31, " Start a conversation with user " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(((_$data$selectedUser = $data.selectedUser) === null || _$data$selectedUser === void 0 ? void 0 : _$data$selectedUser.first_name) + " " + ((_$data$selectedUser2 = $data.selectedUser) === null || _$data$selectedUser2 === void 0 ? void 0 : _$data$selectedUser2.last_name)) + " to begin your collaboration. Introduce yourself, share your ideas, or ask any questions to get things moving ", 1 /* TEXT */)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_32, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
     id: "chatForm",
     onSubmit: _cache[5] || (_cache[5] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {
       return $options.handleSubmit && $options.handleSubmit.apply($options, arguments);
     }, ["prevent"])),
     enctype: "multipart/form-data"
-  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_25, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_33, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     type: "text",
     "class": "form-control form-control-solid px-13",
     name: "input",
@@ -24992,7 +24970,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onClick: _cache[2] || (_cache[2] = function () {
       return $options.triggerFileInput && $options.triggerFileInput.apply($options, arguments);
     })
-  }, _cache[7] || (_cache[7] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+  }, _cache[11] || (_cache[11] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
     "class": "fa-solid fa-image icon-img"
   }, null, -1 /* HOISTED */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
     "class": "fa-solid fa-file icon-file"
@@ -25011,10 +24989,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onClick: _cache[4] || (_cache[4] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {
       return $options.toggleEmojiPicker && $options.toggleEmojiPicker.apply($options, arguments);
     }, ["prevent"]))
-  }, " 😀 ", 512 /* NEED_PATCH */), _cache[8] || (_cache[8] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  }, " 😀 ", 512 /* NEED_PATCH */), _cache[12] || (_cache[12] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     "class": "btn btn-primary",
     type: "submit"
-  }, " Send ", -1 /* HOISTED */))])], 32 /* NEED_HYDRATION */)])])])]);
+  }, " Send ", -1 /* HOISTED */))]), _cache[13] || (_cache[13] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+    "class": "message-error"
+  }, null, -1 /* HOISTED */))], 32 /* NEED_HYDRATION */)])])])]);
 }
 
 /***/ }),
@@ -25153,7 +25133,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Card header"), _cache[9] || (_cache[9] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"card-header pt-7\" id=\"kt_chat_contacts_header\"><!--begin::Form--><form class=\"w-100 position-relative\" autocomplete=\"off\"><!--begin::Icon--><i class=\"ki-duotone ki-magnifier fs-3 text-gray-500 position-absolute top-50 ms-5 translate-middle-y\"><span class=\"path1\"></span><span class=\"path2\"></span></i><!--end::Icon--><!--begin::Input--><input type=\"text\" class=\"form-control form-control-solid px-13\" name=\"search\" value=\"\" placeholder=\"Search by username or email...\"><!--end::Input--></form><!--end::Form--></div>", 1)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Card header"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Card body"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::List of Users"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Kandidati "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.candidatesList, function (user) {
     var _user$user, _$data$selectedUser, _user$user2, _user$user3, _user$user4, _user$user5, _user$user6, _user$user7;
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
-      key: ((_user$user = user.user) === null || _user$user === void 0 ? void 0 : _user$user.id) || user.id,
+      key: ((_user$user = user.user) === null || _user$user === void 0 ? void 0 : _user$user.id) || user.user_id,
       "class": "d-flex flex-column align-items-center",
       onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
         return $options.selectUser(user.user);
@@ -25164,11 +25144,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       }])
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_10, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(((_user$user3 = user.user) === null || _user$user3 === void 0 || (_user$user3 = _user$user3.first_name) === null || _user$user3 === void 0 ? void 0 : _user$user3.charAt(0).toUpperCase()) || "?"), 1 /* TEXT */)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", _hoisted_12, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)((_user$user4 = user.user) === null || _user$user4 === void 0 ? void 0 : _user$user4.first_name) + " " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)((_user$user5 = user.user) === null || _user$user5 === void 0 ? void 0 : _user$user5.last_name), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)((_user$user6 = user.user) === null || _user$user6 === void 0 ? void 0 : _user$user6.email), 1 /* TEXT */), _cache[6] || (_cache[6] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("small", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", null, "Candidate")], -1 /* HOISTED */))]), $data.unreadMap[(_user$user7 = user.user) === null || _user$user7 === void 0 ? void 0 : _user$user7.id] ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_13, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.unreadMap[user.user.id]), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 2 /* CLASS */)], 8 /* PROPS */, _hoisted_8);
   }), 128 /* KEYED_FRAGMENT */))]), _cache[8] || (_cache[8] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("hr", {
-    "class": "hr_custome"
+    "class": "my-4"
   }, null, -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Kontributeri "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_14, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.contributorsList, function (user) {
     var _user$user8, _$data$selectedContri, _user$user9, _user$user10, _user$user11, _user$user12, _user$user13, _user$user14;
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
-      key: ((_user$user8 = user.user) === null || _user$user8 === void 0 ? void 0 : _user$user8.id) || user.id,
+      key: ((_user$user8 = user.user) === null || _user$user8 === void 0 ? void 0 : _user$user8.id) || user.user_id,
       "class": "d-flex flex-column align-items-center",
       onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
         return $options.selectContributor(user);
@@ -25272,26 +25252,28 @@ var _hoisted_5 = {
   }
 };
 var _hoisted_6 = {
-  "class": "d-flex d-flex__column py-4"
+  "class": "d-flex d-flex__column"
 };
 var _hoisted_7 = {
+  "class": "gap-4 user-card__scroll"
+};
+var _hoisted_8 = ["onClick"];
+var _hoisted_9 = {
   "class": "symbol symbol-45px symbol-circle"
 };
-var _hoisted_8 = {
+var _hoisted_10 = {
   "class": "symbol-label bg-light-danger text-danger fs-6 fw-bolder"
 };
-var _hoisted_9 = {
+var _hoisted_11 = {
   "class": "ms-5"
 };
-var _hoisted_10 = ["onClick"];
-var _hoisted_11 = {
-  key: 0,
-  "class": "badge badge-danger"
-};
 var _hoisted_12 = {
-  "class": "d-flex d-flex__column py-4"
+  href: "#",
+  "class": "fs-5 fw-bold text-gray-900 text-hover-primary mb-2"
 };
-var _hoisted_13 = ["onClick"];
+var _hoisted_13 = {
+  "class": "gap-4 user-card__scroll"
+};
 var _hoisted_14 = {
   "class": "symbol symbol-45px symbol-circle"
 };
@@ -25301,92 +25283,80 @@ var _hoisted_15 = {
 var _hoisted_16 = {
   "class": "ms-5"
 };
-var _hoisted_17 = {
-  href: "#",
-  "class": "fs-5 fw-bold text-gray-900 text-hover-primary mb-2"
-};
+var _hoisted_17 = ["onClick"];
 var _hoisted_18 = {
-  "class": "col-lg-7"
+  key: 0,
+  "class": "badge badge-danger"
 };
 var _hoisted_19 = {
-  "class": "card h-100"
+  "class": "col-lg-7"
 };
 var _hoisted_20 = {
-  "class": "card-header"
+  "class": "card h-100"
 };
 var _hoisted_21 = {
-  key: 0
+  "class": "card-header"
 };
 var _hoisted_22 = {
-  "class": "card-title"
+  key: 0
 };
 var _hoisted_23 = {
-  key: 1
+  "class": "card-title"
 };
 var _hoisted_24 = {
-  "class": "card-title"
-};
-var _hoisted_25 = {
-  key: 2
-};
-var _hoisted_26 = {
-  "class": "card-title"
-};
-var _hoisted_27 = {
   "class": "card-body chat-box chat-box__contributor",
   id: "chatBox"
 };
-var _hoisted_28 = {
+var _hoisted_25 = {
   "class": "text-muted"
 };
-var _hoisted_29 = {
+var _hoisted_26 = {
   key: 0
 };
-var _hoisted_30 = {
+var _hoisted_27 = {
   "class": "message-info"
 };
-var _hoisted_31 = {
+var _hoisted_28 = {
   "class": "card-footer"
 };
-var _hoisted_32 = {
+var _hoisted_29 = {
   "class": "d-flex align-items-center gap-2"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  var _$data$selectedContri2, _$data$selectedContri3, _$props$candidates, _$props$candidates2;
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Card header"), _cache[9] || (_cache[9] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"card-header pt-7\" id=\"kt_chat_contacts_header\"><!--begin::Form--><form class=\"w-100 position-relative\" autocomplete=\"off\"><!--begin::Icon--><i class=\"ki-duotone ki-magnifier fs-3 text-gray-500 position-absolute top-50 ms-5 translate-middle-y\"><span class=\"path1\"></span><span class=\"path2\"></span></i><!--end::Icon--><!--begin::Input--><input type=\"text\" class=\"form-control form-control-solid px-13\" name=\"search\" value=\"\" placeholder=\"Search by username or email...\"><!--end::Input--></form><!--end::Form--></div>", 1)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Card header"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Card body"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::List"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::User"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Add a condition to check in witch route, user is "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.contributorData, function (user) {
-    var _$data$selectedContri, _user$user;
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
-      "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["d-flex flex-row align-items-center", {
-        'user-active': $data.selectedContributor && $data.selectedContributor.user.id === user.user.id || user.id
-      }])
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Avatar"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_8, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.user.first_name.charAt(0).toUpperCase()), 1 /* TEXT */)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Avatar"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
-      onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
-        return $options.selectContributor(user);
-      }, ["prevent"]),
-      href: "#",
-      "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(['fs-5 fw-bold text-gray-900 text-hover-primary mb-2', ((_$data$selectedContri = $data.selectedContributor) === null || _$data$selectedContri === void 0 || (_$data$selectedContri = _$data$selectedContri.user) === null || _$data$selectedContri === void 0 ? void 0 : _$data$selectedContri.id) === (user === null || user === void 0 || (_user$user = user.user) === null || _user$user === void 0 ? void 0 : _user$user.id)])
-    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.user.first_name) + " " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.user.last_name), 11 /* TEXT, CLASS, PROPS */, _hoisted_10), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.user.email), 1 /* TEXT */), _cache[6] || (_cache[6] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("small", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", null, "Contributor")], -1 /* HOISTED */))]), $data.unreadMap[user.user.id] ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_11, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.unreadMap[user.user.id]), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 2 /* CLASS */);
-  }), 256 /* UNKEYED_FRAGMENT */))])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.candidates, function (candidate) {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [_cache[9] || (_cache[9] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"card-header pt-7\" id=\"kt_chat_contacts_header\"><form class=\"w-100 position-relative\" autocomplete=\"off\"><i class=\"ki-duotone ki-magnifier fs-3 text-gray-500 position-absolute top-50 ms-5 translate-middle-y\"><span class=\"path1\"></span><span class=\"path2\"></span></i><input type=\"text\" class=\"form-control form-control-solid px-13\" name=\"search\" value=\"\" placeholder=\"Search by username or email...\"></form></div>", 1)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::List"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::User"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Add a condition to check in witch route, user is "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.sortedCandidates, function (candidate) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
       "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["d-flex align-items-center px-2 user-card", [$data.selectedUser && $data.selectedUser.id === candidate.user.id ? 'user-active' : '']]),
       onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
         return $options.selectUser(candidate.user);
       }, ["prevent"])
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_14, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_15, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(candidate.user.first_name.charAt(0).toUpperCase()), 1 /* TEXT */)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_16, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", _hoisted_17, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(candidate.user.first_name) + " " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(candidate.user.last_name), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(candidate.user.email), 1 /* TEXT */), _cache[7] || (_cache[7] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("small", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", null, "Candidate")], -1 /* HOISTED */))])], 10 /* CLASS, PROPS */, _hoisted_13);
-  }), 256 /* UNKEYED_FRAGMENT */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Details"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Separator"), _cache[8] || (_cache[8] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-    "class": "separator separator-dashed d-none"
-  }, null, -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Separator")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::List")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Card body")])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_18, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_19, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_20, [$options.isFreelancerChatRoute ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_21, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", _hoisted_22, " Chat with " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.chatTitle), 1 /* TEXT */)])) : $options.isRecruiterChatRoute ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_23, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", _hoisted_24, " Chat with " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(((_$data$selectedContri2 = $data.selectedContributor) === null || _$data$selectedContri2 === void 0 ? void 0 : _$data$selectedContri2.name) || "Candidate"), 1 /* TEXT */)])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_25, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", _hoisted_26, " Chat with " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(((_$data$selectedContri3 = $data.selectedContributor) === null || _$data$selectedContri3 === void 0 ? void 0 : _$data$selectedContri3.name) || ((_$props$candidates = $props.candidates) === null || _$props$candidates === void 0 || (_$props$candidates = _$props$candidates.user) === null || _$props$candidates === void 0 ? void 0 : _$props$candidates.first_name) + " " + ((_$props$candidates2 = $props.candidates) === null || _$props$candidates2 === void 0 || (_$props$candidates2 = _$props$candidates2.user) === null || _$props$candidates2 === void 0 ? void 0 : _$props$candidates2.last_name) || "Candidate?"), 1 /* TEXT */)]))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_27, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.messages, function (msg) {
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_10, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(candidate.user.first_name.charAt(0).toUpperCase()), 1 /* TEXT */)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", _hoisted_12, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(candidate.user.first_name) + " " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(candidate.user.last_name), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(candidate.user.email), 1 /* TEXT */), _cache[6] || (_cache[6] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("small", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", null, "Candidate")], -1 /* HOISTED */))])], 10 /* CLASS, PROPS */, _hoisted_8);
+  }), 256 /* UNKEYED_FRAGMENT */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Details")]), _cache[8] || (_cache[8] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("hr", {
+    "class": "my-4"
+  }, null, -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_13, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.sortedContributors, function (user) {
+    var _$data$selectedContri, _user$user;
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
+      "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["d-flex flex-row align-items-center", {
+        'user-active': $data.selectedContributor && $data.selectedContributor.user.id === user.user.id
+      }])
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Avatar"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_14, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_15, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.user.first_name.charAt(0).toUpperCase()), 1 /* TEXT */)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Avatar"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_16, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+      onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
+        return $options.selectContributor(user);
+      }, ["prevent"]),
+      href: "#",
+      "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(['fs-5 fw-bold text-gray-900 text-hover-primary mb-2', ((_$data$selectedContri = $data.selectedContributor) === null || _$data$selectedContri === void 0 || (_$data$selectedContri = _$data$selectedContri.user) === null || _$data$selectedContri === void 0 ? void 0 : _$data$selectedContri.id) === (user === null || user === void 0 || (_user$user = user.user) === null || _user$user === void 0 ? void 0 : _user$user.id)])
+    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.user.first_name) + " " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.user.last_name), 11 /* TEXT, CLASS, PROPS */, _hoisted_17), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.user.email), 1 /* TEXT */), _cache[7] || (_cache[7] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("small", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", null, "Contributor")], -1 /* HOISTED */))]), $data.unreadMap[user.user.id] ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_18, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.unreadMap[user.user.id]), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 2 /* CLASS */);
+  }), 256 /* UNKEYED_FRAGMENT */))])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::List")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Card body")])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_19, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_20, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_21, [$options.isRecruiterChatRoute ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_22, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", _hoisted_23, " Chat with " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.chatHeaderName), 1 /* TEXT */)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_24, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.messages, function (msg) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
       key: msg.id,
       "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(msg.user_id === $props.currentUserId ? 'chat-message sent' : 'chat-message received')
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(msg.text), 1 /* TEXT */), _cache[10] || (_cache[10] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("small", _hoisted_28, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(new Date(msg.created_at).toLocaleTimeString()), 1 /* TEXT */)], 2 /* CLASS */);
-  }), 128 /* KEYED_FRAGMENT */)), $data.messages.length === 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_29, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_30, " Start a conversation with user " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.chatPlaceholderName) + " to begin your collaboration. Introduce yourself, share your ideas, or ask any questions to get things moving ", 1 /* TEXT */)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_31, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(msg.text), 1 /* TEXT */), _cache[10] || (_cache[10] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("small", _hoisted_25, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(new Date(msg.created_at).toLocaleTimeString()), 1 /* TEXT */)], 2 /* CLASS */);
+  }), 128 /* KEYED_FRAGMENT */)), $data.messages.length === 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_26, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_27, " Start a conversation with user " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.chatPlaceholderName) + " to begin your collaboration. Introduce yourself, share your ideas, or ask any questions to get things moving ", 1 /* TEXT */)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_28, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
     id: "chatForm",
     onSubmit: _cache[5] || (_cache[5] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {
       return $options.handleSubmit && $options.handleSubmit.apply($options, arguments);
     }, ["prevent"])),
     enctype: "multipart/form-data"
-  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_32, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_29, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     type: "text",
     "class": "form-control form-control-solid px-13",
     name: "input",
@@ -25457,7 +25427,7 @@ var _hoisted_4 = {
   id: "kt_chat_contacts_body"
 };
 var _hoisted_5 = {
-  "class": "scroll-y me-n5 pe-5 h-200px h-lg-auto",
+  "class": "scroll-y me-n5 h-200px h-lg-auto",
   "data-kt-scroll": "true",
   "data-kt-scroll-activate": "{default: false, lg: true}",
   "data-kt-scroll-max-height": "auto",
@@ -25489,19 +25459,21 @@ var _hoisted_12 = {
   "class": "badge badge-danger"
 };
 var _hoisted_13 = {
-  key: 1
-};
-var _hoisted_14 = {
+  key: 1,
   "class": "d-flex d-flex__column py-4"
 };
-var _hoisted_15 = {
-  "class": "symbol symbol-45px symbol-circle"
+var _hoisted_14 = {
+  "class": "symbol symbol-45px symbol-circle pr-16"
 };
-var _hoisted_16 = {
+var _hoisted_15 = {
   "class": "symbol-label bg-light-danger text-danger fs-6 fw-bolder"
 };
+var _hoisted_16 = {
+  "class": ""
+};
 var _hoisted_17 = {
-  "class": "ms-5"
+  href: "#",
+  "class": "fs-5 fw-bold text-gray-900 text-hover-primary mb-2"
 };
 var _hoisted_18 = {
   "class": "symbol symbol-45px symbol-circle"
@@ -25509,67 +25481,64 @@ var _hoisted_18 = {
 var _hoisted_19 = {
   "class": "symbol-label bg-light-danger text-danger fs-6 fw-bolder"
 };
-var _hoisted_20 = {
-  "class": "ms-5"
-};
-var _hoisted_21 = ["onClick"];
-var _hoisted_22 = {
+var _hoisted_20 = ["onClick"];
+var _hoisted_21 = {
   key: 0,
   "class": "badge badge-danger"
 };
-var _hoisted_23 = {
+var _hoisted_22 = {
   "class": "col-lg-7"
 };
-var _hoisted_24 = {
+var _hoisted_23 = {
   "class": "card h-100"
 };
-var _hoisted_25 = {
+var _hoisted_24 = {
   "class": "card-header"
 };
-var _hoisted_26 = {
+var _hoisted_25 = {
   key: 0
 };
-var _hoisted_27 = {
+var _hoisted_26 = {
   "class": "card-title"
 };
-var _hoisted_28 = {
+var _hoisted_27 = {
   key: 1
 };
-var _hoisted_29 = {
+var _hoisted_28 = {
   "class": "card-title"
 };
-var _hoisted_30 = {
+var _hoisted_29 = {
   key: 2
 };
-var _hoisted_31 = {
+var _hoisted_30 = {
   "class": "card-title"
 };
-var _hoisted_32 = {
+var _hoisted_31 = {
   "class": "card-body chat-box chat-box__contributor",
   id: "chatBox"
 };
-var _hoisted_33 = {
+var _hoisted_32 = {
   "class": "text-muted"
 };
-var _hoisted_34 = {
+var _hoisted_33 = {
   key: 0
 };
-var _hoisted_35 = {
+var _hoisted_34 = {
   "class": "message-info"
 };
-var _hoisted_36 = {
+var _hoisted_35 = {
   "class": "card-footer"
 };
-var _hoisted_37 = {
+var _hoisted_36 = {
   "class": "d-flex align-items-center gap-2"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _$data$selectedContri3, _$data$selectedContri4, _$props$candidate, _$props$candidate2;
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Card header"), _cache[11] || (_cache[11] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"card-header pt-7\" id=\"kt_chat_contacts_header\"><!--begin::Form--><form class=\"w-100 position-relative\" autocomplete=\"off\"><!--begin::Icon--><i class=\"ki-duotone ki-magnifier fs-3 text-gray-500 position-absolute top-50 ms-5 translate-middle-y\"><span class=\"path1\"></span><span class=\"path2\"></span></i><!--end::Icon--><!--begin::Input--><input type=\"text\" class=\"form-control form-control-solid px-13\" name=\"search\" value=\"\" placeholder=\"Search by username or email...\"><!--end::Input--></form><!--end::Form--></div>", 1)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Card header"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Card body"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::List"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::User"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Add a condition to check in witch route, user is "), $options.isFreelancerChatRoute ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.contributorData, function (user) {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Card header"), _cache[11] || (_cache[11] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"card-header pt-7\" id=\"kt_chat_contacts_header\"><!--begin::Form--><form class=\"w-100 position-relative\" autocomplete=\"off\"><!--begin::Icon--><i class=\"ki-duotone ki-magnifier fs-3 text-gray-500 position-absolute top-50 ms-5 translate-middle-y\"><span class=\"path1\"></span><span class=\"path2\"></span></i><!--end::Icon--><!--begin::Input--><input type=\"text\" class=\"form-control form-control-solid pr-13\" name=\"search\" value=\"\" placeholder=\"Search by username or email...\"><!--end::Input--></form><!--end::Form--></div>", 1)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Card header"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Card body"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::List"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::User"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Add a condition to check in witch route, user is "), $options.isFreelancerChatRoute ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.contributorData, function (user) {
     var _$data$selectedContri, _user$user;
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
       "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["d-flex flex-row align-items-center", {
-        'user-active': $data.selectedContributor && $data.selectedContributor.user.id === user.user.id || user.id
+        'active-user': $data.selectedContributor && $data.selectedContributor.user.id === user.user.id || user.id
       }])
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Avatar"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_9, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.user.first_name.charAt(0).toUpperCase()), 1 /* TEXT */)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Avatar"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
       onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
@@ -25578,43 +25547,42 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       href: "#",
       "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(['fs-5 fw-bold text-gray-900 text-hover-primary mb-2', ((_$data$selectedContri = $data.selectedContributor) === null || _$data$selectedContri === void 0 || (_$data$selectedContri = _$data$selectedContri.user) === null || _$data$selectedContri === void 0 ? void 0 : _$data$selectedContri.id) === (user === null || user === void 0 || (_user$user = user.user) === null || _user$user === void 0 ? void 0 : _user$user.id)])
     }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.user.first_name) + " " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.user.last_name), 11 /* TEXT, CLASS, PROPS */, _hoisted_11), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.user.email), 1 /* TEXT */), _cache[7] || (_cache[7] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("small", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", null, "Contributor")], -1 /* HOISTED */))]), $data.unreadMap[user.user.id] ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_12, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.unreadMap[user.user.id]), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 2 /* CLASS */);
-  }), 256 /* UNKEYED_FRAGMENT */))])])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_13, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_14, [$props.candidate && $props.candidate.user ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
+  }), 256 /* UNKEYED_FRAGMENT */))])])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_13, [$props.candidate && $props.candidate.user ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
     key: 0,
-    "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["d-flex align-items-center px-2 user-card", [$data.selectedUser && $data.selectedUser.id === $props.candidate.user.id ? 'user-active' : '']])
-  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_15, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_16, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.candidate.user.first_name.charAt(0).toUpperCase()), 1 /* TEXT */)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_17, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+    "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["d-flex align-items-center user-card", [$data.selectedUser && $data.selectedUser.id === $props.candidate.user.id ? 'active-user' : '']]),
     onClick: _cache[0] || (_cache[0] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
       return $options.selectUser($props.candidate.user);
-    }, ["prevent"])),
-    href: "#",
-    "class": "fs-5 fw-bold text-gray-900 text-hover-primary mb-2"
-  }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.candidate.user.first_name) + " " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.candidate.user.last_name), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.candidate.user.email), 1 /* TEXT */), _cache[8] || (_cache[8] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("small", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", null, "Candidate")], -1 /* HOISTED */))])], 2 /* CLASS */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Details"), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.sortedContributors, function (user) {
+    }, ["prevent"]))
+  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_14, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_15, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.candidate.user.first_name.charAt(0).toUpperCase()), 1 /* TEXT */)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_16, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", _hoisted_17, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.candidate.user.first_name) + " " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.candidate.user.last_name), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.candidate.user.email), 1 /* TEXT */), _cache[8] || (_cache[8] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("small", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", null, "Candidate")], -1 /* HOISTED */))])], 2 /* CLASS */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Details"), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.sortedContributors, function (user) {
     var _user$user2, _$data$selectedContri2, _user$user3;
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
       "class": "d-flex align-items-center",
       key: (user === null || user === void 0 || (_user$user2 = user.user) === null || _user$user2 === void 0 ? void 0 : _user$user2.id) || (user === null || user === void 0 ? void 0 : user.id)
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Avatar"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_18, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_19, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.name.charAt(0).toUpperCase()), 1 /* TEXT */)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Avatar"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Details"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_20, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Avatar"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_18, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_19, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.name.charAt(0).toUpperCase()), 1 /* TEXT */)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Avatar"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Details"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+      "class": "ms-5",
       onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
         return $options.selectContributor(user);
-      }, ["prevent"]),
+      }, ["prevent"])
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
       href: "#",
       "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(['fs-5 fw-bold text-gray-900 text-hover-primary mb-2', ((_$data$selectedContri2 = $data.selectedContributor) === null || _$data$selectedContri2 === void 0 || (_$data$selectedContri2 = _$data$selectedContri2.user) === null || _$data$selectedContri2 === void 0 ? void 0 : _$data$selectedContri2.id) === (user === null || user === void 0 || (_user$user3 = user.user) === null || _user$user3 === void 0 ? void 0 : _user$user3.id)])
-    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.name), 11 /* TEXT, CLASS, PROPS */, _hoisted_21), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.user.email), 1 /* TEXT */), _cache[9] || (_cache[9] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("small", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", null, "Contributor")], -1 /* HOISTED */))]), $data.unreadMap[user.user.id] ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_22, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.unreadMap[user.user.id]), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Details")]);
-  }), 128 /* KEYED_FRAGMENT */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Details")])])), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Separator"), _cache[10] || (_cache[10] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.name), 3 /* TEXT, CLASS */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.user.email), 1 /* TEXT */), _cache[9] || (_cache[9] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("small", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", null, "Contributor")], -1 /* HOISTED */))], 8 /* PROPS */, _hoisted_20), $data.unreadMap[user.user.id] ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_21, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.unreadMap[user.user.id]), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Details")]);
+  }), 128 /* KEYED_FRAGMENT */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Details")])), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Separator"), _cache[10] || (_cache[10] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
     "class": "separator separator-dashed d-none"
-  }, null, -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Separator")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::List")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Card body")])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_23, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_24, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_25, [$options.isFreelancerChatRoute ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_26, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", _hoisted_27, " Chat with " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.chatTitle), 1 /* TEXT */)])) : $options.isRecruiterChatRoute ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_28, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", _hoisted_29, " Chat with " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(((_$data$selectedContri3 = $data.selectedContributor) === null || _$data$selectedContri3 === void 0 ? void 0 : _$data$selectedContri3.name) || "Candidate"), 1 /* TEXT */)])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_30, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", _hoisted_31, " Chat with " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(((_$data$selectedContri4 = $data.selectedContributor) === null || _$data$selectedContri4 === void 0 ? void 0 : _$data$selectedContri4.name) || ((_$props$candidate = $props.candidate) === null || _$props$candidate === void 0 || (_$props$candidate = _$props$candidate.user) === null || _$props$candidate === void 0 ? void 0 : _$props$candidate.first_name) + " " + ((_$props$candidate2 = $props.candidate) === null || _$props$candidate2 === void 0 || (_$props$candidate2 = _$props$candidate2.user) === null || _$props$candidate2 === void 0 ? void 0 : _$props$candidate2.last_name) || "Candidate?"), 1 /* TEXT */)]))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_32, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.messages, function (msg) {
+  }, null, -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Separator")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::List")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Card body")])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_22, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_23, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_24, [$options.isFreelancerChatRoute ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_25, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", _hoisted_26, " Chat with " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.chatTitle), 1 /* TEXT */)])) : $options.isRecruiterChatRoute ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_27, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", _hoisted_28, " Chat with " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(((_$data$selectedContri3 = $data.selectedContributor) === null || _$data$selectedContri3 === void 0 ? void 0 : _$data$selectedContri3.name) || "Candidate"), 1 /* TEXT */)])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_29, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", _hoisted_30, " Chat with " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(((_$data$selectedContri4 = $data.selectedContributor) === null || _$data$selectedContri4 === void 0 ? void 0 : _$data$selectedContri4.name) || ((_$props$candidate = $props.candidate) === null || _$props$candidate === void 0 || (_$props$candidate = _$props$candidate.user) === null || _$props$candidate === void 0 ? void 0 : _$props$candidate.first_name) + " " + ((_$props$candidate2 = $props.candidate) === null || _$props$candidate2 === void 0 || (_$props$candidate2 = _$props$candidate2.user) === null || _$props$candidate2 === void 0 ? void 0 : _$props$candidate2.last_name) || "Candidate?"), 1 /* TEXT */)]))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_31, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.messages, function (msg) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
       key: msg.id,
       "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(msg.user_id === $props.currentUserId ? 'chat-message sent' : 'chat-message received')
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(msg.text), 1 /* TEXT */), _cache[12] || (_cache[12] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("small", _hoisted_33, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(new Date(msg.created_at).toLocaleTimeString()), 1 /* TEXT */)], 2 /* CLASS */);
-  }), 128 /* KEYED_FRAGMENT */)), $data.messages.length === 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_34, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_35, " Start a conversation with user " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.chatPlaceholderName) + " to begin your collaboration. Introduce yourself, share your ideas, or ask any questions to get things moving ", 1 /* TEXT */)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_36, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(msg.text), 1 /* TEXT */), _cache[12] || (_cache[12] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("small", _hoisted_32, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(new Date(msg.created_at).toLocaleTimeString()), 1 /* TEXT */)], 2 /* CLASS */);
+  }), 128 /* KEYED_FRAGMENT */)), $data.messages.length === 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_33, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_34, " Start a conversation with user " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.chatPlaceholderName) + " to begin your collaboration. Introduce yourself, share your ideas, or ask any questions to get things moving ", 1 /* TEXT */)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_35, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
     id: "chatForm",
     onSubmit: _cache[6] || (_cache[6] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {
       return $options.handleSubmit && $options.handleSubmit.apply($options, arguments);
     }, ["prevent"])),
     enctype: "multipart/form-data"
-  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_37, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_36, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     type: "text",
-    "class": "form-control form-control-solid px-13",
+    "class": "form-control form-control-solid pr-13",
     name: "input",
     value: "",
     placeholder: "Type your message...",
@@ -32491,7 +32459,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.chat-box__contributor {\r\n    background: #f5f8fa !important;\r\n    height: 400px;\r\n    overflow-y: auto;\r\n    border: 1px solid #e4e6ef;\n}\n.user-card {\r\n    background-color: transparent;\n}\n.user-card:hover {\r\n    background-color: #f5f5f5;\r\n    cursor: pointer;\r\n    transition: background-color 0.2s ease;\n}\n.user-active {\r\n    background: #f5f8fa !important;\n}\n.p-22 {\r\n    padding: 22px!important;\n}\n.btn-emojis {\r\n    background: transparent;\r\n    border: none;\r\n    font-size: 1.5rem;\r\n    cursor: pointer;\r\n    background: #F5F8FA;\r\n    padding: 8px;\r\n    border-radius: 10%;\n}\n.icon-img{\r\n    position: absolute;\r\n    left: 6px;\n}\n.icon-file{\r\n    position: absolute;\r\n    right: 3px;\n}\n.form-control-file {\r\n    max-width: 150px;\n}\n.chat-message.sent {\r\n    text-align: right;\n}\n.chat-message.sent p {\r\n    background-color: #0d6efd;\r\n    color: #fff;\n}\n.chat-message.received {\r\n    text-align: left;\n}\n.chat-message.received p {\r\n    background-color: #e4e6ef !important;\r\n    color: #000;\n}\n.chat-message p {\r\n    display: inline-block;\r\n    padding: 10px 15px;\r\n    border-radius: 15px;\r\n    max-width: 70%;\n}\n.message-info {\r\n    position: absolute;\r\n    bottom: 90px;\r\n    left: 21px;\r\n    background-color: #e4e6ef !important;\r\n    padding: 10px 15px;\r\n    border-radius: 15px;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.chat-box__contributor {\r\n    background: #f5f8fa !important;\r\n    height: 400px;\r\n    overflow-y: auto;\r\n    border: 1px solid #e4e6ef;\n}\n.user-card {\r\n    background-color: transparent;\n}\n.user-card:hover {\r\n    background-color: #f5f5f5;\r\n    cursor: pointer;\r\n    transition: background-color 0.2s ease;\n}\n.user-active {\r\n    background: #f5f8fa !important;\n}\n.user-card__scroll {\r\n    max-height: 300px;\r\n    overflow-y: auto;\n}\n.p-22 {\r\n    padding: 22px !important;\n}\n.btn-emojis {\r\n    background: transparent;\r\n    border: none;\r\n    font-size: 1.5rem;\r\n    cursor: pointer;\r\n    background: #F5F8FA;\r\n    padding: 8px;\r\n    border-radius: 10%;\n}\n.icon-img {\r\n    position: absolute;\r\n    left: 6px;\n}\n.icon-file {\r\n    position: absolute;\r\n    right: 3px;\n}\n.form-control-file {\r\n    max-width: 150px;\n}\n.chat-message.sent {\r\n    text-align: right;\n}\n.chat-message.sent p {\r\n    background-color: #0d6efd;\r\n    color: #fff;\n}\n.chat-message.received {\r\n    text-align: left;\n}\n.chat-message.received p {\r\n    background-color: #e4e6ef !important;\r\n    color: #000;\n}\n.chat-message p {\r\n    display: inline-block;\r\n    padding: 10px 15px;\r\n    border-radius: 15px;\r\n    max-width: 70%;\n}\n.message-info {\r\n    position: absolute;\r\n    bottom: 90px;\r\n    left: 21px;\r\n    background-color: #e4e6ef !important;\r\n    padding: 10px 15px;\r\n    border-radius: 15px;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -32515,7 +32483,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.user-active {\r\n    background: #f5f8fa !important;\n}\n.user__details {\r\n    display: flex;\r\n    justify-content: flex-start;\r\n    width: 100%;\n}\n.active-contributor {\r\n    background: #f5f8fa !important;\n}\n.btn-emojis {\r\n    background: transparent;\r\n    border: none;\r\n    font-size: 1.5rem;\r\n    cursor: pointer;\r\n    background: #f5f8fa;\r\n    padding: 8px;\r\n    border-radius: 10%;\n}\n.hr_custome {\r\n    height: 5px !important;\r\n    width: 100%;\n}\n.message-info {\r\n    position: absolute;\r\n    bottom: 90px;\r\n    left: 21px;\r\n    background-color: #e4e6ef !important;\r\n    padding: 10px 15px;\r\n    border-radius: 15px;\n}\n.scroll-section {\r\n    max-height: 300px; /* ili koliko god želiš */\r\n    overflow-y: auto;\r\n    border: 1px solid #eee;\r\n    margin-bottom: 1rem;\r\n    padding: 0.5rem;\n}\n.badge-danger {\r\n    height: 20px;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.user-active {\r\n    background: #f5f8fa !important;\n}\n.user__details {\r\n    display: flex;\r\n    justify-content: flex-start;\r\n    width: 100%;\n}\n.active-contributor {\r\n    background: #f5f8fa !important;\n}\n.btn-emojis {\r\n    background: transparent;\r\n    border: none;\r\n    font-size: 1.5rem;\r\n    cursor: pointer;\r\n    background: #f5f8fa;\r\n    padding: 8px;\r\n    border-radius: 10%;\n}\n.message-info {\r\n    position: absolute;\r\n    bottom: 90px;\r\n    left: 21px;\r\n    background-color: #e4e6ef !important;\r\n    padding: 10px 15px;\r\n    border-radius: 15px;\n}\n.scroll-section {\r\n    max-height: 300px;\r\n    overflow-y: auto;\r\n    border: 1px solid #eee;\r\n    margin-bottom: 1rem;\r\n    padding: 0.5rem;\n}\n.badge-danger {\r\n    height: 20px;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -32539,7 +32507,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.user-active {\r\n    background: #f5f8fa !important;\n}\n.active-contributor {\r\n    background: #f5f8fa !important;\n}\n.p-22 {\r\n    padding: 22px!important;\n}\n.btn-emojis {\r\n    background: transparent;\r\n    border: none;\r\n    font-size: 1.5rem;\r\n    cursor: pointer;\r\n    background: #F5F8FA;\r\n    padding: 8px;\r\n    border-radius: 10%;\n}\n.icon-img{\r\n    position: absolute;\r\n    left: 6px;\n}\n.icon-file{\r\n    position: absolute;\r\n    right: 3px;\n}\n.message-info {\r\n    position: absolute;\r\n    bottom: 90px;\r\n    left: 21px;\r\n    background-color: #e4e6ef !important;\r\n    padding: 10px 15px;\r\n    border-radius: 15px;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.user-active {\r\n    background: #f5f8fa !important;\n}\n.active-contributor {\r\n    background: #f5f8fa !important;\n}\n.p-22 {\r\n    padding: 22px !important;\n}\n.btn-emojis {\r\n    background: transparent;\r\n    border: none;\r\n    font-size: 1.5rem;\r\n    cursor: pointer;\r\n    background: #F5F8FA;\r\n    padding: 8px;\r\n    border-radius: 10%;\n}\n.icon-img {\r\n    position: absolute;\r\n    left: 6px;\n}\n.icon-file {\r\n    position: absolute;\r\n    right: 3px;\n}\n.message-info {\r\n    position: absolute;\r\n    bottom: 90px;\r\n    left: 21px;\r\n    background-color: #e4e6ef !important;\r\n    padding: 10px 15px;\r\n    border-radius: 15px;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -32563,7 +32531,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.user-active {\r\n    background: #f5f8fa !important;\n}\n.active-contributor {\r\n    background: #f5f8fa !important;\n}\n.p-22 {\r\n    padding: 22px!important;\n}\n.btn-emojis {\r\n    background: transparent;\r\n    border: none;\r\n    font-size: 1.5rem;\r\n    cursor: pointer;\r\n    background: #F5F8FA;\r\n    padding: 8px;\r\n    border-radius: 10%;\n}\n.icon-img{\r\n    position: absolute;\r\n    left: 6px;\n}\n.icon-file{\r\n    position: absolute;\r\n    right: 3px;\n}\n.message-info {\r\n    position: absolute;\r\n    bottom: 90px;\r\n    left: 21px;\r\n    background-color: #e4e6ef !important;\r\n    padding: 10px 15px;\r\n    border-radius: 15px;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.active-user {\r\n    background: #f5f8fa !important;\n}\n.p-22 {\r\n    padding: 22px !important;\n}\n.pr-16 {\r\n    padding-right: 16px;\n}\n.pr-13 {\r\n  padding-right: 3.25rem !important;\n}\n.btn-emojis {\r\n    background: transparent;\r\n    border: none;\r\n    font-size: 1.5rem;\r\n    cursor: pointer;\r\n    background: #f5f8fa;\r\n    padding: 8px;\r\n    border-radius: 10%;\n}\n.icon-img {\r\n    position: absolute;\r\n    left: 6px;\n}\n.icon-file {\r\n    position: absolute;\r\n    right: 3px;\n}\n.message-info {\r\n    position: absolute;\r\n    bottom: 90px;\r\n    left: 21px;\r\n    background-color: #e4e6ef !important;\r\n    padding: 10px 15px;\r\n    border-radius: 15px;\n}\n.card-footer{\r\n    padding: 2rem 1rem!important;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
