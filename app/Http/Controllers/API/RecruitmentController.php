@@ -14,6 +14,8 @@ class RecruitmentController extends Controller
         $user = JWTAuth::parseToken()->authenticate();
         $candidatProfile = $user->candidatProfile;
 
+        
+
         if (!$candidatProfile) {
             return response()->json(['message' => 'Profile not found'], 404);
         }
@@ -25,3 +27,4 @@ class RecruitmentController extends Controller
         return response()->json(['success', 'jobs'=>$jobs, 'count'=>$count]);
     }
 }
+

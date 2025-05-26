@@ -6,6 +6,7 @@ use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\FrontController;
 use App\Http\Controllers\API\CandidateProfileController;
 use App\Http\Controllers\API\RecruitmentController;
+use App\Http\Controllers\API\SettingsController;
 use App\Models\CandidatProfile;
 
 /*
@@ -51,6 +52,11 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/job/{jobId}/candidat/{candidatId}/apply', [FrontController::class, 'alreadyApplyJob']);
 
     Route::get('/applied-jobs/', [RecruitmentController::class, 'getAppliedJobsByCandidate']);
+
+    //settings
+   Route::post('/update-email', [SettingsController::class, 'updateEmail']);
+   Route::post('/update-password', [SettingsController::class, 'updatePassword']);
+
 });
 
 Route::middleware('auth:api')->get('/me', function (Request $request) {
