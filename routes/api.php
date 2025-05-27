@@ -57,6 +57,9 @@ Route::middleware('auth:api')->group(function () {
    Route::post('/update-email', [SettingsController::class, 'updateEmail']);
    Route::post('/update-password', [SettingsController::class, 'updatePassword']);
 
+   //chat
+   Route::post('/store/messages', [ChatController::class, 'store']);
+
 });
 
 Route::middleware('auth:api')->get('/me', function (Request $request) {
