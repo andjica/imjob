@@ -37,15 +37,17 @@ class ChatController extends Controller
             'receiver_id' => 'required|exists:users,id',
         ]);
     
-        $filePath = null;
-        $fileType = null;
-    
         $message = new Message();
+        if ($request->hasFile('file')) 
+         {
+                $file = $request->file('file');
+                $path = $file->store('uploads/chat_files', 'public');
+                $message->file_path = $path;
+                $message->file_type = $file->getClientMimeType();
+        }
         $message->user_id = auth()->user()->id;
         $message->receiver_id = $data['receiver_id'];
         $message->text = $data['text'];
-        $message->file_path = $filePath;
-        $message->file_type = $fileType;
     
         $message->save();
     
