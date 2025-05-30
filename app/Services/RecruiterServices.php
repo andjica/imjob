@@ -3,13 +3,14 @@
 namespace App\Services;
 
 use App\Models\Company;
+use App\Models\Message;
+use App\Models\Candidate;
 use App\Models\Recruiter;
 use Illuminate\Http\Request;
 use App\Models\CandidatProfile;
 use App\Models\FreelancerCompany;
 use Illuminate\Support\Facades\Auth;
 use App\Interfaces\RecruiterInterface;
-use App\Models\Candidate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -215,12 +216,34 @@ class RecruiterServices implements RecruiterInterface
 
         $jobIds = $recruiter->jobs()->pluck('id');
 
-        $candidates = CandidatProfile::with('user') // Učitaj odmah user podatke
+        // $candidates = CandidatProfile::with('user') // Učitaj odmah user podatke
+        //     ->whereHas('jobs', function ($query) use ($jobIds) {
+        //         $query->whereIn('jobs.id', $jobIds)
+        //               ->where('candidate_job.status', 'accept');
+        //     })
+        //     ->get();
+        $candidates = CandidatProfile::with('user')
             ->whereHas('jobs', function ($query) use ($jobIds) {
                 $query->whereIn('jobs.id', $jobIds)
-                      ->where('candidate_job.status', 'accept');
+                    ->where('candidate_job.status', 'accept');
             })
-            ->get();
+            ->get()
+            ->map(function ($candidate) {
+                $userId = $candidate->user->id ?? $candidate->id;
+
+                $lastMessage = Message::where(function ($q) use ($userId) {
+                        $q->where('user_id', $userId)
+                        ->orWhere('receiver_id', $userId);
+                    })
+                    ->latest('created_at')
+                    ->first();
+
+                $candidate->last_message_at = $lastMessage?->created_at;
+
+                return $candidate;
+            })
+            ->sortByDesc('last_message_at') // sortiranje po poslednjoj poruci
+            ->values();
         return $candidates;
     }
         

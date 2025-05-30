@@ -15,7 +15,8 @@ class Message extends Model
         'text',
         'file_path',
         'file_type',
-        'is_read'
+        'is_read',
+        'created_at'
     ];
     public function sender()
     {

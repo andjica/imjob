@@ -12,7 +12,7 @@ class RecruitmentController extends Controller
     public function getAppliedJobsByCandidate()
     {
         $user = JWTAuth::parseToken()->authenticate();
-        $candidatProfile = $user->candidatProfile;
+        $candidatProfile = $user->candidateProfile;
 
         
 
@@ -20,7 +20,7 @@ class RecruitmentController extends Controller
             return response()->json(['message' => 'Profile not found'], 404);
         }
 
-        $jobs = $candidatProfile->jobs()->with('company', 'country', 'city')->get();
+        $jobs = $candidatProfile->jobs()->with('company', 'country', 'city', 'recruiter','category', 'subCategory')->get();
 
         $count = $jobs->count();
 

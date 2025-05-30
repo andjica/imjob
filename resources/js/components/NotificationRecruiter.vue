@@ -49,7 +49,7 @@ export default {
             localStorage.setItem("resetBadgeFromChat", "1");
         },
         refreshUnreadTotal() {
-            fetch("/api/messages/unread-total", {
+            fetch("/messages/unread-total", {
                 method: "GET",
                 headers: {
                     Accept: "application/json",
