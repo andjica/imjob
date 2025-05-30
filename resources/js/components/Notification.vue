@@ -25,9 +25,9 @@ export default {
     },
     mounted() {
         // Ako dolazimo sa badge resetom (klik sa ikonice)
-        if (localStorage.getItem("resetBadgeFromChat") === "1") {
-            this.unreadTotal = 0;
-            localStorage.removeItem("resetBadgeFromChat");
+        if (localStorage.getItem("resetBadgeContributor") === "1") {
+            emitter.emit("reset-navbar-badge");
+            localStorage.removeItem("resetBadgeContributor");
             return;
         }
 
@@ -46,7 +46,7 @@ export default {
     methods: {
         prepareForReset() {
             // Kad kliknemo na ikoncu → postavi flag da se resetuje badge
-            localStorage.setItem("resetBadgeFromChat", "1");
+            localStorage.setItem("resetBadgeContributor", "1");
         },
         refreshUnreadTotal() {
             fetch("/messages/unread-total", {
@@ -71,7 +71,7 @@ export default {
             this.unreadTotal = total;
         },
         incrementBadge() {
-            this.unreadTotal++;
+            this.refreshUnreadTotal();
         },
         resetUnreadTotal() {
             this.unreadTotal = 0;

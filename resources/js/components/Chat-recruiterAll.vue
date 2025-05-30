@@ -36,7 +36,7 @@
                         <div class="d-flex d-flex__column">
                             <div class="gap-4 user-card__scroll">
                                 <div
-                                    v-for="candidate in sortedCandidates"
+                                    v-for="candidate in sortedCandidates" :key="candidate.user.id"
                                     class="d-flex align-items-center px-2 user-card"
                                     :class="[
                                         selectedUser &&
@@ -83,7 +83,7 @@
                             <hr class="my-4" />
                             <div class="gap-4 user-card__scroll">
                                 <div
-                                    v-for="user in sortedContributors"
+                                    v-for="user in sortedContributors" :key="user"
                                     class="d-flex flex-row align-items-center"
                                     :class="{
                                         'user-active':
@@ -430,6 +430,9 @@ export default {
         getImageFileUrl(path) {
             return `/storage/${path}`;
         },
+        resetUnreadTotal() {
+            this.unreadTotal = 0;
+        },
         prepareContributors() {
             this.contributorData = this.contributors.map((contributor) => {
                 const user = contributor.user || {};
@@ -486,6 +489,7 @@ export default {
                     },
                 });
                 const data = await res.json();
+                console.log("FetchMessage: ",data);
                 this.messages = data || [];
                 this.scrollToBottom();
             } catch (err) {
@@ -556,7 +560,7 @@ export default {
             const formData = new FormData();
             formData.append("user_id", this.currentUserId);
             formData.append("text", this.message);
-            formData.append("receiver_id", receiverId);
+            formData.append("receiver_id", Number(receiverId));
 
             if (this.file) {
                 formData.append("file", this.file);
@@ -661,6 +665,8 @@ export default {
         },
     },
     async mounted() {
+        console.log("Recruiter candidate: ", this.candidates);
+        console.log("Recruiter contributor: ", this.contributors);
         this.prepareContributors();
         this.initializeEmojiPicker();
         await this.loadUnreadCounts();
@@ -669,7 +675,7 @@ export default {
         const restored = this.restoreLastSelectedUser();
 
         if (!restored) {
-            if (this.contributorData.length) {
+            if (this.contributors.length) {
                 this.selectFirstContributor();
             } else if (this.candidates.length) {
                 this.selectUser(this.candidates[0].user);
@@ -701,10 +707,20 @@ export default {
                     this.messages.push(message);
                     this.scrollToBottom();
                     this.markMessagesAsRead(activeUserId);
+                    this.fetchMessages(activeUserId);
                 } else {
-                    this.unreadMap[message.user_id] =
-                        (this.unreadMap[message.user_id] || 0) + 1;
-                    this.updateUnreadTotal();
+                    if (message.user_id !== this.currentUserId) {
+                        if (this.unreadMap[message.user_id]) {
+                            this.unreadMap[message.user_id]++;
+                        } else {
+                            this.unreadMap[message.user_id] = 1;
+                        }
+
+                        this.updateUnreadTotal();
+
+                        // Emituj ka nav-baru za globalni badge
+                        emitter.emit("update-navbar-badge", this.unreadTotal);
+                    }
                 }
             })
             .error((error) => {

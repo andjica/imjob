@@ -423,6 +423,9 @@ export default {
         getImageFileUrl(path) {
             return `/storage/${path}`;
         },
+        resetUnreadTotal() {
+            this.unreadTotal = 0;
+        },
         updateUnreadTotal() {
             this.unreadTotal = Object.values(this.unreadMap).reduce(
                 (sum, count) => sum + count,
@@ -439,7 +442,6 @@ export default {
         },
         selectUser(user) {
             this.selectedUser = user;
-            console.log("Selected user: ", this.selectedUser);
             this.selectedRecruiter = null;
             this.fetchMessages(user.id);
             localStorage.setItem("lastChatUser", JSON.stringify(user));
@@ -465,6 +467,13 @@ export default {
                         err
                     );
                 });
+        },
+        getActiveChatUserId() {
+            return (
+                this.selectedUser?.id ||
+                this.selectedRecruiter?.user?.id ||
+                null
+            );
         },
         clearFileInput() {
             if (this.$refs.fileInput) {
@@ -646,10 +655,10 @@ export default {
                 );
             })
             .listen(".MessageSent", (payload) => {
+                console.log("📥 Novi payload:", payload);
                 const message = payload.message;
-                const activeReceiverId =
-                    this.selectedUser?.id || this.selectedRecruiter?.user?.id;
-
+                const activeReceiverId = this.getActiveChatUserId();
+                console.log("Kontributor activeReceiverId: ", activeReceiverId);
                 // Ako je poruka za aktivnog korisnika – dodaj direktno u chat
                 if (
                     message.user_id === activeReceiverId ||
@@ -658,21 +667,18 @@ export default {
                     this.messages.push(message);
                     this.scrollToBottom();
 
-                    fetch(
-                        `/messages/mark-as-read/${this.selectedUser.id}`,
-                        {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json",
-                                "X-CSRF-TOKEN": window.csrfToken,
-                            },
-                        }
-                    )
+                    fetch(`/messages/mark-as-read/${activeReceiverId}`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRF-TOKEN": window.csrfToken,
+                        },
+                    })
                         .then((res) => res.json())
                         .then(() => {
                             // Set the unread count to 0 for this user
-                            if (this.unreadMap[this.selectedUser.id]) {
-                                this.unreadMap[this.selectedUser.id] = 0;
+                            if (this.unreadMap[activeReceiverId]) {
+                                this.unreadMap[activeReceiverId] = 0;
                             }
 
                             this.updateUnreadTotal();
@@ -685,14 +691,14 @@ export default {
                         });
                 } else {
                     // Inače, povećaj broj nepročitanih i pokaži badge
-                    if (this.unreadMap[message.user_id]) {
-                        this.unreadMap[message.user_id]++;
+                    const senderId = message.user_id;
+                    if (this.unreadMap[senderId]) {
+                        this.unreadMap[senderId]++;
                     } else {
-                        this.unreadMap[message.user_id] = 1;
+                        this.unreadMap[senderId] = 1;
                     }
 
                     this.updateUnreadTotal();
-
                     // Emituj ka nav-baru ako koristiš globalni badge (npr. crveni broj u headeru)
                     emitter.emit("update-navbar-badge", this.unreadTotal);
                 }
