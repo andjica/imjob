@@ -536,7 +536,7 @@ export default {
             if (!userId) return;
 
             try {
-                await fetch(`/api/messages/mark-as-read/${userId}`, {
+                await fetch(`/messages/mark-as-read/${userId}`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -605,7 +605,7 @@ export default {
         fetchMessages(receiverId) {
             if (!receiverId) return;
             console.log("Ko je primio poruke: ", receiverId);
-            fetch(`/web/messages/${receiverId}`, {
+            fetch(`/messages/${receiverId}`, {
                 method: "GET",
                 headers: {
                     "X-CSRF-TOKEN": window.csrfToken,
@@ -663,7 +663,7 @@ export default {
                 formData.append("file", this.file);
             }
 
-            fetch("/web/messages", {
+            fetch("/messages", {
                 method: "POST",
                 headers: {
                     "X-CSRF-TOKEN": window.csrfToken,
@@ -712,7 +712,7 @@ export default {
         });
 
         // Dohvati nepročitane poruke po korisniku
-        fetch("/api/messages/unread-count", {
+        fetch("/messages/unread-count", {
             method: "GET",
             headers: {
                 "X-Requested-With": "XMLHttpRequest",

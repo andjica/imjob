@@ -15,18 +15,25 @@ return [
     |
     */
 
-    'paths' => ['api/*', 'sanctum/csrf-cookie'],
+    'paths' => ['api/*', 'sanctum/csrf-cookie', 'broadcasting/auth'],
 
     'allowed_methods' => ['*'],
 
     //za produkciju stavljamo https://imjob.ai u allowed origins
-    'allowed_origins' => ['*'],
+    'allowed_origins' => [
+        'http://localhost:5173',
+        'http://localhost',
+        'http://127.0.0.1:8000',
+        'null',
+        '*'
+        // u produkciji dodaj svoj domen https://imjob.ai
+    ],
 
     'allowed_origins_patterns' => [],
 
     'allowed_headers' => ['*'],
 
-    'exposed_headers' => [],
+    'exposed_headers' => ['*'],
 
     'max_age' => 0,
 

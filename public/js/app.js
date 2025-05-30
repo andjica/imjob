@@ -23090,7 +23090,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       this.selectedRecruiter = null;
       this.fetchMessages(user.id);
       localStorage.setItem("lastChatUser", JSON.stringify(user));
-      fetch("/api/messages/mark-as-read/".concat(this.selectedUser.id), {
+      fetch("/messages/mark-as-read/".concat(this.selectedUser.id), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -23137,7 +23137,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
     fetchMessages: function fetchMessages(receiverId) {
       var _this3 = this;
       if (!receiverId) return;
-      fetch("/web/messages/".concat(receiverId), {
+      fetch("/messages/".concat(receiverId), {
         method: "GET",
         headers: {
           "X-CSRF-TOKEN": window.csrfToken,
@@ -23204,7 +23204,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       } finally {
         _iterator.f();
       }
-      fetch("/web/messages", {
+      fetch("/messages", {
         method: "POST",
         headers: {
           "X-CSRF-TOKEN": window.csrfToken
@@ -23234,7 +23234,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
     });
 
     // Dohvati nepročitane poruke po korisniku
-    fetch("/api/messages/unread-count", {
+    fetch("/messages/unread-count", {
       method: "GET",
       headers: {
         "X-Requested-With": "XMLHttpRequest",
@@ -23293,7 +23293,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       if (message.user_id === activeReceiverId || message.receiver_id === activeReceiverId) {
         _this5.messages.push(message);
         _this5.scrollToBottom();
-        fetch("/api/messages/mark-as-read/".concat(_this5.selectedUser.id), {
+        fetch("/messages/mark-as-read/".concat(_this5.selectedUser.id), {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -23325,11 +23325,6 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
     }).error(function (error) {
       console.error("❌ Greška:", error);
     });
-
-    // Kada se tab vrati u fokus – resetuj title
-    // window.addEventListener("focus", () => {
-    //     document.title = "TvojApp";
-    // });
   },
   beforeUnmount: function beforeUnmount() {
     // Cleanup event listener
@@ -23542,7 +23537,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
             case 2:
               _context.prev = 2;
               _context.next = 5;
-              return fetch("/api/messages/mark-as-read/".concat(userId), {
+              return fetch("/messages/mark-as-read/".concat(userId), {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
@@ -23611,7 +23606,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       var _this2 = this;
       if (!receiverId) return;
       console.log("Ko je primio poruke: ", receiverId);
-      fetch("/web/messages/".concat(receiverId), {
+      fetch("/messages/".concat(receiverId), {
         method: "GET",
         headers: {
           "X-CSRF-TOKEN": window.csrfToken,
@@ -23672,7 +23667,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
               if (_this3.file) {
                 formData.append("file", _this3.file);
               }
-              fetch("/web/messages", {
+              fetch("/messages", {
                 method: "POST",
                 headers: {
                   "X-CSRF-TOKEN": window.csrfToken
@@ -23719,7 +23714,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
     });
 
     // Dohvati nepročitane poruke po korisniku
-    fetch("/api/messages/unread-count", {
+    fetch("/messages/unread-count", {
       method: "GET",
       headers: {
         "X-Requested-With": "XMLHttpRequest",
@@ -23983,7 +23978,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
             case 2:
               _context.prev = 2;
               _context.next = 5;
-              return fetch("/api/messages/mark-as-read/".concat(userId), {
+              return fetch("/messages/mark-as-read/".concat(userId), {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
@@ -24021,7 +24016,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
             case 2:
               _context2.prev = 2;
               _context2.next = 5;
-              return fetch("/web/messages/".concat(userId), {
+              return fetch("/messages/".concat(userId), {
                 method: "GET",
                 headers: {
                   "X-CSRF-TOKEN": window.csrfToken,
@@ -24121,7 +24116,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
                 formData.append("file", _this5.file);
               }
               _context3.next = 14;
-              return fetch("/web/messages", {
+              return fetch("/messages", {
                 method: "POST",
                 headers: {
                   "X-CSRF-TOKEN": window.csrfToken
@@ -24179,7 +24174,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
             case 0:
               _context4.prev = 0;
               _context4.next = 3;
-              return fetch("/api/messages/unread-count", {
+              return fetch("/messages/unread-count", {
                 method: "GET",
                 headers: {
                   "X-Requested-With": "XMLHttpRequest",
@@ -24431,7 +24426,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
     },
     markMessagesAsRead: function markMessagesAsRead(userId) {
       var _this = this;
-      fetch("/api/messages/mark-as-read/".concat(userId), {
+      fetch("/messages/mark-as-read/".concat(userId), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -24490,7 +24485,8 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
     fetchMessages: function fetchMessages(receiverId) {
       var _this2 = this;
       if (!receiverId) return;
-      fetch("/web/messages/".concat(receiverId), {
+      fetch("/messages/".concat(receiverId), {
+        method: "GET",
         headers: {
           "X-CSRF-TOKEN": window.csrfToken,
           Accept: "application/json"
@@ -24539,7 +24535,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       formData.append("text", this.message);
       formData.append("receiver_id", receiverId);
       if (this.file) formData.append("file", this.file);
-      fetch("/web/messages", {
+      fetch("/messages", {
         method: "POST",
         headers: {
           "X-CSRF-TOKEN": window.csrfToken
@@ -24602,7 +24598,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       this.fetchMessages(first.user.id);
       localStorage.setItem("lastChatUser", JSON.stringify(first.user));
     }
-    fetch("/api/messages/unread-count", {
+    fetch("/messages/unread-count", {
       headers: {
         "X-Requested-With": "XMLHttpRequest",
         "X-CSRF-TOKEN": window.csrfToken,
@@ -24679,7 +24675,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     refreshUnreadTotal: function refreshUnreadTotal() {
       var _this = this;
-      fetch("/api/messages/unread-total", {
+      fetch("/messages/unread-total", {
         method: "GET",
         headers: {
           Accept: "application/json",
@@ -24753,7 +24749,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     refreshUnreadTotal: function refreshUnreadTotal() {
       var _this = this;
-      fetch("/api/messages/unread-total", {
+      fetch("/messages/unread-total", {
         method: "GET",
         headers: {
           Accept: "application/json",
@@ -24827,7 +24823,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     refreshUnreadTotal: function refreshUnreadTotal() {
       var _this = this;
-      fetch("/api/messages/unread-total", {
+      fetch("/messages/unread-total", {
         method: "GET",
         headers: {
           Accept: "application/json",
@@ -26131,10 +26127,8 @@ window.onload = function () {
   if (userId) {
     window.Echo["private"]("chat.".concat(userId)).listen('.MessageSent', function (payload) {
       var message = payload.message;
-
-      // Ako nismo na chatu, pošalji badge event
-      if (!window.location.pathname.includes('/contributor/chats') || !window.location.pathname.includes('/recruiter/chats')) {
-        console.log('📨 Nova poruka stigla dok nismo u chatu');
+      if (message.user_id !== parseInt(userId) && !window.location.pathname.includes('/contributor/chats') && !window.location.pathname.includes('/recruiter/chats') && !window.location.pathname.includes('/company/freelancer/chats')) {
+        console.log('📨 Nova poruka od drugog korisnika dok nismo u chatu');
         _eventBus__WEBPACK_IMPORTED_MODULE_10__["default"].emit('increment-navbar-badge');
       }
     });

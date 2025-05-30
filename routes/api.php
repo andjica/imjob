@@ -1,11 +1,14 @@
 <?php
 use Illuminate\Http\Request;
+use App\Models\CandidatProfile;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ChatController;
+use Illuminate\Support\Facades\Broadcast;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\FrontController;
+use App\Http\Controllers\API\SettingsController;
+use App\Http\Controllers\API\RecruitmentController;
 use App\Http\Controllers\API\CandidateProfileController;
-use App\Models\CandidatProfile;
+use App\Http\Controllers\API\ChatController as ApiChatController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,8 +38,9 @@ Route::get('/country/{countryId}/phone-code', [FrontController::class, 'getPhone
 
 //only logged users can use chat
 Route::middleware('auth:api')->group(function () {
-    Route::get('/messages', [ChatController::class, 'index']); // prikaz poruka
-    Route::post('/messages', [ChatController::class, 'store']); // slanje poruka
+    Broadcast::routes();
+    Route::get('/messages/{receiverId}', [ApiChatController::class, 'getMessages']); // prikaz poruka
+    Route::post('/messages', [ApiChatController::class, 'store']); // slanje poruka
     //store Candidat Profile
     // Route::post('/candidat/profile/create', [CandidateProfileController::class, 'store']);
     Route::post('/candidat/profile/update/{userId}', [CandidateProfileController::class, 'update']); // Ažuriranje profila
@@ -48,17 +52,33 @@ Route::middleware('auth:api')->group(function () {
     //kroz bodi neka dodje user id 
     Route::post('/job/{jobId}/candidat/{candidatId}/apply', [FrontController::class, 'applyJob']);
     Route::get('/job/{jobId}/candidat/{candidatId}/apply', [FrontController::class, 'alreadyApplyJob']);
+
+    Route::get('/applied-jobs/', [RecruitmentController::class, 'getAppliedJobsByCandidate']);
+
+    //settings
+   Route::post('/update-email', [SettingsController::class, 'updateEmail']);
+   Route::post('/update-password', [SettingsController::class, 'updatePassword']);
+
+   //chat
+   Route::post('/store/messages', [ApiChatController::class, 'store']);
 });
+
+
 
 Route::middleware('auth:api')->get('/me', function (Request $request) {
     return response()->json($request->user());
 });
 
-// 🎯 WEB + VUE korisnici (Sanctum)
-Route::middleware(['auth:sanctum'])->prefix('messages')->group(function () {
-    Route::get('/messages', [ChatController::class, 'index']); // prikaz poruka
-    Route::post('/messages', [ChatController::class, 'store']); // slanje poruka   
-    Route::post('/mark-as-read/{userId}', [ChatController::class, 'markAsRead']);
-    Route::get('/unread-count', [ChatController::class, 'unreadCount']);
-    Route::get('/unread-total', [ChatController::class, 'unreadTotal']);
-});
+
+
+Route::post('/broadcasting/auth', function (Request $request) {
+    return Broadcast::auth($request);
+})->middleware('jwt.auth');
+
+Route::post('/broadcasting/debug-auth', function (Request $request) {
+    return response()->json([
+        'auth_user' => auth()->user(),
+        'token' => $request->bearerToken(),
+        'channel' => $request->channel_name,
+    ]);
+})->middleware('jwt.auth');

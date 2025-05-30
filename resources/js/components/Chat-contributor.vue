@@ -443,7 +443,7 @@ export default {
             this.selectedRecruiter = null;
             this.fetchMessages(user.id);
             localStorage.setItem("lastChatUser", JSON.stringify(user));
-            fetch(`/api/messages/mark-as-read/${this.selectedUser.id}`, {
+            fetch(`/messages/mark-as-read/${this.selectedUser.id}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -499,7 +499,7 @@ export default {
         fetchMessages(receiverId) {
             if (!receiverId) return;
 
-            fetch(`/web/messages/${receiverId}`, {
+            fetch(`/messages/${receiverId}`, {
                 method: "GET",
                 headers: {
                     "X-CSRF-TOKEN": window.csrfToken,
@@ -556,7 +556,7 @@ export default {
             for (let [key, value] of formData.entries()) {
                 console.log(`${key}:`, value);
             }
-            fetch("/web/messages", {
+            fetch("/messages", {
                 method: "POST",
                 headers: {
                     "X-CSRF-TOKEN": window.csrfToken,
@@ -588,7 +588,7 @@ export default {
         });
 
         // Dohvati nepročitane poruke po korisniku
-        fetch("/api/messages/unread-count", {
+        fetch("/messages/unread-count", {
             method: "GET",
             headers: {
                 "X-Requested-With": "XMLHttpRequest",
@@ -659,7 +659,7 @@ export default {
                     this.scrollToBottom();
 
                     fetch(
-                        `/api/messages/mark-as-read/${this.selectedUser.id}`,
+                        `/messages/mark-as-read/${this.selectedUser.id}`,
                         {
                             method: "POST",
                             headers: {
@@ -700,11 +700,6 @@ export default {
             .error((error) => {
                 console.error("❌ Greška:", error);
             });
-
-        // Kada se tab vrati u fokus – resetuj title
-        // window.addEventListener("focus", () => {
-        //     document.title = "TvojApp";
-        // });
     },
     beforeUnmount() {
         // Cleanup event listener

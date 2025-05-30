@@ -70,4 +70,9 @@ class CandidatProfile extends Model
                     ->withPivot('status', 'applied_at')
                     ->withTimestamps();
     }
+
+    public function job()
+    {
+        return $this->belongsTo(Job::class);
+    }
 }

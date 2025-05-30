@@ -68,9 +68,12 @@ window.onload = function () {
             .listen('.MessageSent', (payload) => {
                 const message = payload.message;
                 
-                // Ako nismo na chatu, pošalji badge event
-                if (!window.location.pathname.includes('/contributor/chats') || !window.location.pathname.includes('/recruiter/chats')) {
-                    console.log('📨 Nova poruka stigla dok nismo u chatu');
+                if (
+                    message.user_id !== parseInt(userId) &&
+                    (!window.location.pathname.includes('/contributor/chats') &&
+                    !window.location.pathname.includes('/recruiter/chats') && !window.location.pathname.includes('/company/freelancer/chats'))
+                ) {
+                    console.log('📨 Nova poruka od drugog korisnika dok nismo u chatu');
                     emitter.emit('increment-navbar-badge');
                 }
             });

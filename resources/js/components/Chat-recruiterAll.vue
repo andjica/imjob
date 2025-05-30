@@ -457,7 +457,7 @@ export default {
             if (!userId) return;
 
             try {
-                await fetch(`/api/messages/mark-as-read/${userId}`, {
+                await fetch(`/messages/mark-as-read/${userId}`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -478,7 +478,7 @@ export default {
             if (!userId) return;
 
             try {
-                const res = await fetch(`/web/messages/${userId}`, {
+                const res = await fetch(`/messages/${userId}`, {
                     method: "GET",
                     headers: {
                         "X-CSRF-TOKEN": window.csrfToken,
@@ -562,7 +562,7 @@ export default {
                 formData.append("file", this.file);
             }
 
-            await fetch("/web/messages", {
+            await fetch("/messages", {
                 method: "POST",
                 headers: {
                     "X-CSRF-TOKEN": window.csrfToken,
@@ -615,7 +615,7 @@ export default {
         },
         async loadUnreadCounts() {
             try {
-                const res = await fetch("/api/messages/unread-count", {
+                const res = await fetch("/messages/unread-count", {
                     method: "GET",
                     headers: {
                         "X-Requested-With": "XMLHttpRequest",

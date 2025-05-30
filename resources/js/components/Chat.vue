@@ -515,7 +515,7 @@ export default {
             emitter.emit("update-navbar-badge", this.unreadTotal);
         },
         markMessagesAsRead(userId) {
-            fetch(`/api/messages/mark-as-read/${userId}`, {
+            fetch(`/messages/mark-as-read/${userId}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -577,7 +577,8 @@ export default {
         },
         fetchMessages(receiverId) {
             if (!receiverId) return;
-            fetch(`/web/messages/${receiverId}`, {
+            fetch(`/messages/${receiverId}`, {
+                method: "GET",
                 headers: {
                     "X-CSRF-TOKEN": window.csrfToken,
                     Accept: "application/json",
@@ -628,7 +629,7 @@ export default {
             formData.append("receiver_id", receiverId);
             if (this.file) formData.append("file", this.file);
 
-            fetch("/web/messages", {
+            fetch("/messages", {
                 method: "POST",
                 headers: { "X-CSRF-TOKEN": window.csrfToken },
                 body: formData,
@@ -703,7 +704,7 @@ export default {
             localStorage.setItem("lastChatUser", JSON.stringify(first.user));
         }
 
-        fetch("/api/messages/unread-count", {
+        fetch("/messages/unread-count", {
             headers: {
                 "X-Requested-With": "XMLHttpRequest",
                 "X-CSRF-TOKEN": window.csrfToken,
