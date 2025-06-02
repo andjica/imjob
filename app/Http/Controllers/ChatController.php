@@ -91,7 +91,7 @@ class ChatController extends Controller
 
     public function unreadCount(Request $request)
     {
-        $userId = $request->user()->id;
+         $userId = auth()->user()->id;
 
         $counts = Message::select('user_id')
             ->where('receiver_id', $userId)
@@ -106,7 +106,7 @@ class ChatController extends Controller
 
     public function unreadTotal(Request $request)
     {
-        $userId = $request->user()->id;
+        $userId = auth()->user()->id;
 
         $count = Message::where('receiver_id', $userId)
             ->where('is_read', false)

@@ -3,6 +3,7 @@ use Illuminate\Http\Request;
 use App\Models\CandidatProfile;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Broadcast;
+use App\Http\Controllers\ChatAiController;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\FrontController;
 use App\Http\Controllers\API\SettingsController;
@@ -61,6 +62,10 @@ Route::middleware('auth:api')->group(function () {
 
    //chat
    Route::post('/store/messages', [ApiChatController::class, 'store']);
+
+   //recruitment process
+    Route::get('/recruitment/status/{candidateJobId}', [RecruitmentController::class, 'showStatus']);
+
 });
 
 
@@ -82,3 +87,7 @@ Route::post('/broadcasting/debug-auth', function (Request $request) {
         'channel' => $request->channel_name,
     ]);
 })->middleware('jwt.auth');
+
+//AI ROUTES
+Route::post('/chat/search', [ChatAiController::class, 'handle']);
+Route::middleware('auth:api')->post('/chat/search/user', [ChatAiController::class, 'handleWithUserRequest']);

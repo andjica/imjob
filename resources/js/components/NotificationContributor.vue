@@ -63,6 +63,8 @@ export default {
                 .then((res) => res.json())
                 .then((data) => {
                     this.unreadTotal = data.unread_total;
+                    console.log("andjica",this.unreadTotal);
+                
                 })
                 .catch((err) => {
                     console.error(

@@ -33,7 +33,7 @@ export default {
 
         // Binduj metode da zadrže `this`
         this.boundIncrementBadge = this.incrementBadge.bind(this);
-        this.boundUpdateUnreadTotal = this.updateUnreadTotal.bind(this);
+        //this.boundUpdateUnreadTotal = this.updateUnreadTotal.bind(this);
         this.boundResetUnreadTotal = this.resetUnreadTotal.bind(this);
 
         emitter.on("increment-navbar-badge", this.boundIncrementBadge);

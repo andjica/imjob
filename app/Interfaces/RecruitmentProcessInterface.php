@@ -14,4 +14,6 @@ interface RecruitmentProcessInterface
      * @return bool
      */
     public function handleRecruitment(int $recruitmentProcessId, RecruitmentRequest $request): bool;
+    public function getCandidateRecruitmentStatus(int $candidateJobId): array;
+
 }

@@ -43,4 +43,9 @@ class RecruitmentProcess extends Model
     {
         return self::find($id);
     }
+
+    public function currentSubphase()
+    {
+        return $this->belongsTo(AvailableRecruitmentSubphases::class, 'current_subphase_id');
+    }
 }

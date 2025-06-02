@@ -5,6 +5,7 @@ use App\Actions\FollowContributor;
 use App\Http\Controllers\{
     Admin\FrontController as AdminFrontController,
     Auth\LoginController,
+    ChatAiController,
     City\CityController,
     Company\CompanyController,
     Company\FrontController as CompanyFrontController,
@@ -311,3 +312,6 @@ Route::middleware(['auth', 'contributor', 'verified'])->prefix('contributor')->n
 Route::get('/', [LandingController::class, 'index'])->name('index');
 Route::get('/contact-us', [LandingController::class, 'getContactUs'])->name('contact-us');
 Route::get('/about-us', [LandingController::class, 'getAboutUs'])->name('about-us');
+
+
+
