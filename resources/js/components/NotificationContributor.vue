@@ -34,14 +34,18 @@ export default {
         this.refreshUnreadTotal();
 
         // Slušaj emitove iz globalnog WebSocket listenera
-        emitter.on("increment-navbar-badge", this.incrementBadge);
-        emitter.on("update-navbar-badge", this.updateUnreadTotal);
-        emitter.on("reset-navbar-badge", this.resetUnreadTotal);
+        this.boundIncrementBadge = this.incrementBadge.bind(this);
+        this.boundUpdateUnreadTotal = this.updateUnreadTotal.bind(this);
+        this.boundResetUnreadTotal = this.resetUnreadTotal.bind(this);
+
+        emitter.on("increment-navbar-badge", this.boundIncrementBadge);
+        // emitter.on("update-navbar-badge", this.boundUpdateUnreadTotal);
+        emitter.on("reset-navbar-badge", this.boundResetUnreadTotal);
     },
     beforeUnmount() {
-        emitter.off("increment-navbar-badge", this.incrementBadge);
-        emitter.off("update-navbar-badge", this.updateUnreadTotal);
-        emitter.off("reset-navbar-badge", this.resetUnreadTotal);
+        emitter.off("increment-navbar-badge", this.boundIncrementBadge);
+        emitter.off("update-navbar-badge", this.boundUpdateUnreadTotal);
+        emitter.off("reset-navbar-badge", this.boundResetUnreadTotal);
     },
     methods: {
         prepareForReset() {

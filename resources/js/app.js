@@ -2,7 +2,7 @@ import setupNotifications from "./notifications.js";
 import { createApp } from "vue";
 import Chat from "./components/Chat.vue";
 import ChatContributor from "./components/Chat-contributor.vue";
-import Notification from "./components/Notification.vue";
+import ContributorNotification from "./components/NotificationContributor.vue";
 import FreelancerNotification from "./components/NotificationFreelancer.vue";
 import RecruiterNorification from "./components/NotificationRecruiter.vue";
 import ChatFreelancerAll from "./components/Chat-freelancerAll.vue";
@@ -55,7 +55,7 @@ safeMount("#app", {
 
 // ✅ Notifikacije
 safeMount("#notificationUnreadMessages", {
-    "component-notification": Notification,
+    "component-contributor-notification": ContributorNotification,
 });
 
 safeMount("#notificationFreelancerUnreadMessages", {
@@ -67,6 +67,28 @@ safeMount("#notificationRecruiterUnreadMessages", {
 });
 
 // ✅ Pokreći notifikacije i slušaj događaje kada se stranica učita
+// window.onload = function () {
+//     setupNotifications();
+
+//     const userId = window.authUserId;
+
+//     if (userId) {
+//         window.Echo.private(`chat.${userId}`).listen(".MessageSent", (payload) => {
+//             const message = payload.message;
+
+//             if (
+//                 message.user_id !== parseInt(userId) &&
+//                 !window.location.pathname.includes("/contributor/chats") &&
+//                 !window.location.pathname.includes("/recruiter/chats") &&
+//                 !window.location.pathname.includes("/company/freelancer/chats")
+//             ) {
+//                 console.log("📨 Nova poruka od drugog korisnika dok nismo u chatu");
+//                 emitter.emit("increment-navbar-badge");
+//             }
+//         });
+//     }
+// };
+
 window.onload = function () {
     setupNotifications();
 
@@ -75,7 +97,9 @@ window.onload = function () {
     if (userId) {
         window.Echo.private(`chat.${userId}`).listen(".MessageSent", (payload) => {
             const message = payload.message;
+            console.log("ANDJICA: ",message);
 
+            // ✅ Ako nisi u aktivnom chatu
             if (
                 message.user_id !== parseInt(userId) &&
                 !window.location.pathname.includes("/contributor/chats") &&
@@ -83,8 +107,17 @@ window.onload = function () {
                 !window.location.pathname.includes("/company/freelancer/chats")
             ) {
                 console.log("📨 Nova poruka od drugog korisnika dok nismo u chatu");
+
+                // ✅ Emituj badge
                 emitter.emit("increment-navbar-badge");
+
+                // ✅ Emituj događaj ka sidebar komponenti da ažurira contributor
+                emitter.emit("update-contributor-timestamp", {
+                    userId: message.user_id,
+                    createdAt: message.created_at
+                });
             }
         });
     }
 };
+

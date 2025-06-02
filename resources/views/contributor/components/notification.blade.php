@@ -1,3 +1,3 @@
 <div id="notificationUnreadMessages">
-    <component-notification></component-notification>
+    <component-contributor-notification></component-contributor-notification>
 </div>

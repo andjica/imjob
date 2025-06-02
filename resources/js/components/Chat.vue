@@ -6,10 +6,17 @@
                 <div class="card-header pt-7" id="kt_chat_contacts_header">
                     <form class="w-100 position-relative" autocomplete="off">
                         <i
-                            class="ki-duotone ki-magnifier fs-3 text-gray-500 position-absolute top-50 ms-5 translate-middle-y"><span
-                                class="path1"></span><span class="path2"></span></i>
-                        <input type="text" class="form-control form-control-solid pr-13" name="search" value=""
-                            placeholder="Search by username or email..." />
+                            class="ki-duotone ki-magnifier fs-3 text-gray-500 position-absolute top-50 ms-5 translate-middle-y"
+                            ><span class="path1"></span
+                            ><span class="path2"></span
+                        ></i>
+                        <input
+                            type="text"
+                            class="form-control form-control-solid pr-13"
+                            name="search"
+                            value=""
+                            placeholder="Search by username or email..."
+                        />
                     </form>
                 </div>
                 <!--end::Card header-->
@@ -17,113 +24,114 @@
                 <!--begin::Card body-->
                 <div class="card-body pt-5" id="kt_chat_contacts_body">
                     <!--begin::List-->
-                    <div class="scroll-y me-n5 h-200px h-lg-auto" data-kt-scroll="true"
-                        data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto"
+                    <div
+                        class="scroll-y me-n5 h-200px h-lg-auto"
+                        data-kt-scroll="true"
+                        data-kt-scroll-activate="{default: false, lg: true}"
+                        data-kt-scroll-max-height="auto"
                         data-kt-scroll-dependencies="#kt_header, #kt_app_header, #kt_toolbar, #kt_app_toolbar, #kt_footer, #kt_app_footer, #kt_chat_contacts_header"
                         data-kt-scroll-wrappers="#kt_content, #kt_app_content, #kt_chat_contacts_body"
-                        data-kt-scroll-offset="5px" style="max-height: 362px">
+                        data-kt-scroll-offset="5px"
+                        style="max-height: 362px"
+                    >
                         <div class="d-flex d-flex__column py-1">
-                            <div v-if="isFreelancerChatRoute">
-                                <div class="d-flex d-flex__column py-4">
-                                    <div v-for="user in contributorData" class="d-flex flex-row align-items-center"
-                                        :class="{
-                                            'active-user':
-                                                (selectedContributor &&
-                                                    selectedContributor.user
-                                                        .id === user.user.id) ||
-                                                user.id,
-                                        }" @click.prevent="selectContributor(user)">
-                                        <!--begin::Avatar-->
-                                        <div class="symbol symbol-45px symbol-circle">
-                                            <img :src="user.user.profile_image
-                                                    ? getImageFileUrl(
-                                                        user.user
-                                                            .profile_image
-                                                    )
-                                                    : defaultImage
-                                                " alt="Profile Image" class="img-fluid rounded-circle shadow-sm" style="
-                                                    width: 60px;
-                                                    height: 60px;
-                                                " />
-                                        </div>
-                                        <!--end::Avatar-->
-                                        <div class="ms-5">
-                                            <a href="#" :class="[
-                                                'fs-5 fw-bold text-gray-900 text-hover-primary mb-2',
-                                                selectedContributor?.user
-                                                    ?.id === user?.user?.id,
-                                            ]">
-                                                {{ user.user.first_name }}
-                                                {{ user.user.last_name }}
-                                            </a>
-
-                                            <p>{{ user.user.email }}</p>
-                                            <small><i>Contributor</i></small>
-                                        </div>
-                                        <span v-if="unreadMap[user.user.id]" class="badge badge-danger">{{
-                                            unreadMap[user.user.id] }}</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div v-else class="d-flex d-flex__column py-4">
-                                <div class="d-flex align-items-center user-card" :class="[
+                            <div
+                                class="d-flex align-items-center user-card"
+                                :class="[
                                     selectedUser &&
-                                        selectedUser.id === candidate.user.id
+                                    selectedUser.id === candidate.user.id
                                         ? 'active-user'
                                         : '',
-                                ]" v-if="candidate && candidate.user" @click.prevent="selectUser(candidate.user)">
-                                    <div class="symbol symbol-45px symbol-circle pr-16">
-                                        <img :src="candidate.user.profile_image
+                                ]"
+                                v-if="candidate && candidate.user"
+                                @click.prevent="selectUser(candidate.user)"
+                            >
+                                <div
+                                    class="symbol symbol-45px symbol-circle pr-16"
+                                >
+                                    <img
+                                        :src="
+                                            candidate.user.profile_image
                                                 ? getImageFileUrl(
-                                                    candidate.user
-                                                        .profile_image
-                                                )
+                                                      candidate.user
+                                                          .profile_image
+                                                  )
                                                 : defaultImage
-                                            " alt="Profile Image" class="img-fluid rounded-circle shadow-sm"
-                                            style="width: 60px; height: 60px" />
-                                    </div>
-                                    <div class="">
-                                        <a href="#" class="fs-5 fw-bold text-gray-900 text-hover-primary mb-2">
-                                            {{ candidate.user.first_name }}
-                                            {{ candidate.user.last_name }}
-                                        </a>
-                                        <p>{{ candidate.user.email }}</p>
-                                        <small><i>Candidate</i></small>
-                                    </div>
+                                        "
+                                        alt="Profile Image"
+                                        class="img-fluid rounded-circle shadow-sm"
+                                        style="width: 60px; height: 60px"
+                                    />
                                 </div>
+                                <div class="">
+                                    <a
+                                        href="#"
+                                        class="fs-5 fw-bold text-gray-900 text-hover-primary mb-2"
+                                    >
+                                        {{ candidate.user.first_name }}
+                                        {{ candidate.user.last_name }}
+                                    </a>
+                                    <p>{{ candidate.user.email }}</p>
+                                    <small><i>Candidate</i></small>
+                                </div>
+                            </div>
+                            <hr class="hr_custome" />
+                            <!--begin::Details-->
+                            <div
+                                class="d-flex align-items-center"
+                                v-for="user in sortedContributors"
+                                :key="user?.user?.id || user?.id"
+                                :class="[
+                                    selectedContributor &&
+                                    selectedContributor.user.id ===
+                                        user?.user?.id
+                                        ? 'active-user'
+                                        : '',
+                                ]"
+                            >
+                                <!--begin::Avatar-->
+                                <div class="symbol symbol-45px symbol-circle">
+                                    <img
+                                        :src="
+                                            user.profile_image
+                                                ? getImageFileUrl(
+                                                      user.profile_image
+                                                  )
+                                                : defaultImage
+                                        "
+                                        alt="Profile Image"
+                                        class="img-fluid rounded-circle shadow-sm"
+                                        style="width: 60px; height: 60px"
+                                    />
+                                </div>
+                                <!--end::Avatar-->
                                 <!--begin::Details-->
-                                <div class="d-flex align-items-center" v-for="user in sortedContributors"
-                                    :key="user?.user?.id || user?.id">
-                                    <!--begin::Avatar-->
-                                    <div class="symbol symbol-45px symbol-circle">
-                                        <img :src="user.profile_image
-                                                ? getImageFileUrl(
-                                                    user.profile_image
-                                                )
-                                                : defaultImage
-                                            " alt="Profile Image" class="img-fluid rounded-circle shadow-sm"
-                                            style="width: 60px; height: 60px" />
-                                    </div>
-                                    <!--end::Avatar-->
-                                    <!--begin::Details-->
-                                    <div class="ms-5" @click.prevent="selectContributor(user)">
-                                        <a href="#" :class="[
+                                <div
+                                    class="ms-5"
+                                    @click.prevent="selectContributor(user)"
+                                >
+                                    <a
+                                        href="#"
+                                        :class="[
                                             'fs-5 fw-bold text-gray-900 text-hover-primary mb-2',
-                                            selectedContributor?.user
-                                                ?.id === user?.user?.id,
-                                        ]">
-                                            {{ user.name }}
-                                        </a>
+                                            selectedContributor?.user?.id ===
+                                                user?.user?.id,
+                                        ]"
+                                    >
+                                        {{ user.name }}
+                                    </a>
 
-                                        <p>{{ user.user.email }}</p>
-                                        <small><i>Contributor</i></small>
-                                    </div>
-                                    <span v-if="unreadMap[user.user.id]" class="badge badge-danger">{{
-                                        unreadMap[user.user.id] }}</span>
-                                    <!--end::Details-->
+                                    <p>{{ user.user.email }}</p>
+                                    <small><i>Contributor</i></small>
                                 </div>
+                                <span
+                                    v-if="unreadMap[user.user.id]"
+                                    class="badge badge-danger"
+                                    >{{ unreadMap[user.user.id] }}</span
+                                >
                                 <!--end::Details-->
                             </div>
+                            <!--end::Details-->
                         </div>
                         <!--begin::Separator-->
                         <div class="separator separator-dashed d-none"></div>
@@ -135,85 +143,111 @@
             </div>
         </div>
         <div class="col-lg-7">
-            <div class="card h-100">
+            <div class="card">
                 <div class="card-header">
-                    <div v-if="isFreelancerChatRoute">
-                        <h3 class="card-title">
-                            Chat with
-                            {{ chatTitle }}
-                        </h3>
-                    </div>
-                    <div v-else-if="isRecruiterChatRoute">
-                        <h3 class="card-title">
-                            Chat with
-                            {{ selectedContributor?.name || "Candidate" }}
-                        </h3>
-                    </div>
-                    <div v-else>
-                        <h3 class="card-title">
-                            Chat with
-                            {{
-                                selectedContributor?.name ||
-                                candidate?.user?.first_name +
+                    <h3 class="card-title">
+                        Chat with
+                        {{
+                            selectedContributor?.name ||
+                            candidate?.user?.first_name +
                                 " " +
                                 candidate?.user?.last_name ||
-                                "Candidate?"
-                            }}
-                        </h3>
-                    </div>
+                            "Candidate?"
+                        }}
+                    </h3>
                 </div>
-                <div class="card-body chat-box chat-box__contributor" id="chatBox">
-                    <div v-for="msg in sortedMessages" :key="msg.id" :class="msg.user_id === currentUserId
-                            ? 'chat-message sent'
-                            : 'chat-message received'
-                        ">
-                        <div :class="msg.user_id === currentUserId
-                                ? 'text-end'
-                                : 'text-start'
-                            ">
+                <div
+                    class="card-body chat-box chat-box__contributor"
+                    id="chatBox_recruitment"
+                >
+                    <div
+                        v-for="msg in sortedMessages"
+                        :key="msg.id"
+                        :class="
+                            msg.user_id === currentUserId
+                                ? 'chat-message sent'
+                                : 'chat-message received'
+                        "
+                    >
+                        <div
+                            :class="
+                                msg.user_id === currentUserId
+                                    ? 'text-end'
+                                    : 'text-start'
+                            "
+                        >
                             <!-- Prikaz teksta poruke -->
-                            <div :class="msg.user_id === currentUserId
-                                    ? 'p-3 rounded bg-primary text-white d-inline-block'
-                                    : 'p-3 rounded bg-light text-dark d-inline-block'
-                                " v-if="msg.text">
+                            <div
+                                :class="
+                                    msg.user_id === currentUserId
+                                        ? 'p-3 rounded bg-primary text-white d-inline-block'
+                                        : 'p-3 rounded bg-light text-dark d-inline-block'
+                                "
+                                v-if="msg.text"
+                            >
                                 {{ msg.text }}
                             </div>
 
                             <!-- Prikaz fajla -->
                             <div v-if="msg.file_path" style="margin-top: 10px">
-                                <div v-if="
-                                    getFileDisplayType(msg.file_type) ===
-                                    'image'
-                                ">
-                                    <img :src="getImageFileUrl(msg.file_path)" alt="image" style="max-width: 200px" />
+                                <div
+                                    v-if="
+                                        getFileDisplayType(msg.file_type) ===
+                                        'image'
+                                    "
+                                >
+                                    <img
+                                        :src="getImageFileUrl(msg.file_path)"
+                                        alt="image"
+                                        style="max-width: 200px"
+                                    />
                                 </div>
-                                <div v-else-if="
-                                    getFileDisplayType(msg.file_type) ===
-                                    'pdf'
-                                ">
-                                    <a :class="msg.user_id === currentUserId
-                                            ? 'p-3 rounded bg-primary text-white d-inline-block'
-                                            : 'p-3 rounded bg-light text-dark d-inline-block'
-                                        " :href="getImageFileUrl(msg.file_path)" target="_blank">
+                                <div
+                                    v-else-if="
+                                        getFileDisplayType(msg.file_type) ===
+                                        'pdf'
+                                    "
+                                >
+                                    <a
+                                        :class="
+                                            msg.user_id === currentUserId
+                                                ? 'p-3 rounded bg-primary text-white d-inline-block'
+                                                : 'p-3 rounded bg-light text-dark d-inline-block'
+                                        "
+                                        :href="getImageFileUrl(msg.file_path)"
+                                        target="_blank"
+                                    >
                                         📄 View PDF
                                     </a>
                                 </div>
-                                <div v-else-if="
-                                    getFileDisplayType(msg.file_type) ===
-                                    'word'
-                                ">
-                                    <a :class="msg.user_id === currentUserId
-                                            ? 'p-3 rounded bg-primary text-white d-inline-block'
-                                            : 'p-3 rounded bg-light text-dark d-inline-block'
-                                        " :href="getImageFileUrl(msg.file_path)" target="_blank">
+                                <div
+                                    v-else-if="
+                                        getFileDisplayType(msg.file_type) ===
+                                        'word'
+                                    "
+                                >
+                                    <a
+                                        :class="
+                                            msg.user_id === currentUserId
+                                                ? 'p-3 rounded bg-primary text-white d-inline-block'
+                                                : 'p-3 rounded bg-light text-dark d-inline-block'
+                                        "
+                                        :href="getImageFileUrl(msg.file_path)"
+                                        target="_blank"
+                                    >
                                         📎 Word Document
                                     </a>
                                 </div>
                                 <div v-else>
-                                    <a :class="msg.user_id === currentUserId
-                                            ? 'p-3 rounded bg-primary text-white d-inline-block'
-                                            : 'p-3 rounded bg-light text-dark d-inline-block'
-                                        " :href="getImageFileUrl(msg.file_path)" target="_blank">
+                                    <a
+                                        :class="
+                                            msg.user_id === currentUserId
+                                                ? 'p-3 rounded bg-primary text-white d-inline-block'
+                                                : 'p-3 rounded bg-light text-dark d-inline-block'
+                                        "
+                                        :href="getImageFileUrl(msg.file_path)"
+                                        target="_blank"
+                                    >
                                         📁 Download file
                                     </a>
                                 </div>
@@ -241,18 +275,42 @@
                 </div>
             </div>
             <div class="card-footer">
-                <form id="chatForm" @submit.prevent="handleSubmit" enctype="multipart/form-data">
+                <form
+                    id="chatForm"
+                    @submit.prevent="handleSubmit"
+                    enctype="multipart/form-data"
+                >
                     <div class="d-flex align-items-center gap-2">
-                        <input type="text" class="form-control form-control-solid pr-13" name="input" value=""
-                            placeholder="Type your message..." v-model="message"
-                            @keydown.enter.prevent="handleSubmit" />
-                        <button type="button" class="btn btn-light position-relative p-22" @click="triggerFileInput">
+                        <input
+                            type="text"
+                            class="form-control form-control-solid pr-13"
+                            name="input"
+                            value=""
+                            placeholder="Type your message..."
+                            v-model="message"
+                            @keydown.enter.prevent="handleSubmit"
+                        />
+                        <button
+                            type="button"
+                            class="btn btn-light position-relative p-22"
+                            @click="triggerFileInput"
+                        >
                             <i class="fa-solid fa-image icon-img"></i>
                             <i class="fa-solid fa-file icon-file"></i>
                         </button>
-                        <input type="file" id="fileUpload" ref="fileInput" @change="handleFileChange"
-                            accept="image/*,.pdf,.doc,.docx" class="d-none" />
-                        <button class="btn-emojis" ref="emojiBtn" @click.prevent="toggleEmojiPicker">
+                        <input
+                            type="file"
+                            id="fileUpload"
+                            ref="fileInput"
+                            @change="handleFileChange"
+                            accept="image/*,.pdf,.doc,.docx"
+                            class="d-none"
+                        />
+                        <button
+                            class="btn-emojis"
+                            ref="emojiBtn"
+                            @click.prevent="toggleEmojiPicker"
+                        >
                             😀
                         </button>
                         <button class="btn btn-primary" type="submit">
@@ -288,25 +346,17 @@ export default {
             file: "",
             messages: [],
             unreadMap: {},
-            contributorData: [],
             messageError: "",
             unreadTotal: 0,
+            localContributors: [],
         };
     },
     computed: {
-        currentPath() {
-            return window.location.pathname;
-        },
-        isFreelancerChatRoute() {
-            return this.currentPath === "/company/freelancer/chats";
-        },
-        isRecruiterChatRoute() {
-            return this.currentPath === "/recruiter/chats";
-        },
         defaultImage() {
             return userImage;
         },
         sortedMessages() {
+            if (!this.messages) return [];
             return this.messages
                 .slice()
                 .sort(
@@ -329,25 +379,62 @@ export default {
                 "Unknown User"
             );
         },
+        // sortedContributors() {
+        //     const lastUser = localStorage.getItem("lastChatUser");
+        //     if (!lastUser) return this.contributors;
+
+        //     const parsed = JSON.parse(lastUser);
+        //     const sorted = [...this.contributors];
+        //     const index = sorted.findIndex((c) => c.user?.id === parsed.id);
+
+        //     if (index > -1) {
+        //         const [last] = sorted.splice(index, 1);
+        //         sorted.unshift(last);
+        //     }
+        //     return sorted;
+        // },
         sortedContributors() {
+            const contributors = [...this.localContributors];
+
+            // Povuci poslednje selektovanog korisnika iz localStorage
             const lastUser = localStorage.getItem("lastChatUser");
-            if (!lastUser) return this.contributors;
+            let prioritized = null;
 
-            const parsed = JSON.parse(lastUser);
-            const sorted = [...this.contributors];
-            const index = sorted.findIndex((c) => c.user?.id === parsed.id);
+            if (lastUser) {
+                const parsed = JSON.parse(lastUser);
+                const index = contributors.findIndex((c) => {
+                    console.log("c", c);
+                    c.user?.id === parsed.id || c.id === parsed.id;
+                });
 
-            if (index > -1) {
-                const [last] = sorted.splice(index, 1);
-                sorted.unshift(last);
+                if (index > -1) {
+                    prioritized = contributors.splice(index, 1)[0]; // izvuci ga iz niza
+                }
             }
+
+            // Sortiraj ostatak po last_message_time
+            const sorted = contributors.sort((a, b) => {
+                const timeA = a.last_message_time
+                    ? new Date(a.last_message_time).getTime()
+                    : 0;
+                const timeB = b.last_message_time
+                    ? new Date(b.last_message_time).getTime()
+                    : 0;
+                return timeB - timeA;
+            });
+
+            // Ako postoji prioritet, stavi ga na vrh
+            if (prioritized) {
+                sorted.unshift(prioritized);
+            }
+
             return sorted;
         },
     },
     watch: {
         messages() {
             this.$nextTick(() => {
-                const chatBox = document.getElementById("chatBox");
+                const chatBox = document.getElementById("chatBox_recruitment");
                 if (chatBox) {
                     chatBox.scrollTop = chatBox.scrollHeight;
                 }
@@ -367,10 +454,10 @@ export default {
             this.unreadTotal = 0;
         },
         prepareContributors() {
-            this.contributorData = this.contributors.map((c) => {
+            this.localContributors = this.contributors.map((c) => {
                 const user = c.user ?? {};
                 return {
-                    original: c,
+                    ...c,
                     user: {
                         id: user.id ?? c.id,
                         first_name:
@@ -391,6 +478,11 @@ export default {
             emitter.emit("update-navbar-badge", this.unreadTotal);
         },
         markMessagesAsRead(userId) {
+            if (this.unreadMap.hasOwnProperty(userId)) {
+                this.unreadMap[userId] = 0;
+                this.updateUnreadTotal();
+            }
+
             fetch(`/messages/mark-as-read/${userId}`, {
                 method: "POST",
                 headers: {
@@ -400,27 +492,12 @@ export default {
             })
                 .then((res) => res.json())
                 .then(() => {
-                    this.$set(this.unreadMap, userId, 0);
+                    this.unreadMap[userId] = 0;
                     this.updateUnreadTotal();
                 })
                 .catch((err) =>
                     console.error("Error marking messages as read:", err)
                 );
-        },
-        selectContributor(user) {
-            this.selectedContributor = user;
-            this.selectedUser = null;
-            const id = user?.user?.id || user?.id;
-            this.fetchMessages(id);
-            localStorage.setItem("lastChatUser", JSON.stringify(user));
-            this.markMessagesAsRead(id);
-        },
-        selectUser(user) {
-            this.selectedUser = user;
-            this.selectedContributor = null;
-            this.fetchMessages(user.id);
-            localStorage.setItem("lastChatUser", JSON.stringify(user));
-            this.markMessagesAsRead(user.id);
         },
         clearFileInput() {
             if (this.$refs.fileInput) {
@@ -451,9 +528,10 @@ export default {
                 return "word";
             return "other";
         },
-        fetchMessages(receiverId) {
-            if (!receiverId) return;
-            fetch(`/messages/${receiverId}`, {
+        fetchMessages(userId) {
+            console.log("fetchMessages ReceiverId: ", userId);
+            if (!userId) return;
+            fetch(`/messages/${userId}`, {
                 method: "GET",
                 headers: {
                     "X-CSRF-TOKEN": window.csrfToken,
@@ -463,21 +541,36 @@ export default {
                 .then((res) => res.json())
                 .then((data) => {
                     console.log("Chat: ", data);
-                    this.messages = data.sort(
-                        (a, b) =>
-                            new Date(a.created_at) - new Date(b.created_at)
-                    );
+                    this.messages = data;
                     this.scrollToBottom();
                 })
                 .catch((err) => console.error("Error fetching messages:", err));
         },
         scrollToBottom() {
             this.$nextTick(() => {
-                const chatBox = document.getElementById("chatBox");
+                const chatBox = document.getElementById("chatBox_recruitment");
                 if (chatBox) {
                     chatBox.scrollTop = chatBox.scrollHeight;
                 }
             });
+        },
+        selectContributor(user) {
+            console.log("selectContributor: ", user);
+            this.selectedContributor = user;
+            this.selectedUser = null;
+            const id = user?.user?.id || user?.id;
+            this.fetchMessages(id);
+            localStorage.setItem("lastChatUser", JSON.stringify(user));
+            this.markMessagesAsRead(id);
+        },
+        selectUser(user) {
+            console.log("selectUser: ", user);
+            this.selectedUser = user;
+            console.log("this.selectedUser: ", this.selectedUser);
+            this.selectedContributor = null;
+            this.fetchMessages(user.id);
+            localStorage.setItem("lastChatUser", JSON.stringify(user));
+            this.markMessagesAsRead(user.id);
         },
         toggleEmojiPicker() {
             if (this.picker && this.$refs.emojiBtn) {
@@ -494,6 +587,7 @@ export default {
                 this.selectedUser?.id ||
                 this.selectedContributor?.user?.id ||
                 this.selectedContributor?.id;
+            console.log("Inside handleSubmit receiverId: ", receiverId);
             if (!receiverId) {
                 this.messageError = "The user is not selected.";
                 return;
@@ -540,13 +634,15 @@ export default {
                         this.selectedContributor?.id;
 
                     const { message } = payload;
-                    console.log("Listen message: ",message);
+                    console.log("Listen message: ", message);
                     if (!message) return;
 
                     const isRelevant =
                         message.user_id === activeId ||
                         message.receiver_id === activeId;
 
+                    console.log("activeId: ", activeId);
+                    console.log("idRelevant: ", isRelevant);
                     if (isRelevant) {
                         this.messages.push(payload.message);
                         this.scrollToBottom();
@@ -554,6 +650,14 @@ export default {
                         this.fetchMessages(activeId);
                     } else {
                         if (message.user_id !== this.currentUserId) {
+                            const contributor = this.localContributors.find(
+                                (c) => c.user?.id === message.user_id
+                            );
+                            if (contributor) {
+                                contributor.last_message_time =
+                                    message.created_at;
+                            }
+
                             if (this.unreadMap[message.user_id]) {
                                 this.unreadMap[message.user_id]++;
                             } else {
@@ -563,7 +667,10 @@ export default {
                             this.updateUnreadTotal();
 
                             // Emituj ka nav-baru za globalni badge
-                            emitter.emit("update-navbar-badge", this.unreadTotal);
+                            emitter.emit(
+                                "update-navbar-badge",
+                                this.unreadTotal
+                            );
                         }
                     }
                 })
@@ -571,26 +678,38 @@ export default {
         },
     },
     mounted() {
+        console.log("Candidate: ", this.candidate);
+        console.log("Contributors: ", this.contributors);
+        emitter.emit("reset-navbar-badge");
+
         this.prepareContributors();
 
         const lastUser = localStorage.getItem("lastChatUser");
+
         if (lastUser) {
             const parsed = JSON.parse(lastUser);
-            this.selectedUser = parsed;
-            this.fetchMessages(parsed.id);
-        } else if (this.candidate?.user) {
-            this.selectedUser = this.candidate.user;
-            this.fetchMessages(this.candidate.user.id);
-            localStorage.setItem(
-                "lastChatUser",
-                JSON.stringify(this.candidate.user)
+
+            // Pronađi kontributora po id-u
+            const contributor = this.contributors.find(
+                (c) => c.user?.id === parsed.id
             );
-        } else if (this.contributorData.length > 0) {
-            const first = this.contributorData[0];
-            this.selectedContributor = first;
-            this.selectedUser = first.user;
-            this.fetchMessages(first.user.id);
-            localStorage.setItem("lastChatUser", JSON.stringify(first.user));
+
+            if (contributor) {
+                this.selectContributor(contributor);
+            } else if (this.candidate?.user?.id === parsed.id) {
+                this.selectUser(this.candidate.user);
+            } else {
+                // Ako localStorage postoji ali korisnik nije ni kandidat ni contributor,
+                // možeš automatski selektovati kandidata kao fallback
+                if (this.candidate?.user) {
+                    this.selectUser(this.candidate.user);
+                }
+            }
+        } else {
+            // Nema lastChatUser u localStorage - automatski selektuj kandidata
+            if (this.candidate?.user) {
+                this.selectUser(this.candidate.user);
+            }
         }
 
         fetch("/messages/unread-count", {
@@ -617,6 +736,16 @@ export default {
         });
 
         this.subscribeToWebSocket();
+
+        emitter.on("update-contributor-timestamp", ({ userId, createdAt }) => {
+            console.log("1242353462346: ", this.contributors);
+            const target = this.localContributors.find(
+                (c) => c.user_id === userId
+            );
+            if (target) {
+                target.last_message_time = createdAt;
+            }
+        });
     },
     beforeUnmount() {
         emitter.off("reset-navbar-badge", this.resetUnreadTotal);
@@ -627,6 +756,11 @@ export default {
 <style>
 .active-user {
     background: #f5f8fa !important;
+}
+
+.hr_custome {
+    height: 5px !important;
+    width: 100%;
 }
 
 .p-22 {

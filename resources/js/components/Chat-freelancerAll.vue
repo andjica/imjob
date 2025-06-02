@@ -290,7 +290,6 @@ export default {
                 .sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
         },
         chatTitle() {
-            console.log("1",this.selectedContributor?.user)
             if (this.selectedContributor?.user) {
                 return `${this.selectedContributor.user.first_name} ${this.selectedContributor.user.last_name}`;
             } else if (this.selectedUser) {

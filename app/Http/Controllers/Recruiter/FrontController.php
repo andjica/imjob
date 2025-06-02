@@ -275,9 +275,14 @@ class FrontController extends Controller
         /** @var User $user */
         $user = auth()->user();
         $contributors = $user->recruiter->contributors()
+            ->with(['user', 'lastSentMessage']) // moraš imati relaciju lastSentMessage u Contributor modelu
             ->wherePivot('status', ContributorRecruiter::ACTIVE)
-            ->with('user')
-            ->get();
+            ->get()
+            ->map(function ($contributor) {
+                // DODAJ svojstvo direktno na model
+                $contributor->last_message_time = $contributor->lastSentMessage?->created_at;
+                return $contributor;
+            });
         
         return view(
             'recruiter.pages.recruitment.candidat-recruitment-process',
