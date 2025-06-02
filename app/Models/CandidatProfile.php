@@ -67,7 +67,7 @@ class CandidatProfile extends Model
     public function jobs(): BelongsToMany
     {
         return $this->belongsToMany(Job::class, 'candidate_job', 'candidate_id', 'job_id')
-                    ->withPivot('status', 'applied_at')
+                    ->withPivot('id', 'status', 'applied_at', 'created_at')
                     ->withTimestamps();
     }
 

@@ -33,9 +33,11 @@ class Candidate extends Model
     public const STATUS_PENDING = 'pending';
     
     protected $fillable = [
+        'id',
         'job_id',
         'user_id',
         'candidate_id',
+        'applied_at',
         'status'
     ];
 
