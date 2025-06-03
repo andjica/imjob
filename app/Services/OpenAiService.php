@@ -10,15 +10,15 @@ class OpenAiService
     public function askIntent($message)
     {
         $prompt = <<<EOD
-Pitanje: "$message"
+            Pitanje: "$message"
 
-Da li je ovo pitanje vezano za traženje posla, kategoriju ili lokaciju?
+            Da li je ovo pitanje vezano za traženje posla, kategoriju ili lokaciju?
 
-Odgovori samo:
-DA
-ILI
-NE
-EOD;
+            Odgovori samo:
+            DA
+            ILI
+            NE
+            EOD;
 
         $response = Http::withToken(config('services.openai.key'))->post(
             'https://api.openai.com/v1/chat/completions',

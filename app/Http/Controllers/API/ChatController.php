@@ -65,14 +65,14 @@ class ChatController extends Controller
             $userId = $user->id;
 
             // Pronađi sve poruke koje uključuju ovog korisnika
-            $allMessages = Message::where('sender_id', $userId)
+            $allMessages = Message::where('user_id', $userId)
                 ->orWhere('receiver_id', $userId)
                 ->orderByDesc('created_at')
                 ->get();
 
             // Grupisanje po korisniku s kojim se čatovalo (druga strana)
             $grouped = $allMessages->groupBy(function ($msg) use ($userId) {
-                return $msg->sender_id === $userId ? $msg->receiver_id : $msg->sender_id;
+                return $msg->user_id === $userId ? $msg->receiver_id : $msg->user_id;
             });
 
             // Sortiranje po najnovijoj poruci
@@ -82,11 +82,27 @@ class ChatController extends Controller
 
             // Dohvatanje korisnika redosledom
             $users = User::whereIn('id', $sortedUserIds)
-                ->get()
-                ->sortBy(function ($user) use ($sortedUserIds) {
-                    return array_search($user->id, $sortedUserIds);
-                })
-                ->values();
+            ->get()
+            ->sortBy(function ($user) use ($sortedUserIds) {
+                return array_search($user->id, $sortedUserIds);
+            })
+            ->map(function ($user) use ($userId) {
+                // Broj nepročitanih poruka od ovog korisnika ka meni
+                $unreadCount = Message::where('user_id', $user->id)
+                    ->where('receiver_id', $userId)
+                    ->where('is_read', false)
+                    ->count();
+
+                return [
+                    'id' => $user->id,
+                    'first_name' => $user->first_name,
+                    'last_name' => $user->last_name,
+                    'email' => $user->email,
+                    'unread_count' => $unreadCount,
+                ];
+            })
+            ->values();
+
 
             return response()->json([
                 'success' => true,
@@ -99,6 +115,22 @@ class ChatController extends Controller
                 'error' => $e->getMessage()
             ], 500);
         }
+    }
+
+    public function markAsRead($userId, Request $request)
+    {
+        
+        $receiverAuth = JWTAuth::parseToken()->authenticate();
+        $receiverId = $receiverAuth->id;
+
+        $userId = $request->user_id;
+
+         Message::where('user_id', $userId)
+            ->where('receiver_id', $receiverId)
+            ->where('is_read', false)
+            ->update(['is_read' => true]);
+
+        return response()->json(['status' => 'ok']);
     }
 
 }

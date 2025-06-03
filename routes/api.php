@@ -44,7 +44,8 @@ Route::middleware('auth:api')->group(function () {
     //chats
     Route::get('/messages/{receiverId}', [ApiChatController::class, 'getMessages']); // prikaz poruka
     Route::post('/messages', [ApiChatController::class, 'store']); // slanje poruka
-    Route::get('/active/contacts/chats', [ApiChatController::class, 'getChatContact']);
+    Route::get('/active/contacts/chats', [ApiChatController::class, 'getChatContacts']);
+     Route::post('/messages/mark-as-read/{userId}', [ApiChatController::class, 'markAsRead']);
     //store Candidat Profile
     // Route::post('/candidat/profile/create', [CandidateProfileController::class, 'store']);
     Route::post('/candidat/profile/update/{userId}', [CandidateProfileController::class, 'update']); // Ažuriranje profila
