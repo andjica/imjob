@@ -58,7 +58,7 @@
                             </div>
                             <!-- Name and Company -->
                             <div>
-                                <span class="text-dark font-weight-bold d-block">{{ $candidate->user->first_name  }}</span>
+                                <span class="text-dark font-weight-bold d-block">{{ $candidate->user->first_name  }} {{ $candidate->user->last_name  }}</span>
                                 <a class="text-muted text-hover-primary font-weight-normal" href="mailto:alarkingg@elegantthemes.com">
                                     <small>{{ $candidate->user->email  }}</small>
                                 </a>

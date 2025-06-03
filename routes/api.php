@@ -40,8 +40,11 @@ Route::get('/country/{countryId}/phone-code', [FrontController::class, 'getPhone
 //only logged users can use chat
 Route::middleware('auth:api')->group(function () {
     Broadcast::routes();
+
+    //chats
     Route::get('/messages/{receiverId}', [ApiChatController::class, 'getMessages']); // prikaz poruka
     Route::post('/messages', [ApiChatController::class, 'store']); // slanje poruka
+    Route::get('/active/contacts/chats', [ApiChatController::class, 'getChatContact']);
     //store Candidat Profile
     // Route::post('/candidat/profile/create', [CandidateProfileController::class, 'store']);
     Route::post('/candidat/profile/update/{userId}', [CandidateProfileController::class, 'update']); // Ažuriranje profila
@@ -54,6 +57,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/job/{jobId}/candidat/{candidatId}/apply', [FrontController::class, 'applyJob']);
     Route::get('/job/{jobId}/candidat/{candidatId}/apply', [FrontController::class, 'alreadyApplyJob']);
 
+    //recruitment process
     Route::get('/applied-jobs/', [RecruitmentController::class, 'getAppliedJobsByCandidate']);
 
     //settings
@@ -63,7 +67,7 @@ Route::middleware('auth:api')->group(function () {
    //chat
    Route::post('/store/messages', [ApiChatController::class, 'store']);
 
-   //recruitment process
+   //recruitment process za joneta
     Route::get('/recruitment/status/{candidateJobId}', [RecruitmentController::class, 'showStatus']);
 
 });
