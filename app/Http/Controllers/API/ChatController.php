@@ -1,5 +1,7 @@
 <?php
+
 namespace app\Http\Controllers\API;
+
 use App\Models\User;
 use App\Models\Message;
 use App\Events\MessageSent;
@@ -19,7 +21,7 @@ class ChatController extends Controller
         ]);
 
         $user =  JWTAuth::parseToken()->authenticate();
-     
+
         $userId = $user->id;
 
         $message = new Message();
@@ -29,30 +31,28 @@ class ChatController extends Controller
 
         $message->save();
 
-         Log::info(' Nova poruka kreirana:', $message->toArray());
-    
+        Log::info(' Nova poruka kreirana:', $message->toArray());
+
         broadcast(new MessageSent($message));
-        
+
         return response()->json([
             'success' => 'Message has been sent',
             'message' => $message
         ], 201);
-
-
     }
 
     public function getMessages($receiverId)
     {
 
-         $user =  JWTAuth::parseToken()->authenticate();
-         $messages = Message::where(function ($q) use ($user, $receiverId) {
+        $user =  JWTAuth::parseToken()->authenticate();
+        $messages = Message::where(function ($q) use ($user, $receiverId) {
             $q->where('user_id', $user->id)->where('receiver_id', $receiverId);
         })->orWhere(function ($q) use ($user, $receiverId) {
             $q->where('user_id', $receiverId)->where('receiver_id', $user->id);
         })
-        ->orderBy('created_at', 'ASC')
-        ->get();
-    
+            ->orderBy('created_at', 'ASC')
+            ->get();
+
         return response()->json($messages);
     }
 
@@ -130,7 +130,7 @@ class ChatController extends Controller
             ->where('is_read', false)
             ->update(['is_read' => true]);
 
-        return response()->json(['status' => 'ok']);
+        return response()->json(['status' => 'ok'], 200);
     }
 
 }
