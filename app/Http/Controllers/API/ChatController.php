@@ -133,4 +133,29 @@ class ChatController extends Controller
         return response()->json(['status' => 'ok'], 200);
     }
 
+    public function totalUnreadCount()
+    {
+        $userId = auth()->user()->id;
+
+        $count = Message::where('receiver_id', $userId)
+            ->where('is_read', false)
+            ->count();
+
+        return response()->json(['unread_total' => $count]);
+    }
+
+    public function unreadCount()
+        {
+            $userId = JWTAuth::parseToken()->authenticate();
+
+            $counts = Message::select('user_id')
+                ->where('receiver_id', $userId)
+                ->where('is_read', false)
+                ->groupBy('user_id')
+                ->selectRaw('user_id, COUNT(*) as unread_count')
+                ->get();
+
+            return response()->json($counts);
+        }
+
 }

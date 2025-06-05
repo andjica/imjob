@@ -37,7 +37,7 @@
               <!-- Kandidati -->
               <div class="scroll-container candidates-scroll scroll-section">
                 <div
-                  v-for="user in candidatesList"
+                  v-for="user in sortedCandidates"
                   :key="user.user?.id || user.id"
                   class="d-flex flex-column align-items-center"
                   @click.prevent="selectUser(user.user)"
@@ -71,6 +71,9 @@
                     </span>
                   </div>
                 </div>
+                <div v-if="sortedCandidates.length === 0">
+                                    <p>You don't have Candidates</p>
+                                </div>
               </div>
 
               <hr class="hr_custome" />
@@ -78,7 +81,7 @@
               <!-- Kontributeri -->
               <div class="scroll-container contributors-scroll scroll-section">
                 <div
-                  v-for="user in contributorsList"
+                  v-for="user in sortedContributors"
                   :key="user.user?.id || user.id"
                   class="d-flex flex-column align-items-center"
                   @click.prevent="selectContributor(user)"
@@ -127,8 +130,7 @@
           <h3 class="card-title">
             Chat with
             {{
-              selectedContributor?.user?.first_name + ' ' +
-              selectedContributor?.user?.last_name || "Candidate"
+              chatTitle || "Candidate"
             }}
           </h3>
         </div>
@@ -253,9 +255,18 @@ import emitter from "../eventBus";
 
 export default {
     props: {
-        contributors: Array,
-        candidates: Array,
-        currentUserId: Number,
+        contributors: {
+            type: Array,
+            required: true,
+        },
+        candidates: {
+            type: Array,
+            required: true,
+        },
+        currentUserId: {
+            type: Number,
+            required: true,
+        },
     },
     data() {
         return {
@@ -263,7 +274,7 @@ export default {
             selectedUser: null,
             picker: null,
             message: "",
-            file: "",
+            file: null,
             messages: [],
             unreadMap: {},
             contributorData: [],
@@ -275,9 +286,6 @@ export default {
         currentPath() {
             return window.location.pathname;
         },
-        isFreelancerChatRoute() {
-            return this.currentPath === "/company/freelancer/chats";
-        },
         isRecruiterChatRoute() {
             return this.currentPath === "/recruiter/chats";
         },
@@ -287,78 +295,58 @@ export default {
         sortedMessages() {
             return this.messages
                 .slice()
-                .sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+                .sort(
+                    (a, b) => new Date(a.created_at) - new Date(b.created_at)
+                );
         },
         chatTitle() {
             if (this.selectedContributor?.user) {
                 return `${this.selectedContributor.user.first_name} ${this.selectedContributor.user.last_name}`;
             } else if (this.selectedUser) {
                 return `${this.selectedUser.first_name} ${this.selectedUser.last_name}`;
+            } else if (this.candidates?.length && this.candidates[0].user) {
+                return `${this.candidates[0].user.first_name} ${this.candidates[0].user.last_name}`;
             }
-            return "Unknown";
+            return "Candidate?";
         },
         chatPlaceholderName() {
-            console.log("2",this.selectedContributor?.user)
-            const user = this.selectedContributor?.user;
-                if (user?.first_name && user?.last_name) {
-                return `${user.first_name} ${user.last_name}`;
-                } else {
-                return 'Unknown User';
-                }
+            const user =
+                this.selectedContributor?.user ||
+                this.selectedContributor ||
+                this.selectedUser ||
+                this.candidates[0]?.user;
+
+            if (!user) return "Unknown User";
+
+            return (
+                `${user.first_name || ""} ${user.last_name || ""}`.trim() ||
+                "Unknown User"
+            );
         },
         sortedContributors() {
-            const lastUser = localStorage.getItem("lastChatUser");
-            if (!lastUser) return this.contributors;
-
-            const parsed = JSON.parse(lastUser);
-            const sorted = [...this.contributors];
-
-            const index = sorted.findIndex((c) => c.user?.id === parsed.id);
-            if (index > -1) {
-                const [last] = sorted.splice(index, 1);
-                sorted.unshift(last);
-            }
-
-            return sorted;
+            return [...this.contributorData].sort((a, b) => {
+                const unreadA = this.unreadMap[a.user.id] || 0;
+                const unreadB = this.unreadMap[b.user.id] || 0;
+                return unreadB - unreadA;
+            });
         },
-        candidatesList() {
-            return (Array.isArray(this.candidates) ? this.candidates : [])
-                .map((c) => ({
-                    ...c,
-                    userType: "candidate",
-                    user: c.user || {
-                        id: c.id,
-                        first_name: c.first_name ?? c.name?.split(" ")[0] ?? "N/A",
-                        last_name: c.last_name ?? c.name?.split(" ")[1] ?? "",
-                    },
-                }))
-                .sort((a, b) => {
-                    const timeA = new Date(a.last_message_at || 0).getTime();
-                    const timeB = new Date(b.last_message_at || 0).getTime();
-                    return timeB - timeA;
-                });
-        },
-        contributorsList() {
-            return (
-                Array.isArray(this.contributorData) ? this.contributorData : []
-            )
-                .map((c) => ({
-                    ...c,
-                    userType: "contributor",
-                }))
-                .sort((a, b) => {
-                    const timeA = new Date(a.last_message_at || 0);
-                    const timeB = new Date(b.last_message_at || 0);
-                    return timeB - timeA;
-                });
+        sortedCandidates() {
+            return [...this.candidates].sort((a, b) => {
+                const unreadA = this.unreadMap[a.user.id] || 0;
+                const unreadB = this.unreadMap[b.user.id] || 0;
+                return unreadB - unreadA;
+            });
         },
     },
     watch: {
-        contributorsList(newList) {
-    if (newList.length > 0 && !this.selectedContributor) {
-      this.selectedContributor = newList[0];
-    }
-  }
+        messages() {
+            this.$nextTick(() => {
+                const chatBox = document.getElementById("chatBox__freelancerAll");
+                if (chatBox) {
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                }
+            });
+        },
     },
     methods: {
         getImageFileUrl(path) {
@@ -367,6 +355,22 @@ export default {
         resetUnreadTotal() {
             this.unreadTotal = 0;
         },
+        prepareContributors() {
+            this.contributorData = this.contributors.map((contributor) => {
+                const user = contributor.user || {};
+                const names = (contributor.name || "").split(" ");
+                return {
+                    original: contributor,
+                    user: {
+                        id: user.id || contributor.id,
+                        first_name: user.first_name || names[0] || "N/A",
+                        last_name: user.last_name || names[1] || "",
+                        email: user.email || contributor.email || "",
+                        profile_image: user.profile_image || null,
+                    },
+                };
+            });
+        },
         updateUnreadTotal() {
             this.unreadTotal = Object.values(this.unreadMap).reduce(
                 (sum, count) => sum + count,
@@ -374,127 +378,45 @@ export default {
             );
             emitter.emit("update-navbar-badge", this.unreadTotal);
         },
-        updateLastMessageTime(userId, timestamp) {
-            const updateUser = (arr) => {
-                const index = arr.findIndex((u) => {
-                    const id = u.user?.id || u.id;
-                    return id === userId;
-                });
-                if (index !== -1) {
-                    arr[index].last_message_at = timestamp;
-                }
-            };
-            if (Array.isArray(this.candidates)) updateUser(this.candidates);
-            if (Array.isArray(this.contributorData)) updateUser(this.contributorData);
-        },
-        selectContributor(user) {
-            this.selectedContributor = user;
-            this.selectedUser = null;
-            const fetchContributorId = user?.user?.id || user?.id;
-            this.fetchMessages(fetchContributorId);
-            localStorage.setItem("lastChatUser", JSON.stringify(user));
-            this.markMessagesAsRead(fetchContributorId);
-        },
-        selectUser(user) {
-            this.selectedUser = user;
-            this.selectedContributor = null;
-            this.fetchMessages(user.id);
-            localStorage.setItem("lastChatUser", JSON.stringify(user));
-            this.markMessagesAsRead(user.id);
-        },
-        selectFirstCandidat() {
-            if (this.candidatesList.length > 0) {
-                const firstCandidate = this.candidatesList[0];
-                this.selectedUser = firstCandidate;
-                this.selectedContributor = null;
-                this.fetchMessages(firstCandidate.id);
-                localStorage.setItem("lastChatUser", JSON.stringify(firstCandidate));
-            }
-        },
-        selectFirstContributor() {
-            if (!this.contributorData.length) return;
-
-            const firstContributor = this.contributorData[0];
-            this.selectContributor(firstContributor);
-        },
-        prepareContributors() {
-            this.contributorData = this.contributors.map((c) => {
-                const user = c.user ?? {};
-                return {
-                    original: c,
-                    user: {
-                        id: user.id ?? c.id,
-                        first_name: user.first_name ?? c.name?.split(" ")[0] ?? "N/A",
-                        last_name: user.last_name ?? c.name?.split(" ")[1] ?? "",
-                        email: user.email ?? c.email,
-                        profile_image: user.profile_image ?? null,
-                    },
-                };
-            });
-        },
-        markMessagesAsRead(userId) {
+        async markMessagesAsRead(userId) {
             if (!userId) return;
-            fetch(`/messages/mark-as-read/${userId}`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": window.csrfToken,
-                },
-            })
-                .then((res) => res.json())
-                .then(() => {
-                    if (this.unreadMap[userId]) {
-                        this.unreadMap[userId] = 0;
-                    }
-                    this.updateUnreadTotal();
-                })
-                .catch((err) => {
-                    console.error("Greška pri označavanju poruka kao pročitanih:", err);
+
+            try {
+                await fetch(`/messages/mark-as-read/${userId}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": window.csrfToken,
+                    },
                 });
-        },
-        handleFileChange(event) {
-            const file = event.target.files[0];
-            if (file && file.size > 5 * 1024 * 1024) {
-                this.messageError = "File must be less than 5MB.";
-                this.clearFileInput();
-                return;
+
+                this.unreadMap[userId] = 0;
+                this.updateUnreadTotal();
+            } catch (err) {
+                console.error(
+                    `Error marking messages as read for user ${userId}:`,
+                    err
+                );
             }
-            this.messageError = "";
-            this.file = file;
         },
-        getFileDisplayType(fileType) {
-            if (fileType?.startsWith("image/")) return "image";
-            if (fileType === "application/pdf") return "pdf";
-            if (
-                fileType ===
-                "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-            ) return "word";
-            return "other";
-        },
-        clearFileInput() {
-            if (this.$refs.fileInput) this.$refs.fileInput.value = "";
-            this.file = null;
-        },
-        triggerFileInput() {
-            this.$refs.fileInput?.click();
-        },
-        fetchMessages(receiverId) {
-            if (!receiverId) return;
-            fetch(`/messages/${receiverId}`, {
-                method: "GET",
-                headers: {
-                    "X-CSRF-TOKEN": window.csrfToken,
-                    Accept: "application/json",
-                },
-            })
-                .then((res) => res.json())
-                .then((data) => {
-                    this.messages = data;
-                    this.scrollToBottom();
-                })
-                .catch((err) => {
-                    console.error("Greška pri dohvatanju poruka:", err);
+        async fetchMessages(userId) {
+            if (!userId) return;
+
+            try {
+                const res = await fetch(`/messages/${userId}`, {
+                    method: "GET",
+                    headers: {
+                        "X-CSRF-TOKEN": window.csrfToken,
+                        Accept: "application/json",
+                    },
                 });
+                const data = await res.json();
+                console.log("FetchMessage: ",data);
+                this.messages = data || [];
+                this.scrollToBottom();
+            } catch (err) {
+                console.error("Error fetching messages:", err);
+            }
         },
         scrollToBottom() {
             this.$nextTick(() => {
@@ -508,14 +430,45 @@ export default {
             if (this.picker && this.$refs.emojiBtn) {
                 this.picker.togglePicker(this.$refs.emojiBtn);
             } else {
-                console.warn("Emoji picker nije inicijalizovan.");
+                console.warn("Emoji picker not initialized.");
             }
+        },
+        handleFileChange(event) {
+            
+            const file = event.target.files[0];
+            if (file && file.size > 5 * 1024 * 1024) {
+                this.messageError = "File must be less than 5MB.";
+                this.clearFileInput();
+                return;
+            }
+            this.messageError = ""; // Clear previous errors
+            this.file = file;
+        },
+        getFileDisplayType(fileType) {
+            if (fileType?.startsWith("image/")) return "image";
+            if (fileType === "application/pdf") return "pdf";
+            if (
+                fileType ===
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            )
+                return "word";
+            return "other";
+        },
+        clearFileInput() {
+            if (this.$refs.fileInput) {
+                this.$refs.fileInput.value = "";
+            }
+            this.file = null;
+        },
+        triggerFileInput() {
+            this.$refs.fileInput?.click();
         },
         async handleSubmit() {
             if (!this.message.trim() && !this.file) {
                 this.messageError = "Please enter a text or upload a file!";
                 return;
             }
+
             const receiverId =
                 this.selectedUser?.id ||
                 this.selectedContributor?.user?.id ||
@@ -529,22 +482,30 @@ export default {
             const formData = new FormData();
             formData.append("user_id", this.currentUserId);
             formData.append("text", this.message);
-            formData.append("receiver_id", receiverId);
-            if (this.file) formData.append("file", this.file);
+            formData.append("receiver_id", Number(receiverId));
 
-            fetch("/messages", {
+            if (this.file) {
+                formData.append("file", this.file);
+            }
+
+            await fetch("/messages", {
                 method: "POST",
-                headers: { "X-CSRF-TOKEN": window.csrfToken },
+                headers: {
+                    "X-CSRF-TOKEN": window.csrfToken,
+                },
                 body: formData,
             })
                 .then((res) => res.json())
                 .then((data) => {
                     this.message = "";
+                    this.messageError = "";
                     this.clearFileInput();
                     if (data.message) {
                         this.messages = [...this.messages, data.message].sort(
-                            (a, b) => new Date(a.created_at) - new Date(b.created_at)
+                            (a, b) =>
+                                new Date(a.created_at) - new Date(b.created_at)
                         );
+
                         this.scrollToBottom();
                     }
                 })
@@ -552,113 +513,144 @@ export default {
                     console.error("Greška pri slanju poruke:", error);
                 });
         },
-    },
-    mounted() {
-        emitter.emit("reset-navbar-badge");
+        selectContributor(contributor) {
+            this.selectedContributor = contributor;
+            this.selectedUser = contributor.user || null;
 
-        fetch("/messages/unread-count", {
-            method: "GET",
-            headers: {
-                "X-Requested-With": "XMLHttpRequest",
-                "X-CSRF-TOKEN": window.csrfToken,
-                Accept: "application/json",
-            },
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                data.forEach((item) => {
-                    this.unreadMap[item.user_id] = item.unread_count;
+            const id = this.selectedUser?.id || contributor.id;
+            this.fetchMessages(id);
+            localStorage.setItem(
+                "lastChatUser",
+                JSON.stringify(this.selectedUser || contributor)
+            );
+
+            this.markMessagesAsRead(id);
+        },
+        selectUser(user) {
+            this.selectedUser = user;
+            this.selectedContributor = null;
+            this.fetchMessages(user.id);
+            localStorage.setItem("lastChatUser", JSON.stringify(user));
+            this.markMessagesAsRead(user.id);
+        },
+        selectFirstContributor() {
+            if (!this.contributorData.length) return;
+
+            const firstContributor = this.contributorData[0];
+            this.selectContributor(firstContributor);
+        },
+        async loadUnreadCounts() {
+            try {
+                const res = await fetch("/messages/unread-count", {
+                    method: "GET",
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest",
+                        "X-CSRF-TOKEN": window.csrfToken,
+                        Accept: "application/json",
+                    },
+                });
+
+                const data = await res.json();
+                data.forEach(({ user_id, unread_count }) => {
+                    this.unreadMap[user_id] = unread_count;
                 });
                 this.updateUnreadTotal();
-            })
-            .catch((err) => {
-                console.error("Greška pri dohvatanju nepročitanih poruka:", err);
-            });
-
-        this.picker = new EmojiButton({ position: "top-end" });
-        if (this.picker) {
+            } catch (err) {
+                console.error("Error loading unread counts:", err);
+            }
+        },
+        initializeEmojiPicker() {
+            this.picker = new EmojiButton({ position: "top-end" });
             this.picker.on("emoji", (emoji) => {
                 this.message += emoji.emoji;
             });
-        }
+        },
+        restoreLastSelectedUser() {
+            const lastUser = localStorage.getItem("lastChatUser");
+            if (!lastUser) return false;
 
-        this.prepareContributors();
-
-    // If there is a last selected user saved, restore it
-    const lastUser = localStorage.getItem("lastChatUser");
-    if (lastUser) {
-        const parsed = JSON.parse(lastUser);
-        if (parsed.userType === "candidate") {
-            this.selectUser(parsed);  // Use method for candidates
-        } else if (parsed.userType === "contributor") {
-            const matched = this.contributorData.find(
+            const parsed = JSON.parse(lastUser);
+            const contributor = this.contributorData.find(
                 (c) => c.user.id === parsed.id
             );
-            if (matched) {
-                this.selectContributor(matched);  // Use method for contributors
+
+            if (contributor) {
+                this.selectedContributor = contributor;
+                this.selectedUser = contributor.user;
+                this.fetchMessages(parsed.id);
+            } else {
+                this.selectedContributor = null;
+                this.selectedUser = parsed;
+                this.fetchMessages(parsed.id);
+            }
+            return true;
+        },
+    },
+    async mounted() {
+        console.log("Recruiter candidate: ", this.candidates);
+        console.log("Recruiter contributor: ", this.contributors);
+        this.prepareContributors();
+        this.initializeEmojiPicker();
+        await this.loadUnreadCounts();
+
+        // Try restore last selected user first
+        const restored = this.restoreLastSelectedUser();
+
+        if (!restored) {
+            if (this.contributors.length) {
+                this.selectFirstContributor();
+            } else if (this.candidates.length) {
+                this.selectUser(this.candidates[0].user);
             }
         }
-    } else {
-        // If no last user, select first contributor by calling the method (not just setting variable)
-        this.selectFirstContributor();
-    }
 
-        Echo.private("chat." + this.currentUserId)
+        emitter.emit("reset-navbar-badge");
+
+        // Setup Laravel Echo listener for incoming messages
+        Echo.private(`chat.${this.currentUserId}`)
+            .subscribed(() => {
+                console.log(`✅ Subscribed to chat.${this.currentUserId}`);
+            })
             .listen(".MessageSent", (payload) => {
-                const activeReceiverId =
+                const activeUserId =
                     this.selectedUser?.id ||
                     this.selectedContributor?.user?.id ||
                     this.selectedContributor?.id;
 
-                const updateUserLastMessage = (userId) => {
-                    const contributor = this.contributorData.find(
-                        (c) => c.user.id === userId
-                    );
-                    if (contributor) {
-                        contributor.last_message_at = payload.message.created_at;
-                        return;
-                    }
+                const { message } = payload;
 
-                    if (Array.isArray(this.candidates)) {
-                        const candidate = this.candidates.find(
-                            (c) => c.id === userId
-                        );
-                        if (candidate) {
-                            candidate.last_message_at = payload.message.created_at;
-                        }
-                    }
-                };
+                if (!message) return;
 
-                updateUserLastMessage(payload.message.user_id);
-                updateUserLastMessage(payload.message.receiver_id);
+                const isRelevant =
+                    message.user_id === activeUserId ||
+                    message.receiver_id === activeUserId;
 
-                if (
-                    payload.message &&
-                    (payload.message.user_id === activeReceiverId ||
-                        payload.message.receiver_id === activeReceiverId)
-                ) {
-                    this.messages.push(payload.message);
+                if (isRelevant) {
+                    this.messages.push(message);
                     this.scrollToBottom();
-                    this.markMessagesAsRead(activeReceiverId);
-                    this.fetchMessages(activeReceiverId);
+                    this.markMessagesAsRead(activeUserId);
+                    this.fetchMessages(activeUserId);
                 } else {
-                    if (payload.message.user_id !== this.currentUserId) {
-                        if (this.unreadMap[payload.message.user_id]) {
-                            this.unreadMap[payload.message.user_id]++;
+                    if (message.user_id !== this.currentUserId) {
+                        if (this.unreadMap[message.user_id]) {
+                            this.unreadMap[message.user_id]++;
                         } else {
-                            this.unreadMap[payload.message.user_id] = 1;
+                            this.unreadMap[message.user_id] = 1;
                         }
+
                         this.updateUnreadTotal();
+
+                        // Emituj ka nav-baru za globalni badge
                         emitter.emit("update-navbar-badge", this.unreadTotal);
                     }
                 }
             })
             .error((error) => {
-                console.error("❌ Greška:", error);
+                console.error("Echo subscription error:", error);
             });
     },
     beforeUnmount() {
-        emitter.off("reset-navbar-badge", this.resetUnreadTotal);
+        emitter.off("reset-navbar-badge");
     },
 };
 </script>
