@@ -75,40 +75,31 @@ class FrontController extends Controller
 
     public function applyJob(Request $request, $jobId, $candidatId)
     {
-       $job = $this->jobServices->find($jobId);
-       
-       if(!$job)
-       {
-         return response()->json(['message'=> 'Not found job', 404]);
-       }
+       $user = auth()->user(); 
+    
+        if (!$user) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
 
-       $candidat = $this->candidatProfileServices->getById($candidatId);
+        $job = $this->jobServices->find($jobId);
+        if (!$job) {
+            return response()->json(['message' => 'Job not found'], 404);
+        }
 
-       if(!$candidat)
-       {
-         return response()->json(['message'=> 'Not found candidat', 404]);
-       }
+        $candidat = $this->candidatProfileServices->getById($candidatId);
+        if (!$candidat) {
+            return response()->json(['message' => 'Candidate not found'], 404);
+        }
 
-       $user = User::find($request->user_id);
-
-       if(!$user) 
-       {
-            return response()->json(['message'=> 'Uset not found', 404]);
-       }
-       $candidatJob = new Candidate();
-
+        $candidatJob = new Candidate();
         $candidatJob->candidate_id = $candidat->id;
         $candidatJob->job_id = $job->id;
         $candidatJob->user_id = $user->id;
         $candidatJob->status = "pending";
-        $candidatJob->applied_at = new DateTime();
-
+        $candidatJob->applied_at = now();
         $candidatJob->save();
 
-        if($candidatJob)
-        {
-            return response()->json(['message'=> 'Created successfully.', 201]);
-        }
+        return response()->json(['message' => 'Created successfully'], 201);
     }
 
     public function alreadyApplyJob($jobId, $candidateId)

@@ -43,6 +43,7 @@ class AuthController extends Controller
             'verification_expires_at' => now()->addMinutes(2),
             'role_id' => $role->id,
         ]);
+        
     
         Mail::to($user->email)->send(new VerificationCodeMail($user, $code));
     
@@ -68,7 +69,10 @@ class AuthController extends Controller
 
         if (!$user->is_mobile_verified)
         {
-            return response()->json(['error' => 'Mobile number not verified.'], 403);
+            return response()->json([
+            'jwt_token' => $token,
+            'token_type' => 'Bearer',
+            'user' => $user,'error' => 'Mobile number not verified.'], 403);
         }
         
         return response()->json([

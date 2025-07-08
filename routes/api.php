@@ -74,6 +74,9 @@ Route::middleware('auth:api')->group(function () {
    //recruitment process za joneta
     Route::get('/recruitment/status/{candidateJobId}', [RecruitmentController::class, 'showStatus']);
 
+
+    Route::get('/job/{id}/translated', [ChatAiController::class, 'getTranslatedJob']);
+
 });
 
 

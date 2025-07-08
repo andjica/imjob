@@ -403,6 +403,10 @@ class FrontController extends Controller
         $userId = auth()->user()->id;
         $recruiter = Recruiter::where('user_id', $userId)->first();
 
+        if(!$recruiter->education)
+        {
+            return redirect('/company/freelancer/edit')->with('error', 'Please finish your profile');
+        }
         $recruiter->education->school;
 
         $recruiter->user;

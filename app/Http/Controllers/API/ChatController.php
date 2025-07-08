@@ -1,7 +1,5 @@
 <?php
-
 namespace app\Http\Controllers\API;
-
 use App\Models\User;
 use App\Models\Message;
 use App\Events\MessageSent;
@@ -21,7 +19,7 @@ class ChatController extends Controller
         ]);
 
         $user =  JWTAuth::parseToken()->authenticate();
-
+     
         $userId = $user->id;
 
         $message = new Message();
@@ -31,28 +29,30 @@ class ChatController extends Controller
 
         $message->save();
 
-        Log::info(' Nova poruka kreirana:', $message->toArray());
-
+         Log::info(' Nova poruka kreirana:', $message->toArray());
+    
         broadcast(new MessageSent($message));
-
+        
         return response()->json([
             'success' => 'Message has been sent',
             'message' => $message
         ], 201);
+
+
     }
 
     public function getMessages($receiverId)
     {
 
-        $user =  JWTAuth::parseToken()->authenticate();
-        $messages = Message::where(function ($q) use ($user, $receiverId) {
+         $user =  JWTAuth::parseToken()->authenticate();
+         $messages = Message::where(function ($q) use ($user, $receiverId) {
             $q->where('user_id', $user->id)->where('receiver_id', $receiverId);
         })->orWhere(function ($q) use ($user, $receiverId) {
             $q->where('user_id', $receiverId)->where('receiver_id', $user->id);
         })
-            ->orderBy('created_at', 'ASC')
-            ->get();
-
+        ->orderBy('created_at', 'ASC')
+        ->get();
+    
         return response()->json($messages);
     }
 
@@ -145,6 +145,22 @@ class ChatController extends Controller
     }
 
     public function unreadCount()
+        {
+            $userId = JWTAuth::parseToken()->authenticate();
+
+            $counts = Message::select('user_id')
+                ->where('receiver_id', $userId)
+                ->where('is_read', false)
+                ->groupBy('user_id')
+                ->selectRaw('user_id, COUNT(*) as unread_count')
+                ->get();
+
+            return response()->json($counts);
+        }
+
+}
+
+     public function unreadCount()
         {
             $userId = JWTAuth::parseToken()->authenticate();
 

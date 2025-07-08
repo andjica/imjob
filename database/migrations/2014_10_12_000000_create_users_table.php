@@ -22,9 +22,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('google_id')->nullable()->unique();
             $table->unsignedBigInteger('role_id')->nullable();
-            $table->string('verification_code')->nullable();
-            $table->timestamp('verification_expires_at')->nullable();
-           $table->boolean('is_mobile_verified')->default(false);
+            $table->boolean('is_mobile_verified')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });

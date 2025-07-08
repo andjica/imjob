@@ -54,7 +54,12 @@
                         <div class="d-flex align-items-center">
                             <!-- Profile Image -->
                             <div class="symbol symbol-50 symbol-light-info mr-5">
-                                <img src="{{ asset('/images/300-12.jpg') }}" class="img-fluid rounded-circle" alt="Profile Image" width="50">
+                                @if ($candidate->candidate->profile_image)
+                            <img src="{{ Storage::url('uploads/mobile/candidate/profile_image/' . $candidate->candidate->profile_image) }}" class="img-fluid rounded-circle" alt="Profile Image" width="50">
+                                @else
+                                    <img src="{{ asset('/images/300-12.jpg') }}" class="img-fluid rounded-circle" alt="Default Profile Image" width="50">
+                                @endif
+
                             </div>
                             <!-- Name and Company -->
                             <div>

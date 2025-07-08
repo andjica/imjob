@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use Carbon\Carbon;
 use App\Models\Job;
+use App\Models\Country;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -22,6 +23,42 @@ class JobRepository
     public function create(array $attributes): Job
     {
         $model = new Job();
+     
+  
+        if (isset($attributes['country_id'])) {
+            $country = Country::find($attributes['country_id']);
+           if ($country && isset($country->iso_code)) {
+                $map = [
+                'RS' => 'sr',
+                'US' => 'en',
+                'DE' => 'de',
+                'FR' => 'fr',
+                'NL' => 'nl',
+                'IT' => 'it',
+                'GR' => 'el',
+                'TR' => 'tr',
+                'ES' => 'es',
+                'PT' => 'pt',
+                'PL' => 'pl',
+                'RO' => 'ro',
+                'CZ' => 'cs',
+                'SK' => 'sk',
+                'HU' => 'hu',
+                'RU' => 'ru',
+                'UA' => 'uk',
+                'BG' => 'bg',
+                'HR' => 'hr',
+                'LK' => 'si', // Šri Lanka — Sinhala (može i 'ta' ako koristiš Tamil)
+                'IN' => 'hi', // Indija — Hindi
+                'CN' => 'zh', // Kina — Chinese
+                'JP' => 'ja', // Japan — Japanese
+                'KR' => 'ko', // Južna Koreja — Korean
+                'AE' => 'ar', // UAE — Arabic
+            ];
+
+                $attributes['language_code'] = $map[strtoupper($country->iso_code)] ?? 'en';
+            }
+        }
         $model->fill($attributes);
         $model->save();
         return $model;

@@ -40,6 +40,7 @@ class Job extends Model
         'max_age',
         'special_requirements',
         'valid_until',
+        'language_code'
     ];
 
     public function skills(): HasMany
