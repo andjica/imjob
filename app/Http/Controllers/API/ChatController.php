@@ -158,20 +158,5 @@ class ChatController extends Controller
             return response()->json($counts);
         }
 
-}
-
-     public function unreadCount()
-        {
-            $userId = JWTAuth::parseToken()->authenticate();
-
-            $counts = Message::select('user_id')
-                ->where('receiver_id', $userId)
-                ->where('is_read', false)
-                ->groupBy('user_id')
-                ->selectRaw('user_id, COUNT(*) as unread_count')
-                ->get();
-
-            return response()->json($counts);
-        }
 
 }
