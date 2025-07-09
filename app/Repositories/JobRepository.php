@@ -249,7 +249,7 @@ class JobRepository
     {
         
         $jobs = Job::where('valid_until', '>', Carbon::now())
-         ->where('job_world_type','==' ,'national')
+         ->where('job_world_type','national')
         ->inRandomOrder()
         ->take(5)
         ->with("country","city","company","category","subCategory")
@@ -262,7 +262,7 @@ class JobRepository
     {
         
         $jobs = Job::where('valid_until', '>', Carbon::now())
-        ->where('job_world_type','==' ,'international')
+        ->where('job_world_type','international')
         ->inRandomOrder()
         ->take(5)
         ->with("country","city","company","category","subCategory")

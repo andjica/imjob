@@ -8,8 +8,10 @@ use App\Models\Country;
 use App\Models\Category;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use App\Models\AiSearchHistory;
 use App\Services\AI\OpenAiService;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Log;
 use App\Services\AI\JobPresenterService;
 use App\Services\AI\CountryNormalizerService;
 
@@ -139,6 +141,16 @@ class ChatAiController extends Controller
         $presentedJobs = $this->jobPresenter->formatJobListForChat($jobs, $userLang);
         $responseText = $this->ai->translateToLanguage('Here are some jobs I found for you 👇', $userLang);
 
+        $user = JWTAuth::parseToken()->authenticate();
+
+        AiSearchHistory::create([
+            'user_id' => $user->id,
+            'user_message' => $userMessage,
+            'ai_response' => $responseText,
+            'jobs' => $presentedJobs,
+            'filters_used' => $params,
+            'language_code' => $userLang,
+        ]);
         return response()->json([
             'message' => $responseText,
             'jobs' => $presentedJobs,
@@ -211,5 +223,15 @@ class ChatAiController extends Controller
         'link' => url("/job/{$job->id}"),
     ]);
 }
+
+    public function history()
+    {
+        $history = AISearchHistory::where('user_id', auth()->id())
+            ->latest()
+            ->take(20)
+            ->get();
+
+        return response()->json($history);
+    }
 
 }

@@ -55,7 +55,7 @@ class FrontController extends Controller
 
     public function activeJobs()
     {
-        $jobsRandomFive = $this->jobServices->randomActiveJobs();
+        $jobsRandomFive = $this->jobServices->randomActiveJobsNational();
 
         return response()->json([
             'randomFiveJobs' => $jobsRandomFive
