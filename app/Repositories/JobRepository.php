@@ -256,4 +256,17 @@ class JobRepository
 
         return $jobs;
     }
+
+    public function randomActiveJobsInternational()
+    {
+        
+        $jobs = Job::where('valid_until', '>', Carbon::now())
+        ->where('job_world_type','==' ,'international')
+        ->inRandomOrder()
+        ->take(5)
+        ->with("country","city","company","category","subCategory")
+        ->get();
+
+        return $jobs;
+    }
 }

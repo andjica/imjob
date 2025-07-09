@@ -55,6 +55,8 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/candidat/{id}', [CandidateProfileController::class, 'getCandidat']);
     //jobs
     Route::get('/jobs/active/', [FrontController::class, 'activeJobs']); // Prikaz aktivnih poslova
+    Route::get('/jobs/active/international', [FrontController::class, 'activeJobsInternational']); // Prikaz aktivnih poslova
+
     Route::get('/job/{id}', [FrontController::class, 'showJob']); // Detalji o poslu
 
     //kroz bodi neka dodje user id 

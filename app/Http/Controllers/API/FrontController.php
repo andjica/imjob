@@ -115,4 +115,14 @@ class FrontController extends Controller
             return response()->json(['message' => 'Can apply to job'], 200);
         }
     }
+
+    public function activeJobsInternational()
+    {
+        $jobs = $this->jobServices->randomActiveJobsInternational();
+
+        return response()->json([
+            'message' => 'International jobs',
+            'data' => $jobs
+        ], 200);
+    }
 }
