@@ -245,10 +245,11 @@ class JobRepository
         return $jobs;
     }
 
-    public function randomActiveJobs()
+    public function randomActiveJobsNational()
     {
         
         $jobs = Job::where('valid_until', '>', Carbon::now())
+         ->where('job_world_type','==' ,'national')
         ->inRandomOrder()
         ->take(5)
         ->with("country","city","company","category","subCategory")
