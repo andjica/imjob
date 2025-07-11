@@ -43,6 +43,9 @@ return [
                 'scheme' => env('PUSHER_SCHEME', 'http'),
             ],
         ],
+        'default' => env('BROADCAST_DRIVER', 'pusher'),
+
+'guard' => 'api', // <-- DODAJ OVO
 
         'ably' => [
             'driver' => 'ably',
@@ -63,5 +66,6 @@ return [
         ],
 
     ],
+    
 
 ];

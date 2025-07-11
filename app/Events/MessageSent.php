@@ -49,7 +49,7 @@ class MessageSent implements ShouldBroadcastNow
                 'text' => $this->message->text,
                 'file_path' => $this->message->file_path,
                 'file_type' => $this->message->file_type,
-                'created_at' => $this->message->created_at->toDateTimeString(),
+                'created_at' => $this->message->created_at->toISOString(),
                 'user_id' => $this->message->user_id,
                 'receiver_id' => $this->message->receiver_id,
                 'sender' => [

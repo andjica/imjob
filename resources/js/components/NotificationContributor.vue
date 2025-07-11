@@ -25,31 +25,35 @@ export default {
     },
     mounted() {
         // Ako dolazimo sa badge resetom (klik sa ikonice)
-        if (localStorage.getItem("resetBadgeFromChat") === "1") {
-            this.unreadTotal = 0;
-            localStorage.removeItem("resetBadgeFromChat");
+        if (localStorage.getItem("resetBadgeContributor") === "1") {
+            emitter.emit("reset-navbar-badge");
+            localStorage.removeItem("resetBadgeContributor");
             return;
         }
 
         this.refreshUnreadTotal();
 
         // Slušaj emitove iz globalnog WebSocket listenera
-        emitter.on("increment-navbar-badge", this.incrementBadge);
-        emitter.on("update-navbar-badge", this.updateUnreadTotal);
-        emitter.on("reset-navbar-badge", this.resetUnreadTotal);
+        this.boundIncrementBadge = this.incrementBadge.bind(this);
+        this.boundUpdateUnreadTotal = this.updateUnreadTotal.bind(this);
+        this.boundResetUnreadTotal = this.resetUnreadTotal.bind(this);
+
+        emitter.on("increment-navbar-badge", this.boundIncrementBadge);
+        // emitter.on("update-navbar-badge", this.boundUpdateUnreadTotal);
+        emitter.on("reset-navbar-badge", this.boundResetUnreadTotal);
     },
     beforeUnmount() {
-        emitter.off("increment-navbar-badge", this.incrementBadge);
-        emitter.off("update-navbar-badge", this.updateUnreadTotal);
-        emitter.off("reset-navbar-badge", this.resetUnreadTotal);
+        emitter.off("increment-navbar-badge", this.boundIncrementBadge);
+        emitter.off("update-navbar-badge", this.boundUpdateUnreadTotal);
+        emitter.off("reset-navbar-badge", this.boundResetUnreadTotal);
     },
     methods: {
         prepareForReset() {
             // Kad kliknemo na ikoncu → postavi flag da se resetuje badge
-            localStorage.setItem("resetBadgeFromChat", "1");
+            localStorage.setItem("resetBadgeContributor", "1");
         },
         refreshUnreadTotal() {
-            fetch("/api/messages/unread-total", {
+            fetch("/messages/unread-total", {
                 method: "GET",
                 headers: {
                     Accept: "application/json",
@@ -59,6 +63,8 @@ export default {
                 .then((res) => res.json())
                 .then((data) => {
                     this.unreadTotal = data.unread_total;
+                    console.log("andjica",this.unreadTotal);
+                
                 })
                 .catch((err) => {
                     console.error(
@@ -71,7 +77,7 @@ export default {
             this.unreadTotal = total;
         },
         incrementBadge() {
-            this.unreadTotal++;
+            this.refreshUnreadTotal();
         },
         resetUnreadTotal() {
             this.unreadTotal = 0;

@@ -26,6 +26,7 @@ class CandidatProfile extends Model
         'school_degree',
         'school_year_start',
         'school_year_end',
+        'is_finished_profile'
     ];
 
     /**
@@ -66,7 +67,12 @@ class CandidatProfile extends Model
     public function jobs(): BelongsToMany
     {
         return $this->belongsToMany(Job::class, 'candidate_job', 'candidate_id', 'job_id')
-                    ->withPivot('status', 'applied_at')
+                    ->withPivot('id', 'status', 'applied_at', 'created_at')
                     ->withTimestamps();
+    }
+
+    public function job()
+    {
+        return $this->belongsTo(Job::class);
     }
 }

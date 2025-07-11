@@ -37,15 +37,17 @@ class ChatController extends Controller
             'receiver_id' => 'required|exists:users,id',
         ]);
     
-        $filePath = null;
-        $fileType = null;
-    
         $message = new Message();
+        if ($request->hasFile('file')) 
+         {
+                $file = $request->file('file');
+                $path = $file->store('uploads/chat_files', 'public');
+                $message->file_path = $path;
+                $message->file_type = $file->getClientMimeType();
+        }
         $message->user_id = auth()->user()->id;
         $message->receiver_id = $data['receiver_id'];
         $message->text = $data['text'];
-        $message->file_path = $filePath;
-        $message->file_type = $fileType;
     
         $message->save();
     
@@ -68,7 +70,7 @@ class ChatController extends Controller
         })->orWhere(function ($q) use ($user, $receiverId) {
             $q->where('user_id', $receiverId)->where('receiver_id', $user->id);
         })
-        ->orderBy('created_at', 'asc')
+        ->orderBy('created_at', 'DESC')
         ->get();
     
         return response()->json($messages);
@@ -89,7 +91,7 @@ class ChatController extends Controller
 
     public function unreadCount(Request $request)
     {
-        $userId = $request->user()->id;
+         $userId = auth()->user()->id;
 
         $counts = Message::select('user_id')
             ->where('receiver_id', $userId)
@@ -104,7 +106,7 @@ class ChatController extends Controller
 
     public function unreadTotal(Request $request)
     {
-        $userId = $request->user()->id;
+        $userId = auth()->user()->id;
 
         $count = Message::where('receiver_id', $userId)
             ->where('is_read', false)

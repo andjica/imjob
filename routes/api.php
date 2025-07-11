@@ -1,10 +1,17 @@
 <?php
 use Illuminate\Http\Request;
+use App\Models\CandidatProfile;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ChatController;
+use App\Http\Controllers\JobController;
+use Illuminate\Support\Facades\Broadcast;
+use App\Http\Controllers\ChatAiController;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\FrontController;
+use App\Http\Controllers\API\SettingsController;
+use App\Http\Controllers\API\RecruitmentController;
 use App\Http\Controllers\API\CandidateProfileController;
+use App\Http\Controllers\API\ChatController as ApiChatController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -33,21 +40,72 @@ Route::get('/country/{countryId}/phone-code', [FrontController::class, 'getPhone
 
 //only logged users can use chat
 Route::middleware('auth:api')->group(function () {
-    Route::get('/messages', [ChatController::class, 'index']); // prikaz poruka
-    Route::post('/messages', [ChatController::class, 'store']); // slanje poruka
+    Broadcast::routes();
+
+    //chats
+    Route::get('/messages/{receiverId}', [ApiChatController::class, 'getMessages']); // prikaz poruka
+    Route::post('/messages', [ApiChatController::class, 'store']); // slanje poruka
+    Route::get('/active/contacts/chats', [ApiChatController::class, 'getChatContacts']);
+    Route::post('/messages/mark-as-read/{userId}', [ApiChatController::class, 'markAsRead']);
+
+    Route::get('/messages/total/unread/count', [ApiChatController::class, 'totalUnreadCount']);
+    Route::get('/messages/unread/count', [ApiChatController::class, 'unreadCount']);
     //store Candidat Profile
-    Route::post('/candidat/profile/create', [CandidateProfileController::class, 'store']);
+    // Route::post('/candidat/profile/create', [CandidateProfileController::class, 'store']);
+    Route::post('/candidat/profile/update/{userId}', [CandidateProfileController::class, 'update']); // Ažuriran`j`e profila
+    Route::get('/candidat/{id}', [CandidateProfileController::class, 'getCandidat']);
+    //jobs
+    Route::get('/jobs/active/national', [FrontController::class, 'activeJobs']); // Prikaz aktivnih poslova national
+    Route::get('/jobs/active/international', [FrontController::class, 'activeJobsInternational']); // Prikaz aktivnih poslova international
+
+    Route::get('/job/{id}', [FrontController::class, 'showJob']); // Detalji o poslu
+
+    //kroz bodi neka dodje user id 
+    Route::post('/job/{jobId}/candidat/{candidatId}/apply', [FrontController::class, 'applyJob']);
+    Route::get('/job/{jobId}/candidat/{candidatId}/apply', [FrontController::class, 'alreadyApplyJob']);
+
+    //recruitment process
+    Route::get('/applied-jobs/', [RecruitmentController::class, 'getAppliedJobsByCandidate']);
+    Route::get('/job/{jobId}/candidat/{candidateId}/check', [JobController::class, 'hasAlreadyApplied']);
+
+    //settings
+   Route::post('/update-email', [SettingsController::class, 'updateEmail']);
+   Route::post('/update-password', [SettingsController::class, 'updatePassword']);
+
+   //chat
+   Route::post('/store/messages', [ApiChatController::class, 'store']);
+
+   //recruitment process za joneta
+    Route::get('/recruitment/status/{candidateJobId}', [RecruitmentController::class, 'showStatus']);
+
+
+    Route::get('/job/{id}/translated', [ChatAiController::class, 'getTranslatedJob']);
+
+
+    Route::get('/chat/history', [ChatAiController::class, 'history']);
+
 });
+
+
 
 Route::middleware('auth:api')->get('/me', function (Request $request) {
     return response()->json($request->user());
 });
 
-// 🎯 WEB + VUE korisnici (Sanctum)
-Route::middleware(['auth:sanctum'])->prefix('messages')->group(function () {
-    Route::get('/messages', [ChatController::class, 'index']); // prikaz poruka
-    Route::post('/messages', [ChatController::class, 'store']); // slanje poruka   
-    Route::post('/mark-as-read/{userId}', [ChatController::class, 'markAsRead']);
-    Route::get('/unread-count', [ChatController::class, 'unreadCount']);
-    Route::get('/unread-total', [ChatController::class, 'unreadTotal']);
-});
+
+
+Route::post('/broadcasting/auth', function (Request $request) {
+    return Broadcast::auth($request);
+})->middleware('jwt.auth');
+
+Route::post('/broadcasting/debug-auth', function (Request $request) {
+    return response()->json([
+        'auth_user' => auth()->user(),
+        'token' => $request->bearerToken(),
+        'channel' => $request->channel_name,
+    ]);
+})->middleware('jwt.auth');
+
+//AI ROUTES
+Route::post('/chat/search', [ChatAiController::class, 'handle']);
+Route::middleware('auth:api')->post('/chat/search/user', [ChatAiController::class, 'handleWithUserRequest']);

@@ -189,7 +189,7 @@
 
                 <!--begin::Menu item-->
                 <div class="menu-item px-5">
-                    <a href="{{ asset('/logout') }}" class="menu-link px-5">
+                    <a href="{{ asset('/logout') }}" class="menu-link px-5" onclick="localStorage.clear();">
                         Sign Out
                     </a>
                 </div>

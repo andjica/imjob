@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\CandidatProfile;
 use App\Mail\VerificationCodeMail;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Controllers\Controller;
-use App\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
@@ -20,7 +21,7 @@ class AuthController extends Controller
             'lastName' => 'required|string|max:50',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6',
-            'passwordConfirm' => 'required|string|same:password',
+            'confirmPassword' => 'required|string|same:password',
         ]);
     
         $code = rand(1000, 9999);
@@ -42,6 +43,7 @@ class AuthController extends Controller
             'verification_expires_at' => now()->addMinutes(2),
             'role_id' => $role->id,
         ]);
+        
     
         Mail::to($user->email)->send(new VerificationCodeMail($user, $code));
     
@@ -64,7 +66,15 @@ class AuthController extends Controller
         }
     
         $user = auth()->user();
-    
+
+        if (!$user->is_mobile_verified)
+        {
+            return response()->json([
+            'jwt_token' => $token,
+            'token_type' => 'Bearer',
+            'user' => $user,'error' => 'Mobile number not verified.'], 403);
+        }
+        
         return response()->json([
             'jwt_token' => $token,
             'token_type' => 'Bearer',
@@ -82,7 +92,7 @@ class AuthController extends Controller
     {
         $request->validate([
             'email' => 'required|email',
-            'verification_code' => 'required|digits:4',
+            'verification_code' => 'required',
         ]);
 
         $user = User::where('id', $userId)
@@ -110,10 +120,16 @@ class AuthController extends Controller
 
        
         $user->email_verified_at = now();
+        $user->is_mobile_verified = 1;
         $user->save();
+
+        $candidateProfile = new CandidatProfile();
+        $candidateProfile->user_id = $user->id;
+        $candidateProfile->save();
 
         return response()->json([
             'message' => 'Verification successful.',
+            'candidateProfile' => $candidateProfile
         ], 200);
     }
 

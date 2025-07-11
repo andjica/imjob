@@ -87,7 +87,7 @@
                                 }
                             @endphp
                             <div class="nav-item">
-                                <a href="{{ asset('/recruiter/notifications') }}"
+                                <a href="{{ asset('/company/freelancer/notifications') }}"
                                 class="nav-link {{ request()->is('recruiter/notifications') ? 'active' : '' }}">
                                     <span class="nav-icon">
                                         <i class="fa fa-user-plus"></i>
@@ -164,7 +164,7 @@
 
                             <!--begin::Menu item-->
                             <div class="menu-item px-5">
-                                <a href="{{asset('/logout')}}" class="menu-link px-5">
+                                <a href="{{asset('/logout')}}" class="menu-link px-5"  onclick="localStorage.clear();">
                                     Sign Out
                                 </a>
                             </div>

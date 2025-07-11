@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Recruiter;
 
-use App\Interfaces\CityInterface;
 use App\Models\Job;
 use App\Models\City;
 use App\Models\Company;
 use App\Models\Country;
 use App\Models\JobType;
+use App\Models\Message;
 use App\Models\Category;
 use App\Models\Candidate;
 use App\Models\Recruiter;
@@ -16,6 +16,7 @@ use FontLib\Table\Type\fpgm;
 use Illuminate\Http\Request;
 use App\Actions\CreateMeeting;
 use App\Models\CompanyRecruiter;
+use App\Interfaces\CityInterface;
 use App\Models\RecruitmentProcess;
 use App\Services\CandidateService;
 use App\Models\RecruitmentSubphase;
@@ -77,7 +78,6 @@ class FrontController extends Controller
     {
         $user   = auth()->user();
         $userId = $user->id;
-
         $recruiter = $this->recruiterServices->getOneByUserId($userId);
         return view("recruiter.pages.index", compact("recruiter"));
     }
@@ -253,6 +253,7 @@ class FrontController extends Controller
     public function candidateRecruitmentProcess(Candidate $candidate): Factory|View|Application
     {
         $currentLoginUser = auth()->user();
+    
         if ($candidate->status !== 'accept' || !$candidate->recruitmentProcess) {
             abort(404);
         }
@@ -274,10 +275,15 @@ class FrontController extends Controller
         /** @var User $user */
         $user = auth()->user();
         $contributors = $user->recruiter->contributors()
+            ->with(['user', 'lastSentMessage']) // moraš imati relaciju lastSentMessage u Contributor modelu
             ->wherePivot('status', ContributorRecruiter::ACTIVE)
-            ->with('user')
-            ->get();
-         
+            ->get()
+            ->map(function ($contributor) {
+                // DODAJ svojstvo direktno na model
+                $contributor->last_message_time = $contributor->lastSentMessage?->created_at;
+                return $contributor;
+            });
+        
         return view(
             'recruiter.pages.recruitment.candidat-recruitment-process',
             compact(
@@ -401,10 +407,26 @@ class FrontController extends Controller
         $contributors = $user->recruiter->contributors()
             ->wherePivot('status', ContributorRecruiter::ACTIVE)
             ->with('user')
-            ->get();
+            ->get()
+            ->map(function ($contributor) {
+                $userId = $contributor->user->id ?? $contributor->id;
+
+                $lastMessage = Message::where(function ($q) use ($userId) {
+                    $q->where('user_id', $userId)
+                        ->orWhere('receiver_id', $userId);
+                })
+                    ->latest('created_at')
+                    ->first();
+
+                $contributor->last_message_at = $lastMessage?->created_at;
+
+                return $contributor;
+            })
+            ->sortByDesc('last_message_at') // sortiraj po najnovijoj poruci
+            ->values();
 
         $candidates = $this->recruiterServices->getAcceptedCandidate();
-    
+
         return view('recruiter.pages.chat', compact('contributors','candidates'));
     }
 

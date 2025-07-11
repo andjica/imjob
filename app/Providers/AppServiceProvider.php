@@ -78,6 +78,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(RecruitmentProcessInterface::class, RecruitmentProcessService::class);
         $this->app->bind(CandidateProfileInterface::class, CandidateProfileService::class);
         $this->app->bind(ChatInterface::class, ChatService::class);
+        $this->app->bind(RecruitmentProcessInterface::class, RecruitmentProcessService::class);
     }
 
     /**

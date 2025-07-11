@@ -2,47 +2,48 @@
 
 namespace App\Http\Controllers\CompanyFreelancer;
 
+use Exception;
+use App\Models\Job;
+use App\Models\User;
+use App\Models\Company;
+use App\Models\Message;
+use App\Models\Candidate;
+use App\Models\Recruiter;
+use App\Models\Contributor;
 use App\Actions\CreateMeeting;
 use App\Actions\FollowCompany;
-use App\Actions\FollowContributor;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\CandidateStatusRequest;
-use App\Http\Requests\CompleteSubphaseRequest;
-use App\Http\Requests\FollowCompanyRequest;
-use App\Http\Requests\FollowContributorRequest;
-use App\Http\Requests\StoreMeetingRequest;
-use App\Interfaces\CategoryInterface;
+use App\Models\CompanyRecruiter;
 use App\Interfaces\CityInterface;
-use App\Interfaces\CompanyFreelancerInterface;
+use Illuminate\Http\JsonResponse;
+use App\Actions\FollowContributor;
+use App\Models\RecruitmentProcess;
+use App\Services\CandidateService;
+use App\Models\RecruitmentSubphase;
+use App\Repositories\JobRepository;
+use Illuminate\Contracts\View\View;
+use App\Http\Controllers\Controller;
 use App\Interfaces\CompanyInterface;
+use App\Interfaces\CountryInterface;
+use App\Interfaces\JobTypeInterface;
+use App\Models\ContributorRecruiter;
+use App\Interfaces\CategoryInterface;
+use Illuminate\Http\RedirectResponse;
+use App\Interfaces\RecruiterInterface;
+use Illuminate\Contracts\View\Factory;
+use App\Interfaces\FreelancerInterface;
 use App\Interfaces\CompanyTypeInterface;
 use App\Interfaces\ContributorInterface;
-use App\Interfaces\CountryInterface;
-use App\Interfaces\FreelancerInterface;
-use App\Interfaces\JobTypeInterface;
-use App\Interfaces\RecruiterInterface;
 use App\Interfaces\SubCategoryInterface;
-use App\Models\AvailableRecruitmentSubphases;
-use App\Models\Candidate;
-use App\Models\Company;
-use App\Models\CompanyRecruiter;
-use App\Models\Contributor;
-use App\Models\ContributorRecruiter;
-use App\Models\Job;
-use App\Models\Recruiter;
-use App\Models\RecruitmentProcess;
-use App\Models\RecruitmentSubphase;
-use App\Models\User;
-use App\Repositories\JobRepository;
-use App\Services\CandidateService;
+use App\Http\Requests\StoreMeetingRequest;
+use App\Http\Requests\FollowCompanyRequest;
 use App\Services\RecruitmentProcessWorkflow;
-use Exception;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
+use App\Http\Requests\CandidateStatusRequest;
+use App\Models\AvailableRecruitmentSubphases;
 use Symfony\Component\HttpFoundation\Request;
+use App\Http\Requests\CompleteSubphaseRequest;
+use App\Interfaces\CompanyFreelancerInterface;
+use App\Http\Requests\FollowContributorRequest;
+use Illuminate\Contracts\Foundation\Application;
 
 class FrontController extends Controller
 {
@@ -182,7 +183,7 @@ class FrontController extends Controller
         /** @var User $user */
         $user = auth()->user();
         //$isConnected = $user->recruiter->companies->contains($company);
-        
+
         $isOwnCompany = $user->recruiter->company?->id === $company->id;
         $similarCompanies = $this->companyServices->getCompaniesByCategory($company->category->id);
 
@@ -231,7 +232,7 @@ class FrontController extends Controller
     public function recruitmentProcess(Job $job): Factory|View|Application
     {
         $candidates = $job->candidates()->with('user', 'candidate')->get();
-        
+
         return view('company-freelancer.pages.recruitment.job-recruitment', compact('job', 'candidates'));
     }
 
@@ -243,7 +244,7 @@ class FrontController extends Controller
         if ($candidate->status !== 'accept' || !$candidate->recruitmentProcess) {
             abort(404);
         }
-           
+
         $recruitmentProcess = $candidate->recruitmentProcess()->with('subphases')->first();
 
         $availablePhases = AvailableRecruitmentSubphases::where('phase', $candidate->recruitmentProcess->current_phase)->get();
@@ -259,11 +260,21 @@ class FrontController extends Controller
 
         /** @var User $user */
         $user = auth()->user();
+        // $contributors = $user->recruiter->contributors()
+        //     ->with('user')
+        //     ->wherePivot('status', ContributorRecruiter::ACTIVE)
+        //     ->get();
         $contributors = $user->recruiter->contributors()
-            ->with('user')
-            ->wherePivot('status', ContributorRecruiter::ACTIVE)
-            ->get();
-        
+        ->with(['user', 'lastSentMessage']) // moraš imati relaciju lastSentMessage u Contributor modelu
+        ->wherePivot('status', ContributorRecruiter::ACTIVE)
+        ->get()
+        ->map(function ($contributor) {
+            // DODAJ svojstvo direktno na model
+            $contributor->last_message_time = $contributor->lastSentMessage?->created_at;
+            return $contributor;
+        });
+
+
         return view(
             'company-freelancer.pages.recruitment.candidat-recruitment-process',
             compact(
@@ -283,7 +294,7 @@ class FrontController extends Controller
      */
     public function createMeeting(StoreMeetingRequest $request, Candidate $candidate, CreateMeeting $createMeeting): RedirectResponse
     {
-        
+
         $createMeeting->execute($candidate, $request->all());
 
         return redirect()->back()->with('success', 'Meeting created succssfully');
@@ -392,6 +403,10 @@ class FrontController extends Controller
         $userId = auth()->user()->id;
         $recruiter = Recruiter::where('user_id', $userId)->first();
 
+        if(!$recruiter->education)
+        {
+            return redirect('/company/freelancer/edit')->with('error', 'Please finish your profile');
+        }
         $recruiter->education->school;
 
         $recruiter->user;
@@ -405,10 +420,26 @@ class FrontController extends Controller
         $contributors = $user->recruiter->contributors()
             ->with('user')
             ->wherePivot('status', ContributorRecruiter::ACTIVE)
-            ->get();
+            ->get()
+            ->map(function ($contributor) {
+                $userId = $contributor->user->id ?? $contributor->id;
+
+                $lastMessage = Message::where(function ($q) use ($userId) {
+                    $q->where('user_id', $userId)
+                        ->orWhere('receiver_id', $userId);
+                })
+                    ->latest('created_at')
+                    ->first();
+
+                $contributor->last_message_at = $lastMessage?->created_at;
+
+                return $contributor;
+            })
+            ->sortByDesc('last_message_at') // sortiraj po najnovijoj poruci
+            ->values();
 
         $candidates = $this->recruiterServices->getAcceptedCandidate();
-
+        // return dd($candidates);
         return view('company-freelancer.pages.chat', compact('contributors', 'candidates'));
     }
 }

@@ -32,7 +32,7 @@
                     <h3 class="card-title">Select Your Role</h3>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('choose-role-update') }}" method="POST">
+                    <form id="form-role" action="{{ route('choose-role-update') }}" method="POST">
                         @csrf
 
                         <div class="mb-10">
@@ -92,17 +92,45 @@
 </div>
 @endsection
 
+
 @section('js')
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const roleOptions = document.querySelectorAll('.role-option');
+    $(document).ready(function () {
+        const roleOptions = $('.role-option');
+        const radioButtons = $('input[name="roleId"]');
 
-        roleOptions.forEach(option => {
-            option.addEventListener('click', () => {
-                roleOptions.forEach(opt => opt.classList.remove('active-role'));
-                option.classList.add('active-role');
-            });
+        roleOptions.on('click', function () {
+            roleOptions.removeClass('active-role');
+            $(this).addClass('active-role');
+
+            const input = $(this).find('input[type="radio"]');
+            if (input.length) {
+                input.prop('checked', true);
+            }
+
+            $('#role-error').remove(); // Ukloni poruku ako postoji
+        });
+
+        $('#form-role').on('submit', function (e) {
+            const selected = radioButtons.is(':checked');
+
+            if (!selected) {
+                e.preventDefault(); // Blokiraj submit
+
+                if ($('#role-error').length === 0) {
+                    const errorMsg = $('<div>', {
+                        class: 'text-danger mt-2 text-center',
+                        id: 'role-error',
+                        text: 'Please select a role before continuing.'
+                    });
+
+                    $('.mb-10').append(errorMsg);
+                    errorMsg[0].scrollIntoView({ behavior: 'smooth' });
+                }
+            }
         });
     });
 </script>
 @endsection
+
+

@@ -39,7 +39,8 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
         'google_id',
         'role_id',
         'verification_code',
-        'verification_expires_at'
+        'verification_expires_at',
+        'is_mobile_verified'
     ];
 
     /**
@@ -111,5 +112,10 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     {
         return \App\Models\Message::where('user_id', $this->id)
             ->orWhere('receiver_id', $this->id);
+    }
+
+    public function candidateProfile()
+    {
+        return $this->hasOne(CandidatProfile::class);
     }
 }

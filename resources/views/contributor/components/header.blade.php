@@ -59,36 +59,32 @@
                 <!--end::Menu wrapper-->
             </div>
             <div class="d-flex flex-row align-items-center me-6">
-            <div class="nav-item">
-            <div class="logo__notification">
-                @include('contributor.components.notification')
+                @php
+                    $contributor = auth()->user()->contributor ?? null;
+                    $pendingCount = $contributor ? $contributor->pendingRecruiters()->count() : 0;
+                @endphp
+
+                <div class="nav-item">
+                    <a href="{{ asset('/contributor/notifications') }}" class="nav-link">
+                        <i id="notification-icon" class="fas fa-bell"></i>
+                        <span id="notification-badge" class="badge bg-danger"
+                            style="{{ $pendingCount > 0 ? '' : 'display: none;' }}">
+                            {{ $pendingCount }}
+                        </span>
+                    </a>
                 </div>
-            </div>
-          
-            @php
-                $contributor = auth()->user()->contributor ?? null;
-                $pendingCount = $contributor ? $contributor->pendingRecruiters()->count() : 0;
-            @endphp
-
-            <div class="nav-item">
-                <a href="{{asset('/contributor/notifications')}}" class="nav-link">
-                    <i id="notification-icon" class="fas fa-bell"></i>
-                    <span
-                        id="notification-badge"
-                        class="badge bg-danger"
-                        style="{{ $pendingCount > 0 ? '' : 'display: none;' }}">
-                        {{ $pendingCount }}
-                    </span>
-                </a>
-            </div>
-
+                <div class="nav-item">
+                    <div class="logo__notification">
+                        @include('contributor.components.notification')
+                    </div>
+                </div>
             </div>
         </div>
         <div class="app-navbar-item ms-1 mt-5 ms-md-3" id="kt_header_user_menu_toggle">
             <!--begin::Menu wrapper-->
             <div class="cursor-pointer" data-kt-menu-trigger="{default: 'click', lg: 'hover'}"
                 data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">
-                <img src="{{asset('/images/logo1.png')}}" width="90px" class="img-fluid">
+                <img src="{{ asset('/images/logo1.png') }}" width="90px" class="img-fluid">
             </div>
 
             <!--begin::User account menu-->
@@ -99,7 +95,7 @@
                     <div class="menu-content d-flex align-items-center px-3">
                         <!--begin::Avatar-->
                         <div class="logo">
-                            <img src="{{asset('/images/logo1.png')}}" width="70px" class="img-fluid">
+                            <img src="{{ asset('/images/logo1.png') }}" width="70px" class="img-fluid">
                         </div>
                         <!--end::Avatar-->
 
@@ -137,7 +133,7 @@
 
                 <!--begin::Menu item-->
                 <div class="menu-item px-5">
-                    <a href="{{ asset('/logout') }}" class="menu-link px-5">
+                    <a href="{{ asset('/logout') }}" class="menu-link px-5"  onclick="localStorage.clear();">
                         Sign Out
                     </a>
                 </div>

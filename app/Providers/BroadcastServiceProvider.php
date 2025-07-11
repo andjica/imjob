@@ -14,8 +14,11 @@ class BroadcastServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Broadcast::routes();
-
+        if (request()->is('api/*')) {
+            Broadcast::routes(['middleware' => ['auth:jwt']]); // JWT za mobilni
+        } else {
+            Broadcast::routes(['middleware' => ['web']]); // Cookie/session auth za web (ili možeš staviti i bez auth)
+        }
         require base_path('routes/channels.php');
     }
 }

@@ -24,4 +24,29 @@ class CandidateProfileController extends Controller
             'data' => $candidateProfile
         ], 200);
     }
+
+
+    public function update(Request $request, $userId)
+    {
+        $candidateProfileUpdate = $this->candidateProfileService->update($request, $userId);
+
+        return response()->json([
+            'candidateProfile' => $candidateProfileUpdate,
+            'message' => 'Updated successfully!'
+        ], 201);
+    }
+
+    public function getCandidat($userId)
+    {
+        $candidaProfile = $this->candidateProfileService->get($userId);
+
+        if(!$candidaProfile)
+        {
+            return response()->json(['message'=>'Not found candidate profile'], 404);
+        }
+        
+        return response()->json(['message' => 'Ok',
+         'candidateProfile'=>$candidaProfile], 
+         200);
+    }
 }

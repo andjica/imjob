@@ -33,7 +33,11 @@
         @else
             <div class="row">
                 <div class="col-lg-12">
-                    @include('contributor.components.chat')
+                    <div id="app">
+                        <chat-component-contributor :recruiters='@json($activeConnections ?? [])'
+                            :current-user-id='@json(auth()->check() ? auth()->user()->id : null)'>
+                        </chat-component-contributor>
+                    </div>
                 </div>
             </div>
         @endif

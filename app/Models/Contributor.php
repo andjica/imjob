@@ -75,4 +75,9 @@ class Contributor extends Model
                     ->with('availableSubphase', 'recruitmentProcess.candidate.user');
     }
    
+    public function lastSentMessage()
+    {
+        return $this->hasOne(Message::class, 'user_id', 'user_id')->latestOfMany();
+    }
+
 }

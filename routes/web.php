@@ -5,6 +5,7 @@ use App\Actions\FollowContributor;
 use App\Http\Controllers\{
     Admin\FrontController as AdminFrontController,
     Auth\LoginController,
+    ChatAiController,
     City\CityController,
     Company\CompanyController,
     Company\FrontController as CompanyFrontController,
@@ -28,7 +29,6 @@ use App\Http\Controllers\{
     RecruitmentController,
     ChatController
 };
-use App\Http\Controllers\API\FrontController as APIFrontController;
 use App\Http\Controllers\CompanyFreelancer\FrontController;
 use App\Http\Controllers\Contributor\PostController;
 use App\Http\Controllers\Front\LandingController;
@@ -80,10 +80,17 @@ Route::middleware('auth')->group(function () {
     Route::put('/job/{id}/update', [JobController::class, 'update'])->name('update-job');
     Route::post('company/dashboard/store', [CompanyController::class, 'store'])->name('company-dashboard-store');
     Route::get('company/dashboard/information/create', [CompanyFrontController::class, 'informationCreate'])->name('company-dashboard-information-create');
+
+
+    Route::get('/messages', [ChatController::class, 'index']); // prikaz poruka
+    Route::post('/messages', [ChatController::class, 'store']); // slanje poruka   
+    Route::post('/messages/mark-as-read/{userId}', [ChatController::class, 'markAsRead']);
+    Route::get('/messages/unread-count', [ChatController::class, 'unreadCount']);
+    Route::get('/messages/unread-total', [ChatController::class, 'unreadTotal']);
+    Route::get('/messages/{receiver_id}', [ChatController::class, 'getMessages']);
 });
 
-Route::middleware(['auth:web'])->post('/web/messages', [ChatController::class, 'store']);
-Route::middleware(['auth:web'])->get('/web/messages/{receiver_id}', [ChatController::class, 'getMessages']);
+
 
 
 // Admin Routes
@@ -305,4 +312,6 @@ Route::middleware(['auth', 'contributor', 'verified'])->prefix('contributor')->n
 Route::get('/', [LandingController::class, 'index'])->name('index');
 Route::get('/contact-us', [LandingController::class, 'getContactUs'])->name('contact-us');
 Route::get('/about-us', [LandingController::class, 'getAboutUs'])->name('about-us');
+
+
 
