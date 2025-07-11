@@ -49,15 +49,16 @@
             </thead>
             <tbody>
             @foreach($candidates as $candidate)
+            {{-- @dump($candidate->candidate) --}}
                 <tr>
                     <td>
                         <div class="d-flex align-items-center">
                             <!-- Profile Image -->
                             <div class="symbol symbol-50 symbol-light-info mr-5">
                                 @if ($candidate->candidate->profile_image)
-                            <img src="{{ Storage::url('uploads/mobile/candidate/profile_image/' . $candidate->candidate->profile_image) }}" class="img-fluid rounded-circle" alt="Profile Image" width="50">
+                            <img src="{{ Storage::url( $candidate->candidate->profile_image) }}" class="img-fluid rounded-circle" alt="Profile Image" width="50">
                                 @else
-                                    <img src="{{ asset('/images/300-12.jpg') }}" class="img-fluid rounded-circle" alt="Default Profile Image" width="50">
+                                    <img src="{{ asset('public/images/user-286.png') }}" class="img-fluid rounded-circle" alt="Default Profile Image" width="50">
                                 @endif
 
                             </div>
@@ -80,8 +81,9 @@
                     </td>
                     <td>
                         <!-- PDF Link -->
-                        <a href="#" class="text-danger">
+                        <a href="{{Storage::url($candidate->candidate->cv)}}" download target="_blank" class="text-danger">
                             <i class="fa-solid fa-file-pdf fa-xl text-danger"></i>
+                            {{-- {{ $candidate->candidate->cv}} --}}
                         </a>
                     </td>
                     <td>

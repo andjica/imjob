@@ -468,6 +468,7 @@ export default {
                     },
                 });
 
+                console.log("Unutar funkcjije mark as read: ",this.unreadMap[userId]);
                 this.unreadMap[userId] = 0;
                 this.updateUnreadTotal();
             } catch (err) {

@@ -23400,9 +23400,9 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
     currentPath: function currentPath() {
       return window.location.pathname;
     },
-    isRecruiterChatRoute: function isRecruiterChatRoute() {
-      return this.currentPath === "/recruiter/chats";
-    },
+    // isRecruiterChatRoute() {
+    //   return this.currentPath === "/recruiter/chats";
+    // },
     defaultImage: function defaultImage() {
       return _public_images_user_286_png__WEBPACK_IMPORTED_MODULE_1__["default"];
     },
@@ -23991,19 +23991,20 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
                 }
               });
             case 5:
+              console.log("Unutar funkcjije mark as read: ", _this3.unreadMap[userId]);
               _this3.unreadMap[userId] = 0;
               _this3.updateUnreadTotal();
-              _context.next = 12;
+              _context.next = 13;
               break;
-            case 9:
-              _context.prev = 9;
+            case 10:
+              _context.prev = 10;
               _context.t0 = _context["catch"](2);
               console.error("Error marking messages as read for user ".concat(userId, ":"), _context.t0);
-            case 12:
+            case 13:
             case "end":
               return _context.stop();
           }
-        }, _callee, null, [[2, 9]]);
+        }, _callee, null, [[2, 10]]);
       }))();
     },
     fetchMessages: function fetchMessages(userId) {
@@ -26120,7 +26121,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Chat_recruiterAll_vue__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/Chat-recruiterAll.vue */ "./resources/js/components/Chat-recruiterAll.vue");
 /* harmony import */ var laravel_echo__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! laravel-echo */ "./node_modules/laravel-echo/dist/echo.js");
 /* harmony import */ var _eventBus__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./eventBus */ "./resources/js/eventBus.js");
-/* provided dependency */ var process = __webpack_require__(/*! process/browser.js */ "./node_modules/process/browser.js");
 function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
@@ -26142,7 +26142,7 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 window.Pusher = __webpack_require__(/*! pusher-js */ "./node_modules/pusher-js/dist/web/pusher.js");
 window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_9__["default"]({
   broadcaster: "pusher",
-  key: process.env.MIX_PUSHER_APP_KEY || "localkey",
+  key: "localkey" || 0,
   wsHost: window.location.hostname,
   wsPort: 6001,
   forceTLS: false,
@@ -32910,7 +32910,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.user-active {\r\n    background: #f5f8fa !important;\n}\n.user__details {\r\n    display: flex;\r\n    justify-content: flex-start;\r\n    width: 100%;\n}\n.active-contributor {\r\n    background: #f5f8fa !important;\n}\n.btn-emojis {\r\n    background: transparent;\r\n    border: none;\r\n    font-size: 1.5rem;\r\n    cursor: pointer;\r\n    background: #f5f8fa;\r\n    padding: 8px;\r\n    border-radius: 10%;\n}\n.hr_custome {\r\n    height: 5px !important;\r\n    width: 100%;\n}\n.message-info {\r\n    position: absolute;\r\n    bottom: 90px;\r\n    left: 21px;\r\n    background-color: #e4e6ef !important;\r\n    padding: 10px 15px;\r\n    border-radius: 15px;\n}\n.scroll-section {\r\n    max-height: 300px;\r\n    /* ili koliko god želiš */\r\n    overflow-y: auto;\r\n    margin-bottom: 1rem;\r\n    padding: 0.5rem;\n}\n.badge-danger {\r\n    height: 20px;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.user-active {\r\n  background: #f5f8fa !important;\n}\n.user__details {\r\n  display: flex;\r\n  justify-content: flex-start;\r\n  width: 100%;\n}\n.active-contributor {\r\n  background: #f5f8fa !important;\n}\n.btn-emojis {\r\n  background: transparent;\r\n  border: none;\r\n    font-size: 1.5rem;\r\n    cursor: pointer;\r\n    background: #f5f8fa;\r\n    padding: 8px;\r\n    border-radius: 10%;\n}\n.hr_custome {\r\n    height: 5px !important;\r\n    width: 100%;\n}\n.message-info {\r\n    position: absolute;\r\n    bottom: 90px;\r\n    left: 21px;\r\n    background-color: #e4e6ef !important;\r\n    padding: 10px 15px;\r\n    border-radius: 15px;\n}\n.scroll-section {\r\n    max-height: 300px;\r\n    /* ili koliko god želiš */\r\n    overflow-y: auto;\r\n    margin-bottom: 1rem;\r\n    padding: 0.5rem;\n}\n.badge-danger {\r\n    height: 20px;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

@@ -82,15 +82,6 @@
                                             <span class="menu-title">Find Contributors</span>
                                         </a>
                                     </div>
-                                    <div class="menu-item menu-sub-indention menu-accordion">
-                                        <a class="menu-link {{ Route::currentRouteName() === 'company-freelancer-chats' ? 'active' : '' }}" 
-                                        href="{{ route('company-freelancer-chats') }}">
-                                        <span class="menu-bullet">
-                                            <span class="bullet bullet-dot"></span>
-                                        </span>
-                                        <span class="menu-title">Chats with Contributors</span>
-                                    </a>
-                                    </div>
                             </div>
 
                         </div>
@@ -243,6 +234,15 @@
                                             </span>
                                             <span class="menu-title">All connections</span> 
                                         </a>
+                                    </div>
+                                    <div class="menu-item menu-sub-indention menu-accordion">
+                                        <a class="menu-link {{ Route::currentRouteName() === 'company-freelancer-chats' ? 'active' : '' }}" 
+                                        href="{{ route('company-freelancer-chats') }}">
+                                        <span class="menu-bullet">
+                                            <span class="bullet bullet-dot"></span>
+                                        </span>
+                                        <span class="menu-title">Chats with All</span>
+                                    </a>
                                     </div>
                                 </div>
                               

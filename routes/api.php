@@ -51,11 +51,11 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/messages/unread/count', [ApiChatController::class, 'unreadCount']);
     //store Candidat Profile
     // Route::post('/candidat/profile/create', [CandidateProfileController::class, 'store']);
-    Route::post('/candidat/profile/update/{userId}', [CandidateProfileController::class, 'update']); // Ažuriranje profila
+    Route::post('/candidat/profile/update/{userId}', [CandidateProfileController::class, 'update']); // Ažuriran`j`e profila
     Route::get('/candidat/{id}', [CandidateProfileController::class, 'getCandidat']);
     //jobs
-    Route::get('/jobs/active/national', [FrontController::class, 'activeJobs']); // Prikaz aktivnih poslova
-    Route::get('/jobs/active/international', [FrontController::class, 'activeJobsInternational']); // Prikaz aktivnih poslova
+    Route::get('/jobs/active/national', [FrontController::class, 'activeJobs']); // Prikaz aktivnih poslova national
+    Route::get('/jobs/active/international', [FrontController::class, 'activeJobsInternational']); // Prikaz aktivnih poslova international
 
     Route::get('/job/{id}', [FrontController::class, 'showJob']); // Detalji o poslu
 

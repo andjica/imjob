@@ -426,7 +426,7 @@ class FrontController extends Controller
             ->values();
 
         $candidates = $this->recruiterServices->getAcceptedCandidate();
-    
+
         return view('recruiter.pages.chat', compact('contributors','candidates'));
     }
 

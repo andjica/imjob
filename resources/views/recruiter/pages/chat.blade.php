@@ -1,5 +1,5 @@
 @extends('recruiter.template-recruiter')
-@section('main-title', 'Chat with Contributor')
+@section('main-title', 'Chat with All - Candidates and Contributors')
 
 @section('title-dash', 'Chat')
 @section('css')
@@ -9,7 +9,7 @@
     <div class="container m-0">
         <div class="row">
             <div class="col-lg-12">
-                @if ($contributors->count() == 0)
+                @if ($contributors->count() == 0 && $candidates->count() == 0)
                     <div class="card card-flush shadow-sm mb-5">
                         <div class="card-body text-center">
                             <div class="alert alert-warning d-flex justify-content-center p-5 mb-0">
@@ -25,8 +25,8 @@
                                     </svg>
                                 </span>
                                 <div class="d-flex flex-column justify-content-center">
-                                    <h4 class="mb-1">No contributor found</h4>
-                                    <p>Please follow contributor for makeing connections, on page <a
+                                    <h4 class="mb-1">No contributor found or candidates, you don't have any connections</h4>
+                                    <p>Please follow contributor for makeing connections or contact your candidate, on page <a
                                             href="{{ asset('/company/freelancer/find/contributors') }}">find
                                             contributors</a></p>
                                 </div>
