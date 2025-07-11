@@ -2,6 +2,7 @@
 use Illuminate\Http\Request;
 use App\Models\CandidatProfile;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\JobController;
 use Illuminate\Support\Facades\Broadcast;
 use App\Http\Controllers\ChatAiController;
 use App\Http\Controllers\API\AuthController;
@@ -65,6 +66,7 @@ Route::middleware('auth:api')->group(function () {
 
     //recruitment process
     Route::get('/applied-jobs/', [RecruitmentController::class, 'getAppliedJobsByCandidate']);
+    Route::get('/job/{jobId}/candidat/{candidateId}/check', [JobController::class, 'hasAlreadyApplied']);
 
     //settings
    Route::post('/update-email', [SettingsController::class, 'updateEmail']);

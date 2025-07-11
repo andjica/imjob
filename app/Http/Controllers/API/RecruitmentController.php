@@ -30,7 +30,8 @@ class RecruitmentController extends Controller
             return response()->json(['message' => 'Profile not found'], 404);
         }
 
-        $jobs = $candidatProfile->jobs()->with('company', 'country', 'city', 'recruiter','category', 'subCategory')
+        $jobs = $candidatProfile->jobs()
+        ->with('company', 'country', 'city', 'recruiter','category', 'subCategory')
         ->orderBy('updated_at', 'desc')
         ->get();
 

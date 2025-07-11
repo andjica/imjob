@@ -31,6 +31,7 @@ class ChatController extends Controller
 
          Log::info(' Nova poruka kreirana:', $message->toArray());
     
+         $message->load('sender'); // ⬅️ obavezno
         broadcast(new MessageSent($message));
         
         return response()->json([

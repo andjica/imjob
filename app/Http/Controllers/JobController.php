@@ -113,5 +113,16 @@ class JobController extends Controller
     
         return redirect()->back()->with('sucess', 'Job is deleted successfully');
     }
+
+    public function hasAlreadyApplied($jobId, $candidateId)
+    {
+        $alreadyApplied = Candidate::where('job_id', $jobId)
+            ->where('candidate_id', $candidateId)
+            ->exists();
+
+        return response()->json([
+            'applied' => $alreadyApplied
+        ]);
+    }
     
 }
