@@ -235,7 +235,7 @@ class RecruiterServices implements RecruiterInterface
                         $q->where('user_id', $userId)
                         ->orWhere('receiver_id', $userId);
                     })
-                    ->latest('created_at')
+                    ->latest('created_at', 'desc')
                     ->first();
 
                 $candidate->last_message_at = $lastMessage?->created_at;

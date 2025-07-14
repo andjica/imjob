@@ -23840,6 +23840,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _public_images_user_286_png__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../public/images/user-286.png */ "./public/images/user-286.png");
 /* harmony import */ var _eventBus__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../eventBus */ "./resources/js/eventBus.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == _typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator["return"] && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, "catch": function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
 function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
 function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
@@ -23923,6 +23928,8 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
     },
     sortedCandidates: function sortedCandidates() {
       var _this2 = this;
+      this.unreadMap; // triggeruje Vue reaktivnost
+      console.log("KANDIDATI: ", this.candidates);
       return _toConsumableArray(this.candidates).sort(function (a, b) {
         var unreadA = _this2.unreadMap[a.user.id] || 0;
         var unreadB = _this2.unreadMap[b.user.id] || 0;
@@ -23981,8 +23988,9 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
               }
               return _context.abrupt("return");
             case 2:
-              _context.prev = 2;
-              _context.next = 5;
+              console.log("markMessagesAsRead", userId);
+              _context.prev = 3;
+              _context.next = 6;
               return fetch("/messages/mark-as-read/".concat(userId), {
                 method: "POST",
                 headers: {
@@ -23990,21 +23998,21 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
                   "X-CSRF-TOKEN": window.csrfToken
                 }
               });
-            case 5:
+            case 6:
               console.log("Unutar funkcjije mark as read: ", _this3.unreadMap[userId]);
               _this3.unreadMap[userId] = 0;
               _this3.updateUnreadTotal();
-              _context.next = 13;
+              _context.next = 14;
               break;
-            case 10:
-              _context.prev = 10;
-              _context.t0 = _context["catch"](2);
+            case 11:
+              _context.prev = 11;
+              _context.t0 = _context["catch"](3);
               console.error("Error marking messages as read for user ".concat(userId, ":"), _context.t0);
-            case 13:
+            case 14:
             case "end":
               return _context.stop();
           }
-        }, _callee, null, [[2, 10]]);
+        }, _callee, null, [[3, 11]]);
       }))();
     },
     fetchMessages: function fetchMessages(userId) {
@@ -24160,7 +24168,8 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       localStorage.setItem("lastChatUser", JSON.stringify(this.selectedUser || contributor));
       this.markMessagesAsRead(id);
     },
-    selectUser: function selectUser(user) {
+    selectUser: function selectUser(candidate) {
+      var user = candidate.user;
       this.selectedUser = user;
       this.selectedContributor = null;
       this.fetchMessages(user.id);
@@ -24169,13 +24178,13 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
     },
     selectFirstContributor: function selectFirstContributor() {
       if (!this.contributorData.length) return;
-      var firstContributor = this.contributorData[0];
+      var firstContributor = this.sortedContributors[0];
       this.selectContributor(firstContributor);
     },
     loadUnreadCounts: function loadUnreadCounts() {
       var _this6 = this;
       return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
-        var res, data;
+        var res, data, updatedMap;
         return _regeneratorRuntime().wrap(function _callee4$(_context4) {
           while (1) switch (_context4.prev = _context4.next) {
             case 0:
@@ -24195,23 +24204,29 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
               return res.json();
             case 6:
               data = _context4.sent;
+              // Prvo napravimo novi objekat kopiran iz starog
+              updatedMap = _objectSpread({}, _this6.unreadMap); // Ažuriramo vrednosti
               data.forEach(function (_ref) {
                 var user_id = _ref.user_id,
                   unread_count = _ref.unread_count;
-                _this6.unreadMap[user_id] = unread_count;
+                updatedMap[user_id] = unread_count;
               });
+
+              // Zamenimo ceo objekat da bismo triggerovali reaktivnost
+              _this6.unreadMap = updatedMap;
+              console.log("UNREAD MAP after load:", JSON.parse(JSON.stringify(_this6.unreadMap)));
               _this6.updateUnreadTotal();
-              _context4.next = 14;
+              _context4.next = 17;
               break;
-            case 11:
-              _context4.prev = 11;
+            case 14:
+              _context4.prev = 14;
               _context4.t0 = _context4["catch"](0);
               console.error("Error loading unread counts:", _context4.t0);
-            case 14:
+            case 17:
             case "end":
               return _context4.stop();
           }
-        }, _callee4, null, [[0, 11]]);
+        }, _callee4, null, [[0, 14]]);
       }))();
     },
     initializeEmojiPicker: function initializeEmojiPicker() {
@@ -24253,16 +24268,17 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
             console.log("Recruiter contributor: ", _this8.contributors);
             _this8.prepareContributors();
             _this8.initializeEmojiPicker();
+            // ⏳ Prvo učitaj unreadMap da bi sortiranje odmah bilo validno
             _context5.next = 6;
             return _this8.loadUnreadCounts();
           case 6:
             // Try restore last selected user first
             restored = _this8.restoreLastSelectedUser();
             if (!restored) {
-              if (_this8.contributors.length) {
-                _this8.selectFirstContributor();
-              } else if (_this8.candidates.length) {
-                _this8.selectUser(_this8.candidates[0].user);
+              if (_this8.sortedContributors.length) {
+                _this8.selectContributor(_this8.sortedContributors[0]);
+              } else if (_this8.sortedCandidates.length) {
+                _this8.selectUser(_this8.sortedCandidates[0].user);
               }
             }
             _eventBus__WEBPACK_IMPORTED_MODULE_2__["default"].emit("reset-navbar-badge");
@@ -24284,7 +24300,11 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
               } else {
                 if (message.user_id !== _this8.currentUserId) {
                   if (_this8.unreadMap[message.user_id]) {
-                    _this8.unreadMap[message.user_id]++;
+                    // Dodaj ili uvećaj vrednost
+                    _this8.unreadMap[message.user_id] = (_this8.unreadMap[message.user_id] || 0) + 1;
+
+                    // Triggeruj reaktivnost (hack: zamenimo ceo objekat)
+                    _this8.unreadMap = _objectSpread({}, _this8.unreadMap);
                   } else {
                     _this8.unreadMap[message.user_id] = 1;
                   }
@@ -24403,8 +24423,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
         var parsed = JSON.parse(lastUser);
         var index = contributors.findIndex(function (c) {
           var _c$user;
-          console.log("c", c);
-          ((_c$user = c.user) === null || _c$user === void 0 ? void 0 : _c$user.id) === parsed.id || c.id === parsed.id;
+          return ((_c$user = c.user) === null || _c$user === void 0 ? void 0 : _c$user.id) === parsed.id || c.id === parsed.id;
         });
         if (index > -1) {
           prioritized = contributors.splice(index, 1)[0]; // izvuci ga iz niza
@@ -24628,16 +24647,12 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
           if (message.user_id !== _this4.currentUserId) {
             var contributor = _this4.localContributors.find(function (c) {
               var _c$user3;
-              return ((_c$user3 = c.user) === null || _c$user3 === void 0 ? void 0 : _c$user3.id) === message.user_id;
+              return ((_c$user3 = c.user) === null || _c$user3 === void 0 ? void 0 : _c$user3.id) === message.user_id || c.id === message.user_id;
             });
             if (contributor) {
               contributor.last_message_time = message.created_at;
             }
-            if (_this4.unreadMap[message.user_id]) {
-              _this4.unreadMap[message.user_id]++;
-            } else {
-              _this4.unreadMap[message.user_id] = 1;
-            }
+            _this4.unreadMap[message.user_id] = (_this4.unreadMap[message.user_id] || 0) + 1;
             _this4.updateUnreadTotal();
 
             // Emituj ka nav-baru za globalni badge
@@ -24912,7 +24927,7 @@ __webpack_require__.r(__webpack_exports__);
 
     // Veži metode za this
     this.boundIncrementBadge = this.incrementBadge.bind(this);
-    //this.boundUpdateUnreadTotal = this.updateUnreadTotal.bind(this);
+    this.boundUpdateUnreadTotal = this.updateUnreadTotal.bind(this);
     this.boundResetUnreadTotal = this.resetUnreadTotal.bind(this);
     _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].on("increment-navbar-badge", this.boundIncrementBadge);
     _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].on("update-navbar-badge", this.boundUpdateUnreadTotal);
@@ -25556,86 +25571,90 @@ var _hoisted_12 = {
   "class": "fs-5 fw-bold text-gray-900 text-hover-primary mb-2"
 };
 var _hoisted_13 = {
-  key: 0
-};
-var _hoisted_14 = {
-  "class": "gap-4 user-card__scroll"
-};
-var _hoisted_15 = {
-  "class": "symbol symbol-45px symbol-circle"
-};
-var _hoisted_16 = ["src"];
-var _hoisted_17 = {
-  "class": "ms-5"
-};
-var _hoisted_18 = ["onClick"];
-var _hoisted_19 = {
   key: 0,
   "class": "badge badge-danger"
 };
-var _hoisted_20 = {
+var _hoisted_14 = {
   key: 0
+};
+var _hoisted_15 = {
+  "class": "gap-4 user-card__scroll"
+};
+var _hoisted_16 = {
+  "class": "symbol symbol-45px symbol-circle"
+};
+var _hoisted_17 = ["src"];
+var _hoisted_18 = {
+  "class": "ms-5"
+};
+var _hoisted_19 = ["onClick"];
+var _hoisted_20 = {
+  key: 0,
+  "class": "badge badge-danger"
 };
 var _hoisted_21 = {
-  "class": "col-lg-7"
-};
-var _hoisted_22 = {
-  "class": "card h-100"
-};
-var _hoisted_23 = {
-  "class": "card-header"
-};
-var _hoisted_24 = {
   key: 0
 };
+var _hoisted_22 = {
+  "class": "col-lg-7"
+};
+var _hoisted_23 = {
+  "class": "card h-100"
+};
+var _hoisted_24 = {
+  "class": "card-header"
+};
 var _hoisted_25 = {
-  "class": "card-title"
+  key: 0
 };
 var _hoisted_26 = {
+  "class": "card-title"
+};
+var _hoisted_27 = {
   "class": "card-body chat-box chat-box__contributor",
   id: "chatBox__recruiter"
 };
-var _hoisted_27 = {
+var _hoisted_28 = {
   key: 1,
   style: {
     "margin-top": "10px"
   }
 };
-var _hoisted_28 = {
+var _hoisted_29 = {
   key: 0
 };
-var _hoisted_29 = ["src"];
-var _hoisted_30 = {
+var _hoisted_30 = ["src"];
+var _hoisted_31 = {
   key: 1
 };
-var _hoisted_31 = ["href"];
-var _hoisted_32 = {
+var _hoisted_32 = ["href"];
+var _hoisted_33 = {
   key: 2
 };
-var _hoisted_33 = ["href"];
-var _hoisted_34 = {
+var _hoisted_34 = ["href"];
+var _hoisted_35 = {
   key: 3
 };
-var _hoisted_35 = ["href"];
-var _hoisted_36 = {
+var _hoisted_36 = ["href"];
+var _hoisted_37 = {
   "class": "mt-1"
 };
-var _hoisted_37 = {
+var _hoisted_38 = {
   "class": "text-muted"
 };
-var _hoisted_38 = {
+var _hoisted_39 = {
   key: 0
 };
-var _hoisted_39 = {
+var _hoisted_40 = {
   "class": "message-info"
 };
-var _hoisted_40 = {
+var _hoisted_41 = {
   "class": "card-footer"
 };
-var _hoisted_41 = {
+var _hoisted_42 = {
   "class": "d-flex align-items-center gap-2"
 };
-var _hoisted_42 = {
+var _hoisted_43 = {
   key: 0,
   "class": "message-error"
 };
@@ -25645,7 +25664,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       key: candidate.user.id,
       "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["d-flex align-items-center px-2 user-card", [$data.selectedUser && $data.selectedUser.id === candidate.user.id ? 'user-active' : '']]),
       onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
-        return $options.selectUser(candidate.user);
+        return $options.selectUser(candidate);
       }, ["prevent"])
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
       src: candidate.profile_image ? $options.getImageFileUrl(candidate.profile_image) : $options.defaultImage,
@@ -25655,17 +25674,17 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         "width": "60px",
         "height": "60px"
       }
-    }, null, 8 /* PROPS */, _hoisted_10)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", _hoisted_12, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(candidate.user.first_name) + " " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(candidate.user.last_name), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(candidate.user.email), 1 /* TEXT */), _cache[6] || (_cache[6] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("small", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", null, "Candidate")], -1 /* HOISTED */))])], 10 /* CLASS, PROPS */, _hoisted_8);
-  }), 128 /* KEYED_FRAGMENT */)), $options.sortedCandidates.length === 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_13, _cache[7] || (_cache[7] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, "You don't have Candidates", -1 /* HOISTED */)]))) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Details")]), _cache[10] || (_cache[10] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("hr", {
+    }, null, 8 /* PROPS */, _hoisted_10)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", _hoisted_12, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(candidate.user.first_name) + " " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(candidate.user.last_name), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(candidate.user.email), 1 /* TEXT */), _cache[6] || (_cache[6] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("small", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", null, "Candidate")], -1 /* HOISTED */))]), candidate.user && $data.unreadMap[candidate.user.id] > 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_13, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.unreadMap[candidate.user.id]), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 10 /* CLASS, PROPS */, _hoisted_8);
+  }), 128 /* KEYED_FRAGMENT */)), $options.sortedCandidates.length === 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_14, _cache[7] || (_cache[7] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, "You don't have Candidates", -1 /* HOISTED */)]))) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Details")]), _cache[10] || (_cache[10] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("hr", {
     "class": "my-4"
-  }, null, -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_14, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.sortedContributors, function (user) {
+  }, null, -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_15, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.sortedContributors, function (user) {
     var _$data$selectedContri, _user$user;
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
-      key: user,
+      key: user.user.id,
       "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["d-flex flex-row align-items-center", {
         'user-active': $data.selectedContributor && $data.selectedContributor.user.id === user.user.id
       }])
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Avatar"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_15, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Avatar"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_16, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
       src: user.user.profile_image ? $options.getImageFileUrl(user.user.profile_image) : $options.defaultImage,
       alt: "Profile Image",
       "class": "img-fluid rounded-circle shadow-sm",
@@ -25673,14 +25692,14 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         "width": "60px",
         "height": "60px"
       }
-    }, null, 8 /* PROPS */, _hoisted_16)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Avatar"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_17, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+    }, null, 8 /* PROPS */, _hoisted_17)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Avatar"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_18, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
       onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
         return $options.selectContributor(user);
       }, ["prevent"]),
       href: "#",
       "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(['fs-5 fw-bold text-gray-900 text-hover-primary mb-2', ((_$data$selectedContri = $data.selectedContributor) === null || _$data$selectedContri === void 0 || (_$data$selectedContri = _$data$selectedContri.user) === null || _$data$selectedContri === void 0 ? void 0 : _$data$selectedContri.id) === (user === null || user === void 0 || (_user$user = user.user) === null || _user$user === void 0 ? void 0 : _user$user.id)])
-    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.user.first_name) + " " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.user.last_name), 11 /* TEXT, CLASS, PROPS */, _hoisted_18), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.user.email), 1 /* TEXT */), _cache[8] || (_cache[8] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("small", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", null, "Contributor")], -1 /* HOISTED */))]), $data.unreadMap[user.user.id] ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_19, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.unreadMap[user.user.id]), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 2 /* CLASS */);
-  }), 128 /* KEYED_FRAGMENT */)), $options.sortedContributors.length === 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_20, _cache[9] || (_cache[9] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, "You don't have Contributors", -1 /* HOISTED */)]))) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::List")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Card body")])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_21, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_22, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_23, [$options.isRecruiterChatRoute ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_24, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", _hoisted_25, " Chat with " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.chatHeaderName), 1 /* TEXT */)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_26, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.sortedMessages, function (msg) {
+    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.user.first_name) + " " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.user.last_name), 11 /* TEXT, CLASS, PROPS */, _hoisted_19), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.user.email), 1 /* TEXT */), _cache[8] || (_cache[8] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("small", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", null, "Contributor")], -1 /* HOISTED */))]), user.user && $data.unreadMap[user.user.id] > 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_20, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.unreadMap[user.user.id]), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 2 /* CLASS */);
+  }), 128 /* KEYED_FRAGMENT */)), $options.sortedContributors.length === 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_21, _cache[9] || (_cache[9] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, "You don't have Contributors", -1 /* HOISTED */)]))) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::List")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Card body")])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_22, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_23, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_24, [$options.isRecruiterChatRoute ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_25, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", _hoisted_26, " Chat with " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.chatHeaderName), 1 /* TEXT */)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_27, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.sortedMessages, function (msg) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
       key: msg.id,
       "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(['chat-message', msg.user_id === $props.currentUserId ? 'sent' : 'received'])
@@ -25689,32 +25708,32 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Prikaz teksta poruke "), msg.text ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
       key: 0,
       "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(msg.user_id === $props.currentUserId ? 'p-3 rounded bg-primary text-white d-inline-block' : 'p-3 rounded bg-light text-dark d-inline-block')
-    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(msg.text), 3 /* TEXT, CLASS */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Prikaz fajla "), msg.file_path ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_27, [$options.getFileDisplayType(msg.file_type) === 'image' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_28, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
+    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(msg.text), 3 /* TEXT, CLASS */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Prikaz fajla "), msg.file_path ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_28, [$options.getFileDisplayType(msg.file_type) === 'image' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_29, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
       src: $options.getImageFileUrl(msg.file_path),
       alt: "image",
       style: {
         "max-width": "200px"
       }
-    }, null, 8 /* PROPS */, _hoisted_29)])) : $options.getFileDisplayType(msg.file_type) === 'pdf' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_30, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+    }, null, 8 /* PROPS */, _hoisted_30)])) : $options.getFileDisplayType(msg.file_type) === 'pdf' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_31, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
       "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(msg.user_id === $props.currentUserId ? 'p-3 rounded bg-primary text-white d-inline-block' : 'p-3 rounded bg-light text-dark d-inline-block'),
       href: $options.getImageFileUrl(msg.file_path),
       target: "_blank"
-    }, " 📄 View PDF ", 10 /* CLASS, PROPS */, _hoisted_31)])) : $options.getFileDisplayType(msg.file_type) === 'word' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_32, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+    }, " 📄 View PDF ", 10 /* CLASS, PROPS */, _hoisted_32)])) : $options.getFileDisplayType(msg.file_type) === 'word' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_33, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
       "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(msg.user_id === $props.currentUserId ? 'p-3 rounded bg-primary text-white d-inline-block' : 'p-3 rounded bg-light text-dark d-inline-block'),
       href: $options.getImageFileUrl(msg.file_path),
       target: "_blank"
-    }, " 📎 Word Document ", 10 /* CLASS, PROPS */, _hoisted_33)])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_34, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+    }, " 📎 Word Document ", 10 /* CLASS, PROPS */, _hoisted_34)])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_35, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
       "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(msg.user_id === $props.currentUserId ? 'p-3 rounded bg-primary text-white d-inline-block' : 'p-3 rounded bg-light text-dark d-inline-block'),
       href: $options.getImageFileUrl(msg.file_path),
       target: "_blank"
-    }, " 📁 Download file ", 10 /* CLASS, PROPS */, _hoisted_35)]))])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Vreme "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_36, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("small", _hoisted_37, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(new Date(msg.created_at).toLocaleTimeString()), 1 /* TEXT */)])], 2 /* CLASS */)], 2 /* CLASS */);
-  }), 128 /* KEYED_FRAGMENT */)), $data.messages.length === 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_38, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_39, " Start a conversation with user " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.chatPlaceholderName) + " to begin your collaboration. Introduce yourself, share your ideas, or ask any questions to get things moving ", 1 /* TEXT */)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_40, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
+    }, " 📁 Download file ", 10 /* CLASS, PROPS */, _hoisted_36)]))])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Vreme "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_37, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("small", _hoisted_38, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(new Date(msg.created_at).toLocaleTimeString()), 1 /* TEXT */)])], 2 /* CLASS */)], 2 /* CLASS */);
+  }), 128 /* KEYED_FRAGMENT */)), $data.messages.length === 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_39, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_40, " Start a conversation with user " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.chatPlaceholderName) + " to begin your collaboration. Introduce yourself, share your ideas, or ask any questions to get things moving ", 1 /* TEXT */)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_41, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
     id: "chatForm",
     onSubmit: _cache[5] || (_cache[5] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {
       return $options.handleSubmit && $options.handleSubmit.apply($options, arguments);
     }, ["prevent"])),
     enctype: "multipart/form-data"
-  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_41, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_42, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     type: "text",
     "class": "form-control form-control-solid px-13",
     name: "input",
@@ -25753,7 +25772,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, " 😀 ", 512 /* NEED_PATCH */), _cache[13] || (_cache[13] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     "class": "btn btn-primary",
     type: "submit"
-  }, " Send ", -1 /* HOISTED */))]), $data.messageError ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_42, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.messageError), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 32 /* NEED_HYDRATION */)])])])]);
+  }, " Send ", -1 /* HOISTED */))]), $data.messageError ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_43, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.messageError), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 32 /* NEED_HYDRATION */)])])])]);
 }
 
 /***/ }),
@@ -25811,71 +25830,75 @@ var _hoisted_10 = {
   "class": "fs-5 fw-bold text-gray-900 text-hover-primary mb-2"
 };
 var _hoisted_11 = {
-  "class": "symbol symbol-45px symbol-circle"
-};
-var _hoisted_12 = ["src"];
-var _hoisted_13 = ["onClick"];
-var _hoisted_14 = {
   key: 0,
   "class": "badge badge-danger"
 };
+var _hoisted_12 = {
+  "class": "symbol symbol-45px symbol-circle"
+};
+var _hoisted_13 = ["src"];
+var _hoisted_14 = ["onClick"];
 var _hoisted_15 = {
-  "class": "col-lg-7"
+  key: 0,
+  "class": "badge badge-danger"
 };
 var _hoisted_16 = {
-  "class": "card"
+  "class": "col-lg-7"
 };
 var _hoisted_17 = {
-  "class": "card-header"
+  "class": "card"
 };
 var _hoisted_18 = {
-  "class": "card-title"
+  "class": "card-header"
 };
 var _hoisted_19 = {
+  "class": "card-title"
+};
+var _hoisted_20 = {
   "class": "card-body chat-box chat-box__contributor",
   id: "chatBox_recruitment"
 };
-var _hoisted_20 = {
+var _hoisted_21 = {
   key: 1,
   style: {
     "margin-top": "10px"
   }
 };
-var _hoisted_21 = {
+var _hoisted_22 = {
   key: 0
 };
-var _hoisted_22 = ["src"];
-var _hoisted_23 = {
+var _hoisted_23 = ["src"];
+var _hoisted_24 = {
   key: 1
 };
-var _hoisted_24 = ["href"];
-var _hoisted_25 = {
+var _hoisted_25 = ["href"];
+var _hoisted_26 = {
   key: 2
 };
-var _hoisted_26 = ["href"];
-var _hoisted_27 = {
+var _hoisted_27 = ["href"];
+var _hoisted_28 = {
   key: 3
 };
-var _hoisted_28 = ["href"];
-var _hoisted_29 = {
+var _hoisted_29 = ["href"];
+var _hoisted_30 = {
   "class": "mt-1"
 };
-var _hoisted_30 = {
+var _hoisted_31 = {
   "class": "text-muted"
 };
-var _hoisted_31 = {
+var _hoisted_32 = {
   key: 0
 };
-var _hoisted_32 = {
+var _hoisted_33 = {
   "class": "message-info"
 };
-var _hoisted_33 = {
+var _hoisted_34 = {
   "class": "card-footer"
 };
-var _hoisted_34 = {
+var _hoisted_35 = {
   "class": "d-flex align-items-center gap-2"
 };
-var _hoisted_35 = {
+var _hoisted_36 = {
   key: 0,
   "class": "message-error"
 };
@@ -25895,14 +25918,14 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       "width": "60px",
       "height": "60px"
     }
-  }, null, 8 /* PROPS */, _hoisted_8)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", _hoisted_10, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.candidate.user.first_name) + " " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.candidate.user.last_name), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.candidate.user.email), 1 /* TEXT */), _cache[7] || (_cache[7] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("small", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", null, "Candidate")], -1 /* HOISTED */))])], 2 /* CLASS */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), _cache[9] || (_cache[9] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("hr", {
+  }, null, 8 /* PROPS */, _hoisted_8)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", _hoisted_10, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.candidate.user.first_name) + " " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.candidate.user.last_name), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.candidate.user.email), 1 /* TEXT */), _cache[7] || (_cache[7] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("small", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", null, "Candidate")], -1 /* HOISTED */))]), $data.unreadMap[$props.candidate.user.id] > 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_11, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.unreadMap[$props.candidate.user.id]), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 2 /* CLASS */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), _cache[9] || (_cache[9] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("hr", {
     "class": "hr_custome"
   }, null, -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Details"), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.sortedContributors, function (user) {
     var _user$user, _user$user2, _$data$selectedContri, _user$user3;
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
       "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["d-flex align-items-center", [$data.selectedContributor && $data.selectedContributor.user.id === (user === null || user === void 0 || (_user$user = user.user) === null || _user$user === void 0 ? void 0 : _user$user.id) ? 'active-user' : '']]),
       key: (user === null || user === void 0 || (_user$user2 = user.user) === null || _user$user2 === void 0 ? void 0 : _user$user2.id) || (user === null || user === void 0 ? void 0 : user.id)
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Avatar"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Avatar"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
       src: user.profile_image ? $options.getImageFileUrl(user.profile_image) : $options.defaultImage,
       alt: "Profile Image",
       "class": "img-fluid rounded-circle shadow-sm",
@@ -25910,7 +25933,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         "width": "60px",
         "height": "60px"
       }
-    }, null, 8 /* PROPS */, _hoisted_12)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Avatar"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Details"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+    }, null, 8 /* PROPS */, _hoisted_13)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Avatar"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Details"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
       "class": "ms-5",
       onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
         return $options.selectContributor(user);
@@ -25918,10 +25941,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
       href: "#",
       "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(['fs-5 fw-bold text-gray-900 text-hover-primary mb-2', ((_$data$selectedContri = $data.selectedContributor) === null || _$data$selectedContri === void 0 || (_$data$selectedContri = _$data$selectedContri.user) === null || _$data$selectedContri === void 0 ? void 0 : _$data$selectedContri.id) === (user === null || user === void 0 || (_user$user3 = user.user) === null || _user$user3 === void 0 ? void 0 : _user$user3.id)])
-    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.name), 3 /* TEXT, CLASS */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.user.email), 1 /* TEXT */), _cache[8] || (_cache[8] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("small", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", null, "Contributor")], -1 /* HOISTED */))], 8 /* PROPS */, _hoisted_13), $data.unreadMap[user.user.id] ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_14, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.unreadMap[user.user.id]), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Details")], 2 /* CLASS */);
+    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.name), 3 /* TEXT, CLASS */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.user.email), 1 /* TEXT */), _cache[8] || (_cache[8] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("small", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", null, "Contributor")], -1 /* HOISTED */))], 8 /* PROPS */, _hoisted_14), $data.unreadMap[user.user.id] > 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_15, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.unreadMap[user.user.id]), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Details")], 2 /* CLASS */);
   }), 128 /* KEYED_FRAGMENT */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Details")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("begin::Separator"), _cache[10] || (_cache[10] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
     "class": "separator separator-dashed d-none"
-  }, null, -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Separator")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::List")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Card body")])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_15, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_16, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_17, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", _hoisted_18, " Chat with " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(((_$data$selectedContri2 = $data.selectedContributor) === null || _$data$selectedContri2 === void 0 ? void 0 : _$data$selectedContri2.name) || ((_$props$candidate = $props.candidate) === null || _$props$candidate === void 0 || (_$props$candidate = _$props$candidate.user) === null || _$props$candidate === void 0 ? void 0 : _$props$candidate.first_name) + " " + ((_$props$candidate2 = $props.candidate) === null || _$props$candidate2 === void 0 || (_$props$candidate2 = _$props$candidate2.user) === null || _$props$candidate2 === void 0 ? void 0 : _$props$candidate2.last_name) || "Candidate?"), 1 /* TEXT */)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_19, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.sortedMessages, function (msg) {
+  }, null, -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Separator")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::List")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("end::Card body")])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_16, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_17, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_18, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", _hoisted_19, " Chat with " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(((_$data$selectedContri2 = $data.selectedContributor) === null || _$data$selectedContri2 === void 0 ? void 0 : _$data$selectedContri2.name) || ((_$props$candidate = $props.candidate) === null || _$props$candidate === void 0 || (_$props$candidate = _$props$candidate.user) === null || _$props$candidate === void 0 ? void 0 : _$props$candidate.first_name) + " " + ((_$props$candidate2 = $props.candidate) === null || _$props$candidate2 === void 0 || (_$props$candidate2 = _$props$candidate2.user) === null || _$props$candidate2 === void 0 ? void 0 : _$props$candidate2.last_name) || "Candidate?"), 1 /* TEXT */)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_20, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.sortedMessages, function (msg) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
       key: msg.id,
       "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(msg.user_id === $props.currentUserId ? 'chat-message sent' : 'chat-message received')
@@ -25930,32 +25953,32 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Prikaz teksta poruke "), msg.text ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
       key: 0,
       "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(msg.user_id === $props.currentUserId ? 'p-3 rounded bg-primary text-white d-inline-block' : 'p-3 rounded bg-light text-dark d-inline-block')
-    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(msg.text), 3 /* TEXT, CLASS */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Prikaz fajla "), msg.file_path ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_20, [$options.getFileDisplayType(msg.file_type) === 'image' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_21, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
+    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(msg.text), 3 /* TEXT, CLASS */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Prikaz fajla "), msg.file_path ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_21, [$options.getFileDisplayType(msg.file_type) === 'image' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_22, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
       src: $options.getImageFileUrl(msg.file_path),
       alt: "image",
       style: {
         "max-width": "200px"
       }
-    }, null, 8 /* PROPS */, _hoisted_22)])) : $options.getFileDisplayType(msg.file_type) === 'pdf' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_23, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+    }, null, 8 /* PROPS */, _hoisted_23)])) : $options.getFileDisplayType(msg.file_type) === 'pdf' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_24, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
       "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(msg.user_id === $props.currentUserId ? 'p-3 rounded bg-primary text-white d-inline-block' : 'p-3 rounded bg-light text-dark d-inline-block'),
       href: $options.getImageFileUrl(msg.file_path),
       target: "_blank"
-    }, " 📄 View PDF ", 10 /* CLASS, PROPS */, _hoisted_24)])) : $options.getFileDisplayType(msg.file_type) === 'word' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_25, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+    }, " 📄 View PDF ", 10 /* CLASS, PROPS */, _hoisted_25)])) : $options.getFileDisplayType(msg.file_type) === 'word' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_26, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
       "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(msg.user_id === $props.currentUserId ? 'p-3 rounded bg-primary text-white d-inline-block' : 'p-3 rounded bg-light text-dark d-inline-block'),
       href: $options.getImageFileUrl(msg.file_path),
       target: "_blank"
-    }, " 📎 Word Document ", 10 /* CLASS, PROPS */, _hoisted_26)])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_27, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+    }, " 📎 Word Document ", 10 /* CLASS, PROPS */, _hoisted_27)])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_28, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
       "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(msg.user_id === $props.currentUserId ? 'p-3 rounded bg-primary text-white d-inline-block' : 'p-3 rounded bg-light text-dark d-inline-block'),
       href: $options.getImageFileUrl(msg.file_path),
       target: "_blank"
-    }, " 📁 Download file ", 10 /* CLASS, PROPS */, _hoisted_28)]))])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_29, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("small", _hoisted_30, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(new Date(msg.created_at).toLocaleTimeString()), 1 /* TEXT */)])], 2 /* CLASS */)], 2 /* CLASS */);
-  }), 128 /* KEYED_FRAGMENT */))]), $data.messages.length === 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_31, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_32, " Start a conversation with user " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.chatPlaceholderName) + " to begin your collaboration. Introduce yourself, share your ideas, or ask any questions to get things moving ", 1 /* TEXT */)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_33, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
+    }, " 📁 Download file ", 10 /* CLASS, PROPS */, _hoisted_29)]))])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_30, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("small", _hoisted_31, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(new Date(msg.created_at).toLocaleTimeString()), 1 /* TEXT */)])], 2 /* CLASS */)], 2 /* CLASS */);
+  }), 128 /* KEYED_FRAGMENT */))]), $data.messages.length === 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_32, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_33, " Start a conversation with user " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.chatPlaceholderName) + " to begin your collaboration. Introduce yourself, share your ideas, or ask any questions to get things moving ", 1 /* TEXT */)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_34, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
     id: "chatForm",
     onSubmit: _cache[6] || (_cache[6] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {
       return $options.handleSubmit && $options.handleSubmit.apply($options, arguments);
     }, ["prevent"])),
     enctype: "multipart/form-data"
-  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_34, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_35, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     type: "text",
     "class": "form-control form-control-solid pr-13",
     name: "input",
@@ -25995,7 +26018,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, " 😀 ", 512 /* NEED_PATCH */), _cache[13] || (_cache[13] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     "class": "btn btn-primary",
     type: "submit"
-  }, " Send ", -1 /* HOISTED */))]), $data.messageError ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_35, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.messageError), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 32 /* NEED_HYDRATION */)])])]);
+  }, " Send ", -1 /* HOISTED */))]), $data.messageError ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_36, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.messageError), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 32 /* NEED_HYDRATION */)])])]);
 }
 
 /***/ }),
@@ -32886,7 +32909,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.chat-box__contributor {\n    background: #f5f8fa !important;\n    height: 400px;\n    overflow-y: auto;\n    border: 1px solid #e4e6ef;\n}\n.user-card {\n    background-color: transparent;\n}\n.user-card:hover {\n    background-color: #f5f5f5;\n    cursor: pointer;\n    transition: background-color 0.2s ease;\n}\n.user-active {\n    background: #f5f8fa !important;\n}\n.user-card__scroll {\n    max-height: 300px;\n    overflow-y: auto;\n}\n.p-22 {\n    padding: 22px !important;\n}\n.btn-emojis {\n    background: transparent;\n    border: none;\n    font-size: 1.5rem;\n    cursor: pointer;\n    background: #f5f8fa;\n    padding: 8px;\n    border-radius: 10%;\n}\n.icon-img {\n    position: absolute;\n    left: 6px;\n}\n.icon-file {\n    position: absolute;\n    right: 3px;\n}\n.form-control-file {\n    max-width: 150px;\n}\n.chat-message.sent {\n    text-align: right;\n}\n.chat-message.sent p {\n    background-color: #0d6efd;\n    color: #fff;\n}\n.chat-message.received {\n    text-align: left;\n}\n.bg-light {\n    background-color: #e4e6ef !important;\n    color: #000;\n}\n.chat-message p {\n    display: inline-block;\n    padding: 10px 15px;\n    border-radius: 15px;\n    max-width: 70%;\n}\n.message-info {\n    position: absolute;\n    bottom: 90px;\n    left: 21px;\n    background-color: #e4e6ef !important;\n    padding: 10px 15px;\n    border-radius: 15px;\n}\n.message-error {\n    margin-top: 5px;\n    color: red;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.chat-box__contributor {\r\n    background: #f5f8fa !important;\r\n    height: 400px;\r\n    overflow-y: auto;\r\n    border: 1px solid #e4e6ef;\n}\n.user-card {\r\n    background-color: transparent;\n}\n.user-card:hover {\r\n    background-color: #f5f5f5;\r\n    cursor: pointer;\r\n    transition: background-color 0.2s ease;\n}\n.user-active {\r\n    background: #f5f8fa !important;\n}\n.user-card__scroll {\r\n    max-height: 300px;\r\n    overflow-y: auto;\n}\n.p-22 {\r\n    padding: 22px !important;\n}\n.btn-emojis {\r\n    background: transparent;\r\n    border: none;\r\n    font-size: 1.5rem;\r\n    cursor: pointer;\r\n    background: #f5f8fa;\r\n    padding: 8px;\r\n    border-radius: 10%;\n}\n.icon-img {\r\n    position: absolute;\r\n    left: 6px;\n}\n.icon-file {\r\n    position: absolute;\r\n    right: 3px;\n}\n.form-control-file {\r\n    max-width: 150px;\n}\n.chat-message.sent {\r\n    text-align: right;\n}\n.chat-message.sent p {\r\n    background-color: #0d6efd;\r\n    color: #fff;\n}\n.chat-message.received {\r\n    text-align: left;\n}\n.bg-light {\r\n    background-color: #e4e6ef !important;\r\n    color: #000;\n}\n.chat-message p {\r\n    display: inline-block;\r\n    padding: 10px 15px;\r\n    border-radius: 15px;\r\n    max-width: 70%;\n}\n.message-info {\r\n    position: absolute;\r\n    bottom: 90px;\r\n    left: 21px;\r\n    background-color: #e4e6ef !important;\r\n    padding: 10px 15px;\r\n    border-radius: 15px;\n}\n.message-error {\r\n    margin-top: 5px;\r\n    color: red;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -32910,7 +32933,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.user-active {\n    background: #f5f8fa !important;\n}\n.user__details {\n    display: flex;\n    justify-content: flex-start;\n    width: 100%;\n}\n.active-contributor {\n    background: #f5f8fa !important;\n}\n.btn-emojis {\n    background: transparent;\n    border: none;\n    font-size: 1.5rem;\n    cursor: pointer;\n    background: #f5f8fa;\n    padding: 8px;\n    border-radius: 10%;\n}\n.hr_custome {\n    height: 5px !important;\n    width: 100%;\n}\n.message-info {\n    position: absolute;\n    bottom: 90px;\n    left: 21px;\n    background-color: #e4e6ef !important;\n    padding: 10px 15px;\n    border-radius: 15px;\n}\n.scroll-section {\n    max-height: 300px;\n    /* ili koliko god želiš */\n    overflow-y: auto;\n    margin-bottom: 1rem;\n    padding: 0.5rem;\n}\n.badge-danger {\n    height: 20px;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.user-active {\r\n  background: #f5f8fa !important;\n}\n.user__details {\r\n  display: flex;\r\n  justify-content: flex-start;\r\n  width: 100%;\n}\n.active-contributor {\r\n  background: #f5f8fa !important;\n}\n.btn-emojis {\r\n  background: transparent;\r\n  border: none;\r\n    font-size: 1.5rem;\r\n    cursor: pointer;\r\n    background: #f5f8fa;\r\n    padding: 8px;\r\n    border-radius: 10%;\n}\n.hr_custome {\r\n    height: 5px !important;\r\n    width: 100%;\n}\n.message-info {\r\n    position: absolute;\r\n    bottom: 90px;\r\n    left: 21px;\r\n    background-color: #e4e6ef !important;\r\n    padding: 10px 15px;\r\n    border-radius: 15px;\n}\n.scroll-section {\r\n    max-height: 300px;\r\n    /* ili koliko god želiš */\r\n    overflow-y: auto;\r\n    margin-bottom: 1rem;\r\n    padding: 0.5rem;\n}\n.badge-danger {\r\n    height: 20px;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -32934,7 +32957,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.user-active {\n    background: #f5f8fa !important;\n}\n.active-contributor {\n    background: #f5f8fa !important;\n}\n.p-22 {\n    padding: 22px !important;\n}\n.btn-emojis {\n    background: transparent;\n    border: none;\n    font-size: 1.5rem;\n    cursor: pointer;\n    background: #f5f8fa;\n    padding: 8px;\n    border-radius: 10%;\n}\n.icon-img {\n    position: absolute;\n    left: 6px;\n}\n.icon-file {\n    position: absolute;\n    right: 3px;\n}\n.message-info {\n    position: absolute;\n    bottom: 90px;\n    left: 21px;\n    background-color: #e4e6ef !important;\n    padding: 10px 15px;\n    border-radius: 15px;\n}\n.message-error {\n    margin-top: 5px;\n    color: red;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.user-active {\r\n    background: #f5f8fa !important;\n}\n.active-contributor {\r\n    background: #f5f8fa !important;\n}\n.p-22 {\r\n    padding: 22px !important;\n}\n.btn-emojis {\r\n    background: transparent;\r\n    border: none;\r\n    font-size: 1.5rem;\r\n    cursor: pointer;\r\n    background: #f5f8fa;\r\n    padding: 8px;\r\n    border-radius: 10%;\n}\n.icon-img {\r\n    position: absolute;\r\n    left: 6px;\n}\n.icon-file {\r\n    position: absolute;\r\n    right: 3px;\n}\n.message-info {\r\n    position: absolute;\r\n    bottom: 90px;\r\n    left: 21px;\r\n    background-color: #e4e6ef !important;\r\n    padding: 10px 15px;\r\n    border-radius: 15px;\n}\n.message-error {\r\n    margin-top: 5px;\r\n    color: red;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -32958,7 +32981,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.active-user {\n    background: #f5f8fa !important;\n}\n.hr_custome {\n    height: 5px !important;\n    width: 100%;\n}\n.p-22 {\n    padding: 22px !important;\n}\n.pr-16 {\n    padding-right: 16px;\n}\n.pr-13 {\n    padding-right: 3.25rem !important;\n}\n.btn-emojis {\n    background: transparent;\n    border: none;\n    font-size: 1.5rem;\n    cursor: pointer;\n    background: #f5f8fa;\n    padding: 8px;\n    border-radius: 10%;\n}\n.icon-img {\n    position: absolute;\n    left: 6px;\n}\n.icon-file {\n    position: absolute;\n    right: 3px;\n}\n.message-info {\n    position: absolute;\n    bottom: 90px;\n    left: 21px;\n    background-color: #e4e6ef !important;\n    padding: 10px 15px;\n    border-radius: 15px;\n}\n.card-footer {\n    padding: 2rem 1rem !important;\n}\n.message-error {\n    margin-top: 5px;\n    color: red;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.active-user {\r\n    background: #f5f8fa !important;\n}\n.hr_custome {\r\n    height: 5px !important;\r\n    width: 100%;\n}\n.p-22 {\r\n    padding: 22px !important;\n}\n.pr-16 {\r\n    padding-right: 16px;\n}\n.pr-13 {\r\n    padding-right: 3.25rem !important;\n}\n.btn-emojis {\r\n    background: transparent;\r\n    border: none;\r\n    font-size: 1.5rem;\r\n    cursor: pointer;\r\n    background: #f5f8fa;\r\n    padding: 8px;\r\n    border-radius: 10%;\n}\n.icon-img {\r\n    position: absolute;\r\n    left: 6px;\n}\n.icon-file {\r\n    position: absolute;\r\n    right: 3px;\n}\n.message-info {\r\n    position: absolute;\r\n    bottom: 90px;\r\n    left: 21px;\r\n    background-color: #e4e6ef !important;\r\n    padding: 10px 15px;\r\n    border-radius: 15px;\n}\n.card-footer {\r\n    padding: 2rem 1rem !important;\n}\n.message-error {\r\n    margin-top: 5px;\r\n    color: red;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -32982,7 +33005,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.logo__notification[data-v-e6f77356] {\n  display: flex;\n    flex-direction: column;\n    justify-content: center;\n}\n\n\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.logo__notification[data-v-e6f77356] {\r\n  display: flex;\r\n    flex-direction: column;\r\n    justify-content: center;\n}\r\n\r\n\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -33006,7 +33029,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.notification-wrapper {\n    position: relative;\n}\n.notification-wrapper .nav-icon .badge {\n    position: absolute;\n    top: -10px;\n    right: -18px;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.notification-wrapper {\r\n    position: relative;\n}\n.notification-wrapper .nav-icon .badge {\r\n    position: absolute;\r\n    top: -10px;\r\n    right: -18px;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -33030,7 +33053,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.logo__notification[data-v-71160a65] {\n    display: flex;\n    flex-direction: column;\n    justify-content: center;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.logo__notification[data-v-71160a65] {\r\n    display: flex;\r\n    flex-direction: column;\r\n    justify-content: center;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -56791,7 +56814,7 @@ ${codeFrame}` : message);
 "use strict";
 /* provided dependency */ var process = __webpack_require__(/*! process/browser.js */ "./node_modules/process/browser.js");
 /* provided dependency */ var Buffer = __webpack_require__(/*! buffer */ "./node_modules/buffer/index.js")["Buffer"];
-/*! Axios v1.8.1 Copyright (c) 2025 Matt Zabriskie and contributors */
+/*! Axios v1.9.0 Copyright (c) 2025 Matt Zabriskie and contributors */
 
 
 function bind(fn, thisArg) {
@@ -56804,6 +56827,7 @@ function bind(fn, thisArg) {
 
 const {toString} = Object.prototype;
 const {getPrototypeOf} = Object;
+const {iterator, toStringTag} = Symbol;
 
 const kindOf = (cache => thing => {
     const str = toString.call(thing);
@@ -56930,7 +56954,7 @@ const isPlainObject = (val) => {
   }
 
   const prototype = getPrototypeOf(val);
-  return (prototype === null || prototype === Object.prototype || Object.getPrototypeOf(prototype) === null) && !(Symbol.toStringTag in val) && !(Symbol.iterator in val);
+  return (prototype === null || prototype === Object.prototype || Object.getPrototypeOf(prototype) === null) && !(toStringTag in val) && !(iterator in val);
 };
 
 /**
@@ -57281,13 +57305,13 @@ const isTypedArray = (TypedArray => {
  * @returns {void}
  */
 const forEachEntry = (obj, fn) => {
-  const generator = obj && obj[Symbol.iterator];
+  const generator = obj && obj[iterator];
 
-  const iterator = generator.call(obj);
+  const _iterator = generator.call(obj);
 
   let result;
 
-  while ((result = iterator.next()) && !result.done) {
+  while ((result = _iterator.next()) && !result.done) {
     const pair = result.value;
     fn.call(obj, pair[0], pair[1]);
   }
@@ -57408,7 +57432,7 @@ const toFiniteNumber = (value, defaultValue) => {
  * @returns {boolean}
  */
 function isSpecCompliantForm(thing) {
-  return !!(thing && isFunction(thing.append) && thing[Symbol.toStringTag] === 'FormData' && thing[Symbol.iterator]);
+  return !!(thing && isFunction(thing.append) && thing[toStringTag] === 'FormData' && thing[iterator]);
 }
 
 const toJSONObject = (obj) => {
@@ -57477,6 +57501,10 @@ const asap = typeof queueMicrotask !== 'undefined' ?
 
 // *********************
 
+
+const isIterable = (thing) => thing != null && isFunction(thing[iterator]);
+
+
 var utils$1 = {
   isArray,
   isArrayBuffer,
@@ -57532,7 +57560,8 @@ var utils$1 = {
   isAsyncFn,
   isThenable,
   setImmediate: _setImmediate,
-  asap
+  asap,
+  isIterable
 };
 
 /**
@@ -58517,10 +58546,18 @@ class AxiosHeaders {
       setHeaders(header, valueOrRewrite);
     } else if(utils$1.isString(header) && (header = header.trim()) && !isValidHeaderName(header)) {
       setHeaders(parseHeaders(header), valueOrRewrite);
-    } else if (utils$1.isHeaders(header)) {
-      for (const [key, value] of header.entries()) {
-        setHeader(value, key, rewrite);
+    } else if (utils$1.isObject(header) && utils$1.isIterable(header)) {
+      let obj = {}, dest, key;
+      for (const entry of header) {
+        if (!utils$1.isArray(entry)) {
+          throw TypeError('Object iterator must return a key-value pair');
+        }
+
+        obj[key = entry[0]] = (dest = obj[key]) ?
+          (utils$1.isArray(dest) ? [...dest, entry[1]] : [dest, entry[1]]) : entry[1];
       }
+
+      setHeaders(obj, valueOrRewrite);
     } else {
       header != null && setHeader(valueOrRewrite, header, rewrite);
     }
@@ -58660,6 +58697,10 @@ class AxiosHeaders {
 
   toString() {
     return Object.entries(this.toJSON()).map(([header, value]) => header + ': ' + value).join('\n');
+  }
+
+  getSetCookie() {
+    return this.get("set-cookie") || [];
   }
 
   get [Symbol.toStringTag]() {
@@ -59021,7 +59062,7 @@ function combineURLs(baseURL, relativeURL) {
  */
 function buildFullPath(baseURL, requestedURL, allowAbsoluteUrls) {
   let isRelativeUrl = !isAbsoluteURL(requestedURL);
-  if (baseURL && isRelativeUrl || allowAbsoluteUrls == false) {
+  if (baseURL && (isRelativeUrl || allowAbsoluteUrls == false)) {
     return combineURLs(baseURL, requestedURL);
   }
   return requestedURL;
@@ -59136,7 +59177,7 @@ var resolveConfig = (config) => {
 
   newConfig.headers = headers = AxiosHeaders$1.from(headers);
 
-  newConfig.url = buildURL(buildFullPath(newConfig.baseURL, newConfig.url), config.params, config.paramsSerializer);
+  newConfig.url = buildURL(buildFullPath(newConfig.baseURL, newConfig.url, newConfig.allowAbsoluteUrls), config.params, config.paramsSerializer);
 
   // HTTP basic authentication
   if (auth) {
@@ -59701,7 +59742,7 @@ var fetchAdapter = isFetchSupported && (async (config) => {
   } catch (err) {
     unsubscribe && unsubscribe();
 
-    if (err && err.name === 'TypeError' && /fetch/i.test(err.message)) {
+    if (err && err.name === 'TypeError' && /Load failed|fetch/i.test(err.message)) {
       throw Object.assign(
         new AxiosError('Network Error', AxiosError.ERR_NETWORK, config, request),
         {
@@ -59861,7 +59902,7 @@ function dispatchRequest(config) {
   });
 }
 
-const VERSION = "1.8.1";
+const VERSION = "1.9.0";
 
 const validators$1 = {};
 
@@ -59969,7 +60010,7 @@ const validators = validator.validators;
  */
 class Axios {
   constructor(instanceConfig) {
-    this.defaults = instanceConfig;
+    this.defaults = instanceConfig || {};
     this.interceptors = {
       request: new InterceptorManager$1(),
       response: new InterceptorManager$1()

@@ -1,6 +1,6 @@
 <div class="card">
 <div class="card-header">
-    <h4 class="card-title">Your new Notifications by Companies</h4>
+    <h4 class="card-title">Your new Notifications by Recruiters</h4>
 </div>
 <div class="card-body">
 @if($recruiterToCompanyFollowRequest->count() == 0)

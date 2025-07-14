@@ -27,7 +27,7 @@
                                 <div class="d-flex flex-column justify-content-center">
                                     <h4 class="mb-1">No contributor found or candidates, you don't have any connections</h4>
                                     <p>Please follow contributor for makeing connections or contact your candidate, on page <a
-                                            href="{{ asset('/company/freelancer/find/contributors') }}">find
+                                            href="{{ asset('/recruiter/find/contributors') }}">find
                                             contributors</a></p>
                                 </div>
                             </div>
