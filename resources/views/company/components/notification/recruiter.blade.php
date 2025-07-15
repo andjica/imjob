@@ -1,3 +1,6 @@
+@section('main-title', 'Dashboard')
+@section('title-dash', 'All Notification')
+
 <div class="card">
 <div class="card-header">
     <h4 class="card-title">Your new Notifications by Recruiters</h4>

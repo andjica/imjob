@@ -12,7 +12,7 @@
             <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
                 <!--begin::Item-->
                 <li class="breadcrumb-item text-muted">
-                    <a href="{{asset('/dashboard')}}" class="text-muted text-hover-primary">
+                    <a href="{{asset('/recruiter/dashboard')}}" class="text-muted text-hover-primary">
                         Dashboard
                     </a>
                 </li>

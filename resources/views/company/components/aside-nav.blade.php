@@ -205,8 +205,8 @@
                         </span>
                         <div class="menu-sub menu-sub-accordion">
                         <div class="menu-item">
-                            <a class="menu-link {{ Route::currentRouteName() === 'comapny-dashboard-notifications' ? 'active' : '' }}" 
-                            href="{{ asset('/company/dashboard/notifications') }}">
+                            <a class="menu-link {{ Route::currentRouteName() === 'company-dashboard-notifications' ? 'active' : '' }}" 
+                            href="{{ asset('company/dashboard/notifications') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -214,8 +214,8 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link {{ Route::currentRouteName() === 'comapny-dashboard-connections' ? 'active' : '' }}" 
-                            href="{{ asset('/company/dashboard/connections') }}">
+                            <a class="menu-link {{ Route::currentRouteName() === 'company-dashboard-connections' ? 'active' : '' }}" 
+                            href="{{ asset('company/dashboard/connections') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>

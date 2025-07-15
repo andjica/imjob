@@ -26,7 +26,7 @@ export default {
     mounted() {
         // Ako dolazimo sa badge resetom (klik sa ikonice)
         if (localStorage.getItem("resetBadgeContributor") === "1") {
-            emitter.emit("reset-navbar-badge");
+            emitter.emit("reset-contributor-navbar-badge");
             localStorage.removeItem("resetBadgeContributor");
             return;
         }
@@ -38,14 +38,14 @@ export default {
         this.boundUpdateUnreadTotal = this.updateUnreadTotal.bind(this);
         this.boundResetUnreadTotal = this.resetUnreadTotal.bind(this);
 
-        emitter.on("increment-navbar-badge", this.boundIncrementBadge);
+        emitter.on("increment-contributor-navbar-badge", this.boundIncrementBadge);
         // emitter.on("update-navbar-badge", this.boundUpdateUnreadTotal);
-        emitter.on("reset-navbar-badge", this.boundResetUnreadTotal);
+        emitter.on("reset-contributor-navbar-badge", this.boundResetUnreadTotal);
     },
     beforeUnmount() {
-        emitter.off("increment-navbar-badge", this.boundIncrementBadge);
-        emitter.off("update-navbar-badge", this.boundUpdateUnreadTotal);
-        emitter.off("reset-navbar-badge", this.boundResetUnreadTotal);
+        emitter.off("increment-contributor-navbar-badge", this.boundIncrementBadge);
+        emitter.off("update-contributor-navbar-badge", this.boundUpdateUnreadTotal);
+        emitter.off("reset-contributor-navbar-badge", this.boundResetUnreadTotal);
     },
     methods: {
         prepareForReset() {

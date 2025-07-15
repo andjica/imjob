@@ -1,6 +1,6 @@
 @extends('contributor.template-contributor')
 @section('main-title', 'Your Active Connections')
-@section('title-dash', 'Connection')
+@section('title-dash', 'Notification')
 
 
 @section('content')

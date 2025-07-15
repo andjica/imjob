@@ -24,7 +24,7 @@ export default {
     },
     mounted() {
         if (localStorage.getItem("resetBadgeFreelancer") === "1") {
-            emitter.emit("reset-navbar-badge");
+            emitter.emit("reset-freelancer-navbar-badge");
             localStorage.removeItem("resetBadgeFreelancer");
             return;
         }
@@ -33,17 +33,17 @@ export default {
 
         // Binduj metode da zadrže `this`
         this.boundIncrementBadge = this.incrementBadge.bind(this);
-        //this.boundUpdateUnreadTotal = this.updateUnreadTotal.bind(this);
+        this.boundUpdateUnreadTotal = this.updateUnreadTotal.bind(this);
         this.boundResetUnreadTotal = this.resetUnreadTotal.bind(this);
 
-        emitter.on("increment-navbar-badge", this.boundIncrementBadge);
-        emitter.on("update-navbar-badge", this.boundUpdateUnreadTotal);
-        emitter.on("reset-navbar-badge", this.boundResetUnreadTotal);
+        emitter.on("increment-freelancer-navbar-badge", this.boundIncrementBadge);
+        emitter.on("update-freelancer-navbar-badge", this.boundUpdateUnreadTotal);
+        emitter.on("reset-freelancer-navbar-badge", this.boundResetUnreadTotal);
     },
     beforeUnmount() {
-        emitter.off("increment-navbar-badge", this.boundIncrementBadge);
-        emitter.off("update-navbar-badge", this.boundUpdateUnreadTotal);
-        emitter.off("reset-navbar-badge", this.boundResetUnreadTotal);
+        emitter.off("increment-freelancer-navbar-badge", this.boundIncrementBadge);
+        emitter.off("update-freelancer-navbar-badge", this.boundUpdateUnreadTotal);
+        emitter.off("reset-freelancer-navbar-badge", this.boundResetUnreadTotal);
     },
     methods: {
         prepareForReset() {

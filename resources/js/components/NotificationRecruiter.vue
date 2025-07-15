@@ -21,7 +21,7 @@ export default {
     },
     mounted() {
         if (localStorage.getItem("resetBadgeRecruiter") === "1") {
-            emitter.emit("reset-navbar-badge");
+            emitter.emit("reset-recruiter-navbar-badge");
             localStorage.removeItem("resetBadgeRecruiter");
             return;
         }
@@ -33,14 +33,14 @@ export default {
         this.boundUpdateUnreadTotal = this.updateUnreadTotal.bind(this);
         this.boundResetUnreadTotal = this.resetUnreadTotal.bind(this);
 
-        emitter.on("increment-navbar-badge", this.boundIncrementBadge);
-        emitter.on("update-navbar-badge", this.boundUpdateUnreadTotal);
-        emitter.on("reset-navbar-badge", this.boundResetUnreadTotal);
+        emitter.on("increment-recruiter-navbar-badge", this.boundIncrementBadge);
+        emitter.on("update-recruiter-navbar-badge", this.boundUpdateUnreadTotal);
+        emitter.on("reset-recruiter-navbar-badge", this.boundResetUnreadTotal);
     },
     beforeUnmount() {
-        emitter.off("increment-navbar-badge", this.boundIncrementBadge);
-        emitter.off("update-navbar-badge", this.boundUpdateUnreadTotal);
-        emitter.off("reset-navbar-badge", this.boundResetUnreadTotal);
+        emitter.off("increment-recruiter-navbar-badge", this.boundIncrementBadge);
+        emitter.off("update-recruiter-navbar-badge", this.boundUpdateUnreadTotal);
+        emitter.off("reset-recruiter-navbar-badge", this.boundResetUnreadTotal);
     },
     methods: {
         prepareForReset() {
