@@ -36,11 +36,15 @@ return [
             'secret' => env('PUSHER_APP_SECRET'),
             'app_id' => env('PUSHER_APP_ID'),
             'options' => [
-                'cluster' => env('PUSHER_APP_CLUSTER'),
-                'useTLS' => false,
-                'host' => env('PUSHER_HOST', '127.0.0.1'),
+                'cluster' => env('PUSHER_APP_CLUSTER', 'mt1'),
+                'useTLS' => true,
+                'host' => env('PUSHER_HOST', 'fluffycave.nl'),
                 'port' => env('PUSHER_PORT', 6001),
-                'scheme' => env('PUSHER_SCHEME', 'http'),
+                'scheme' => env('PUSHER_SCHEME', 'https'),
+		'curl_options' => [
+			CURLOPT_SSL_VERIFYPEER => false, // ⚠️ po potrebi — za self-signed certifikat
+            		CURLOPT_SSL_VERIFYHOST => 0,
+		]
             ],
         ],
         'default' => env('BROADCAST_DRIVER', 'pusher'),

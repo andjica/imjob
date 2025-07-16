@@ -239,15 +239,15 @@ return [
 
     'ssl' => [
 
-        'local_cert' => env('LARAVEL_WEBSOCKETS_SSL_LOCAL_CERT', null),
+        'local_cert' => '/etc/letsencrypt/live/fluffycave.nl/fullchain.pem',
 
         'capath' => env('LARAVEL_WEBSOCKETS_SSL_CA', null),
 
-        'local_pk' => env('LARAVEL_WEBSOCKETS_SSL_LOCAL_PK', null),
+        'local_pk' => '/etc/letsencrypt/live/fluffycave.nl/privkey.pem',
 
-        'passphrase' => env('LARAVEL_WEBSOCKETS_SSL_PASSPHRASE', null),
+        'passphrase' => null,
 
-        'verify_peer' => env('APP_ENV') === 'production',
+        'verify_peer' => false,
 
         'allow_self_signed' => env('APP_ENV') !== 'production',
 
