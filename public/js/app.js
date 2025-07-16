@@ -429,7 +429,6 @@ function getClippingParents(element) {
     return [];
   } // $FlowFixMe[incompatible-return]: https://github.com/facebook/flow/issues/1414
 
-
   return clippingParents.filter(function (clippingParent) {
     return (0,_instanceOf_js__WEBPACK_IMPORTED_MODULE_4__.isElement)(clippingParent) && (0,_contains_js__WEBPACK_IMPORTED_MODULE_11__["default"])(clippingParent, clipperElement) && (0,_getNodeName_js__WEBPACK_IMPORTED_MODULE_12__["default"])(clippingParent) !== 'body';
   });
@@ -26216,10 +26215,10 @@ window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_9__["default"]({
   key: "localkey" || 0,
   wsHost: window.location.hostname,
   wsPort: 6001,
-  forceTLS: false,
-  encrypted: false,
+  forceTLS: true,
+  encrypted: true,
   disableStats: true,
-  enabledTransports: ["ws"],
+  enabledTransports: ["ws", "wss"],
   cluster: "mt1",
   namespace: null,
   authEndpoint: "/broadcasting/auth",
@@ -32981,7 +32980,11 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
+<<<<<<< Updated upstream
 ___CSS_LOADER_EXPORT___.push([module.id, "\n.user-active {\r\n    background: #f5f8fa !important;\n}\n.user__details {\r\n    display: flex;\r\n    justify-content: flex-start;\r\n    width: 100%;\n}\n.active-contributor {\r\n    background: #f5f8fa !important;\n}\n.btn-emojis {\r\n    background: transparent;\r\n    border: none;\r\n    font-size: 1.5rem;\r\n    cursor: pointer;\r\n    background: #f5f8fa;\r\n    padding: 8px;\r\n    border-radius: 10%;\n}\n.hr_custome {\r\n    height: 5px !important;\r\n    width: 100%;\n}\n.message-info {\r\n    position: absolute;\r\n    bottom: 90px;\r\n    left: 21px;\r\n    background-color: #e4e6ef !important;\r\n    padding: 10px 15px;\r\n    border-radius: 15px;\n}\n.scroll-section {\r\n    max-height: 300px;\r\n    /* ili koliko god želiš */\r\n    overflow-y: auto;\r\n    margin-bottom: 1rem;\r\n    padding: 0.5rem;\n}\n.badge-danger {\r\n    height: 20px;\n}\r\n", ""]);
+=======
+___CSS_LOADER_EXPORT___.push([module.id, "\n.user-active {\n  background: #f5f8fa !important;\n}\n.user__details {\n  display: flex;\n  justify-content: flex-start;\n  width: 100%;\n}\n.active-contributor {\n  background: #f5f8fa !important;\n}\n.btn-emojis {\n  background: transparent;\n  border: none;\n    font-size: 1.5rem;\n    cursor: pointer;\n    background: #f5f8fa;\n    padding: 8px;\n    border-radius: 10%;\n}\n.hr_custome {\n    height: 5px !important;\n    width: 100%;\n}\n.message-info {\n    position: absolute;\n    bottom: 90px;\n    left: 21px;\n    background-color: #e4e6ef !important;\n    padding: 10px 15px;\n    border-radius: 15px;\n}\n.scroll-section {\n    max-height: 300px;\n    /* ili koliko god želiš */\n    overflow-y: auto;\n    margin-bottom: 1rem;\n    padding: 0.5rem;\n}\n.badge-danger {\n    height: 20px;\n}\n", ""]);
+>>>>>>> Stashed changes
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
