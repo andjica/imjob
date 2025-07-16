@@ -35,13 +35,13 @@
                     <div class="card-header p-0" id="kt_contacts_list_header">
                         <!--begin::Form-->
                         @if (request('search'))
-                            <form method="GET" action="{{ route('company-dashboard-find-recruiters') }}">
+                            <form method="GET" action="{{ route('contributor-find-recruiter') }}">
                                 <button type="submit" class="btn btn-primary mb-3 btn-sm">
                                     <i class="fa-solid fa-chevron-left"></i> Back to All Recruiters
                                 </button>
                             </form>
                         @endif
-                        <form action="{{ route('company-dashboard-find-recruiters') }}" method="GET"
+                        <form action="{{ route('contributor-find-recruiter') }}" method="GET"
                             class="d-flex align-items-center position-relative w-100 m-0" autocomplete="off">
                             <!--begin::Icon-->
                             <i

@@ -1,4 +1,5 @@
 <template>
+    Recruiters
     <div class="row">
         <div class="col-lg-5 mb-5">
             <div class="card card-flush">
@@ -36,7 +37,8 @@
                         <div class="d-flex d-flex__column">
                             <div class="gap-4 user-card__scroll">
                                 <div
-                                    v-for="candidate in sortedCandidates" :key="candidate.user.id"
+                                    v-for="candidate in sortedCandidates"
+                                    :key="candidate.user.id"
                                     class="d-flex align-items-center px-2 user-card"
                                     :class="[
                                         selectedUser &&
@@ -44,7 +46,7 @@
                                             ? 'user-active'
                                             : '',
                                     ]"
-                                    @click.prevent="selectUser(candidate.user)"
+                                    @click.prevent="selectUser(candidate)"
                                 >
                                     <div
                                         class="symbol symbol-45px symbol-circle"
@@ -74,6 +76,16 @@
                                         <p>{{ candidate.user.email }}</p>
                                         <small><i>Candidate</i></small>
                                     </div>
+                                    <span
+                                        v-if="
+                                            candidate.user &&
+                                            unreadMap[candidate.user.id] > 0
+                                        "
+                                        class="badge badge-danger"
+                                        >{{
+                                            unreadMap[candidate.user.id]
+                                        }}</span
+                                    >
                                 </div>
                                 <div v-if="sortedCandidates.length === 0">
                                     <p>You don't have Candidates</p>
@@ -83,7 +95,8 @@
                             <hr class="my-4" />
                             <div class="gap-4 user-card__scroll">
                                 <div
-                                    v-for="user in sortedContributors" :key="user"
+                                    v-for="user in sortedContributors"
+                                    :key="user.user?.id || user.id"
                                     class="d-flex flex-row align-items-center"
                                     :class="{
                                         'user-active':
@@ -131,7 +144,10 @@
                                         <small><i>Contributor</i></small>
                                     </div>
                                     <span
-                                        v-if="unreadMap[user.user.id]"
+                                        v-if="
+                                            user.user &&
+                                            unreadMap[user.user.id] > 0
+                                        "
                                         class="badge badge-danger"
                                         >{{ unreadMap[user.user.id] }}</span
                                     >
@@ -409,10 +425,19 @@ export default {
             });
         },
         sortedCandidates() {
+            this.unreadMap; // reaktivnost
             return [...this.candidates].sort((a, b) => {
-                const unreadA = this.unreadMap[a.user.id] || 0;
-                const unreadB = this.unreadMap[b.user.id] || 0;
-                return unreadB - unreadA;
+                const unreadA = this.unreadMap[a.user?.id] || 0;
+                const unreadB = this.unreadMap[b.user?.id] || 0;
+
+                if (unreadA !== unreadB) {
+                    return unreadB - unreadA; // Sort po unread porukama
+                }
+
+                const aTime = new Date(a.last_message_at || 0).getTime();
+                const bTime = new Date(b.last_message_at || 0).getTime();
+
+                return bTime - aTime; // Ako nema unread razlike, po poslednjoj poruci
             });
         },
     },
@@ -454,11 +479,11 @@ export default {
                 (sum, count) => sum + count,
                 0
             );
-            emitter.emit("update-navbar-badge", this.unreadTotal);
+            emitter.emit("update-recruiter-navbar-badge", this.unreadTotal);
         },
         async markMessagesAsRead(userId) {
             if (!userId) return;
-
+            console.log("markMessagesAsRead", userId);
             try {
                 await fetch(`/messages/mark-as-read/${userId}`, {
                     method: "POST",
@@ -468,7 +493,10 @@ export default {
                     },
                 });
 
-                console.log("Unutar funkcjije mark as read: ",this.unreadMap[userId]);
+                console.log(
+                    "Unutar funkcjije mark as read: ",
+                    this.unreadMap[userId]
+                );
                 this.unreadMap[userId] = 0;
                 this.updateUnreadTotal();
             } catch (err) {
@@ -490,7 +518,7 @@ export default {
                     },
                 });
                 const data = await res.json();
-                console.log("FetchMessage: ",data);
+                console.log("FetchMessage: ", data);
                 this.messages = data || [];
                 this.scrollToBottom();
             } catch (err) {
@@ -513,7 +541,6 @@ export default {
             }
         },
         handleFileChange(event) {
-            
             const file = event.target.files[0];
             if (file && file.size > 5 * 1024 * 1024) {
                 this.messageError = "File must be less than 5MB.";
@@ -605,9 +632,17 @@ export default {
 
             this.markMessagesAsRead(id);
         },
-        selectUser(user) {
+        selectUser(candidate) {
+            console.log("selectUser is: ", candidate);
+            const user = candidate;
             this.selectedUser = user;
             this.selectedContributor = null;
+
+            const match = this.candidates.find(c => c.user.id === user.id);
+            if(match){
+                console.log("match: ", match);
+                match.last_message_at = new Date().toISOString();
+            }
             this.fetchMessages(user.id);
             localStorage.setItem("lastChatUser", JSON.stringify(user));
             this.markMessagesAsRead(user.id);
@@ -615,7 +650,7 @@ export default {
         selectFirstContributor() {
             if (!this.contributorData.length) return;
 
-            const firstContributor = this.contributorData[0];
+            const firstContributor = this.sortedContributors[0];
             this.selectContributor(firstContributor);
         },
         async loadUnreadCounts() {
@@ -628,11 +663,19 @@ export default {
                         Accept: "application/json",
                     },
                 });
-
                 const data = await res.json();
+
+                // Prvo napravimo novi objekat kopiran iz starog
+                const updatedMap = { ...this.unreadMap };
+
+                // Ažuriramo vrednosti
                 data.forEach(({ user_id, unread_count }) => {
-                    this.unreadMap[user_id] = unread_count;
+                    updatedMap[user_id] = unread_count;
                 });
+
+                // Zamenimo ceo objekat da bismo triggerovali reaktivnost
+                this.unreadMap = updatedMap;
+
                 this.updateUnreadTotal();
             } catch (err) {
                 console.error("Error loading unread counts:", err);
@@ -670,16 +713,17 @@ export default {
         console.log("Recruiter contributor: ", this.contributors);
         this.prepareContributors();
         this.initializeEmojiPicker();
+        // ⏳ Prvo učitaj unreadMap da bi sortiranje odmah bilo validno
         await this.loadUnreadCounts();
 
         // Try restore last selected user first
         const restored = this.restoreLastSelectedUser();
 
         if (!restored) {
-            if (this.contributors.length) {
-                this.selectFirstContributor();
-            } else if (this.candidates.length) {
-                this.selectUser(this.candidates[0].user);
+            if (this.sortedContributors.length) {
+                this.selectContributor(this.sortedContributors[0]);
+            } else if (this.sortedCandidates.length) {
+                this.selectUser(this.sortedCandidates[0].user);
             }
         }
 
@@ -712,7 +756,12 @@ export default {
                 } else {
                     if (message.user_id !== this.currentUserId) {
                         if (this.unreadMap[message.user_id]) {
-                            this.unreadMap[message.user_id]++;
+                            // Dodaj ili uvećaj vrednost
+                            this.unreadMap[message.user_id] =
+                                (this.unreadMap[message.user_id] || 0) + 1;
+
+                            // Triggeruj reaktivnost (hack: zamenimo ceo objekat)
+                            this.unreadMap = { ...this.unreadMap };
                         } else {
                             this.unreadMap[message.user_id] = 1;
                         }
@@ -720,7 +769,7 @@ export default {
                         this.updateUnreadTotal();
 
                         // Emituj ka nav-baru za globalni badge
-                        emitter.emit("update-navbar-badge", this.unreadTotal);
+                        emitter.emit("update-recruiter-navbar-badge", this.unreadTotal);
                     }
                 }
             })
@@ -775,6 +824,7 @@ export default {
     padding: 10px 15px;
     border-radius: 15px;
 }
+
 .message-error {
     margin-top: 5px;
     color: red;

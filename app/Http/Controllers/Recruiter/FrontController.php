@@ -415,7 +415,7 @@ class FrontController extends Controller
                     $q->where('user_id', $userId)
                         ->orWhere('receiver_id', $userId);
                 })
-                    ->latest('created_at')
+                    ->latest('created_at', 'desc')
                     ->first();
 
                 $contributor->last_message_at = $lastMessage?->created_at;
@@ -426,7 +426,7 @@ class FrontController extends Controller
             ->values();
 
         $candidates = $this->recruiterServices->getAcceptedCandidate();
-
+        // return dd($candidates);
         return view('recruiter.pages.chat', compact('contributors','candidates'));
     }
 

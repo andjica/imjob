@@ -6,17 +6,10 @@
                 <div class="card-header pt-7" id="kt_chat_contacts_header">
                     <form class="w-100 position-relative" autocomplete="off">
                         <i
-                            class="ki-duotone ki-magnifier fs-3 text-gray-500 position-absolute top-50 ms-5 translate-middle-y"
-                            ><span class="path1"></span
-                            ><span class="path2"></span
-                        ></i>
-                        <input
-                            type="text"
-                            class="form-control form-control-solid pr-13"
-                            name="search"
-                            value=""
-                            placeholder="Search by username or email..."
-                        />
+                            class="ki-duotone ki-magnifier fs-3 text-gray-500 position-absolute top-50 ms-5 translate-middle-y"><span
+                                class="path1"></span><span class="path2"></span></i>
+                        <input type="text" class="form-control form-control-solid pr-13" name="search" value=""
+                            placeholder="Search by username or email..." />
                     </form>
                 </div>
                 <!--end::Card header-->
@@ -24,111 +17,75 @@
                 <!--begin::Card body-->
                 <div class="card-body pt-5" id="kt_chat_contacts_body">
                     <!--begin::List-->
-                    <div
-                        class="scroll-y me-n5 h-200px h-lg-auto"
-                        data-kt-scroll="true"
-                        data-kt-scroll-activate="{default: false, lg: true}"
-                        data-kt-scroll-max-height="auto"
+                    <div class="scroll-y me-n5 h-200px h-lg-auto" data-kt-scroll="true"
+                        data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto"
                         data-kt-scroll-dependencies="#kt_header, #kt_app_header, #kt_toolbar, #kt_app_toolbar, #kt_footer, #kt_app_footer, #kt_chat_contacts_header"
                         data-kt-scroll-wrappers="#kt_content, #kt_app_content, #kt_chat_contacts_body"
-                        data-kt-scroll-offset="5px"
-                        style="max-height: 362px"
-                    >
+                        data-kt-scroll-offset="5px" style="max-height: 362px">
                         <div class="d-flex d-flex__column py-1">
-                            <div
-                                class="d-flex align-items-center user-card"
-                                :class="[
-                                    selectedUser &&
+                            <div class="d-flex align-items-center user-card" :class="[
+                                selectedUser &&
                                     selectedUser.id === candidate.user.id
-                                        ? 'active-user'
-                                        : '',
-                                ]"
-                                v-if="candidate && candidate.user"
-                                @click.prevent="selectUser(candidate.user)"
-                            >
-                                <div
-                                    class="symbol symbol-45px symbol-circle pr-16"
-                                >
-                                    <img
-                                        :src="
-                                            candidate.user.profile_image
-                                                ? getImageFileUrl(
-                                                      candidate.user
-                                                          .profile_image
-                                                  )
-                                                : defaultImage
-                                        "
-                                        alt="Profile Image"
-                                        class="img-fluid rounded-circle shadow-sm"
-                                        style="width: 60px; height: 60px"
-                                    />
+                                    ? 'active-user'
+                                    : '',
+                            ]" v-if="candidate && candidate.user" @click.prevent="selectUser(candidate.user)">
+                                <div class="symbol symbol-45px symbol-circle pr-16">
+                                    <img :src="candidate.user.profile_image
+                                            ? getImageFileUrl(
+                                                candidate.user
+                                                    .profile_image
+                                            )
+                                            : defaultImage
+                                        " alt="Profile Image" class="img-fluid rounded-circle shadow-sm"
+                                        style="width: 60px; height: 60px" />
                                 </div>
                                 <div class="">
-                                    <a
-                                        href="#"
-                                        class="fs-5 fw-bold text-gray-900 text-hover-primary mb-2"
-                                    >
+                                    <a href="#" class="fs-5 fw-bold text-gray-900 text-hover-primary mb-2">
                                         {{ candidate.user.first_name }}
                                         {{ candidate.user.last_name }}
                                     </a>
                                     <p>{{ candidate.user.email }}</p>
                                     <small><i>Candidate</i></small>
                                 </div>
+                                <span v-if="unreadMap[candidate.user.id] > 0" class="badge badge-danger">{{
+                                    unreadMap[candidate.user.id] }}</span>
                             </div>
                             <hr class="hr_custome" />
                             <!--begin::Details-->
-                            <div
-                                class="d-flex align-items-center"
-                                v-for="user in sortedContributors"
-                                :key="user?.user?.id || user?.id"
-                                :class="[
+                            <div class="d-flex align-items-center" v-for="user in sortedContributors"
+                                :key="user?.user?.id || user?.id" :class="[
                                     selectedContributor &&
-                                    selectedContributor.user.id ===
+                                        selectedContributor.user.id ===
                                         user?.user?.id
                                         ? 'active-user'
                                         : '',
-                                ]"
-                            >
+                                ]">
                                 <!--begin::Avatar-->
                                 <div class="symbol symbol-45px symbol-circle">
-                                    <img
-                                        :src="
-                                            user.profile_image
-                                                ? getImageFileUrl(
-                                                      user.profile_image
-                                                  )
-                                                : defaultImage
-                                        "
-                                        alt="Profile Image"
-                                        class="img-fluid rounded-circle shadow-sm"
-                                        style="width: 60px; height: 60px"
-                                    />
+                                    <img :src="user.profile_image
+                                            ? getImageFileUrl(
+                                                user.profile_image
+                                            )
+                                            : defaultImage
+                                        " alt="Profile Image" class="img-fluid rounded-circle shadow-sm"
+                                        style="width: 60px; height: 60px" />
                                 </div>
                                 <!--end::Avatar-->
                                 <!--begin::Details-->
-                                <div
-                                    class="ms-5"
-                                    @click.prevent="selectContributor(user)"
-                                >
-                                    <a
-                                        href="#"
-                                        :class="[
-                                            'fs-5 fw-bold text-gray-900 text-hover-primary mb-2',
-                                            selectedContributor?.user?.id ===
-                                                user?.user?.id,
-                                        ]"
-                                    >
+                                <div class="ms-5" @click.prevent="selectContributor(user)">
+                                    <a href="#" :class="[
+                                        'fs-5 fw-bold text-gray-900 text-hover-primary mb-2',
+                                        selectedContributor?.user?.id ===
+                                        user?.user?.id,
+                                    ]">
                                         {{ user.name }}
                                     </a>
 
                                     <p>{{ user.user.email }}</p>
                                     <small><i>Contributor</i></small>
                                 </div>
-                                <span
-                                    v-if="unreadMap[user.user.id]"
-                                    class="badge badge-danger"
-                                    >{{ unreadMap[user.user.id] }}</span
-                                >
+                                <span v-if="unreadMap[user.user.id] > 0" class="badge badge-danger">{{
+                                    unreadMap[user.user.id] }}</span>
                                 <!--end::Details-->
                             </div>
                             <!--end::Details-->
@@ -150,104 +107,64 @@
                         {{
                             selectedContributor?.name ||
                             candidate?.user?.first_name +
-                                " " +
-                                candidate?.user?.last_name ||
+                            " " +
+                            candidate?.user?.last_name ||
                             "Candidate?"
                         }}
                     </h3>
                 </div>
-                <div
-                    class="card-body chat-box chat-box__contributor"
-                    id="chatBox_recruitment"
-                >
-                    <div
-                        v-for="msg in sortedMessages"
-                        :key="msg.id"
-                        :class="
-                            msg.user_id === currentUserId
-                                ? 'chat-message sent'
-                                : 'chat-message received'
-                        "
-                    >
-                        <div
-                            :class="
-                                msg.user_id === currentUserId
-                                    ? 'text-end'
-                                    : 'text-start'
-                            "
-                        >
+                <div class="card-body chat-box chat-box__contributor" id="chatBox_recruitment">
+                    <div v-for="msg in sortedMessages" :key="msg.id" :class="msg.user_id === currentUserId
+                            ? 'chat-message sent'
+                            : 'chat-message received'
+                        ">
+                        <div :class="msg.user_id === currentUserId
+                                ? 'text-end'
+                                : 'text-start'
+                            ">
                             <!-- Prikaz teksta poruke -->
-                            <div
-                                :class="
-                                    msg.user_id === currentUserId
-                                        ? 'p-3 rounded bg-primary text-white d-inline-block'
-                                        : 'p-3 rounded bg-light text-dark d-inline-block'
-                                "
-                                v-if="msg.text"
-                            >
+                            <div :class="msg.user_id === currentUserId
+                                    ? 'p-3 rounded bg-primary text-white d-inline-block'
+                                    : 'p-3 rounded bg-light text-dark d-inline-block'
+                                " v-if="msg.text">
                                 {{ msg.text }}
                             </div>
 
                             <!-- Prikaz fajla -->
                             <div v-if="msg.file_path" style="margin-top: 10px">
-                                <div
-                                    v-if="
-                                        getFileDisplayType(msg.file_type) ===
-                                        'image'
-                                    "
-                                >
-                                    <img
-                                        :src="getImageFileUrl(msg.file_path)"
-                                        alt="image"
-                                        style="max-width: 200px"
-                                    />
+                                <div v-if="
+                                    getFileDisplayType(msg.file_type) ===
+                                    'image'
+                                ">
+                                    <img :src="getImageFileUrl(msg.file_path)" alt="image" style="max-width: 200px" />
                                 </div>
-                                <div
-                                    v-else-if="
-                                        getFileDisplayType(msg.file_type) ===
-                                        'pdf'
-                                    "
-                                >
-                                    <a
-                                        :class="
-                                            msg.user_id === currentUserId
-                                                ? 'p-3 rounded bg-primary text-white d-inline-block'
-                                                : 'p-3 rounded bg-light text-dark d-inline-block'
-                                        "
-                                        :href="getImageFileUrl(msg.file_path)"
-                                        target="_blank"
-                                    >
+                                <div v-else-if="
+                                    getFileDisplayType(msg.file_type) ===
+                                    'pdf'
+                                ">
+                                    <a :class="msg.user_id === currentUserId
+                                            ? 'p-3 rounded bg-primary text-white d-inline-block'
+                                            : 'p-3 rounded bg-light text-dark d-inline-block'
+                                        " :href="getImageFileUrl(msg.file_path)" target="_blank">
                                         📄 View PDF
                                     </a>
                                 </div>
-                                <div
-                                    v-else-if="
-                                        getFileDisplayType(msg.file_type) ===
-                                        'word'
-                                    "
-                                >
-                                    <a
-                                        :class="
-                                            msg.user_id === currentUserId
-                                                ? 'p-3 rounded bg-primary text-white d-inline-block'
-                                                : 'p-3 rounded bg-light text-dark d-inline-block'
-                                        "
-                                        :href="getImageFileUrl(msg.file_path)"
-                                        target="_blank"
-                                    >
+                                <div v-else-if="
+                                    getFileDisplayType(msg.file_type) ===
+                                    'word'
+                                ">
+                                    <a :class="msg.user_id === currentUserId
+                                            ? 'p-3 rounded bg-primary text-white d-inline-block'
+                                            : 'p-3 rounded bg-light text-dark d-inline-block'
+                                        " :href="getImageFileUrl(msg.file_path)" target="_blank">
                                         📎 Word Document
                                     </a>
                                 </div>
                                 <div v-else>
-                                    <a
-                                        :class="
-                                            msg.user_id === currentUserId
-                                                ? 'p-3 rounded bg-primary text-white d-inline-block'
-                                                : 'p-3 rounded bg-light text-dark d-inline-block'
-                                        "
-                                        :href="getImageFileUrl(msg.file_path)"
-                                        target="_blank"
-                                    >
+                                    <a :class="msg.user_id === currentUserId
+                                            ? 'p-3 rounded bg-primary text-white d-inline-block'
+                                            : 'p-3 rounded bg-light text-dark d-inline-block'
+                                        " :href="getImageFileUrl(msg.file_path)" target="_blank">
                                         📁 Download file
                                     </a>
                                 </div>
@@ -275,42 +192,18 @@
                 </div>
             </div>
             <div class="card-footer">
-                <form
-                    id="chatForm"
-                    @submit.prevent="handleSubmit"
-                    enctype="multipart/form-data"
-                >
+                <form id="chatForm" @submit.prevent="handleSubmit" enctype="multipart/form-data">
                     <div class="d-flex align-items-center gap-2">
-                        <input
-                            type="text"
-                            class="form-control form-control-solid pr-13"
-                            name="input"
-                            value=""
-                            placeholder="Type your message..."
-                            v-model="message"
-                            @keydown.enter.prevent="handleSubmit"
-                        />
-                        <button
-                            type="button"
-                            class="btn btn-light position-relative p-22"
-                            @click="triggerFileInput"
-                        >
+                        <input type="text" class="form-control form-control-solid pr-13" name="input" value=""
+                            placeholder="Type your message..." v-model="message"
+                            @keydown.enter.prevent="handleSubmit" />
+                        <button type="button" class="btn btn-light position-relative p-22" @click="triggerFileInput">
                             <i class="fa-solid fa-image icon-img"></i>
                             <i class="fa-solid fa-file icon-file"></i>
                         </button>
-                        <input
-                            type="file"
-                            id="fileUpload"
-                            ref="fileInput"
-                            @change="handleFileChange"
-                            accept="image/*,.pdf,.doc,.docx"
-                            class="d-none"
-                        />
-                        <button
-                            class="btn-emojis"
-                            ref="emojiBtn"
-                            @click.prevent="toggleEmojiPicker"
-                        >
+                        <input type="file" id="fileUpload" ref="fileInput" @change="handleFileChange"
+                            accept="image/*,.pdf,.doc,.docx" class="d-none" />
+                        <button class="btn-emojis" ref="emojiBtn" @click.prevent="toggleEmojiPicker">
                             😀
                         </button>
                         <button class="btn btn-primary" type="submit">
@@ -402,10 +295,8 @@ export default {
 
             if (lastUser) {
                 const parsed = JSON.parse(lastUser);
-                const index = contributors.findIndex((c) => {
-                    console.log("c", c);
-                    c.user?.id === parsed.id || c.id === parsed.id;
-                });
+                const index = contributors.findIndex(
+                    (c) => c.user?.id === parsed.id || c.id === parsed.id);
 
                 if (index > -1) {
                     prioritized = contributors.splice(index, 1)[0]; // izvuci ga iz niza
@@ -651,18 +542,14 @@ export default {
                     } else {
                         if (message.user_id !== this.currentUserId) {
                             const contributor = this.localContributors.find(
-                                (c) => c.user?.id === message.user_id
+                                (c) => c.user?.id === message.user_id || c.id === message.user_id
                             );
                             if (contributor) {
                                 contributor.last_message_time =
                                     message.created_at;
                             }
 
-                            if (this.unreadMap[message.user_id]) {
-                                this.unreadMap[message.user_id]++;
-                            } else {
-                                this.unreadMap[message.user_id] = 1;
-                            }
+                            this.unreadMap[message.user_id] = (this.unreadMap[message.user_id] || 0) + 1;
 
                             this.updateUnreadTotal();
 
