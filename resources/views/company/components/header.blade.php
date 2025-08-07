@@ -75,8 +75,8 @@
         </div>
         <div class="nav-item mt-5">
             <a href="{{asset('/company/dashboard/notifications')}}" class="nav-link">
-                <i id="notification-icon" class="fas fa-bell"></i>
-                <span id="notification-badge" class="badge bg-danger" style="display: none;">0</span>
+                <i id="notification-icon-company" class="fas fa-bell"></i>
+                <span id="notification-badge-company" class="badge bg-danger" style="display: none;">0</span>
             </a>
         </div>
 

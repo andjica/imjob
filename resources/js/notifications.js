@@ -1,8 +1,12 @@
-import './bootstrap';
+import "./bootstrap";
 
 function setupNotifications() {
-    const companyId = document.querySelector('meta[name="company-id"]')?.content;
-    const recruiterId = document.querySelector('meta[name="recruiter-id"]')?.content;
+    const companyId = document.querySelector(
+        'meta[name="company-id"]'
+    )?.content;
+    const recruiterId = document.querySelector(
+        'meta[name="recruiter-id"]'
+    )?.content;
 
     const isCompanyLoggedIn = Boolean(companyId);
     const isRecruiterLoggedIn = Boolean(recruiterId);
@@ -15,36 +19,66 @@ function setupNotifications() {
         if (!entityId) return;
 
         // Zabrani slušanje kanala koji ne pripada ulogovanom tipu korisnika
-        if (entityType === 'company' && !isCompanyLoggedIn) return;
-        if (entityType === 'recruiter' && !isRecruiterLoggedIn) return;
+        if (entityType === "company" && !isCompanyLoggedIn) return;
+        if (entityType === "recruiter" && !isRecruiterLoggedIn) return;
 
         const channelName = `${entityType}.${entityId}`;
 
+
+
         if (window.subscribedChannels.has(channelName)) {
-            console.warn("Reset channel:", channelName);
-            window.Echo.leave(channelName);
-        } else {
-            window.subscribedChannels.add(channelName);
+            console.log("⚠️ Already subscribed to:", channelName);
+            return;
         }
 
-        const channel = window.Echo.channel(channelName);
+        window.subscribedChannels.add(channelName);
 
-        channel.stopListening('.new-follow').listen('.new-follow', (event) => {
+        console.log("👂 Listening for new-follow event on:", channelName);
+
+        const channel = window.Echo.channel(channelName);
+        console.log("andjica", channel);
+        channel.stopListening(".new-follow").listen(".new-follow", (event) => {
             console.log(`📬 New notification on ${channelName}:`, event);
 
-            const isFollowedCompany = event.followed_type === 'company' && parseInt(event.company_id) === parseInt(entityId);
-            const isFollowedRecruiter = event.followed_type === 'recruiter' && parseInt(event.recruiter_id) === parseInt(entityId);
+            const isFollowedCompany =
+                event.followed_type === "company" &&
+                parseInt(event.company_id) === parseInt(entityId);
+            const isFollowedRecruiter =
+                event.followed_type === "recruiter" &&
+                parseInt(event.recruiter_id) === parseInt(entityId);
 
             if (!isFollowedCompany && !isFollowedRecruiter) {
-                console.log("🚫 Ignored — current user is NOT the followed entity.");
+                console.log(
+                    "🚫 Ignored — current user is NOT the followed entity."
+                );
                 return;
             }
 
-            console.log("🔔 Showing notification to FOLLOWED entity:", channelName);
+            console.log(
+                "🔔 Showing notification to FOLLOWED entity:",
+                channelName
+            );
+            const isCompanyDashboard =
+                window.location.pathname.includes("company/dashboard");
+            const isRecruiterDashboard =
+                window.location.pathname.includes("recruiter");
+            const isFreelancerDashboard =
+                window.location.pathname.includes("company/freelancer");
+            const role = isRecruiterDashboard
+                ? "recruiter"
+                : isCompanyDashboard
+                ? "company"
+                : "freelancer";
 
-            const notificationIcon = document.getElementById("notification-icon");
-            const notificationBadge = document.getElementById("notification-badge");
-            const notificationMenuTitles = document.querySelectorAll(".notification-menu-title");
+            const notificationIcon =
+                document.getElementById(`notification-icon-${role}`);
+            const notificationBadge = document.getElementById(
+                `notification-badge-${role}`
+            );
+            
+            const notificationMenuTitles = document.querySelectorAll(
+                ".notification-menu-title"
+            );
 
             if (!notificationIcon || !notificationBadge) return;
 
@@ -52,78 +86,139 @@ function setupNotifications() {
 
             if (entityType === "company") {
                 localStorage.setItem("companyHasNewNotification", "true");
-                notificationCount = parseInt(localStorage.getItem("companyNotificationCount") || "0") + 1;
-                localStorage.setItem("companyNotificationCount", notificationCount);
+                notificationCount =
+                    parseInt(
+                        localStorage.getItem("companyNotificationCount") || "0"
+                    ) + 1;
+                localStorage.setItem(
+                    "companyNotificationCount",
+                    notificationCount
+                );
             }
 
             if (entityType === "recruiter") {
                 localStorage.setItem("recruiterHasNewNotification", "true");
-                notificationCount = parseInt(localStorage.getItem("recruiterNotificationCount") || "0") + 1;
-                localStorage.setItem("recruiterNotificationCount", notificationCount);
+                notificationCount =
+                    parseInt(
+                        localStorage.getItem("recruiterNotificationCount") ||
+                            "0"
+                    ) + 1;
+                localStorage.setItem(
+                    "recruiterNotificationCount",
+                    notificationCount
+                );
             }
 
             notificationIcon.classList.add("text-danger");
             notificationBadge.innerText = notificationCount;
             notificationBadge.style.display = "inline";
-            notificationMenuTitles.forEach(menu => menu.classList.add("text-danger"));
+            notificationMenuTitles.forEach((menu) =>
+                menu.classList.add("text-danger")
+            );
         });
 
         console.log(`✅ Subscribed to: ${channelName}`);
     }
 
     function checkStoredNotifications() {
-        const notificationIcon = document.getElementById("notification-icon");
-        const notificationBadge = document.getElementById("notification-badge");
-        const notificationMenuTitles = document.querySelectorAll(".notification-menu-title");
+        const isCompanyDashboard =
+            window.location.pathname.includes("company/dashboard");
+        const isRecruiterDashboard =
+            window.location.pathname.includes("recruiter");
+        const isFreelancerDashboard =
+            window.location.pathname.includes("company/freelancer");
+        const role = isRecruiterDashboard
+            ? "recruiter"
+            : isCompanyDashboard
+            ? "company"
+            : "freelancer";
 
-        const isCompanyDashboard = window.location.pathname.includes("company/dashboard");
-        const isRecruiterDashboard = window.location.pathname.includes("recruiter");
-        const isFreelancerDashboard = window.location.pathname.includes("company/freelancer");
+        const notificationIcon = document.getElementById(`notification-icon-${role}`);
+        const notificationBadge = document.getElementById(
+            `notification-badge-${role}`
+        );
+
+        const notificationMenuTitles = document.querySelectorAll(
+            ".notification-menu-title"
+        );
 
         let notificationCount = 0;
 
-        if (isCompanyDashboard && localStorage.getItem("companyHasNewNotification") === "true") {
+        if (
+            isCompanyDashboard &&
+            localStorage.getItem("companyHasNewNotification") === "true"
+        ) {
             notificationIcon.classList.add("text-danger");
-            notificationMenuTitles.forEach(menu => menu.classList.add("text-danger"));
-            notificationCount = localStorage.getItem("companyNotificationCount") || "0";
+            notificationMenuTitles.forEach((menu) =>
+                menu.classList.add("text-danger")
+            );
+            notificationCount =
+                localStorage.getItem("companyNotificationCount") || "0";
             notificationBadge.innerText = notificationCount;
             notificationBadge.style.display = "inline";
         }
 
-        if ((isRecruiterDashboard || isFreelancerDashboard) && localStorage.getItem("recruiterHasNewNotification") === "true") {
+        if (
+            (isRecruiterDashboard || isFreelancerDashboard) &&
+            localStorage.getItem("recruiterHasNewNotification") === "true"
+        ) {
             notificationIcon.classList.add("text-danger");
-            notificationMenuTitles.forEach(menu => menu.classList.add("text-danger"));
-            notificationCount = localStorage.getItem("recruiterNotificationCount") || "0";
+            notificationMenuTitles.forEach((menu) =>
+                menu.classList.add("text-danger")
+            );
+            notificationCount =
+                localStorage.getItem("recruiterNotificationCount") || "0";
             notificationBadge.innerText = notificationCount;
             notificationBadge.style.display = "inline";
         }
     }
 
     function clearNotificationsOnRoute() {
-        const isCompanyNotificationPage = window.location.pathname === "/company/dashboard/notifications";
-        const isRecruiterNotificationPage = window.location.pathname === "/recruiter/notifications";
-        const isFreelancerNotificationPage = window.location.pathname === "/company/freelancer/notifications";
-
-        if (isCompanyNotificationPage || isRecruiterNotificationPage || isFreelancerNotificationPage) {
+        const isCompanyNotificationPage =
+            window.location.pathname === "/company/dashboard/notifications";
+        const isRecruiterNotificationPage =
+            window.location.pathname === "/recruiter/notifications";
+        const isFreelancerNotificationPage =
+            window.location.pathname === "/company/freelancer/notifications";
+        const role = isRecruiterNotificationPage
+            ? "recruiter"
+            : isCompanyNotificationPage
+            ? "company"
+            : "freelancer";
+        if (
+            isCompanyNotificationPage ||
+            isRecruiterNotificationPage ||
+            isFreelancerNotificationPage
+        ) {
             localStorage.removeItem("companyHasNewNotification");
             localStorage.removeItem("companyNotificationCount");
             localStorage.removeItem("recruiterHasNewNotification");
             localStorage.removeItem("recruiterNotificationCount");
 
-            const notificationIcon = document.getElementById("notification-icon");
-            const notificationBadge = document.getElementById("notification-badge");
-            const notificationMenuTitles = document.querySelectorAll(".notification-menu-title");
+            const notificationIcon =
+                document.getElementById(`notification-icon-${role}`);
+            const notificationBadge = document.getElementById(
+                `notification-badge-${role}`
+            );
+
+            const notificationMenuTitles = document.querySelectorAll(
+                ".notification-menu-title"
+            );
 
             notificationIcon.classList.remove("text-danger");
             notificationBadge.style.display = "none";
-            notificationMenuTitles.forEach(menu => menu.classList.remove("text-danger"));
+            notificationMenuTitles.forEach((menu) =>
+                menu.classList.remove("text-danger")
+            );
         }
     }
 
     function setupNotificationClickReset() {
-        const notificationLinks = document.querySelectorAll('.menu-link[href*="notifications"]');
-        notificationLinks.forEach(link => {
-            link.addEventListener('click', () => {
+        const notificationLinks = document.querySelectorAll(
+            '.menu-link[href*="notifications"]'
+        );
+        notificationLinks.forEach((link) => {
+            link.addEventListener("click", () => {
                 console.log("🔄 Resetting notifications on menu click...");
                 clearNotificationsOnRoute();
             });
@@ -131,11 +226,11 @@ function setupNotifications() {
     }
 
     if (isCompanyLoggedIn) {
-        subscribeToChannel('company', companyId);
+        subscribeToChannel("company", companyId);
     }
 
     if (isRecruiterLoggedIn) {
-        subscribeToChannel('recruiter', recruiterId);
+        subscribeToChannel("recruiter", recruiterId);
     }
 
     checkStoredNotifications();

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Log;
 use App\Models\Job;
 use App\Models\City;
 use App\Models\Country;
@@ -11,7 +12,6 @@ use Illuminate\Http\Request;
 use App\Models\AiSearchHistory;
 use App\Services\AI\OpenAiService;
 use Tymon\JWTAuth\Facades\JWTAuth;
-use Illuminate\Support\Facades\Log;
 use App\Services\AI\JobPresenterService;
 use App\Services\AI\CountryNormalizerService;
 
@@ -28,9 +28,10 @@ class ChatAiController extends Controller
         $this->jobPresenter = $jobPresenter;
     }
 
-    
+
     public function handle(Request $request)
     {
+
         $userMessage = $request->get('message');
 
         $detectedLang = $this->ai->detectLanguage($userMessage);
@@ -58,8 +59,6 @@ class ChatAiController extends Controller
 
         $city = $params['city'] ?? null;
         $country = $params['country'] ?? null;
-        $category = $params['category'] ?? null;
-        $subcategory = $params['subcategory'] ?? null;
 
         if ($city) {
             $cityModel = City::whereRaw('LOWER(name) = ?', [$city])->first();
@@ -77,34 +76,58 @@ class ChatAiController extends Controller
             }
         }
 
-        $categoryModel = null;
-        $subcategoryModel = null;
 
-        if ($category) {
-            $categoryModel = Category::whereRaw('LOWER(name) = ?', [$category])->first();
-            if (!$categoryModel) {
-                $subcategoryModel = SubCategory::with('category')->whereRaw('LOWER(name) = ?', [$category])->first();
-                if ($subcategoryModel && $subcategoryModel->category) {
-                    $categoryModel = $subcategoryModel->category;
-                }
+        // Priprema filtera
+        $category = $params['category'] ?? null;
+        $subcategory = $params['subcategory'] ?? null;
+
+
+        $mappedCategory = null;
+        $mappedSubcategory = null;
+
+        // Mapiraj oboje odvojeno
+        if (!empty($params['subcategory'])) {
+            $mappedSubcategory = $this->ai->normalizeAndMapCategory($params['subcategory']);
+        }
+        if (!empty($params['category'])) {
+            $mappedCategory = $this->ai->normalizeAndMapCategory($params['category']);
+        }
+
+        // Mapiranje subcategory
+        if ($mappedCategory && $mappedCategory['type'] === 'category') {
+            $params['category'] = $mappedCategory['value'];
+
+            $normalizedCatValue = strtolower(trim($mappedCategory['value']));
+            $category = Category::whereRaw('LOWER(TRIM(name)) = ?', [$normalizedCatValue])->first();
+
+            if ($category instanceof Category) {
+                Log::info("✅ Matched category: " . $category->name);
+                Log::info('🧩 category_id type: ' . gettype($category->id));
+                $jobsQuery->where('category_id', (int) $category->id);
+            } else {
+                Log::warning("⚠️ Category not found in DB: " . $mappedCategory['value']);
             }
         }
 
-        if ($categoryModel) {
-            $jobsQuery->where('category_id', $categoryModel->id);
-        }
+        if ($mappedSubcategory && $mappedSubcategory['type'] === 'subcategory') {
+            $params['subcategory'] = $mappedSubcategory['value'];
 
-        if ($subcategoryModel) {
-            $jobsQuery->where('sub_category_id', $subcategoryModel->id);
-        }
+            $normalizedSubValue = strtolower(trim($mappedSubcategory['value']));
+            $subcategory = SubCategory::whereRaw('LOWER(TRIM(name)) = ?', [$normalizedSubValue])->first();
 
-        if ($subcategory) {
-            $explicitSub = SubCategory::whereRaw('LOWER(name) = ?', [$subcategory])->first();
-            if ($explicitSub) {
-                $jobsQuery->where('sub_category_id', $explicitSub->id);
+            if ($subcategory instanceof SubCategory) {
+                Log::info("✅ Matched subcategory: " . $subcategory->name);
+                Log::info('🧩 sub_category_id type: ' . gettype($subcategory->id));
+                $jobsQuery->where('sub_category_id', (int) $subcategory->id);
+            } else {
+                Log::warning("⚠️ SubCategory not found in DB: " . $mappedSubcategory['value']);
             }
         }
-        
+
+
+
+
+
 
         if (!empty($params['salary_min'])) {
             $jobsQuery->where('salary_min', '>=', $params['salary_min']);
@@ -125,6 +148,22 @@ class ChatAiController extends Controller
                 Log::warning('Unknown job_type: ' . $params['job_type']);
             }
         }
+
+        if (is_object($subcategory) && property_exists($subcategory, 'id')) {
+            Log::info('🧩 sub_category_id type: ' . gettype($subcategory->id));
+        } else {
+            Log::warning('⚠️ sub_category_id is not an object or has no id.');
+        }
+
+        if (is_object($category) && property_exists($category, 'id')) {
+            Log::info('🧩 category_id type: ' . gettype($category->id));
+        } else {
+            Log::warning('⚠️ category_id is not an object or has no id.');
+        }
+
+
+        Log::info('🕵️ Final SQL:', [$jobsQuery->toSql()]);
+        Log::info('🔗 Bindings:', $jobsQuery->getBindings());
 
         $jobs = $jobsQuery->get();
 
@@ -160,69 +199,71 @@ class ChatAiController extends Controller
     }
 
     public function getTranslatedJob(Request $request, $id)
-{
-    $job = Job::with([
-        'company',
-        'city',
-        'country',
-        'category',
-        'subcategory',
-        'jobType',
-        'skills'
-    ])->find($id);
+    {
+        $job = Job::with([
+            'company',
+            'city',
+            'country',
+            'category',
+            'subcategory',
+            'jobType',
+            'skills'
+        ])->find($id);
 
-    if (!$job) {
-        return response()->json(['error' => 'Job not found'], 404);
+        if (!$job) {
+            return response()->json(['error' => 'Job not found'], 404);
+        }
+
+        $userLang = $request->query('lang');
+        if (!$userLang) {
+            return response()->json(['error' => 'Missing lang parameter'], 400);
+        }
+
+        $needsTranslation = $job->language_code !== $userLang;
+
+        $ai = $this->ai; // koristi injected AI servis
+
+        try {
+            $translatedTitle = $needsTranslation ? $ai->translateToLanguage($job->title, $userLang) : $job->title;
+            $translatedDescription = $needsTranslation ? $ai->translateToLanguage(strip_tags($job->description), $userLang) : $job->description;
+            $translatedCategory = $needsTranslation ? $ai->translateToLanguage($job->category->name ?? '', $userLang) : ($job->category->name ?? '');
+            $translatedSubcategory = $needsTranslation ? $ai->translateToLanguage($job->subcategory->name ?? '', $userLang) : ($job->subcategory->name ?? '');
+            $translatedJobType = $needsTranslation ? $ai->translateToLanguage($job->jobType->name ?? '', $userLang) : ($job->jobType->name ?? '');
+            $translatedExperienceLevel = $needsTranslation ? $ai->translateToLanguage($job->experience_level, $userLang) : $job->experience_level;
+
+            $translatedSkills = $job->skills->map(function ($skill) use ($ai, $userLang, $needsTranslation) {
+                return [
+                    'name' => $needsTranslation ? $ai->translateToLanguage($skill->skill, $userLang) : $skill->skill,
+                    'required' => $skill->is_required,
+                ];
+            })->toArray();
+        } catch (\Exception $e) {
+            Log::warning("Translation error for job ID {$job->id}: " . $e->getMessage());
+            return response()->json(['error' => 'Translation failed'], 500);
+        }
+
+        return response()->json([
+            'id' => $job->id,
+            'title' => $translatedTitle,
+            'company' => $job->company->name ?? null,
+            'city' => $job->city->name ?? 'Unknown',
+            'country' => $job->country->name ?? 'Unknown',
+            'job_world_type' => $job->job_world_type ?? 'Unknown',
+            'category' => $translatedCategory,
+            'sub_category' => $translatedSubcategory,
+            'job_type' => $translatedJobType,
+            'experience_level' => $translatedExperienceLevel,
+            'min_age' => $job->min_age,
+            'max_age' => $job->max_age,
+            'skills' => $translatedSkills,
+            'salary_min' => $job->salary_min,
+            'salary_max' => $job->salary_max,
+            'valid_until' => $job->valid_until,
+            'description' => $translatedDescription,
+            'original_language' => $job->language_code,
+            'link' => url("/job/{$job->id}"),
+        ]);
     }
-
-    $userLang = $request->query('lang');
-    if (!$userLang) {
-        return response()->json(['error' => 'Missing lang parameter'], 400);
-    }
-
-    $needsTranslation = $job->language_code !== $userLang;
-
-    $ai = $this->ai; // koristi injected AI servis
-
-    try {
-        $translatedTitle = $needsTranslation ? $ai->translateToLanguage($job->title, $userLang) : $job->title;
-        $translatedDescription = $needsTranslation ? $ai->translateToLanguage(strip_tags($job->description), $userLang) : $job->description;
-        $translatedCategory = $needsTranslation ? $ai->translateToLanguage($job->category->name ?? '', $userLang) : ($job->category->name ?? '');
-        $translatedSubcategory = $needsTranslation ? $ai->translateToLanguage($job->subcategory->name ?? '', $userLang) : ($job->subcategory->name ?? '');
-        $translatedJobType = $needsTranslation ? $ai->translateToLanguage($job->jobType->name ?? '', $userLang) : ($job->jobType->name ?? '');
-        $translatedExperienceLevel = $needsTranslation ? $ai->translateToLanguage($job->experience_level, $userLang) : $job->experience_level;
-
-        $translatedSkills = $job->skills->map(function ($skill) use ($ai, $userLang, $needsTranslation) {
-            return [
-                'name' => $needsTranslation ? $ai->translateToLanguage($skill->skill, $userLang) : $skill->skill,
-                'required' => $skill->is_required,
-            ];
-        })->toArray();
-
-    } catch (\Exception $e) {
-        Log::warning("Translation error for job ID {$job->id}: " . $e->getMessage());
-        return response()->json(['error' => 'Translation failed'], 500);
-    }
-
-    return response()->json([
-        'id' => $job->id,
-        'title' => $translatedTitle,
-        'company' => $job->company->name ?? null,
-        'city' => $job->city->name ?? 'Unknown',
-        'country' => $job->country->name ?? 'Unknown',
-        'category' => $translatedCategory,
-        'sub_category' => $translatedSubcategory,
-        'job_type' => $translatedJobType,
-        'experience_level' => $translatedExperienceLevel,
-        'skills' => $translatedSkills,
-        'salary_min' => $job->salary_min,
-        'salary_max' => $job->salary_max,
-        'valid_until' => $job->valid_until,
-        'description' => $translatedDescription,
-        'original_language' => $job->language_code,
-        'link' => url("/job/{$job->id}"),
-    ]);
-}
 
     public function history()
     {
@@ -233,5 +274,4 @@ class ChatAiController extends Controller
 
         return response()->json($history);
     }
-
 }

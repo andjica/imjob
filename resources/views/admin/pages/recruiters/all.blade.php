@@ -94,7 +94,7 @@
                                                     <span class="text-muted">{{ $recruiter->user->last_name }}</span>
                                                 </td>
                                                 <td>
-                                                    @if (Storage::exists('public/' . $recruiter->profile_image))
+                                                    @if ($recruiter->profile_image && Storage::exists('public/' . $recruiter->profile_image))
                                                         <img src="{{ asset('storage/' . $recruiter->profile_image) }}"
                                                             alt="{{ $recruiter->user->first_name }}"
                                                             class="objfit img-fluid" width="150px">

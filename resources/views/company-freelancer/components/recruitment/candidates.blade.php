@@ -84,6 +84,11 @@
                         <a href="{{Storage::url($candidate->candidate->cv)}}" download target="_blank" class="text-danger">
                             <i class="fa-solid fa-file-pdf fa-xl text-danger"></i>
                             {{-- {{ $candidate->candidate->cv}} --}}
+                            <a href="{{ url('company/freelancer/candidate/' . $candidate->user_id . '/cvai') }}" target="_blank">
+                                📄 View AI CV
+                            </a>
+
+
                         </a>
                     </td>
                     <td>

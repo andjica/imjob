@@ -15,6 +15,8 @@ use App\Models\Contributor;
 use FontLib\Table\Type\fpgm;
 use Illuminate\Http\Request;
 use App\Actions\CreateMeeting;
+use App\Models\CandidatProfile;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\CompanyRecruiter;
 use App\Interfaces\CityInterface;
 use App\Models\RecruitmentProcess;
@@ -22,6 +24,7 @@ use App\Services\CandidateService;
 use App\Models\RecruitmentSubphase;
 use App\Repositories\JobRepository;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Interfaces\CompanyInterface;
 use App\Interfaces\CountryInterface;
@@ -428,6 +431,31 @@ class FrontController extends Controller
         $candidates = $this->recruiterServices->getAcceptedCandidate();
         // return dd($candidates);
         return view('recruiter.pages.chat', compact('contributors','candidates'));
+    }
+
+    public function generateCvAi($id)
+    {
+        
+        $candidate = CandidatProfile::where('user_id', $id)->with('user', 'city', 'country')->first() ?? abort(404);
+        $imagePath = public_path($candidate->profile_image ?? 'images/user-286.png');
+
+        if (!file_exists($imagePath)) {
+            $imagePath = public_path('images/user-286.png');
+        }
+
+        $imageData = base64_encode(file_get_contents($imagePath));
+        $imageType = pathinfo($imagePath, PATHINFO_EXTENSION);
+        $base64Image = 'data:image/' . $imageType . ';base64,' . $imageData;
+
+        Log::info("Generated base64 image: " . substr($base64Image, 0, 100));
+
+        $pdf = Pdf::loadView('pdf.candidate-cv-ai', [
+            'candidate' => $candidate,
+            'base64Image' => $base64Image,
+        ]);
+
+        return $pdf->stream('AI_CV_' . $candidate->id . '.pdf');
+       
     }
 
 }

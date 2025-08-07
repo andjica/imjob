@@ -51,30 +51,42 @@
         
             @foreach($candidates as $candidate)
                 <tr>
-                    <td>
+                      <td>
                         <div class="d-flex align-items-center">
                             <!-- Profile Image -->
                             <div class="symbol symbol-50 symbol-light-info mr-5">
-                                <img src="{{ asset('/images/300-12.jpg') }}" class="img-fluid rounded-circle" alt="Profile Image" width="50">
+                                @if ($candidate->candidate->profile_image)
+                            <img src="{{ Storage::url( $candidate->candidate->profile_image) }}" class="img-fluid rounded-circle" alt="Profile Image" width="50">
+                                @else
+                                    <img src="{{ asset('public/images/user-286.png') }}" class="img-fluid rounded-circle" alt="Default Profile Image" width="50">
+                                @endif
+
                             </div>
                             <!-- Name and Company -->
                             <div>
-                                <span class="text-dark font-weight-bold d-block">{{ $candidate->user->first_name }}</span>
+                                <span class="text-dark font-weight-bold d-block">{{ $candidate->user->first_name  }} {{ $candidate->user->last_name  }}</span>
                                 <a class="text-muted text-hover-primary font-weight-normal" href="mailto:alarkingg@elegantthemes.com">
                                     <small>{{ $candidate->user->email  }}</small>
                                 </a>
                             </div>
                         </div>
                     </td>
-                    <td>
+                     <td>
                         <!-- Full Name -->
-                        <span class="font-weight-bold text-dark">{{ $candidate->user->last_name  }}</span>
+                        <span class="font-weight-bold text-dark">{{$candidate->candidate->country->name}}, {{$candidate->candidate->city->name}}</span>
                     </td>
-                    <td>
+                     <td>
                         <!-- PDF Link -->
-                        <a href="#" class="text-danger">
+                        <a href="{{Storage::url($candidate->candidate->cv)}}" download target="_blank" class="text-danger">
                             <i class="fa-solid fa-file-pdf fa-xl text-danger"></i>
+                            {{-- {{ $candidate->candidate->cv}} --}}
+                            <a href="{{ url('/company/dashboard/candidate/' . $candidate->user_id . '/cvai') }}" target="_blank">
+                                📄 View AI CV
+                            </a>
+
+
                         </a>
+                   
                     </td>
                     <td>
                         <!-- Status -->

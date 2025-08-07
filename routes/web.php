@@ -35,6 +35,7 @@ use App\Http\Controllers\Front\LandingController;
 use App\Models\Recruiter;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Log;
 
 /*
 |--------------------------------------------------------------------------
@@ -146,6 +147,9 @@ Route::middleware(['auth', 'company', 'verified'])->prefix('company/dashboard')-
 
     Route::get('/notifications', [CompanyFrontController::class, 'getNotifications'])->name('notifications');
     Route::get('/connections', [CompanyFrontController::class, 'getConnections'])->name('connections');
+
+    Route::get('/candidate/{id}/cvai', [CompanyFrontController::class, 'generateCvAi']);
+
 });
 
 // Company Freelancer Routes
@@ -208,6 +212,10 @@ Route::middleware(['auth', 'company.freelancer', 'verified'])->prefix('company/f
         Route::get('/connections', [CompanyFreelancerFrontController::class, 'connections'])->name('connections');
 
         Route::get('/chats', [CompanyFreelancerFrontController::class, 'chats'])->name('chats');
+
+        //automatski cv
+        Route::get('/candidate/{id}/cvai', [CompanyFreelancerFrontController::class, 'generateCvAi']);
+
     });
 });
 
@@ -260,6 +268,9 @@ Route::middleware(['auth', 'recruiter', 'verified'])->prefix('recruiter')->name(
         Route::get('/notifications', [RecruiterFrontController::class, 'notifications'])->name('notifications');
         Route::get('/connections', [RecruiterFrontController::class, 'connections'])->name('connections');
         Route::get('/chats', [RecruiterFrontController::class, 'chats'])->name('chats');
+
+        Route::get('/candidate/{id}/cvai', [RecruiterFrontController::class, 'generateCvAi']);
+
     });
 });
 
@@ -314,4 +325,7 @@ Route::get('/contact-us', [LandingController::class, 'getContactUs'])->name('con
 Route::get('/about-us', [LandingController::class, 'getAboutUs'])->name('about-us');
 
 
-
+Route::get('/logtest', function () {
+    Log::info('🟢 Ovo je test log poruka.');
+    return 'Log test poslat!';
+});
