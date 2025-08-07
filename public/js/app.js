@@ -26192,6 +26192,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Chat_recruiterAll_vue__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/Chat-recruiterAll.vue */ "./resources/js/components/Chat-recruiterAll.vue");
 /* harmony import */ var laravel_echo__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! laravel-echo */ "./node_modules/laravel-echo/dist/echo.js");
 /* harmony import */ var _eventBus__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./eventBus */ "./resources/js/eventBus.js");
+/* provided dependency */ var process = __webpack_require__(/*! process/browser.js */ "./node_modules/process/browser.js");
 function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
@@ -26213,7 +26214,7 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 window.Pusher = __webpack_require__(/*! pusher-js */ "./node_modules/pusher-js/dist/web/pusher.js");
 window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_9__["default"]({
   broadcaster: "pusher",
-  key: "localkey" || 0,
+  key: process.env.MIX_PUSHER_APP_KEY || "localkey",
   wsHost: window.location.hostname,
   wsPort: 6001,
   forceTLS: true,
@@ -26392,27 +26393,32 @@ function setupNotifications() {
     if (!entityId) return;
 
     // Zabrani slušanje kanala koji ne pripada ulogovanom tipu korisnika
-    if (entityType === 'company' && !isCompanyLoggedIn) return;
-    if (entityType === 'recruiter' && !isRecruiterLoggedIn) return;
+    if (entityType === "company" && !isCompanyLoggedIn) return;
+    if (entityType === "recruiter" && !isRecruiterLoggedIn) return;
     var channelName = "".concat(entityType, ".").concat(entityId);
     if (window.subscribedChannels.has(channelName)) {
-      console.warn("Reset channel:", channelName);
-      window.Echo.leave(channelName);
-    } else {
-      window.subscribedChannels.add(channelName);
+      console.log("⚠️ Already subscribed to:", channelName);
+      return;
     }
+    window.subscribedChannels.add(channelName);
+    console.log("👂 Listening for new-follow event on:", channelName);
     var channel = window.Echo.channel(channelName);
-    channel.stopListening('.new-follow').listen('.new-follow', function (event) {
+    console.log("andjica", channel);
+    channel.stopListening(".new-follow").listen(".new-follow", function (event) {
       console.log("\uD83D\uDCEC New notification on ".concat(channelName, ":"), event);
-      var isFollowedCompany = event.followed_type === 'company' && parseInt(event.company_id) === parseInt(entityId);
-      var isFollowedRecruiter = event.followed_type === 'recruiter' && parseInt(event.recruiter_id) === parseInt(entityId);
+      var isFollowedCompany = event.followed_type === "company" && parseInt(event.company_id) === parseInt(entityId);
+      var isFollowedRecruiter = event.followed_type === "recruiter" && parseInt(event.recruiter_id) === parseInt(entityId);
       if (!isFollowedCompany && !isFollowedRecruiter) {
         console.log("🚫 Ignored — current user is NOT the followed entity.");
         return;
       }
       console.log("🔔 Showing notification to FOLLOWED entity:", channelName);
-      var notificationIcon = document.getElementById("notification-icon");
-      var notificationBadge = document.getElementById("notification-badge");
+      var isCompanyDashboard = window.location.pathname.includes("company/dashboard");
+      var isRecruiterDashboard = window.location.pathname.includes("recruiter");
+      var isFreelancerDashboard = window.location.pathname.includes("company/freelancer");
+      var role = isRecruiterDashboard ? "recruiter" : isCompanyDashboard ? "company" : "freelancer";
+      var notificationIcon = document.getElementById("notification-icon-".concat(role));
+      var notificationBadge = document.getElementById("notification-badge-".concat(role));
       var notificationMenuTitles = document.querySelectorAll(".notification-menu-title");
       if (!notificationIcon || !notificationBadge) return;
       var notificationCount = 0;
@@ -26436,12 +26442,13 @@ function setupNotifications() {
     console.log("\u2705 Subscribed to: ".concat(channelName));
   }
   function checkStoredNotifications() {
-    var notificationIcon = document.getElementById("notification-icon");
-    var notificationBadge = document.getElementById("notification-badge");
-    var notificationMenuTitles = document.querySelectorAll(".notification-menu-title");
     var isCompanyDashboard = window.location.pathname.includes("company/dashboard");
     var isRecruiterDashboard = window.location.pathname.includes("recruiter");
     var isFreelancerDashboard = window.location.pathname.includes("company/freelancer");
+    var role = isRecruiterDashboard ? "recruiter" : isCompanyDashboard ? "company" : "freelancer";
+    var notificationIcon = document.getElementById("notification-icon-".concat(role));
+    var notificationBadge = document.getElementById("notification-badge-".concat(role));
+    var notificationMenuTitles = document.querySelectorAll(".notification-menu-title");
     var notificationCount = 0;
     if (isCompanyDashboard && localStorage.getItem("companyHasNewNotification") === "true") {
       notificationIcon.classList.add("text-danger");
@@ -26466,13 +26473,14 @@ function setupNotifications() {
     var isCompanyNotificationPage = window.location.pathname === "/company/dashboard/notifications";
     var isRecruiterNotificationPage = window.location.pathname === "/recruiter/notifications";
     var isFreelancerNotificationPage = window.location.pathname === "/company/freelancer/notifications";
+    var role = isRecruiterNotificationPage ? "recruiter" : isCompanyNotificationPage ? "company" : "freelancer";
     if (isCompanyNotificationPage || isRecruiterNotificationPage || isFreelancerNotificationPage) {
       localStorage.removeItem("companyHasNewNotification");
       localStorage.removeItem("companyNotificationCount");
       localStorage.removeItem("recruiterHasNewNotification");
       localStorage.removeItem("recruiterNotificationCount");
-      var notificationIcon = document.getElementById("notification-icon");
-      var notificationBadge = document.getElementById("notification-badge");
+      var notificationIcon = document.getElementById("notification-icon-".concat(role));
+      var notificationBadge = document.getElementById("notification-badge-".concat(role));
       var notificationMenuTitles = document.querySelectorAll(".notification-menu-title");
       notificationIcon.classList.remove("text-danger");
       notificationBadge.style.display = "none";
@@ -26484,17 +26492,17 @@ function setupNotifications() {
   function setupNotificationClickReset() {
     var notificationLinks = document.querySelectorAll('.menu-link[href*="notifications"]');
     notificationLinks.forEach(function (link) {
-      link.addEventListener('click', function () {
+      link.addEventListener("click", function () {
         console.log("🔄 Resetting notifications on menu click...");
         clearNotificationsOnRoute();
       });
     });
   }
   if (isCompanyLoggedIn) {
-    subscribeToChannel('company', companyId);
+    subscribeToChannel("company", companyId);
   }
   if (isRecruiterLoggedIn) {
-    subscribeToChannel('recruiter', recruiterId);
+    subscribeToChannel("recruiter", recruiterId);
   }
   checkStoredNotifications();
   clearNotificationsOnRoute();
@@ -56862,7 +56870,7 @@ ${codeFrame}` : message);
 "use strict";
 /* provided dependency */ var process = __webpack_require__(/*! process/browser.js */ "./node_modules/process/browser.js");
 /* provided dependency */ var Buffer = __webpack_require__(/*! buffer */ "./node_modules/buffer/index.js")["Buffer"];
-/*! Axios v1.9.0 Copyright (c) 2025 Matt Zabriskie and contributors */
+/*! Axios v1.8.1 Copyright (c) 2025 Matt Zabriskie and contributors */
 
 
 function bind(fn, thisArg) {
@@ -56875,7 +56883,6 @@ function bind(fn, thisArg) {
 
 const {toString} = Object.prototype;
 const {getPrototypeOf} = Object;
-const {iterator, toStringTag} = Symbol;
 
 const kindOf = (cache => thing => {
     const str = toString.call(thing);
@@ -57002,7 +57009,7 @@ const isPlainObject = (val) => {
   }
 
   const prototype = getPrototypeOf(val);
-  return (prototype === null || prototype === Object.prototype || Object.getPrototypeOf(prototype) === null) && !(toStringTag in val) && !(iterator in val);
+  return (prototype === null || prototype === Object.prototype || Object.getPrototypeOf(prototype) === null) && !(Symbol.toStringTag in val) && !(Symbol.iterator in val);
 };
 
 /**
@@ -57353,13 +57360,13 @@ const isTypedArray = (TypedArray => {
  * @returns {void}
  */
 const forEachEntry = (obj, fn) => {
-  const generator = obj && obj[iterator];
+  const generator = obj && obj[Symbol.iterator];
 
-  const _iterator = generator.call(obj);
+  const iterator = generator.call(obj);
 
   let result;
 
-  while ((result = _iterator.next()) && !result.done) {
+  while ((result = iterator.next()) && !result.done) {
     const pair = result.value;
     fn.call(obj, pair[0], pair[1]);
   }
@@ -57480,7 +57487,7 @@ const toFiniteNumber = (value, defaultValue) => {
  * @returns {boolean}
  */
 function isSpecCompliantForm(thing) {
-  return !!(thing && isFunction(thing.append) && thing[toStringTag] === 'FormData' && thing[iterator]);
+  return !!(thing && isFunction(thing.append) && thing[Symbol.toStringTag] === 'FormData' && thing[Symbol.iterator]);
 }
 
 const toJSONObject = (obj) => {
@@ -57549,10 +57556,6 @@ const asap = typeof queueMicrotask !== 'undefined' ?
 
 // *********************
 
-
-const isIterable = (thing) => thing != null && isFunction(thing[iterator]);
-
-
 var utils$1 = {
   isArray,
   isArrayBuffer,
@@ -57608,8 +57611,7 @@ var utils$1 = {
   isAsyncFn,
   isThenable,
   setImmediate: _setImmediate,
-  asap,
-  isIterable
+  asap
 };
 
 /**
@@ -58594,18 +58596,10 @@ class AxiosHeaders {
       setHeaders(header, valueOrRewrite);
     } else if(utils$1.isString(header) && (header = header.trim()) && !isValidHeaderName(header)) {
       setHeaders(parseHeaders(header), valueOrRewrite);
-    } else if (utils$1.isObject(header) && utils$1.isIterable(header)) {
-      let obj = {}, dest, key;
-      for (const entry of header) {
-        if (!utils$1.isArray(entry)) {
-          throw TypeError('Object iterator must return a key-value pair');
-        }
-
-        obj[key = entry[0]] = (dest = obj[key]) ?
-          (utils$1.isArray(dest) ? [...dest, entry[1]] : [dest, entry[1]]) : entry[1];
+    } else if (utils$1.isHeaders(header)) {
+      for (const [key, value] of header.entries()) {
+        setHeader(value, key, rewrite);
       }
-
-      setHeaders(obj, valueOrRewrite);
     } else {
       header != null && setHeader(valueOrRewrite, header, rewrite);
     }
@@ -58745,10 +58739,6 @@ class AxiosHeaders {
 
   toString() {
     return Object.entries(this.toJSON()).map(([header, value]) => header + ': ' + value).join('\n');
-  }
-
-  getSetCookie() {
-    return this.get("set-cookie") || [];
   }
 
   get [Symbol.toStringTag]() {
@@ -59110,7 +59100,7 @@ function combineURLs(baseURL, relativeURL) {
  */
 function buildFullPath(baseURL, requestedURL, allowAbsoluteUrls) {
   let isRelativeUrl = !isAbsoluteURL(requestedURL);
-  if (baseURL && (isRelativeUrl || allowAbsoluteUrls == false)) {
+  if (baseURL && isRelativeUrl || allowAbsoluteUrls == false) {
     return combineURLs(baseURL, requestedURL);
   }
   return requestedURL;
@@ -59225,7 +59215,7 @@ var resolveConfig = (config) => {
 
   newConfig.headers = headers = AxiosHeaders$1.from(headers);
 
-  newConfig.url = buildURL(buildFullPath(newConfig.baseURL, newConfig.url, newConfig.allowAbsoluteUrls), config.params, config.paramsSerializer);
+  newConfig.url = buildURL(buildFullPath(newConfig.baseURL, newConfig.url), config.params, config.paramsSerializer);
 
   // HTTP basic authentication
   if (auth) {
@@ -59790,7 +59780,7 @@ var fetchAdapter = isFetchSupported && (async (config) => {
   } catch (err) {
     unsubscribe && unsubscribe();
 
-    if (err && err.name === 'TypeError' && /Load failed|fetch/i.test(err.message)) {
+    if (err && err.name === 'TypeError' && /fetch/i.test(err.message)) {
       throw Object.assign(
         new AxiosError('Network Error', AxiosError.ERR_NETWORK, config, request),
         {
@@ -59950,7 +59940,7 @@ function dispatchRequest(config) {
   });
 }
 
-const VERSION = "1.9.0";
+const VERSION = "1.8.1";
 
 const validators$1 = {};
 
@@ -60058,7 +60048,7 @@ const validators = validator.validators;
  */
 class Axios {
   constructor(instanceConfig) {
-    this.defaults = instanceConfig || {};
+    this.defaults = instanceConfig;
     this.interceptors = {
       request: new InterceptorManager$1(),
       response: new InterceptorManager$1()

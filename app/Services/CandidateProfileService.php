@@ -81,7 +81,12 @@ class CandidateProfileService implements CandidateProfileInterface
         $profile->country_id = $request->country_id;
         $profile->city_id = $request->city_id;
         $profile->phone = $request->phone;
-        $profile->birthday = $request->birthday;
+        $birthday = $request->birthday;
+
+        if ($birthday && preg_match('/^\d{2}\.\d{2}\.\d{4}$/', $birthday)) {
+            $birthday = \Carbon\Carbon::createFromFormat('d.m.Y', $birthday)->format('Y-m-d');
+        }
+        $profile->birthday = $birthday;
         $profile->current_title_job = $request->current_title_job;
         $profile->current_company = $request->current_company;
         $profile->years_of_experience = $request->years_of_experience;

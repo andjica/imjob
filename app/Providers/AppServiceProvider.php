@@ -48,6 +48,9 @@ use App\Services\ContributorRecruiterServices;
 use App\Interfaces\RecruiterEducationInterface;
 use App\Interfaces\RecruitmentProcessInterface;
 use App\Interfaces\ContributorRecruiterInterface;
+use App\Services\AI\OpenAiService;
+use App\Services\AI\JobPresenterService;
+use App\Services\AI\CountryNormalizerService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -79,6 +82,18 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(CandidateProfileInterface::class, CandidateProfileService::class);
         $this->app->bind(ChatInterface::class, ChatService::class);
         $this->app->bind(RecruitmentProcessInterface::class, RecruitmentProcessService::class);
+
+         $this->app->singleton(OpenAiService::class, function ($app) {
+        return new OpenAiService();
+        });
+
+        $this->app->singleton(JobPresenterService::class, function ($app) {
+            return new JobPresenterService($app->make(OpenAiService::class));
+        });
+
+        $this->app->singleton(CountryNormalizerService::class, function ($app) {
+            return new CountryNormalizerService($app->make(OpenAiService::class));
+        });
     }
 
     /**

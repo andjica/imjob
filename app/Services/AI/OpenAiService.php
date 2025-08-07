@@ -15,21 +15,41 @@ class OpenAiService
 {
     protected $apiUrl = 'https://api.openai.com/v1/chat/completions';
 
-    public function chat(array $options)
-    {
+   public function chat(array $options)
+{
+    try {
         $response = Http::withOptions([
-            'timeout' => 10,
+            'timeout' => 15,
         ])
-            ->withToken(config('services.openai.key'))
-            ->post($this->apiUrl, [
-                'model' => $options['model'] ?? 'gpt-4o',
-                'messages' => $options['messages'],
-                'temperature' => $options['temperature'] ?? 0.1,
+        ->withToken(config('services.openai.key'))
+        ->post($this->apiUrl, [
+            'model' => $options['model'] ?? 'gpt-4o',
+            'messages' => $options['messages'],
+            'temperature' => $options['temperature'] ?? 0.1,
+        ]);
+
+        if ($response->failed()) {
+            Log::error('❌ OpenAI failed', [
+                'status' => $response->status(),
+                'body' => $response->body(),
             ]);
 
+            throw new \Exception('OpenAI returned error ' . $response->status());
+        }
 
         return $response->json();
+    } catch (\Throwable $e) {
+        Log::error('💥 OpenAI exception', [
+            'error' => $e->getMessage()
+        ]);
+
+        return [
+            'choices' => [
+                ['message' => ['content' => '{}']]
+            ]
+        ]; // fallback response da ne puca Laravel
     }
+}
 
     /**
      * Automatska detekcija jezika poruke
@@ -378,4 +398,117 @@ PROMPT
         return $salaryInput;
     }
 
+ public function normalizeAndMapCategory(string $input): ?array
+{
+    // 1. Otkrivanje jezika i prevođenje na engleski (za obradu)
+    $detectedLang = $this->detectLanguage($input)['language'] ?? 'en';
+    $translated = $detectedLang !== 'en'
+        ? strtolower(trim($this->translateToLanguage($input, 'en')))
+        : strtolower(trim($input));
+
+    // 2. Sinonimi i direktne mape (multijezični sinonimi ručno definisani)
+    $mappings = [
+        // ✅ IT & Software
+        'it' => ['type' => 'category', 'value' => 'IT & Software'],
+        'programming' => ['type' => 'category', 'value' => 'IT & Software'],
+        'software' => ['type' => 'category', 'value' => 'IT & Software'],
+        'information technology' => ['type' => 'category', 'value' => 'IT & Software'],
+        'developer' => ['type' => 'subcategory', 'value' => 'Software Developers'],
+        'programmer' => ['type' => 'subcategory', 'value' => 'Software Developers'],
+        'network engineer' => ['type' => 'subcategory', 'value' => 'Network Engineers'],
+        'ui designer' => ['type' => 'subcategory', 'value' => 'UI/UX Designers'],
+        'ux designer' => ['type' => 'subcategory', 'value' => 'UI/UX Designers'],
+        'it security' => ['type' => 'subcategory', 'value' => 'IT Security Analysts'],
+
+        // ✅ Healthcare / Medicina
+        'healthcare' => ['type' => 'category', 'value' => 'Healthcare'],
+        'medicine' => ['type' => 'category', 'value' => 'Healthcare'],
+        'medicina' => ['type' => 'category', 'value' => 'Healthcare'],
+        'zdravstvo' => ['type' => 'category', 'value' => 'Healthcare'],
+        'hospital' => ['type' => 'category', 'value' => 'Healthcare'],
+        'clinic' => ['type' => 'category', 'value' => 'Healthcare'],
+        'doctor' => ['type' => 'subcategory', 'value' => 'Doctors'],
+        'lekar' => ['type' => 'subcategory', 'value' => 'Doctors'],
+        'nurse' => ['type' => 'subcategory', 'value' => 'Nurses'],
+        'pharmacist' => ['type' => 'subcategory', 'value' => 'Pharmacists'],
+        'therapist' => ['type' => 'subcategory', 'value' => 'Therapists'],
+
+        // ✅ Construction
+        'construction' => ['type' => 'category', 'value' => 'Construction & Building'],
+        'builder' => ['type' => 'category', 'value' => 'Construction & Building'],
+        'civil engineer' => ['type' => 'subcategory', 'value' => 'Civil Engineers'],
+        'architect' => ['type' => 'subcategory', 'value' => 'Architects'],
+
+        // ✅ Fashion
+        'fashion' => ['type' => 'category', 'value' => 'Fashion'],
+        'model' => ['type' => 'subcategory', 'value' => 'Models'],
+        'fashion designer' => ['type' => 'subcategory', 'value' => 'Fashion Designers'],
+
+        // ✅ Music
+        'music' => ['type' => 'category', 'value' => 'Music'],
+        'musician' => ['type' => 'subcategory', 'value' => 'Musicians'],
+        'singer' => ['type' => 'subcategory', 'value' => 'Musicians'],
+        'composer' => ['type' => 'subcategory', 'value' => 'Musicians'],
+
+        // ✅ Electrical Engineering
+        'electrical engineering' => ['type' => 'category', 'value' => 'Electrical Engineering'],
+        'electrical engineer' => ['type' => 'subcategory', 'value' => 'Electrical Engineers'],
+    ];
+
+    // 3. Direktan match
+    if (isset($mappings[$translated])) {
+        return $mappings[$translated];
+    }
+
+    // 4. Fuzzy match
+    $bestMatch = null;
+    $highestSimilarity = 0;
+
+    foreach ($mappings as $key => $map) {
+        similar_text($translated, $key, $percent);
+        if ($percent > $highestSimilarity && $percent >= 75) {
+            $highestSimilarity = $percent;
+            $bestMatch = $map;
+        }
+    }
+
+    if ($bestMatch) {
+        return $bestMatch;
+    }
+
+    // 5. Fallback: AI prepoznavanje (OpenAI GPT-4o)
+    try {
+        $aiResponse = $this->chat([
+            'messages' => [
+                [
+                    'role' => 'system',
+                    'content' => 'You are a job categorization assistant. Your job is to decide whether a given term is a known job category or subcategory.
+
+Available categories: IT & Software, Healthcare, Construction & Building, Fashion, Music, Electrical Engineering.
+
+Return one of the following formats ONLY:
+{"type": "category", "value": "Healthcare"}
+{"type": "subcategory", "value": "Doctors"}'
+                ],
+                [
+                    'role' => 'user',
+                    'content' => $translated
+                ]
+            ]
+        ]);
+
+        $guess = json_decode($aiResponse['choices'][0]['message']['content'] ?? '', true);
+
+        if (isset($guess['type']) && isset($guess['value'])) {
+            Log::info('🤖 AI fallback match: ' . json_encode($guess));
+            return $guess;
+        } else {
+            Log::warning('⚠️ Invalid AI response: ' . ($aiResponse['choices'][0]['message']['content'] ?? 'null'));
+        }
+    } catch (\Exception $e) {
+        Log::error('❌ AI Fallback failed: ' . $e->getMessage());
+    }
+
+    return null;
+}
 }
